@@ -5,3 +5,4 @@ syntax: glob
 src/TCode.r2rml4net/packages/
 *.suo
 *.user
+src/packages/
