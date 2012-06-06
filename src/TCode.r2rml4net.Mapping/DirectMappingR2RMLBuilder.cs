@@ -53,7 +53,8 @@ namespace TCode.r2rml4net.Mapping
 
         public void BuildGraph()
         {
-            _databaseMetadataProvider.Tables.Accept(this);
+            if(_databaseMetadataProvider.Tables != null)
+                _databaseMetadataProvider.Tables.Accept(this);
         }
 
         #region Implementation of IDatabaseMetadataVisitor
@@ -62,19 +63,14 @@ namespace TCode.r2rml4net.Mapping
 
         public void Visit(TableCollection tables)
         {
-            foreach (TableMetadata table in tables)
-                table.Accept(this);
         }
 
         public void Visit(TableMetadata table)
         {
-            currentTripleMap = R2RMLGraph.CreateUriNode(string.Format("{0}TripleMap", table.Name));
+            currentTripleMap = R2RMLGraph.CreateUriNode(new Uri(string.Format("{0}TriplesMap", table.Name), UriKind.Relative));
 
             AssertTripleMapTriples(table);
             AssertSubjectMapTriples(table);
-
-            foreach (ColumnMetadata column in table)
-                column.Accept(this);
         }
 
         private void AssertSubjectMapTriples(TableMetadata table)
@@ -126,7 +122,7 @@ namespace TCode.r2rml4net.Mapping
             var objectMapDef = R2RMLGraph.CreateBlankNode();
             var predicateObjectMapDef = R2RMLGraph.CreateBlankNode();
 
-            R2RMLGraph.Assert(currentTripleMap, predicate, predicateObjectMapDef);
+            R2RMLGraph.Assert(currentTripleMap, predicateObjectMap, predicateObjectMapDef);
             R2RMLGraph.Assert(predicateObjectMapDef, predicate, predicateDef);
             R2RMLGraph.Assert(predicateObjectMapDef, objectMap, objectMapDef);
             R2RMLGraph.Assert(predicateDef, rrTemplate, predicateTemplate);
