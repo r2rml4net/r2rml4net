@@ -9,18 +9,18 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Builds a R2RML graph from a relational database's schema
     /// </summary>
-    public class DirectMappingR2RMLBuilder
+    public class DirectMappingR2RMLBuilder : IDatabaseMetadataVisitor
     {
+        private readonly VDS.RDF.IGraph _r2rmlGraph = new VDS.RDF.Graph(true);
+
         private RDB.IDatabaseMetadata _databaseMetadataProvider;
-        private IDatabaseMetadataVisitor _databaseMetadataVisitor;
 
         /// <summary>
         /// Creates <see cref="DirectMappingR2RMLBuilder"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider, IDatabaseMetadataVisitor databaseMetadataVisitor)
+        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
-            this._databaseMetadataVisitor = databaseMetadataVisitor;
         }
 
         /// <summary>
@@ -30,13 +30,32 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                return null;
+                return _r2rmlGraph;
             }
         }
 
-        public VDS.RDF.IGraph BuildGraph()
+        public void BuildGraph()
+        {
+            _databaseMetadataProvider.Tables.Accept(this);
+        }
+
+        #region Implementation of IDatabaseMetadataVisitor
+
+        public void Visit(TableCollection tables)
         {
             throw new NotImplementedException();
         }
+
+        public void Visit(TableMetadata table)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(ColumnMetadata column)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
