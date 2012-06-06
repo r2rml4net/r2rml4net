@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TCode.r2rml4net.RDB;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -33,10 +34,9 @@ namespace TCode.r2rml4net.Mapping
 
         private void BuildEmptyGraph()
         {
-            _r2rmlGraph = new VDS.RDF.Graph(true);
+            _r2rmlGraph = new VDS.RDF.Graph();
 
             _r2rmlGraph.BaseUri = MappingBaseUri;
-            _r2rmlGraph.NamespaceMap.AddNamespace("xsd", new Uri("http://www.w3.org/2001/XMLSchema#"));
             _r2rmlGraph.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
         }
 
@@ -58,19 +58,79 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IDatabaseMetadataVisitor
 
+        private IUriNode currentTripleMap;
+
         public void Visit(TableCollection tables)
         {
-            throw new NotImplementedException();
+            foreach (TableMetadata table in tables)
+                table.Accept(this);
         }
 
         public void Visit(TableMetadata table)
         {
-            throw new NotImplementedException();
+            currentTripleMap = R2RMLGraph.CreateUriNode(string.Format("{0}TripleMap", table.Name));
+
+            AssertTripleMapTriples(table);
+            AssertSubjectMapTriples(table);
+
+            foreach (ColumnMetadata column in table)
+                column.Accept(this);
+        }
+
+        private void AssertSubjectMapTriples(TableMetadata table)
+        {
+            var subjectMap = R2RMLGraph.CreateUriNode("rr:subjectMap");
+            var rrClass = R2RMLGraph.CreateUriNode("rr:class");
+            var rrTemplate = R2RMLGraph.CreateUriNode("rr:template");
+            var termType = R2RMLGraph.CreateUriNode("rr:termType");
+            var blankNode = R2RMLGraph.CreateUriNode("rr:BlankNode");
+            var template = R2RMLGraph.CreateLiteralNode(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name));
+            var subjectMapDef = R2RMLGraph.CreateBlankNode();
+            var classDef = R2RMLGraph.CreateBlankNode();
+
+            R2RMLGraph.Assert(currentTripleMap, subjectMap, subjectMapDef);
+            R2RMLGraph.Assert(subjectMapDef, termType, blankNode);
+            R2RMLGraph.Assert(subjectMapDef, rrClass, classDef);
+            R2RMLGraph.Assert(classDef, rrTemplate, template);
+        }
+
+        private void AssertTripleMapTriples(TableMetadata table)
+        {
+            var type = R2RMLGraph.CreateUriNode("rdf:type");
+            var tripleMap = R2RMLGraph.CreateUriNode("rr:TriplesMap");
+            var logicalTable = R2RMLGraph.CreateUriNode("rr:logicalTable");
+            var tableName = R2RMLGraph.CreateUriNode("rr:tableName");
+            var tableNameLiteral = R2RMLGraph.CreateLiteralNode(table.Name);
+            var tableDefinition = R2RMLGraph.CreateBlankNode();
+
+            R2RMLGraph.Assert(currentTripleMap, type, tripleMap);
+            R2RMLGraph.Assert(currentTripleMap, logicalTable, tableDefinition);
+            R2RMLGraph.Assert(tableDefinition, tableName, tableNameLiteral);
         }
 
         public void Visit(ColumnMetadata column)
         {
-            throw new NotImplementedException();
+            AssertPredicateObjectMap(column);
+        }
+
+        private void AssertPredicateObjectMap(ColumnMetadata column)
+        {
+            var predicateObjectMap = R2RMLGraph.CreateUriNode("rr:predicateObjectMap");
+            var predicate = R2RMLGraph.CreateUriNode("rr:predicate");
+            var objectMap = R2RMLGraph.CreateUriNode("rr:objectMap");
+            var rrColumn = R2RMLGraph.CreateUriNode("rr:column");
+            var rrTemplate = R2RMLGraph.CreateUriNode("rr:template");
+            var predicateTemplate = R2RMLGraph.CreateLiteralNode(string.Format("{0}{1}#{2}", MappedDataBaseUri, column.Table.Name, column.Name));
+            var columnName = R2RMLGraph.CreateLiteralNode(column.Name);
+            var predicateDef = R2RMLGraph.CreateBlankNode();
+            var objectMapDef = R2RMLGraph.CreateBlankNode();
+            var predicateObjectMapDef = R2RMLGraph.CreateBlankNode();
+
+            R2RMLGraph.Assert(currentTripleMap, predicate, predicateObjectMapDef);
+            R2RMLGraph.Assert(predicateObjectMapDef, predicate, predicateDef);
+            R2RMLGraph.Assert(predicateObjectMapDef, objectMap, objectMapDef);
+            R2RMLGraph.Assert(predicateDef, rrTemplate, predicateTemplate);
+            R2RMLGraph.Assert(objectMapDef, rrColumn, columnName);
         }
 
         #endregion
