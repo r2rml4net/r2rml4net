@@ -2,6 +2,8 @@
 using Moq;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
+using System.Data;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests
 {
@@ -52,6 +54,38 @@ namespace TCode.r2rml4net.Tests
             // then
             _databaseMetedata.Verify(db => db.Tables, Times.Once());
             Assert.IsNotNull(_directMappingR2RMLBuilder.R2RMLGraph);
+        }
+
+        [Test]
+        public void DirectGraphTC0001_MappingGeneration()
+        {
+            // given
+            var tables = RelationalTestMappings.D001_1table1column;
+
+            // when 
+            _directMappingR2RMLBuilder.BuildGraph();
+
+            // then
+            Graph graph = new Graph();
+            graph.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl");
+
+            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(graph));
+        }
+
+        [Test]
+        public void DirectGraphTC0002_MappingGeneration()
+        {
+            // given
+            var tables = RelationalTestMappings.D002_1table2columns;
+
+            // when 
+            _directMappingR2RMLBuilder.BuildGraph();
+
+            // then
+            Graph graph = new Graph();
+            graph.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl");
+
+            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(graph));
         }
     }
 }

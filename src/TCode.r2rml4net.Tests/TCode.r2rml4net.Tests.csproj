@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="DirectMappingR2RMLBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelationalExampleMappings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -71,6 +72,12 @@
       <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
       <Name>TCode.r2rml4net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestGraphs\R2RMLTC0002.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestGraphs\R2RMLTC0001.ttl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
