@@ -54,7 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectMappingR2RMLBuilder.cs" />
+    <Compile Include="PredicateObjectMapPart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="R2RMLMappings.cs" />
+    <Compile Include="SubjectMapPart.cs" />
+    <Compile Include="TriplesMapLogicaTableBuilder.cs" />
+    <Compile Include="TriplesMapPart.cs" />
+    <Compile Include="TriplesMapSubjectMapBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj">
