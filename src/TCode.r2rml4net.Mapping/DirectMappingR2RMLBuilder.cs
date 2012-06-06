@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -11,13 +12,15 @@ namespace TCode.r2rml4net.Mapping
     public class DirectMappingR2RMLBuilder
     {
         private RDB.IDatabaseMetadata _databaseMetadataProvider;
+        private IDatabaseMetadataVisitor _databaseMetadataVisitor;
 
         /// <summary>
         /// Creates <see cref="DirectMappingR2RMLBuilder"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider)
+        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider, IDatabaseMetadataVisitor databaseMetadataVisitor)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
+            this._databaseMetadataVisitor = databaseMetadataVisitor;
         }
 
         /// <summary>
@@ -29,6 +32,11 @@ namespace TCode.r2rml4net.Mapping
             {
                 return null;
             }
+        }
+
+        public VDS.RDF.IGraph BuildGraph()
+        {
+            throw new NotImplementedException();
         }
     }
 }
