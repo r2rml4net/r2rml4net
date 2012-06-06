@@ -59,11 +59,9 @@ namespace TCode.r2rml4net.Tests
             Assert.IsNotNull(_directMappingR2RMLBuilder.R2RMLGraph);
         }
 
-        [Test]
-        public void DirectGraphTC0001_MappingGeneration()
+        private void TestMappingGeneration(TableCollection tables, string embeddedResourceGraph)
         {
-            // given
-            var tables = RelationalTestMappings.D001_1table1column;
+            // given;
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when 
@@ -71,26 +69,27 @@ namespace TCode.r2rml4net.Tests
 
             // then
             Graph expected = new Graph();
-            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl, TCode.r2rml4net.Tests");
+            expected.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.TestGraphs.{0}, TCode.r2rml4net.Tests", embeddedResourceGraph));
 
             Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
         }
 
         [Test]
+        public void DirectGraphTC0001_MappingGeneration()
+        {
+            TestMappingGeneration(RelationalTestMappings.D001_1table1column, "R2RMLTC0001.ttl");
+        }
+
+        [Test]
         public void DirectGraphTC0002_MappingGeneration()
         {
-            // given
-            var tables = RelationalTestMappings.D002_1table2columns;
-            _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
+            TestMappingGeneration(RelationalTestMappings.D002_1table2columns, "R2RMLTC0002.ttl");
+        }
 
-            // when 
-            _directMappingR2RMLBuilder.BuildGraph();
-
-            // then
-            Graph expected = new Graph();
-            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl, TCode.r2rml4net.Tests");
-
-            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
+        [Test]
+        public void DirectGraphTC0003_MappingGeneration()
+        {
+            TestMappingGeneration(RelationalTestMappings.D003_1table3columns, "R2RMLTC0003.ttl");
         }
 
         private string Serialize<TWriter>(IGraph graph) where TWriter : IRdfWriter, new()

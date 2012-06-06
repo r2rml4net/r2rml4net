@@ -23,5 +23,11 @@
     [ 
       rr:predicate		[ rr:template "http://example.com/Student#Name" ] ; 
       rr:objectMap		[ rr:column "Name" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicate		[ rr:template "http://example.com/Student#LastName" ] ; 
+      rr:objectMap		[ rr:column "LastName" ]
     ]
     .
