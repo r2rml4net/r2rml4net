@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
+using System.Data;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -53,7 +54,7 @@ namespace TCode.r2rml4net.Mapping
 
         public void BuildGraph()
         {
-            if(_databaseMetadataProvider.Tables != null)
+            if (_databaseMetadataProvider.Tables != null)
                 _databaseMetadataProvider.Tables.Accept(this);
         }
 
@@ -116,19 +117,65 @@ namespace TCode.r2rml4net.Mapping
             var objectMap = R2RMLGraph.CreateUriNode("rr:objectMap");
             var rrColumn = R2RMLGraph.CreateUriNode("rr:column");
             var rrTemplate = R2RMLGraph.CreateUriNode("rr:template");
+            var dataType = R2RMLGraph.CreateUriNode("rr:dataType");
             var predicateTemplate = R2RMLGraph.CreateLiteralNode(string.Format("{0}{1}#{2}", MappedDataBaseUri, column.Table.Name, column.Name));
             var columnName = R2RMLGraph.CreateLiteralNode(column.Name);
             var predicateDef = R2RMLGraph.CreateBlankNode();
             var objectMapDef = R2RMLGraph.CreateBlankNode();
             var predicateObjectMapDef = R2RMLGraph.CreateBlankNode();
+            var literalType = LiterlUriNode(column);
 
             R2RMLGraph.Assert(currentTripleMap, predicateObjectMap, predicateObjectMapDef);
             R2RMLGraph.Assert(predicateObjectMapDef, predicate, predicateDef);
             R2RMLGraph.Assert(predicateObjectMapDef, objectMap, objectMapDef);
             R2RMLGraph.Assert(predicateDef, rrTemplate, predicateTemplate);
             R2RMLGraph.Assert(objectMapDef, rrColumn, columnName);
+            if (literalType != null)
+                R2RMLGraph.Assert(objectMapDef, dataType, literalType);
         }
 
         #endregion
+
+        private IUriNode LiterlUriNode(ColumnMetadata column)
+        {
+            switch (column.Type)
+            {
+                case System.Data.DbType.Int16:
+                    return R2RMLGraph.CreateUriNode("xsd:short");
+                case System.Data.DbType.Int32:
+                    return R2RMLGraph.CreateUriNode("xsd:int");
+                case System.Data.DbType.Boolean:
+                    return R2RMLGraph.CreateUriNode("xsd:boolean");
+                case System.Data.DbType.Byte:
+                    return R2RMLGraph.CreateUriNode("xsd:unsignedByte");
+                case System.Data.DbType.Date:
+                    return R2RMLGraph.CreateUriNode("xsd:date");
+                case System.Data.DbType.DateTime:
+                case System.Data.DbType.DateTime2:
+                    return R2RMLGraph.CreateUriNode("xsd:datetime");
+                case System.Data.DbType.Currency:
+                    return R2RMLGraph.CreateUriNode("xsd:double");
+                case System.Data.DbType.DateTimeOffset:
+                    return R2RMLGraph.CreateUriNode("xsd:datetime");
+                case System.Data.DbType.Decimal:
+                    return R2RMLGraph.CreateUriNode("xsd:decimal");
+                case System.Data.DbType.Double:
+                    return R2RMLGraph.CreateUriNode("xsd:double");
+                case System.Data.DbType.SByte:
+                    return R2RMLGraph.CreateUriNode("xsd:byte");
+                case System.Data.DbType.Single:
+                    return R2RMLGraph.CreateUriNode("xsd:float");
+                case System.Data.DbType.Time:
+                    return R2RMLGraph.CreateUriNode("xsd:time");
+                case System.Data.DbType.UInt16:
+                    return R2RMLGraph.CreateUriNode("xsd:unsignedShort");
+                case System.Data.DbType.UInt32:
+                    return R2RMLGraph.CreateUriNode("xsd:unsignedInt");
+                case System.Data.DbType.UInt64:
+                    return R2RMLGraph.CreateUriNode("xsd:unsignedLong");
+                default:
+                    return null;
+            }
+        }
     }
 }
