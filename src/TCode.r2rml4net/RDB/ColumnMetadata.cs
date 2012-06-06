@@ -10,6 +10,7 @@ namespace TCode.r2rml4net.RDB
     {
         public string Name { get; internal set; }
         public DbType Type { get; internal set; }
+        public TableMetadata Table { get; internal set; }
 
         public void Accept(IDatabaseMetadataVisitor visitor)
         {
