@@ -17,33 +17,31 @@ namespace TCode.r2rml4net.Tests
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
             _databaseMetedataVisitor = new Mock<IDatabaseMetadataVisitor>();
-            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object);
+            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _databaseMetedataVisitor.Object);
         }
 
-        [Test, Description("First access to DirectMappingR2RMLBuilder#R2RMLGraph should execute reading of metadata")]
+        [Test, Description("Invoking DirectMappingR2RMLBuilder#BuildGraph should execute reading of metadata")]
         public void AccesingGraphReadsDatabaseMetadata()
         {
             // when
-            var graph = _directMappingR2RMLBuilder.R2RMLGraph;
+            _directMappingR2RMLBuilder.BuildGraph();
 
             // then
             _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
-            Assert.IsNotNull(graph);
         }
 
         [Test, Description("Metadata should be read from db only once")]
         public void AccesingGraphTwiceReadsDatabaseMetadataOnlyOnce()
         {
             // when
-            var graph = _directMappingR2RMLBuilder.R2RMLGraph;
-            graph = _directMappingR2RMLBuilder.R2RMLGraph;
+            _directMappingR2RMLBuilder.BuildGraph();
+            _directMappingR2RMLBuilder.BuildGraph();
 
             // then
             _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
-            Assert.IsNotNull(graph);
         }
 
-        [Test]
+        [Test, Description("Building graph visits the table collection")]
         public void BuildingGraphReadsTablesCollection()
         {
             // given
@@ -51,12 +49,12 @@ namespace TCode.r2rml4net.Tests
             _databaseMetedata.Setup(db => db.Tables).Returns(tables);
 
             // when
-            var graph = _directMappingR2RMLBuilder.R2RMLGraph;
+            _directMappingR2RMLBuilder.BuildGraph();
 
             // then
             _databaseMetedata.Verify(db => db.Tables, Times.Once());
             _databaseMetedataVisitor.Verify(visitor => visitor.Visit(tables), Times.Once());
-            Assert.IsNotNull(graph);
+            Assert.IsNotNull(_directMappingR2RMLBuilder.R2RMLGraph);
         }
     }
 }
