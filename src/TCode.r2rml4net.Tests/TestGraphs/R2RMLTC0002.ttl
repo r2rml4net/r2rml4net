@@ -1,28 +1,27 @@
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
-@prefix ex: <http://example.com/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
 
 <StudentTriplesMap>
      a rr:TriplesMap;
     
-    rr:logicalTable [ rr:tableName "\"Student\""; ];
+    rr:logicalTable [ rr:tableName "Student"; ];
 
     rr:subjectMap 
 	[ 
 	  rr:termType rr:BlankNode;  
-	  rr:class [ rr:template "http://example.com/base/Student" ]
+	  rr:class [ rr:template "http://example.com/Student" ]
 	];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate		[ rr:template "http://example.com/base/Student#ID" ] ; 
-      rr:objectMap		[ rr:column "\"ID\"" ]
+      rr:predicate		[ rr:template "http://example.com/Student#ID" ] ; 
+      rr:objectMap		[ rr:column "ID" ]
     ];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate		[ rr:template "http://example.com/base/Student#Name" ] ; 
-      rr:objectMap		[ rr:column "\"Name\"" ]
+      rr:predicate		[ rr:template "http://example.com/Student#Name" ] ; 
+      rr:objectMap		[ rr:column "Name" ]
     ]
     .

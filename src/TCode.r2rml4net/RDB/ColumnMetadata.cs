@@ -14,7 +14,7 @@ namespace TCode.r2rml4net.RDB
 
         public void Accept(IDatabaseMetadataVisitor visitor)
         {
-            throw new NotImplementedException();
+            visitor.Visit(this);
         }
     }
 }

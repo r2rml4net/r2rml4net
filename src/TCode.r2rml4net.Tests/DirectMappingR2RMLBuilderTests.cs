@@ -4,6 +4,9 @@ using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using System.Data;
 using VDS.RDF;
+using System.IO;
+using VDS.RDF.Writing;
+using System.Collections.Generic;
 
 namespace TCode.r2rml4net.Tests
 {
@@ -61,13 +64,14 @@ namespace TCode.r2rml4net.Tests
         {
             // given
             var tables = RelationalTestMappings.D001_1table1column;
+            _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when 
             _directMappingR2RMLBuilder.BuildGraph();
 
             // then
             Graph expected = new Graph();
-            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl");
+            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl, TCode.r2rml4net.Tests");
 
             Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
         }
@@ -77,15 +81,26 @@ namespace TCode.r2rml4net.Tests
         {
             // given
             var tables = RelationalTestMappings.D002_1table2columns;
+            _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when 
             _directMappingR2RMLBuilder.BuildGraph();
 
             // then
             Graph expected = new Graph();
-            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl");
+            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl, TCode.r2rml4net.Tests");
 
             Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
+        }
+
+        private string Serialize<TWriter>(IGraph graph) where TWriter : IRdfWriter, new()
+        {
+            using (TextWriter writer = new System.IO.StringWriter())
+            {
+                IRdfWriter turtle = new TWriter();
+                turtle.Save(graph, writer);
+                return writer.ToString();
+            }
         }
     }
 }
