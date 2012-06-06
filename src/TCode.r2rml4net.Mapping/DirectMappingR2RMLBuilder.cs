@@ -11,7 +11,7 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public class DirectMappingR2RMLBuilder : IDatabaseMetadataVisitor
     {
-        private readonly VDS.RDF.IGraph _r2rmlGraph = new VDS.RDF.Graph(true);
+        private VDS.RDF.IGraph _r2rmlGraph;
 
         private RDB.IDatabaseMetadata _databaseMetadataProvider;
 
@@ -21,6 +21,23 @@ namespace TCode.r2rml4net.Mapping
         public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
+
+            MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
+            MappedDataBaseUri = new Uri("http://example.com/");
+
+            BuildEmptyGraph();
+        }
+
+        public Uri MappingBaseUri { get; private set; }
+        public Uri MappedDataBaseUri { get; private set; }
+
+        private void BuildEmptyGraph()
+        {
+            _r2rmlGraph = new VDS.RDF.Graph(true);
+
+            _r2rmlGraph.BaseUri = MappingBaseUri;
+            _r2rmlGraph.NamespaceMap.AddNamespace("xsd", new Uri("http://www.w3.org/2001/XMLSchema#"));
+            _r2rmlGraph.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
         }
 
         /// <summary>
