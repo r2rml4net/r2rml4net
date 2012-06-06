@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A7938022-C641-4470-B22E-0CBBC2D11D5E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TCode.r2rml4net.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Tests</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="dotNetRDF">
       <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\dotNetRDF.dll</HintPath>
@@ -44,6 +47,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit-gui-runner">
+      <HintPath>..\packages\NUnit.Runners.2.6.0.12051\tools\lib\nunit-gui-runner.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -59,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectMappingR2RMLBuilderTests.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationalExampleMappings.cs" />
   </ItemGroup>
