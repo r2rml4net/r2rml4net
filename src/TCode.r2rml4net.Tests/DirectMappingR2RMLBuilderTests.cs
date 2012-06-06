@@ -9,12 +9,12 @@ namespace TCode.r2rml4net.Tests
     public class DirectMappingR2RMLBuilderTests
     {
         private DirectMappingR2RMLBuilder _directMappingR2RMLBuilder;
-        private Mock<IDatabaseMetadataProvider> _databaseMetedata;
+        private Mock<IDatabaseMetadata> _databaseMetedata;
 
         [SetUp]
         public void Setup()
         {
-            _databaseMetedata = new Mock<IDatabaseMetadataProvider>();
+            _databaseMetedata = new Mock<IDatabaseMetadata>();
             _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object);
         }
 

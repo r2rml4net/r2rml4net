@@ -10,12 +10,12 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public class DirectMappingR2RMLBuilder
     {
-        private RDB.IDatabaseMetadataProvider _databaseMetadataProvider;
+        private RDB.IDatabaseMetadata _databaseMetadataProvider;
 
         /// <summary>
-        /// Creates <see cref="DirectMappingR2RMLBuilder"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadataProvider"/>
+        /// Creates <see cref="DirectMappingR2RMLBuilder"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadataProvider databaseMetadataProvider)
+        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
         }
