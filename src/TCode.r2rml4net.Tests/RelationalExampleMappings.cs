@@ -12,16 +12,19 @@ namespace TCode.r2rml4net.Tests
         {
             get
             {
-                return new TableCollection
-                        {
-                            new TableMetadata
+                var studentsTable = new TableMetadata
                             {
                                 new ColumnMetadata
                                 {
                                     Name = "Name",
                                     Type = DbType.AnsiString
                                 }
-                            }
+                            };
+                studentsTable.Name = "Student";
+
+                return new TableCollection
+                        {
+                            studentsTable
                         };
             }
         }
@@ -33,9 +36,7 @@ namespace TCode.r2rml4net.Tests
         {
             get
             {
-                return new TableCollection
-                        {
-                            new TableMetadata
+                var studentsTable = new TableMetadata
                             {
                                 new ColumnMetadata
                                 {
@@ -47,8 +48,13 @@ namespace TCode.r2rml4net.Tests
                                     Name = "Name",
                                     Type = DbType.AnsiString
                                 }
-                            }
-                        };
+                            };
+                studentsTable.Name = "Student";
+
+                return new TableCollection
+                       {
+                           studentsTable
+                       };
             }
         }
     }
