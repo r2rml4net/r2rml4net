@@ -3,5 +3,6 @@
     public interface IDatabaseMetadata
     {
         void ReadMetadata();
+        TableCollection Tables { get; }
     }
 }
