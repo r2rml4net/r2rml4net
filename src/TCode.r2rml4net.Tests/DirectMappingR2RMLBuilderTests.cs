@@ -66,10 +66,10 @@ namespace TCode.r2rml4net.Tests
             _directMappingR2RMLBuilder.BuildGraph();
 
             // then
-            Graph graph = new Graph();
-            graph.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl");
+            Graph expected = new Graph();
+            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0001.ttl");
 
-            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(graph));
+            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
         }
 
         [Test]
@@ -82,10 +82,10 @@ namespace TCode.r2rml4net.Tests
             _directMappingR2RMLBuilder.BuildGraph();
 
             // then
-            Graph graph = new Graph();
-            graph.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl");
+            Graph expected = new Graph();
+            expected.LoadFromEmbeddedResource("TCode.r2rml4net.Tests.TestGraphs.R2RMLTC0002.ttl");
 
-            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(graph));
+            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
         }
     }
 }
