@@ -7,6 +7,6 @@ namespace TCode.r2rml4net
 {
     public interface IVistitable<TVisitor>
     {
-        void Accept<TVisitor>(TVisitor visitor);
+        void Accept(TVisitor visitor);
     }
 }

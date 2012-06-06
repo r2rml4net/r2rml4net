@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TCode.r2rml4net.RDB
 {
-    class ColumnMetadata
+    public class ColumnMetadata
     {
     }
 }
