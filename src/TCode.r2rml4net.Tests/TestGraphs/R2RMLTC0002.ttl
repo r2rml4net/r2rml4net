@@ -1,4 +1,4 @@
-﻿@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix ex: <http://example.com/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -19,7 +19,7 @@
     [ 
       rr:predicate		[ rr:template "http://example.com/base/Student#ID" ] ; 
       rr:objectMap		[ rr:column "\"ID\"" ]
-    ]
+    ];
 
     rr:predicateObjectMap
     [ 
