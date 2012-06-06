@@ -5,8 +5,13 @@ using System.Text;
 
 namespace TCode.r2rml4net.RDB
 {
-    public class TableMetadata
+    public class TableMetadata : IVistitable<IDatabaseMetadataVisitor>
     {
         public IEnumerable<ColumnMetadata> Columns { get; internal set; }
+
+        public void Accept(IDatabaseMetadataVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
