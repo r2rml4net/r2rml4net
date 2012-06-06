@@ -1,6 +1,6 @@
 ﻿namespace TCode.r2rml4net.RDB
 {
-    public interface IDatabaseMetadataProvider
+    public interface IDatabaseMetadata
     {
         void ReadMetadata();
     }

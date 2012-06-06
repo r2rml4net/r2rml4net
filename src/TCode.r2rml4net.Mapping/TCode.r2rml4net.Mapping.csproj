@@ -33,6 +33,15 @@
     <DocumentationFile>..\bin\Release\TCode.r2rml4net.Mapping.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="dotNetRDF">
+      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\dotNetRDF.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +51,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectMappingR2RMLBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj">
+      <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
+      <Name>TCode.r2rml4net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
