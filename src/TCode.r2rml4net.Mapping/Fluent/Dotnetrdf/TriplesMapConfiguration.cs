@@ -16,12 +16,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITriplesMapConfiguration SetSqlVersion(Uri uri)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public ITriplesMapConfiguration SetSqlVersion(string uri)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         #endregion
