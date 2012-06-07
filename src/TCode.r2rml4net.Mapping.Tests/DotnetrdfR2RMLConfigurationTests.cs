@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent;
@@ -6,13 +7,13 @@ using TCode.r2rml4net.Mapping.Fluent;
 namespace TCode.r2rml4net.Mapping.Tests
 {
     [TestFixture]
-    public class R2RMLConfigurationTests
+    public class DotnetrdfR2RMLConfigurationTests
     {
-        private R2RMLConfiguration _configuration;
+        private DotnetrdfR2RMLConfiguration _configuration;
 
         public void Setup()
         {
-            _configuration = new R2RMLConfiguration();
+            _configuration = new DotnetrdfR2RMLConfiguration();
         }
 
         [TestCase(1)]
@@ -45,6 +46,20 @@ namespace TCode.r2rml4net.Mapping.Tests
             }
 
             Assert.IsTrue(tripleMaps.All(map => map != null));
+        }
+
+        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
+        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName)
+        {
+            _configuration.CreateTriplesMapFromTable(tableName);
+        }
+
+        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
+        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery)
+        {
+            _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
         }
     }
 }

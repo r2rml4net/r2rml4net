@@ -54,8 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectMappingR2RMLBuilder.cs" />
+    <Compile Include="Fluent\IR2RMLConfiguration.cs" />
     <Compile Include="Fluent\ITriplesMapConfiguration.cs" />
-    <Compile Include="Fluent\R2RMLConfiguration.cs" />
+    <Compile Include="Fluent\DotnetrdfR2RMLConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="R2RMLMappings.cs" />
   </ItemGroup>

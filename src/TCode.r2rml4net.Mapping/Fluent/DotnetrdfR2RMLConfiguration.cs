@@ -3,7 +3,7 @@
     /// <summary>
     /// Entrypoint to all of R2RML fluent configuration interfaces
     /// </summary>
-    public class R2RMLConfiguration
+    public class DotnetrdfR2RMLConfiguration : IR2RMLConfiguration
     {
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
