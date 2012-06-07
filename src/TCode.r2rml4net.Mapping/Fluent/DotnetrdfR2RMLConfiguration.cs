@@ -1,8 +1,5 @@
 ﻿namespace TCode.r2rml4net.Mapping.Fluent
 {
-    /// <summary>
-    /// Entrypoint to all of R2RML fluent configuration interfaces
-    /// </summary>
     public class DotnetrdfR2RMLConfiguration : IR2RMLConfiguration
     {
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
@@ -10,7 +7,7 @@
             throw new System.NotImplementedException();
         }
 
-        public ITriplesMapConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
+        public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
             throw new System.NotImplementedException();
         }

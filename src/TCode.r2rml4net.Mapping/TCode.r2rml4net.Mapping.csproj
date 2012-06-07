@@ -57,6 +57,7 @@
     <Compile Include="Fluent\IR2RMLConfiguration.cs" />
     <Compile Include="Fluent\ITriplesMapConfiguration.cs" />
     <Compile Include="Fluent\DotnetrdfR2RMLConfiguration.cs" />
+    <Compile Include="Fluent\ITriplesMapFromR2RMLViewConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="R2RMLMappings.cs" />
   </ItemGroup>
