@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent;
+using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 
 namespace TCode.r2rml4net.Mapping.Tests
 {
     [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests
     {
-        private DotnetrdfR2RMLConfiguration _configuration;
+        private R2RMLConfiguration _configuration;
 
+        [SetUp]
         public void Setup()
         {
-            _configuration = new DotnetrdfR2RMLConfiguration();
+            _configuration = new R2RMLConfiguration();
         }
 
         [TestCase(1)]
@@ -30,6 +32,10 @@ namespace TCode.r2rml4net.Mapping.Tests
             }
 
             Assert.IsTrue(tripleMaps.All(map => map != null));
+            foreach (var configuration in tripleMaps)
+            {
+                Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
+            }
         }
 
         [TestCase(1)]
@@ -48,7 +54,7 @@ namespace TCode.r2rml4net.Mapping.Tests
             Assert.IsTrue(tripleMaps.All(map => map != null));
             foreach (var configuration in tripleMaps)
             {
-                Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+                Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
             }
         }
 
@@ -72,7 +78,7 @@ namespace TCode.r2rml4net.Mapping.Tests
             ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
                                                                    .SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"));
 
-            Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+            Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
             Assert.IsNotNull(configuration);
         }
 
@@ -82,7 +88,7 @@ namespace TCode.r2rml4net.Mapping.Tests
             ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
                                                                    .SetSqlVersion("rr:SQL2008");
 
-            Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+            Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
             Assert.IsNotNull(configuration);
         }
     }
