@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 using System.Data;
@@ -60,7 +61,6 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IDatabaseMetadataVisitor
 
-        private PredicateObjectMapPart currentTriplesMap;
         private IUriNode currentTripleMap;
 
         public void Visit(TableCollection tables)
@@ -69,10 +69,6 @@ namespace TCode.r2rml4net.Mapping
 
         public void Visit(TableMetadata table)
         {
-            new R2RMLMappings()
-                .CreateTriplesMap().FromTableOrView(table.Name)
-
-
             currentTripleMap = R2RMLGraph.CreateUriNode(new Uri(string.Format("{0}TriplesMap", table.Name), UriKind.Relative));
 
             AssertTripleMapTriples(table);
