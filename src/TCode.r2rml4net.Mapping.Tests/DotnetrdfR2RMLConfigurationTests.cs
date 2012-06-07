@@ -46,6 +46,10 @@ namespace TCode.r2rml4net.Mapping.Tests
             }
 
             Assert.IsTrue(tripleMaps.All(map => map != null));
+            foreach (var configuration in tripleMaps)
+            {
+                Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+            }
         }
 
         [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
@@ -60,6 +64,26 @@ namespace TCode.r2rml4net.Mapping.Tests
         public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery)
         {
             _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
+        }
+
+        [Test]
+        public void SqlVersionUriCanBeChanged()
+        {
+            ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
+                                                                   .SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"));
+
+            Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+            Assert.IsNotNull(configuration);
+        }
+
+        [Test]
+        public void SqlVersionUriCanBeChangedFromUriString()
+        {
+            ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
+                                                                   .SetSqlVersion("rr:SQL2008");
+
+            Assert.IsInstanceOf<ITriplesMapConfiguration>(configuration);
+            Assert.IsNotNull(configuration);
         }
     }
 }
