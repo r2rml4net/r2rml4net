@@ -11,6 +11,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
+            if (tablename == null)
+                throw new System.ArgumentNullException("tablename");
+            if (string.IsNullOrWhiteSpace(tablename))
+                throw new System.ArgumentOutOfRangeException("tablename");
+
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
@@ -18,6 +23,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
+            if (sqlQuery == null)
+                throw new System.ArgumentNullException("sqlQuery");
+            if (string.IsNullOrWhiteSpace(sqlQuery))
+                throw new System.ArgumentOutOfRangeException("sqlQuery");
+
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
