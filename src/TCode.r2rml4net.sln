@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Web Developer Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net", "TCode.r2rml4net\TCode.r2rml4net.csproj", "{7C5D6099-CEA0-4D34-84C7-754A92E51798}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Tests", "TCode.r2rml4net.Tests\TCode.r2rml4net.Tests.csproj", "{A7938022-C641-4470-B22E-0CBBC2D11D5E}"
@@ -8,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Mapping", "TCode.r2rml4net.Mapping\TCode.r2rml4net.Mapping.csproj", "{1C96F7F6-32B6-4FD3-A12F-5BEE2FD068D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Query", "TCode.r2rml4net.Query\TCode.r2rml4net.Query.csproj", "{3C3500A1-3E4A-4D0E-8902-715BE5461A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Mapping.Tests", "TCode.r2rml4net.Mapping.Tests\TCode.r2rml4net.Mapping.Tests.csproj", "{B2B367CA-B338-4176-B97B-FB9B5558C4B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{3C3500A1-3E4A-4D0E-8902-715BE5461A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C3500A1-3E4A-4D0E-8902-715BE5461A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C3500A1-3E4A-4D0E-8902-715BE5461A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
