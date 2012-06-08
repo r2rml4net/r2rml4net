@@ -13,12 +13,19 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         protected BaseConfiguration(Uri baseUri)
         {
             R2RMLMappings = new Graph { BaseUri = baseUri };
-            R2RMLMappings.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
+            EnsurePrefixes();
         }
 
         protected BaseConfiguration(IGraph existingMappingsGraph)
         {
             R2RMLMappings = existingMappingsGraph;
+            EnsurePrefixes();
+        }
+
+        private void EnsurePrefixes()
+        {
+            if (!R2RMLMappings.NamespaceMap.HasNamespace("rr"))
+                R2RMLMappings.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
         }
     }
 }

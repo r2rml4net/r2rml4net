@@ -11,12 +11,15 @@ namespace TCode.r2rml4net.Mapping.Tests
     [TestFixture]
     public class TermMapConfigurationTests
     {
+        INode triplesMapNode;
         TermMapConfiguration _termMapConfiguration;
 
         [SetUp]
         public void Setup()
         {
-            _termMapConfiguration = new TermMapConfiguration(new R2RMLConfiguration().R2RMLMappings);
+            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
+            triplesMapNode = graph.CreateBlankNode();
+            _termMapConfiguration = new TermMapConfiguration(triplesMapNode, graph);
         }
 
         [Test]
@@ -38,17 +41,23 @@ namespace TCode.r2rml4net.Mapping.Tests
         }
 
         [Test]
-        public void ConstructorCreatesNodeForTheTermMapIsRepresents()
+        public void ConstructorCreatesNodeForTheTermMapIsRepresentsAndItsRelationToSubjectMap()
         {
             // given
             IGraph mappings = new Graph();
+            IUriNode triplesMap = mappings.CreateUriNode(new Uri("http://mapping.com/SomeMap")); 
 
             // when
-            var configuration = new TermMapConfiguration(mappings);
+            var configuration = new TermMapConfiguration(triplesMap, mappings);
 
             // then
             Assert.IsNotNull(configuration.TermMapNode);
             Assert.AreSame(mappings, configuration.TermMapNode.Graph);
+
+            var triples = configuration.R2RMLMappings.GetTriplesWithSubject(triplesMap);
+            Assert.AreEqual(1, triples.Count());
+            Assert.AreSame(configuration.TermMapNode, triples.First().Object);
+            Assert.AreEqual(configuration.R2RMLMappings.CreateUriNode("rr:subjectMap"), triples.First().Predicate);
         }
     }
 }
