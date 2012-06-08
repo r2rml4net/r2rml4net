@@ -44,7 +44,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                                     }}", _triplesMapUri));
 
                     if (result.Count > 1)
-                        throw new InvalidTriplesMapException("Triples map contains multiple table names");
+                        throw new InvalidTriplesMapException("Triples map contains multiple table names", Uri);
 
                     if (result.Count == 1)
                         return result[0].Value("tableName").ToString();
@@ -54,9 +54,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             internal set
             {
                 if (this.TableName != null)
-                    throw new InvalidTriplesMapException("Table name already set");
+                    throw new InvalidTriplesMapException("Table name already set", Uri);
                 if(this.SqlQuery != null)
-                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query");
+                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query", Uri);
 
                 if (value == null)
                     throw new System.ArgumentNullException("value");
@@ -137,7 +137,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                                     }}", _triplesMapUri));
 
                     if (result.Count > 1)
-                        throw new InvalidTriplesMapException("Triples map contains multiple SQL queries");
+                        throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", Uri);
 
                     if (result.Count == 1)
                         return result[0].Value("sqlQuery").ToString();
@@ -147,9 +147,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             internal set
             {
                 if (this.SqlQuery != null)
-                    throw new InvalidTriplesMapException("SQL query already set");
+                    throw new InvalidTriplesMapException("SQL query already set", Uri);
                 if (this.TableName != null)
-                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query");
+                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query", Uri);
 
                 if (value == null)
                     throw new System.ArgumentNullException("value");
