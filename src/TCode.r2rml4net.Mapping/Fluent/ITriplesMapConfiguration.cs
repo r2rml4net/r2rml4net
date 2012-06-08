@@ -1,4 +1,5 @@
-﻿namespace TCode.r2rml4net.Mapping.Fluent
+﻿using System;
+namespace TCode.r2rml4net.Mapping.Fluent
 {
     /// <summary>
     /// Configuration of the Triples Map graph as described on http://www.w3.org/TR/r2rml/#triples-map
@@ -10,5 +11,9 @@
         /// </summary>
         string TableName { get; }
         string SqlQuery { get; }
+        /// <summary>
+        /// <see cref="Uri"/> of the triples map represented by this instance
+        /// </summary>
+        Uri Uri { get; }
     }
 }

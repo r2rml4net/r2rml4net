@@ -65,20 +65,6 @@ namespace TCode.r2rml4net.Mapping.Tests
             }
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName)
-        {
-            _configuration.CreateTriplesMapFromTable(tableName);
-        }
-
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery)
-        {
-            _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
-        }
-
         [Test]
         public void SqlVersionUriCanBeChanged()
         {
@@ -152,49 +138,6 @@ namespace TCode.r2rml4net.Mapping.Tests
             _configuration = new R2RMLConfiguration(baseUri);
 
             Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
-        }
-
-        [TestCase("TableName", "TableName")]
-        [TestCase("[TableName]", "TableName")]
-        [TestCase("[Table1Name]", "Table1Name")]
-        [TestCase("'TableName'", "TableName")]
-        [TestCase("`TableName`", "TableName")]
-        [TestCase("`Table12Name`", "Table12Name")]
-        [TestCase("\"TableName\"", "TableName")]
-        public void TriplesMapTableNameShouldBeTrimmed(string tableName, string expected)
-        {
-            // when
-            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
-
-            // then
-            Assert.AreEqual(expected, triplesMap.TableName);
-        }
-
-        [TestCase("`Schema`.`TableName`")]
-        [TestCase("[Schema].[TableName]")]
-        [TestCase("[Schema].[TableName]")]
-        [TestCase("Schema.[TableName]")]
-        [TestCase("Schema.`TableName`")]
-        public void TriplesMapTableNameCanContainSchema(string tableName)
-        {
-            // when
-            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
-
-            // then
-            Assert.AreEqual("Schema.TableName", triplesMap.TableName);
-        }
-
-        [TestCase("[Database].[Schema].[TableName]")]
-        [TestCase("Database.[Schema].[TableName]")]
-        [TestCase("`Database`.`Schema`.`TableName`")]
-        [TestCase("Database.`Schema`.`TableName`")]
-        public void TriplesMapTableNameCanContainSchemaAndDatabaseName(string tableName)
-        {
-            // when
-            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
-
-            // then
-            Assert.AreEqual("Database.Schema.TableName", triplesMap.TableName);
         }
 
         #region Assertion helper methods
