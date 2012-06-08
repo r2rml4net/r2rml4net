@@ -18,7 +18,10 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <see cref="Uri"/> of the triples map represented by this instance
         /// </summary>
         Uri Uri { get; }
-
+        /// <summary>
+        /// Adds a subject map subgraph to the mapping graph. Subject maps are used to construct subjects
+        /// for triples procduced once mapping is applied to relational data
+        /// </summary>
         ISubjectMapConfiguration SubjectMap(); 
     }
 }
