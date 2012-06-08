@@ -16,8 +16,6 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public class DirectMappingR2RMLBuilder : IDatabaseMetadataVisitor
     {
-        private VDS.RDF.IGraph _r2rmlGraph;
-
         private RDB.IDatabaseMetadata _databaseMetadataProvider;
         private IR2RMLConfiguration _R2RMLConfiguration;
 
@@ -31,20 +29,10 @@ namespace TCode.r2rml4net.Mapping
 
             MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
             MappedDataBaseUri = new Uri("http://example.com/");
-
-            BuildEmptyGraph();
         }
 
         public Uri MappingBaseUri { get; private set; }
         public Uri MappedDataBaseUri { get; private set; }
-
-        private void BuildEmptyGraph()
-        {
-            _r2rmlGraph = new VDS.RDF.Graph();
-
-            _r2rmlGraph.BaseUri = MappingBaseUri;
-            _r2rmlGraph.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
-        }
 
         /// <summary>
         /// Returns an R2RML graph generated for direct mapping
@@ -54,7 +42,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                return _r2rmlGraph;
+                return null;
             }
         }
 
