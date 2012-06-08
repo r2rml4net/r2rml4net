@@ -90,15 +90,44 @@ namespace TCode.r2rml4net.Mapping.Tests
             _triplesMapConfiguration.SqlQuery = sqlQuery;
         }
 
-        [TestCase("Table1", "Table1")]
-        [TestCase("Table1", "Table2")]
-        public void CannotAssignTableNameTwice(string tableName, string secondTableName)
+        [Test]
+        public void CannotAssignTableNameTwice()
         {
             // when
-            _triplesMapConfiguration.TableName = tableName;
+            _triplesMapConfiguration.TableName = "TABLE1";
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.TableName = secondTableName);
+            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.TableName = "TABLE2");
+        }
+
+        [Test]
+        public void CannotAssignSqlQueryTwice()
+        {
+            // when
+            _triplesMapConfiguration.SqlQuery = "SELECT * FROM X";
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.SqlQuery = "SELECT * FROM Y");
+        }
+
+        [Test]
+        public void CannotAssignSqlQueryHavingAlreadyAssignedTable()
+        {
+            // when
+            _triplesMapConfiguration.TableName = "SomeTable";
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.SqlQuery = "SELECT * FROM Y");
+        }
+
+        [Test]
+        public void CannotAssignTableNameHavingAlreadyAssignedSqlQuery()
+        {
+            // when
+            _triplesMapConfiguration.SqlQuery = "SELECT * FROM X";
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.TableName = "SomeTable");
         }
     }
 }
