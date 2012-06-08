@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using VDS.RDF;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
@@ -8,7 +11,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     {
         private readonly Uri _baseUri;
 
-        internal static Uri DefaultBaseUri{get
+        private static Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
+
+        internal static Uri DefaultBaseUri
         {
             return new Uri("http://r2rml.net/mappings#");
         }}
@@ -53,11 +58,37 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (string.IsNullOrWhiteSpace(tablename))
                 throw new System.ArgumentOutOfRangeException("tablename");
 
+            tablename = TrimTableName(tablename);
+            if (tablename == string.Empty)
+                throw new System.ArgumentOutOfRangeException("tablename", "The table name seems invalid");
+
             AssertTriples(tablename);
 
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
+            triplesMapConfiguration.TableName = tablename;
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
+        }
+
+        private string TrimTableName(string tablename)
+        {
+            var regexMatch = TableNameRegex.Match(tablename);
+
+            StringBuilder stringBuilder = new StringBuilder(tablename.Length);
+
+            if (regexMatch.Success)
+            {
+                stringBuilder.Append(regexMatch.Value);
+                regexMatch = regexMatch.NextMatch();
+
+                while (regexMatch.Success)
+                {
+                    stringBuilder.AppendFormat(".{0}", regexMatch.Value);
+                    regexMatch = regexMatch.NextMatch();
+                }
+            }
+
+            return stringBuilder.ToString();
         }
 
         private void AssertTriples(string tablename)

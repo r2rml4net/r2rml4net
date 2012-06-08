@@ -154,6 +154,58 @@ namespace TCode.r2rml4net.Mapping.Tests
             Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
         }
 
+        [TestCase("TableName", "TableName")]
+        [TestCase("[TableName]", "TableName")]
+        [TestCase("[Table1Name]", "Table1Name")]
+        [TestCase("'TableName'", "TableName")]
+        [TestCase("`TableName`", "TableName")]
+        [TestCase("`Table12Name`", "Table12Name")]
+        [TestCase("\"TableName\"", "TableName")]
+        public void TriplesMapTableNameShouldBeTrimmed(string tableName, string expected)
+        {
+            // when
+            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
+
+            // then
+            Assert.AreEqual(expected, triplesMap.TableName);
+        }
+
+        [TestCase("`Schema`.`TableName`")]
+        [TestCase("[Schema].[TableName]")]
+        [TestCase("[Schema].[TableName]")]
+        [TestCase("Schema.[TableName]")]
+        [TestCase("Schema.`TableName`")]
+        public void TriplesMapTableNameCanContainSchema(string tableName)
+        {
+            // when
+            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
+
+            // then
+            Assert.AreEqual("Schema.TableName", triplesMap.TableName);
+        }
+
+        [TestCase("[Database].[Schema].[TableName]")]
+        [TestCase("Database.[Schema].[TableName]")]
+        [TestCase("`Database`.`Schema`.`TableName`")]
+        [TestCase("Database.`Schema`.`TableName`")]
+        public void TriplesMapTableNameCanContainSchemaAndDatabaseName(string tableName)
+        {
+            // when
+            var triplesMap = _configuration.CreateTriplesMapFromTable(tableName);
+
+            // then
+            Assert.AreEqual("Database.Schema.TableName", triplesMap.TableName);
+        }
+
+        [TestCase("[]", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        [TestCase("[].[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        [TestCase("[].[Schema].[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        [TestCase("[].Schema.[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromInvalidQuotedTableName(string tableName)
+        {
+            _configuration.CreateTriplesMapFromTable(tableName);
+        }
+
         #region Assertion helper methods
 
         private void AssertGraphHasNode(string uri)
