@@ -1,5 +1,8 @@
 using System;
 using VDS.RDF;
+using System.Text.RegularExpressions;
+using System.Text;
+using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
@@ -8,6 +11,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// </summary>
     class TriplesMapConfiguration : ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
+        private static Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
+        private string _triplesMapUri;
+
         internal IGraph R2RMLMappings { get; private set; }
 
         /// <summary>
@@ -21,17 +27,85 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ITriplesMapConfiguration
 
-        string _tableName;
         public string TableName
         {
             get 
             {
-                return _tableName;
+                if (_triplesMapUri != null)
+                {
+                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(string.Format(@"
+                                    PREFIX rr: <http://www.w3.org/ns/r2rml#>
+
+                                    SELECT ?tableName
+                                    WHERE 
+                                    {{
+                                      <{0}> rr:logicalTable ?lt .
+                                      ?lt rr:tableName ?tableName
+                                    }}", _triplesMapUri));
+
+                    if (result.Count > 1)
+                        throw new InvalidTriplesMapException("Triples map contains multiple table names");
+
+                    if (result.Count == 1)
+                        return result[0].Value("tableName").ToString();
+                }
+                return null;
             }
-            internal set 
+            internal set
             {
-                _tableName = value;
+                if (this.TableName != null)
+                    throw new InvalidTriplesMapException("Table name already set");
+
+                if (value == null)
+                    throw new System.ArgumentNullException("value");
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new System.ArgumentOutOfRangeException("value");
+
+                string tablename = TrimTableName(value);
+                if (tablename == string.Empty)
+                    throw new System.ArgumentOutOfRangeException("tablename", "The table name seems invalid");
+
+                AssertTriples(tablename);
             }
+        }
+
+        private string TrimTableName(string tablename)
+        {
+            var regexMatch = TableNameRegex.Match(tablename);
+
+            StringBuilder stringBuilder = new StringBuilder(tablename.Length);
+
+            if (regexMatch.Success)
+            {
+                stringBuilder.Append(regexMatch.Value);
+                regexMatch = regexMatch.NextMatch();
+
+                while (regexMatch.Success)
+                {
+                    stringBuilder.AppendFormat(".{0}", regexMatch.Value);
+                    regexMatch = regexMatch.NextMatch();
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private void AssertTriples(string tablename)
+        {
+            // TODO: refactor with new version of dotNetRDF
+            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, tablename);
+
+            var tripleMap = R2RMLMappings.CreateUriNode(Uri);
+            var type = R2RMLMappings.CreateUriNode("rdf:type");
+            var tripleMapClass = R2RMLMappings.CreateUriNode("rr:TriplesMap");
+            var logicalTable = R2RMLMappings.CreateUriNode("rr:logicalTable");
+            var tableName = R2RMLMappings.CreateUriNode("rr:tableName");
+            var tableNameLiteral = R2RMLMappings.CreateLiteralNode(tablename);
+            var tableDefinition = R2RMLMappings.CreateBlankNode();
+
+            R2RMLMappings.Assert(tripleMap, type, tripleMapClass);
+            R2RMLMappings.Assert(tripleMap, logicalTable, tableDefinition);
+            R2RMLMappings.Assert(tableDefinition, tableName, tableNameLiteral);
         }
 
         string _sqlQuery;
@@ -43,7 +117,20 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
             internal set
             {
+                if (value == null)
+                    throw new System.ArgumentNullException("value");
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new System.ArgumentOutOfRangeException("value");
+
                 _sqlQuery = value;
+            }
+        }
+
+        public Uri Uri
+        {
+            get
+            {
+                return new Uri(_triplesMapUri);
             }
         }
 
