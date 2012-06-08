@@ -197,15 +197,6 @@ namespace TCode.r2rml4net.Mapping.Tests
             Assert.AreEqual("Database.Schema.TableName", triplesMap.TableName);
         }
 
-        [TestCase("[]", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        [TestCase("[].[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        [TestCase("[].[Schema].[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        [TestCase("[].Schema.[TableName]", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromInvalidQuotedTableName(string tableName)
-        {
-            _configuration.CreateTriplesMapFromTable(tableName);
-        }
-
         #region Assertion helper methods
 
         private void AssertGraphHasNode(string uri)
