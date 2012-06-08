@@ -12,6 +12,23 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings = r2RMLMappings;
         }
 
+        #region Implementation of ITriplesMapConfiguration
+
+        string _tableName;
+        public string TableName
+        {
+            get 
+            {
+                return _tableName;
+            }
+            internal set 
+            {
+                _tableName = value;
+            }
+        }
+
+        #endregion
+
         #region Implementation of ITriplesMapFromR2RMLViewConfiguration
 
         public ITriplesMapConfiguration SetSqlVersion(Uri uri)

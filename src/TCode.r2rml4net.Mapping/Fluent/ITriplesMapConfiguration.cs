@@ -2,6 +2,6 @@
 {
     public interface ITriplesMapConfiguration
     {
-         
+        string TableName { get; }
     }
 }
