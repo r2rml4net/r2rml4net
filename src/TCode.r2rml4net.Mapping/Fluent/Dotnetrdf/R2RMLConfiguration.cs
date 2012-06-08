@@ -15,8 +15,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         internal static Uri DefaultBaseUri
         {
-            return new Uri("http://r2rml.net/mappings#");
-        }}
+            get
+            {
+                return new Uri("http://r2rml.net/mappings#");
+            }
+        }
 
         private IGraph _R2RMLMappings;
         internal IGraph R2RMLMappings
@@ -41,7 +44,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
-        public R2RMLConfiguration(Uri baseUri):this()
+        public R2RMLConfiguration(Uri baseUri)
+            : this()
         {
             _baseUri = baseUri;
         }
