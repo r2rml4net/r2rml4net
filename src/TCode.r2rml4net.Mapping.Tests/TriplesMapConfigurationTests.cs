@@ -129,5 +129,11 @@ namespace TCode.r2rml4net.Mapping.Tests
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _triplesMapConfiguration.TableName = "SomeTable");
         }
+
+        [Test]
+        public void CannotSetSqlVersionTwice()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
