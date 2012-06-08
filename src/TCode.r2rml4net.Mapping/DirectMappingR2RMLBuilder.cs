@@ -7,6 +7,8 @@ using TCode.r2rml4net.RDB;
 using VDS.RDF;
 using System.Data;
 
+#pragma warning disable
+
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
