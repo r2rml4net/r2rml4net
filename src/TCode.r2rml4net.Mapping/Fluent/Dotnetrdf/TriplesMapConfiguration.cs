@@ -34,6 +34,19 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
         }
 
+        string _sqlQuery;
+        public string SqlQuery
+        {
+            get
+            {
+                return _sqlQuery;
+            }
+            internal set
+            {
+                _sqlQuery = value;
+            }
+        }
+
         #endregion
 
         #region Implementation of ITriplesMapFromR2RMLViewConfiguration
@@ -52,7 +65,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public ITriplesMapConfiguration SetSqlVersion(string uri)
         {
-            return this;
+            return this.SetSqlVersion(new Uri(uri));
         }
 
         #endregion
