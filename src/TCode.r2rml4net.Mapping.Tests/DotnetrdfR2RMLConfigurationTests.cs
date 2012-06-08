@@ -140,6 +140,17 @@ namespace TCode.r2rml4net.Mapping.Tests
             Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
         }
 
+        [Test]
+        public void CanSubjectMaps()
+        {
+            // given
+            ISubjectMapConfiguration subjectMapConfiguration = _configuration.CreateTriplesMapFromTable("Table").SubjectMap();
+
+            // then
+            Assert.IsNotNull(subjectMapConfiguration);
+            Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
+        }
+
         #region Assertion helper methods
 
         private void AssertGraphHasNode(string uri)

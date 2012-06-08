@@ -9,27 +9,25 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// <summary>
     /// Implementation of fluent configuration interface for <a href="http://www.w3.org/TR/r2rml/#triples-map">Triples Maps</a>
     /// </summary>
-    class TriplesMapConfiguration : ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
+    class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
         private static Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
         private string _triplesMapUri;
-
-        internal IGraph R2RMLMappings { get; private set; }
 
         /// <summary>
         /// Creates an instance of <see cref="TriplesMapConfiguration"/>
         /// </summary>
         /// <param name="r2RMLMappings">existing mappings passed from <see cref="R2RMLConfiguration"/></param>
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
+            : base(r2RMLMappings)
         {
-            R2RMLMappings = r2RMLMappings;
         }
 
         #region Implementation of ITriplesMapConfiguration
 
         public string TableName
         {
-            get 
+            get
             {
                 if (_triplesMapUri != null)
                 {
@@ -55,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             {
                 if (this.TableName != null)
                     throw new InvalidTriplesMapException("Table name already set", Uri);
-                if(this.SqlQuery != null)
+                if (this.SqlQuery != null)
                     throw new InvalidTriplesMapException("Cannot set both table name and SQL query", Uri);
 
                 if (value == null)
@@ -180,6 +178,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
             R2RMLMappings.Assert(tripleMap, type, tripleMapClass);
             R2RMLMappings.Assert(tripleMap, logicalTable, tableDefinition);
+        }
+
+        public ISubjectMapConfiguration SubjectMap()
+        {
+            return new TermMapConfiguration(R2RMLMappings);
         }
 
         #endregion

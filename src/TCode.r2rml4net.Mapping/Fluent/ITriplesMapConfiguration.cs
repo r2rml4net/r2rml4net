@@ -18,5 +18,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <see cref="Uri"/> of the triples map represented by this instance
         /// </summary>
         Uri Uri { get; }
+
+        ISubjectMapConfiguration SubjectMap(); 
     }
 }

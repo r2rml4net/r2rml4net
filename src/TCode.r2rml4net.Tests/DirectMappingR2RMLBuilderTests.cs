@@ -7,6 +7,7 @@ using VDS.RDF;
 using System.IO;
 using VDS.RDF.Writing;
 using System.Collections.Generic;
+using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Tests
 {
@@ -15,12 +16,14 @@ namespace TCode.r2rml4net.Tests
     {
         private DirectMappingR2RMLBuilder _directMappingR2RMLBuilder;
         private Mock<IDatabaseMetadata> _databaseMetedata;
+        private Mock<IR2RMLConfiguration> _configuration;
 
         [SetUp]
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object);
+            _configuration = new Mock<IR2RMLConfiguration>();
+            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _configuration.Object);
         }
 
         [Test, Description("Invoking DirectMappingR2RMLBuilder#BuildGraph should execute reading of metadata")]
