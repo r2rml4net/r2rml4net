@@ -55,6 +55,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             {
                 if (this.TableName != null)
                     throw new InvalidTriplesMapException("Table name already set");
+                if(this.SqlQuery != null)
+                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query");
 
                 if (value == null)
                     throw new System.ArgumentNullException("value");
@@ -65,7 +67,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                 if (tablename == string.Empty)
                     throw new System.ArgumentOutOfRangeException("tablename", "The table name seems invalid");
 
-                AssertTriples(tablename);
+                AssertTableNameTriples(tablename);
             }
         }
 
@@ -90,7 +92,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return stringBuilder.ToString();
         }
 
-        private void AssertTriples(string tablename)
+        private void AssertTableNameTriples(string tablename)
         {
             // TODO: refactor with new version of dotNetRDF
             _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, tablename);
@@ -108,21 +110,61 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(tableDefinition, tableName, tableNameLiteral);
         }
 
-        string _sqlQuery;
+        private void AssertSqlQueryTriples(string sqlQuery)
+        {
+            // TODO: refactor with new version of dotNetRDF
+            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, Guid.NewGuid());
+
+            var tripleMap = R2RMLMappings.CreateUriNode(Uri);
+            var type = R2RMLMappings.CreateUriNode("rdf:type");
+            var tripleMapClass = R2RMLMappings.CreateUriNode("rr:TriplesMap");
+            var logicalTable = R2RMLMappings.CreateUriNode("rr:logicalTable");
+            var sqlQueryLiteral = R2RMLMappings.CreateLiteralNode(sqlQuery);
+            var tableDefinition = R2RMLMappings.CreateBlankNode();
+            var sqlQueryProperty = R2RMLMappings.CreateUriNode("rr:sqlQuery");
+
+            R2RMLMappings.Assert(tripleMap, type, tripleMapClass);
+            R2RMLMappings.Assert(tripleMap, logicalTable, tableDefinition);
+            R2RMLMappings.Assert(tableDefinition, sqlQueryProperty, sqlQueryLiteral);
+        }
+
         public string SqlQuery
         {
             get
             {
-                return _sqlQuery;
+                if (_triplesMapUri != null)
+                {
+                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(string.Format(@"
+                                    PREFIX rr: <http://www.w3.org/ns/r2rml#>
+
+                                    SELECT ?sqlQuery
+                                    WHERE 
+                                    {{
+                                      <{0}> rr:logicalTable ?lt .
+                                      ?lt rr:sqlQuery ?sqlQuery
+                                    }}", _triplesMapUri));
+
+                    if (result.Count > 1)
+                        throw new InvalidTriplesMapException("Triples map contains multiple SQL queries");
+
+                    if (result.Count == 1)
+                        return result[0].Value("sqlQuery").ToString();
+                }
+                return null;
             }
             internal set
             {
+                if (this.SqlQuery != null)
+                    throw new InvalidTriplesMapException("SQL query already set");
+                if (this.TableName != null)
+                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query");
+
                 if (value == null)
                     throw new System.ArgumentNullException("value");
                 if (string.IsNullOrWhiteSpace(value))
                     throw new System.ArgumentOutOfRangeException("value");
 
-                _sqlQuery = value;
+                AssertSqlQueryTriples(value);
             }
         }
 
