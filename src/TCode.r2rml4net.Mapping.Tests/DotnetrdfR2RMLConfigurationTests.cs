@@ -141,7 +141,7 @@ namespace TCode.r2rml4net.Mapping.Tests
         }
 
         [Test]
-        public void CanSubjectMaps()
+        public void CanCreateSubjectMaps()
         {
             // given
             ISubjectMapConfiguration subjectMapConfiguration = _configuration.CreateTriplesMapFromTable("Table").SubjectMap();
