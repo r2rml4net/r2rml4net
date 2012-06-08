@@ -19,13 +19,15 @@ namespace TCode.r2rml4net.Mapping
         private VDS.RDF.IGraph _r2rmlGraph;
 
         private RDB.IDatabaseMetadata _databaseMetadataProvider;
+        private IR2RMLConfiguration _R2RMLConfiguration;
 
         /// <summary>
         /// Creates <see cref="DirectMappingR2RMLBuilder"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider)
+        public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
+            this._R2RMLConfiguration = _R2RMLConfiguration;
 
             MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
             MappedDataBaseUri = new Uri("http://example.com/");
@@ -47,6 +49,7 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Returns an R2RML graph generated for direct mapping
         /// </summary>
+        [Obsolete]
         public VDS.RDF.IGraph R2RMLGraph
         {
             get
@@ -63,6 +66,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IDatabaseMetadataVisitor
 
+        private ITriplesMapConfiguration currentTriplesMapConfiguration;
         private IUriNode currentTripleMap;
 
         public void Visit(TableCollection tables)
@@ -73,12 +77,13 @@ namespace TCode.r2rml4net.Mapping
         {
             currentTripleMap = R2RMLGraph.CreateUriNode(new Uri(string.Format("{0}TriplesMap", table.Name), UriKind.Relative));
 
-            AssertTripleMapTriples(table);
             AssertSubjectMapTriples(table);
         }
 
         private void AssertSubjectMapTriples(TableMetadata table)
         {
+            currentTriplesMapConfiguration = _R2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
+
             var subjectMap = R2RMLGraph.CreateUriNode("rr:subjectMap");
             var rrClass = R2RMLGraph.CreateUriNode("rr:class");
             var rrTemplate = R2RMLGraph.CreateUriNode("rr:template");
@@ -92,20 +97,6 @@ namespace TCode.r2rml4net.Mapping
             R2RMLGraph.Assert(subjectMapDef, termType, blankNode);
             R2RMLGraph.Assert(subjectMapDef, rrClass, classDef);
             R2RMLGraph.Assert(classDef, rrTemplate, template);
-        }
-
-        private void AssertTripleMapTriples(TableMetadata table)
-        {
-            var type = R2RMLGraph.CreateUriNode("rdf:type");
-            var tripleMap = R2RMLGraph.CreateUriNode("rr:TriplesMap");
-            var logicalTable = R2RMLGraph.CreateUriNode("rr:logicalTable");
-            var tableName = R2RMLGraph.CreateUriNode("rr:tableName");
-            var tableNameLiteral = R2RMLGraph.CreateLiteralNode(table.Name);
-            var tableDefinition = R2RMLGraph.CreateBlankNode();
-
-            R2RMLGraph.Assert(currentTripleMap, type, tripleMap);
-            R2RMLGraph.Assert(currentTripleMap, logicalTable, tableDefinition);
-            R2RMLGraph.Assert(tableDefinition, tableName, tableNameLiteral);
         }
 
         public void Visit(ColumnMetadata column)
