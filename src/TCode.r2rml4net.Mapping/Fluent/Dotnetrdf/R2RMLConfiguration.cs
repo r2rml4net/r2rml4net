@@ -45,6 +45,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
+            triplesMapConfiguration.SqlQuery = sqlQuery;
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
