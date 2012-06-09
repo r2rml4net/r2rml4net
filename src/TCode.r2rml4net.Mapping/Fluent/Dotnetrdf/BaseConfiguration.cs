@@ -8,15 +8,18 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// </summary>
     public abstract class BaseConfiguration
     {
-        protected const string RdfType = "rdf:type";
-        protected const string RrLogicalTableProperty = "rr:logicalTable";
-        protected const string RrTableNameProperty = "rr:tableName";
-        protected const string RrSqlQueryProperty = "rr:sqlQuery";
-        protected const string RrSqlVersionProperty = "rr:sqlVersion";
-        protected const string RrTriplesMapClass = "rr:TriplesMap";
-        protected const string RrClassClass = "rr:Class";
-        protected const string RrSubjectMapProperty = "rr:subjectMap";
+        internal const string RdfType = "rdf:type";
+        internal const string RrLogicalTableProperty = "rr:logicalTable";
+        internal const string RrTableNameProperty = "rr:tableName";
+        internal const string RrSqlQueryProperty = "rr:sqlQuery";
+        internal const string RrSqlVersionProperty = "rr:sqlVersion";
+        internal const string RrTriplesMapClass = "rr:TriplesMap";
+        internal const string RrClassClass = "rr:Class";
+        internal const string RrSubjectMapProperty = "rr:subjectMap";
 
+        /// <summary>
+        /// DotNetRDF graph containing the R2RML mappings
+        /// </summary>
         protected internal IGraph R2RMLMappings { get; private set; }
 
         /// <summary>

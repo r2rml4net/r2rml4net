@@ -22,6 +22,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ITriplesMapConfiguration
 
+        /// <summary>
+        /// <see cref="ITriplesMapConfiguration.TableName"/>
+        /// </summary>
         public string TableName
         {
             get
@@ -66,7 +69,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
         }
 
-        private string TrimTableName(string tablename)
+        private static string TrimTableName(string tablename)
         {
             var regexMatch = TableNameRegex.Match(tablename);
 
@@ -115,6 +118,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(tableDefinition, sqlQueryProperty, sqlQueryLiteral);
         }
 
+        /// <summary>
+        /// <see cref="ITriplesMapConfiguration.SqlQuery"/>
+        /// </summary>
         public string SqlQuery
         {
             get
@@ -155,6 +161,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
         }
 
+        /// <summary>
+        /// <see cref="ITriplesMapConfiguration.Uri"/>
+        /// </summary>
         public Uri Uri
         {
             get
@@ -163,20 +172,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                     return null;
 
                 return new Uri(_triplesMapUri);
-            }
-        }
-
-        public Uri[] SqlVersions
-        {
-            get
-            {
-                IBlankNode logicalTableNode = LogicalTableNode;
-
-                if (logicalTableNode == null)
-                    return new Uri[0];
-
-                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode(RrSqlVersionProperty));
-                return triples.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }
 
@@ -192,6 +187,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(tripleMap, logicalTable, tableDefinition);
         }
 
+        /// <summary>
+        /// <see cref="ITriplesMapConfiguration.SubjectMap"/>
+        /// </summary>
         public ISubjectMapConfiguration SubjectMap()
         {
             return new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
@@ -221,6 +219,23 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(string uri)
         {
             return this.SetSqlVersion(new Uri(uri));
+        }
+
+        /// <summary>
+        /// <see cref="ITriplesMapFromR2RMLViewConfiguration.SqlVersions"/>
+        /// </summary>
+        public Uri[] SqlVersions
+        {
+            get
+            {
+                IBlankNode logicalTableNode = LogicalTableNode;
+
+                if (logicalTableNode == null)
+                    return new Uri[0];
+
+                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode(RrSqlVersionProperty));
+                return triples.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
+            }
         }
 
         #endregion

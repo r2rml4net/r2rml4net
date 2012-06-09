@@ -13,6 +13,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         internal INode TriplesMapNode { get; private set; }
         internal INode TermMapNode { get; private set; }
 
+        /// <summary>
+        /// </summary>
         protected TermMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
@@ -24,11 +26,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ITermMapConfiguration
 
-        public Uri TermTypeIRI
-        {
-            get { throw new NotImplementedException(); }
-        }
+        /// <summary>
+        /// <see cref="ITermMapConfiguration.TermTypeIRI"/>
+        /// </summary>
+        public abstract Uri TermTypeIRI { get; }
 
+        /// <summary>
+        /// <see cref="ITermMapConfiguration.TermType"/>
+        /// </summary>
         public ITermTypeConfiguration TermType()
         {
             return this;
@@ -38,8 +43,17 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ITermTypeConfiguration
 
+        /// <summary>
+        /// <see cref="ITermTypeConfiguration.IsBlankNode"/>
+        /// </summary>
         public abstract ITermMapConfiguration IsBlankNode();
+        /// <summary>
+        /// <see cref="ITermTypeConfiguration.IsIRI"/>
+        /// </summary>
         public abstract ITermMapConfiguration IsIRI();
+        /// <summary>
+        /// <see cref="ITermTypeConfiguration.IsLiteral"/>
+        /// </summary>
         public abstract ITermMapConfiguration IsLiteral();
 
         #endregion
