@@ -16,11 +16,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
         }
 
-        protected Uri MappingBaseUri
-        {
-            get { return new Uri("http://example.com/"); }
-        }
-
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
         /// <summary>
@@ -41,6 +36,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
         }
 
+        /// <summary>
+        /// Creates a Triples Map with physical table datasource and adds it to the R2RML mappings
+        /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings) { TableName = tablename };
@@ -48,6 +46,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return triplesMapConfiguration;
         }
 
+        /// <summary>
+        /// Creates a Triples Map with R2RML view datasource and adds it to the R2RML mappings
+        /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings) { SqlQuery = sqlQuery };
