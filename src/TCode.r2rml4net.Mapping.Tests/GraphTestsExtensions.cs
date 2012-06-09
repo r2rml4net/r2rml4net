@@ -75,7 +75,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                 graph.CreateUriNode(predicateUri),
                 graph.CreateUriNode(objectUri)
                 )), string.Format("Triple <{0}> => <{1}> => <{2}> not found in graph", subjectUri, predicateUri, objectUri));
-        } 
+        }
 
         #endregion
 
@@ -120,8 +120,53 @@ namespace TCode.r2rml4net.Mapping.Tests
             {
                 Assert.AreEqual(NodeType.Blank, triple.Object.NodeType, "Triple found but object was {0}", triple.Object.NodeType);
             }
-        } 
+        }
 
         #endregion
+
+        #region VerifyHasTripleWithBlankSubjectAndLiteralObject
+
+		/// <summary>
+        /// Check wheather graph has a triple with blank subject, given predicate and literal object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankSubjectAndLiteralObject(this IGraph graph, string predicateUri, string literalValue, string languageSpec = null, Uri dataType = null, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankSubjectAndLiteralObject(
+                new Uri(predicateUri), 
+                literalValue, 
+                languageSpec, 
+                dataType, 
+                expectedTriplesCount);
+        }
+
+        /// <summary>
+        /// Check wheather graph has a triple with blank subject, given predicate and literal object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankSubjectAndLiteralObject(this IGraph graph, Uri predicateUri, string literalValue, string languageSpec = null, Uri dataType = null, int expectedTriplesCount = 1)
+        {
+            if (languageSpec != null && dataType != null)
+                throw new ArgumentException("Both languageSpec and dataType params cannot be set");
+
+            ILiteralNode literalNode;
+            if (languageSpec == null && dataType == null)
+                literalNode = graph.CreateLiteralNode(literalValue);
+            else if (languageSpec != null)
+                literalNode = graph.CreateLiteralNode(literalValue, languageSpec);
+            else
+                literalNode = graph.CreateLiteralNode(literalValue, dataType);
+
+            var triples = graph.GetTriplesWithPredicateObject(
+                graph.CreateUriNode(predicateUri),
+                literalNode
+                ).ToArray();
+
+            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            foreach (var triple in triples)
+            {
+                Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Object.NodeType);
+            }
+        }
+
+	#endregion
     }
 }
