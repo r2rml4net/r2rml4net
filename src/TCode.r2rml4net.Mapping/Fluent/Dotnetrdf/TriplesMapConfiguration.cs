@@ -10,15 +10,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// <summary>
     /// Implementation of fluent configuration interface for <a href="http://www.w3.org/TR/r2rml/#triples-map">Triples Maps</a>
     /// </summary>
-    class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
+    public class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
         private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
         private string _triplesMapUri;
 
-        /// <summary>
-        /// Creates an instance of <see cref="TriplesMapConfiguration"/>
-        /// </summary>
-        /// <param name="r2RMLMappings">existing mappings passed from <see cref="R2RMLConfiguration"/></param>
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
