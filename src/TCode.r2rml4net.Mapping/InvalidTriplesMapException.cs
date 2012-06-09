@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -21,6 +18,15 @@ namespace TCode.r2rml4net.Mapping
         public InvalidTriplesMapException(string message, Uri errorneousNodeUri)
             : base(message)
         {
+            Uri = errorneousNodeUri;
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="InvalidTriplesMapException"/> with a message
+        /// </summary>
+        public InvalidTriplesMapException(string message)
+            : this(message, null)
+        {
         }
 
         /// <summary>
@@ -30,7 +36,9 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                return string.Format("{0}. Error in node {1}", base.Message, Uri);
+                return Uri != null 
+                    ? string.Format("{0}. Error in node {1}", base.Message, Uri) 
+                    : base.Message;
             }
         }
     }
