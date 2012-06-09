@@ -4,6 +4,10 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
+    /// <summary>
+    /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 
+    /// backed by a DotNetRDF graph (see <see cref="ITermMapConfiguration"/>)
+    /// </summary>
     public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration
     {
         internal INode TriplesMapNode { get; private set; }

@@ -5,7 +5,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
-    class SubjectMapConfigurationTests
+    public class SubjectMapConfigurationTests
     {
         private SubjectMapConfiguration _subjectMapConfiguration;
         private IBlankNode _triplesMapNode;

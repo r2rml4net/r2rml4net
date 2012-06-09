@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration
+    /// <summary>
+    /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF
+    /// </summary>
+    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration
     {
         internal static Uri DefaultBaseUri
         {
@@ -20,11 +23,19 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
+        /// <summary>
+        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
+        /// </summary>
+        /// <param name="baseUri">base URI for mapping nodes</param>
         public R2RMLConfiguration(Uri baseUri)
             : base(baseUri)
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings 
+        /// and base URI set to <see cref="DefaultBaseUri"/>
+        /// </summary>
         public R2RMLConfiguration()
             : base(DefaultBaseUri)
         {

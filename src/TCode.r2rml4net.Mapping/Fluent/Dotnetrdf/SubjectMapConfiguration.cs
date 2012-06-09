@@ -4,9 +4,12 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    internal class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration
+    /// <summary>
+    /// Fluent configuration of subject map backed by a DotNetRDF graph (see <see cref="ISubjectMapConfiguration"/>)
+    /// </summary>
+    public class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration
     {
-        public SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
+        internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
         }
 
