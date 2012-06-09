@@ -98,7 +98,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.AreEqual(triplesMapUri, triplesMap.Uri.ToString());
             _configuration.R2RMLMappings.VerifyHasTriple(triplesMapUri, RdfType, RrTriplesMapClass);
-            AssertTripleAssertionWithBlankNodeObject(triplesMapUri, RrLogicalTableProperty);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMapUri, RrLogicalTableProperty);
             AssertTripleAssertionWithBlankSubjectAndLiteralNode(RrTableNameProperty, tablename);
         }
 
@@ -113,7 +113,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             _configuration.R2RMLMappings.VerifyHasTriple(triplesMap.Uri, RdfType, RrTriplesMapClass);
-            AssertTripleAssertionWithBlankNodeObject(triplesMap.Uri.ToString(), RrLogicalTableProperty);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMap.Uri, RrLogicalTableProperty);
             AssertTripleAssertionWithBlankSubjectAndLiteralNode(RrSqlQueryProperty, sqlQuery);
         }
 
@@ -165,16 +165,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         private void AssertGraphHasNode(string uri)
         {
             Assert.IsNotNull(_configuration.R2RMLMappings.GetUriNode(new Uri(uri)), string.Format("Node <{0}> not found in graph {1}", uri, _configuration.R2RMLMappings));
-        }
-
-        private void AssertTripleAssertionWithBlankNodeObject(string subjectUri, string predicateUri, int expectedTriplesCount = 1)
-        {
-            var triples = _configuration.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _configuration.R2RMLMappings.CreateUriNode(new Uri(subjectUri)),
-                _configuration.R2RMLMappings.CreateUriNode(new Uri(predicateUri))
-                );
-
-            Assert.AreEqual(expectedTriplesCount, triples.Count());
         }
 
         private void AssertTripleAssertionWithBlankNodeSubject(string predicateUri, string objectUri)
