@@ -12,16 +12,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests
     {
-        private Mock<Graph> _graph;
         private R2RMLConfiguration _configuration;
 
         [SetUp]
         public void Setup()
         {
-            _graph = new Mock<Graph>
-                         {
-                             CallBase = true
-                         };
+            new Mock<Graph>
+                {
+                    CallBase = true
+                };
             _configuration = new R2RMLConfiguration();// {R2RMLMappings = _graph.Object};
         }
 

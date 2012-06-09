@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using VDS.RDF;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
@@ -36,16 +32,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
-            var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
-            triplesMapConfiguration.TableName = tablename;
+            var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings) { TableName = tablename };
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
 
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
-            var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
-            triplesMapConfiguration.SqlQuery = sqlQuery;
+            var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings) { SqlQuery = sqlQuery };
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
