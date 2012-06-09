@@ -58,6 +58,7 @@
     <Compile Include="Fluent\Dotnetrdf\TermMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\TriplesMapConfiguration.cs" />
     <Compile Include="Fluent\IR2RMLConfiguration.cs" />
+    <Compile Include="Fluent\ISubjectMapConfiguration.cs" />
     <Compile Include="Fluent\ITermMapConfiguration.cs" />
     <Compile Include="Fluent\ITriplesMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\R2RMLConfiguration.cs" />
