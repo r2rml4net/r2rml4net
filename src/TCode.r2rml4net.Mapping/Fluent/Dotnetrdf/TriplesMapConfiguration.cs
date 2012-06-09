@@ -93,10 +93,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         private void AssertTableNameTriples(string tablename)
         {
             // TODO: refactor with new version of dotNetRDF
-            string triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, tablename);
+            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, tablename);
 
             IBlankNode tableDefinition;
-            AssertTriplesMapsTriples(triplesMapUri, out tableDefinition);
+            AssertTriplesMapsTriples(out tableDefinition);
 
             var tableName = R2RMLMappings.CreateUriNode("rr:tableName");
             var tableNameLiteral = R2RMLMappings.CreateLiteralNode(tablename);
@@ -107,10 +107,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         private void AssertSqlQueryTriples(string sqlQuery)
         {
             // TODO: refactor for something else than GUID
-            string triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, Guid.NewGuid());
+            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, Guid.NewGuid());
 
             IBlankNode tableDefinition;
-            AssertTriplesMapsTriples(triplesMapUri, out tableDefinition);
+            AssertTriplesMapsTriples(out tableDefinition);
 
             var sqlQueryLiteral = R2RMLMappings.CreateLiteralNode(sqlQuery);
             var sqlQueryProperty = R2RMLMappings.CreateUriNode("rr:sqlQuery");
@@ -166,10 +166,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             }
         }
 
-        private void AssertTriplesMapsTriples(string triplesMapUri, out IBlankNode tableDefinition)
+        private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
         {
-            _triplesMapUri = triplesMapUri;
-
             var tripleMap = R2RMLMappings.CreateUriNode(Uri);
             var tripleMapClass = R2RMLMappings.CreateUriNode("rr:TriplesMap");
             var type = R2RMLMappings.CreateUriNode("rdf:type");

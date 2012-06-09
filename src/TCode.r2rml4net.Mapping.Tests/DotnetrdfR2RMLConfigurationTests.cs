@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -93,19 +94,28 @@ namespace TCode.r2rml4net.Mapping.Tests
             string triplesMapUri = string.Format("{0}{1}TriplesMap", _configuration.R2RMLMappings.BaseUri, tablename);
 
             // when
-            _configuration.CreateTriplesMapFromTable(tablename);
+            var triplesMap = _configuration.CreateTriplesMapFromTable(tablename);
 
             // then
-            //_graph.Verify(g => g.CreateUriNode("rr:TriplesMap"), Times.Once());
-            //_graph.Verify(g => g.CreateUriNode("rdf:Type"), Times.Once());
-            //_graph.Verify(g => g.CreateUriNode("rr:logicalTable"), Times.Once());
-            //_graph.Verify(g => g.CreateUriNode("rr:tableName"), Times.Once());
-            //_graph.Verify(g => g.CreateLiteralNode(tablename), Times.Once());
-            //_graph.Verify(g => g.CreateBlankNode(), Times.Once());
-
+            Assert.AreEqual(triplesMapUri, triplesMap.Uri.ToString());
             AssertTripleAssertion(triplesMapUri, RdfType, RrTriplesMapClass);
-            //AssertTripleAssertionWithBlankNodeObject(triplesMapUri, RrLogicalTableProperty);
-            //AssertTripleAssertionWithBlankSubjectAndLiteralNode(RrTableNameProperty, tablename);
+            AssertTripleAssertionWithBlankNodeObject(triplesMapUri, RrLogicalTableProperty);
+            AssertTripleAssertionWithBlankSubjectAndLiteralNode(RrTableNameProperty, tablename);
+        }
+
+        [Test]
+        public void CreatingTriplesMapFromR2RMLViewAssertsTriplesInGraph()
+        {
+            // given
+            const string sqlQuery = "SELECT * from X";
+
+            // when
+            var triplesMap = _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
+
+            // then
+            AssertTripleAssertion(triplesMap.Uri.ToString(), RdfType, RrTriplesMapClass);
+            AssertTripleAssertionWithBlankNodeObject(triplesMap.Uri.ToString(), RrLogicalTableProperty);
+            AssertTripleAssertionWithBlankSubjectAndLiteralNode(RrSqlQueryProperty, sqlQuery);
         }
 
         [Test]
@@ -160,24 +170,25 @@ namespace TCode.r2rml4net.Mapping.Tests
 
         private void AssertTripleAssertion(string subjectUri, string predicateUri, string objectUri)
         {
-            AssertGraphHasNode(subjectUri);
-            AssertGraphHasNode(predicateUri);
-            AssertGraphHasNode(objectUri);
+            //AssertGraphHasNode(subjectUri);
+            //AssertGraphHasNode(predicateUri);
+            //AssertGraphHasNode(objectUri);
 
             Assert.IsTrue(_configuration.R2RMLMappings.ContainsTriple(new Triple(
-                _configuration.R2RMLMappings.GetUriNode(new Uri(subjectUri)),
-                _configuration.R2RMLMappings.GetUriNode(new Uri(predicateUri)),
-                _configuration.R2RMLMappings.GetUriNode(new Uri(objectUri))
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(subjectUri)),
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(predicateUri)),
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(objectUri))
                 )), string.Format("Triple <{0}> => <{1}> => <{2}> not found in graph", subjectUri, predicateUri, objectUri));
         }
 
-        private void AssertTripleAssertionWithBlankNodeObject(string subjectUri, string predicateUri)
+        private void AssertTripleAssertionWithBlankNodeObject(string subjectUri, string predicateUri, int expectedTriplesCount = 1)
         {
-            _graph.Verify(g => g.Assert(
-                It.Is<UriNode>(node => node.Uri.ToString() == subjectUri),
-                It.Is<UriNode>(node => node.Uri.ToString() == predicateUri),
-                It.IsAny<BlankNode>()
-                ));
+            var triples = _configuration.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(subjectUri)),
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(predicateUri))
+                );
+
+            Assert.AreEqual(expectedTriplesCount, triples.Count());
         }
 
         private void AssertTripleAssertionWithBlankNodeSubject(string predicateUri, string objectUri)
@@ -198,13 +209,14 @@ namespace TCode.r2rml4net.Mapping.Tests
                 ));
         }
 
-        private void AssertTripleAssertionWithBlankSubjectAndLiteralNode(string predicateUri, string literalValue)
+        private void AssertTripleAssertionWithBlankSubjectAndLiteralNode(string predicateUri, string literalValue, int expectedTriplesCount = 1)
         {
-            _graph.Verify(g => g.Assert(
-                It.IsAny<BlankNode>(),
-                It.Is<UriNode>(node => node.Uri.ToString() == predicateUri),
-                It.Is<LiteralNode>(node => node.Value == literalValue)
-                ));
+            var triples = _configuration.R2RMLMappings.GetTriplesWithPredicateObject(
+                _configuration.R2RMLMappings.CreateUriNode(new Uri(predicateUri)),
+                _configuration.R2RMLMappings.CreateLiteralNode(literalValue)
+                );
+
+            Assert.AreEqual(expectedTriplesCount, triples.Count());
         }
 
         #endregion
@@ -214,6 +226,7 @@ namespace TCode.r2rml4net.Mapping.Tests
         private const string RrTriplesMapClass = "http://www.w3.org/ns/r2rml#TriplesMap";
         private const string RrLogicalTableProperty = "http://www.w3.org/ns/r2rml#logicalTable";
         private const string RrTableNameProperty = "http://www.w3.org/ns/r2rml#tableName";
+        private const string RrSqlQueryProperty = "http://www.w3.org/ns/r2rml#sqlQuery";
 
         private const string RdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
