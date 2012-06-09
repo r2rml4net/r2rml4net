@@ -198,7 +198,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ISubjectMapConfiguration SubjectMap()
         {
-            return new TermMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            return new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
         }
 
         #endregion

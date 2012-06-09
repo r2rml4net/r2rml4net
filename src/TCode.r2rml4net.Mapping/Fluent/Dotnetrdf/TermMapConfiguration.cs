@@ -4,12 +4,12 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ISubjectMapConfiguration
+    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration
     {
         internal INode TriplesMapNode { get; private set; }
         internal INode TermMapNode { get; private set; }
 
-        internal TermMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
+        protected TermMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
             TriplesMapNode = triplesMapNode;
@@ -19,28 +19,24 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         }
 
         #region Implementation of ITermMapConfiguration
-        #endregion
 
-        #region Implementation of ISubjectMapConfiguration
-
-        public ISubjectMapConfiguration AddClass(Uri classIri)
+        public Uri TermTypeIRI
         {
-            R2RMLMappings.Assert(
-                TermMapNode, 
-                R2RMLMappings.CreateUriNode(RrClassClass), 
-                R2RMLMappings.CreateUriNode(classIri));
+            get { throw new NotImplementedException(); }
+        }
 
+        public ITermTypeConfiguration TermType()
+        {
             return this;
         }
 
-        public Uri[] ClassIris
-        {
-            get
-            {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrClassClass));
-                return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
-            }
-        }
+        #endregion
+
+        #region Implementation of ITermTypeConfiguration
+
+        public abstract ITermMapConfiguration IsBlankNode();
+        public abstract ITermMapConfiguration IsIRI();
+        public abstract ITermMapConfiguration IsLiteral();
 
         #endregion
     }
