@@ -55,11 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DotnetrdfR2RMLConfigurationTests.cs" />
-    <Compile Include="TermMapConfigurationTests.cs" />
-    <Compile Include="TriplesMapConfigurationTests.cs" />
+    <Compile Include="Dotnetrdf\DotnetrdfR2RMLConfigurationTests.cs" />
+    <Compile Include="Dotnetrdf\TermMapConfigurationTests.cs" />
+    <Compile Include="Dotnetrdf\TriplesMapConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

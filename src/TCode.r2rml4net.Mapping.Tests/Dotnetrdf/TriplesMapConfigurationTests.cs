@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
-using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Tests
+namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
     [TestFixture]
     public class TriplesMapConfigurationTests
