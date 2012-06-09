@@ -3,7 +3,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    abstract class BaseConfiguration
+    public abstract class BaseConfiguration
     {
         protected const string RdfType = "rdf:type";
         protected const string RrLogicalTableProperty = "rr:logicalTable";

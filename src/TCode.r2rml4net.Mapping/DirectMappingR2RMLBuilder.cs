@@ -63,10 +63,11 @@ namespace TCode.r2rml4net.Mapping
 
         public void Visit(TableMetadata table)
         {
-            currentTripleMap = R2RMLGraph.CreateUriNode(new Uri(string.Format("{0}TriplesMap", table.Name), UriKind.Relative));
-
             currentTriplesMapConfiguration = _R2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
-            currentTriplesMapConfiguration.SubjectMap().AddClass(new Uri(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name)));
+            currentTriplesMapConfiguration
+                .SubjectMap()
+                .AddClass(new Uri(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name)))
+                .TermType().IsBlankNode();
 
             AssertSubjectMapTriples(table);
         }
