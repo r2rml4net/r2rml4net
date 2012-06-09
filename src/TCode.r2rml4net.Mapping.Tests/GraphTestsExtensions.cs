@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using VDS.RDF;
 
@@ -78,6 +79,49 @@ namespace TCode.r2rml4net.Mapping.Tests
 
         #endregion
 
+        #region VerifyHasTripleWithBlankObject
 
+        /// <summary>
+        /// Check wheather graph has triples with subject and predicate and blank node object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankObject(this IGraph graph, string subjectUri, string predicateUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankObject(new Uri(subjectUri), new Uri(predicateUri), expectedTriplesCount);
+        }
+
+        /// <summary>
+        /// Check wheather graph has triples with subject and predicate and blank node object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankObject(this IGraph graph, Uri subjectUri, string predicateUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankObject(subjectUri, new Uri(predicateUri), expectedTriplesCount);
+        }
+
+        /// <summary>
+        /// Check wheather graph has triples with subject and predicate and blank node object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankObject(this IGraph graph, string subjectUri, Uri predicateUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankObject(new Uri(subjectUri), predicateUri, expectedTriplesCount);
+        }
+
+        /// <summary>
+        /// Check wheather graph has triples with subject and predicate and blank node object
+        /// </summary>
+        internal static void VerifyHasTripleWithBlankObject(this IGraph graph, Uri subjectUri, Uri predicateUri, int expectedTriplesCount = 1)
+        {
+            var triples = graph.GetTriplesWithSubjectPredicate(
+                graph.CreateUriNode(subjectUri),
+                graph.CreateUriNode(predicateUri)
+                ).ToArray();
+
+            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            foreach (var triple in triples)
+            {
+                Assert.AreEqual(NodeType.Blank, triple.Object.NodeType, "Triple found but object was {0}", triple.Object.NodeType);
+            }
+        } 
+
+        #endregion
     }
 }
