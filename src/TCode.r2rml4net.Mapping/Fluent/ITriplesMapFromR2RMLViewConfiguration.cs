@@ -11,12 +11,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// Sets the sql query to be conformat with a specific SQL language specification
         /// </summary>
         /// <param name="uri">Usually on of the URIs listed on http://www.w3.org/2001/sw/wiki/RDB2RDF/SQL_Version_IRIs </param>
-        ITriplesMapConfiguration SetSqlVersion(Uri uri);
+        ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(Uri uri);
 
         /// <summary>
         /// Sets the sql query to be conformat with a specific SQL language specification
         /// </summary>
         /// <param name="uri">String representation of the sql version URI. Usually on of the URIs listed on http://www.w3.org/2001/sw/wiki/RDB2RDF/SQL_Version_IRIs </param>
-        ITriplesMapConfiguration SetSqlVersion(string uri);
+        ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(string uri);
+
+        /// <summary>
+        /// Gets the URIs of SQL versions set for the logical table
+        /// </summary>
+        Uri[] SqlVersions { get; }
     }
 }

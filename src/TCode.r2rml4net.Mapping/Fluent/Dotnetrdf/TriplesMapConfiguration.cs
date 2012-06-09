@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using VDS.RDF;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -162,7 +163,24 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
+                if (string.IsNullOrWhiteSpace(_triplesMapUri))
+                    return null;
+
                 return new Uri(_triplesMapUri);
+            }
+        }
+
+        public Uri[] SqlVersions
+        {
+            get
+            {
+                IBlankNode logicalTableNode = LogicalTableNode;
+
+                if (logicalTableNode == null)
+                    return new Uri[0];
+
+                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode("rr:sqlVersion"));
+                return triples.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }
 
@@ -191,19 +209,43 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// Asserts this Triples Map's SQL query as a query of type defined by <paramref name="uri"/> parmeter
         /// </summary>
         /// <param name="uri">Usually on of the URIs listed on http://www.w3.org/2001/sw/wiki/RDB2RDF/SQL_Version_IRIs </param>
-        public ITriplesMapConfiguration SetSqlVersion(Uri uri)
+        public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(Uri uri)
         {
+            if (TableName != null)
+                throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", Uri);
+
+            R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode("rr:sqlVersion"), R2RMLMappings.CreateUriNode(uri));
+
             return this;
         }
 
         /// <summary>
         /// <see cref="SetSqlVersion(Uri)"/>
         /// </summary>
-        public ITriplesMapConfiguration SetSqlVersion(string uri)
+        public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(string uri)
         {
             return this.SetSqlVersion(new Uri(uri));
         }
 
         #endregion
+
+        IBlankNode LogicalTableNode
+        {
+            get
+            {
+                if (Uri == null)
+                    throw new Exception("No TriplesMap URI!");
+
+                var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
+                    R2RMLMappings.CreateUriNode(Uri),
+                    R2RMLMappings.CreateUriNode("rr:logicalTable")
+                    ).ToArray();
+
+                if (logicalTables.Count() > 1)
+                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", Uri);
+
+                return logicalTables.First().Object as IBlankNode;
+            }
+        }
     }
 }
