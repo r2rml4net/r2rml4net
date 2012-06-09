@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
+using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
@@ -127,9 +128,68 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         }
 
         [Test]
-        public void CannotSetSqlVersionTwice()
+        public void CanSetSqlVersionTwice()
         {
-            throw new NotImplementedException();
+            // given
+            _triplesMapConfiguration.SqlQuery = "SELECT * from X";
+
+            // when
+            _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
+                                    .SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#MSSQL"));
+
+            // then
+            _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", "http://www.w3.org/ns/r2rml#SQL2008");
+            _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", "http://www.w3.org/ns/r2rml#MSSQL");
+        }
+
+        [Test]
+        public void CanSetSameSqlVersionTwice()
+        {
+            // given
+            _triplesMapConfiguration.SqlQuery = "SELECT * from X";
+
+            // when
+            _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
+                                    .SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"));
+
+            // then
+            _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", "http://www.w3.org/ns/r2rml#SQL2008", 2);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void CanSetSqlVersion(bool fromUriString)
+        {
+            // given
+            const string sqlVersionString = "http://www.w3.org/ns/r2rml#SQL2008";
+            Uri sqlVersion = new Uri(sqlVersionString);
+            _triplesMapConfiguration.SqlQuery = "SELECT * from X";
+
+            // when
+            if (fromUriString)
+                _triplesMapConfiguration.SetSqlVersion(sqlVersionString);
+            else
+                _triplesMapConfiguration.SetSqlVersion(sqlVersion);
+
+            // then
+            if (fromUriString)
+                _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", sqlVersionString);
+            else
+                _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", sqlVersion);
+
+            Assert.Contains(sqlVersion, _triplesMapConfiguration.SqlVersions);
+        }
+
+        [Test]
+        public void CannotSetSqlVersionWhenTableNameHasAlreadyBeenSet()
+        {
+            // given
+            _triplesMapConfiguration.TableName = "Table";
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(
+                () => _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
+            );
         }
     }
 }

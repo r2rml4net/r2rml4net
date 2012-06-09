@@ -144,16 +144,7 @@ namespace TCode.r2rml4net.Mapping.Tests
         /// </summary>
         internal static void VerifyHasTripleWithBlankSubjectAndLiteralObject(this IGraph graph, Uri predicateUri, string literalValue, string languageSpec = null, Uri dataType = null, int expectedTriplesCount = 1)
         {
-            if (languageSpec != null && dataType != null)
-                throw new ArgumentException("Both languageSpec and dataType params cannot be set");
-
-            ILiteralNode literalNode;
-            if (languageSpec == null && dataType == null)
-                literalNode = graph.CreateLiteralNode(literalValue);
-            else if (languageSpec != null)
-                literalNode = graph.CreateLiteralNode(literalValue, languageSpec);
-            else
-                literalNode = graph.CreateLiteralNode(literalValue, dataType);
+            var literalNode = CreateLiteralNode(graph, literalValue, languageSpec, dataType);
 
             var triples = graph.GetTriplesWithPredicateObject(
                 graph.CreateUriNode(predicateUri),
@@ -167,6 +158,66 @@ namespace TCode.r2rml4net.Mapping.Tests
             }
         }
 
-	#endregion
+        #endregion
+
+        #region VerifyHasTripleWithBlankSubject
+
+        /// <summary>
+        /// Checks wheather graph has triple with blank object
+        /// </summary>
+        public static void VerifyHasTripleWithBlankSubject(this IGraph graph, string predicateUri, string objectUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankSubject(new Uri(predicateUri), new Uri(objectUri));
+        }
+
+        /// <summary>
+        /// Checks wheather graph has triple with blank object
+        /// </summary>
+        public static void VerifyHasTripleWithBlankSubject(this IGraph graph, Uri predicateUri, string objectUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankSubject(predicateUri, new Uri(objectUri));
+        }
+
+        /// <summary>
+        /// Checks wheather graph has triple with blank object
+        /// </summary>
+        public static void VerifyHasTripleWithBlankSubject(this IGraph graph, string predicateUri, Uri objectUri, int expectedTriplesCount = 1)
+        {
+            graph.VerifyHasTripleWithBlankSubject(new Uri(predicateUri), objectUri);
+        }
+
+        /// <summary>
+        /// Checks wheather graph has triple with blank object
+        /// </summary>
+        public static void VerifyHasTripleWithBlankSubject(this IGraph graph, Uri predicateUri, Uri objectUri, int expectedTriplesCount = 1)
+        {
+            var triples = graph.GetTriplesWithPredicateObject(
+                graph.CreateUriNode(predicateUri),
+                graph.CreateUriNode(objectUri)
+                ).ToArray();
+
+            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            foreach (var triple in triples)
+            {
+                Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Object.NodeType);
+            }
+        } 
+
+        #endregion
+
+        private static ILiteralNode CreateLiteralNode(IGraph graph, string literalValue, string languageSpec, Uri dataType)
+        {
+            if (languageSpec != null && dataType != null)
+                throw new ArgumentException("Both languageSpec and dataType params cannot be set");
+
+            ILiteralNode literalNode;
+            if (languageSpec == null && dataType == null)
+                literalNode = graph.CreateLiteralNode(literalValue);
+            else if (languageSpec != null)
+                literalNode = graph.CreateLiteralNode(literalValue, languageSpec);
+            else
+                literalNode = graph.CreateLiteralNode(literalValue, dataType);
+            return literalNode;
+        }
     }
 }
