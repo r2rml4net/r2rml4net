@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using VDS.RDF;
-using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
@@ -18,7 +15,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             TriplesMapNode = triplesMapNode;
             TermMapNode = R2RMLMappings.CreateBlankNode();
 
-            R2RMLMappings.Assert(TriplesMapNode, R2RMLMappings.CreateUriNode("rr:subjectMap"), TermMapNode);
+            R2RMLMappings.Assert(TriplesMapNode, R2RMLMappings.CreateUriNode(RrSubjectMapProperty), TermMapNode);
         }
 
         #region Implementation of ITermMapConfiguration
@@ -30,7 +27,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             R2RMLMappings.Assert(
                 TermMapNode, 
-                R2RMLMappings.CreateUriNode("rr:Class"), 
+                R2RMLMappings.CreateUriNode(RrClassClass), 
                 R2RMLMappings.CreateUriNode(classIri));
 
             return this;
@@ -40,7 +37,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode("rr:Class"));
+                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrClassClass));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }

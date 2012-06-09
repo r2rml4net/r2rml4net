@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
-using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
