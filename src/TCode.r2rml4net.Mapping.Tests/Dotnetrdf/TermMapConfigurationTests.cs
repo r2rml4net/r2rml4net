@@ -10,8 +10,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     [TestFixture]
     public class TermMapConfigurationTests
     {
-        INode _triplesMapNode;
-        TermMapConfiguration _termMapConfiguration;
+        private INode _triplesMapNode;
+        private TermMapConfiguration _termMapConfiguration;
         private IGraph _graph;
 
         [SetUp]
@@ -23,19 +23,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                                         {
                                             CallBase = true
                                         }.Object;
-        }
-
-        [Test]
-        public void ConstructorCreatesNodeForTheTermMapIsRepresentsAndItsRelationToTriplesMap()
-        {
-            // then
-            Assert.IsNotNull(_termMapConfiguration.TermMapNode);
-            Assert.AreSame(_graph, _termMapConfiguration.TermMapNode.Graph);
-
-            var triples = _termMapConfiguration.R2RMLMappings.GetTriplesWithSubject(_triplesMapNode).ToArray();
-            Assert.AreEqual(1, triples.Count());
-            Assert.AreSame(_termMapConfiguration.TermMapNode, triples.First().Object);
-            Assert.AreEqual(_termMapConfiguration.R2RMLMappings.CreateUriNode("rr:subjectMap"), triples.First().Predicate);
         }
     }
 }
