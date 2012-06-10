@@ -210,6 +210,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsNotNull(subjectMapConfiguration);
             Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
+            Assert.IsInstanceOf<ITermMapConfiguration>(subjectMapConfiguration);
         }
 
         [Test]
@@ -224,6 +225,27 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.AreSame(subjectMapConfiguration, shouldBeTheSame);
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void CannotCreatePropertyMapBeforeInitializingTriplesMap()
+        {
+            IPropertyObjectMapConfiguration propertyObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
+        }
+
+        [Test]
+        public void CanCreatePropertyObjectMap()
+        {
+            // given
+            _triplesMapConfiguration.TableName = "Table";
+
+            // when
+            IPropertyObjectMapConfiguration propertyObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
+
+            // then
+            Assert.IsNotNull(propertyObjectMap);
+            Assert.IsInstanceOf<TermMapConfiguration>(propertyObjectMap);
+            Assert.IsInstanceOf<ITermMapConfiguration>(propertyObjectMap);
         }
     }
 }
