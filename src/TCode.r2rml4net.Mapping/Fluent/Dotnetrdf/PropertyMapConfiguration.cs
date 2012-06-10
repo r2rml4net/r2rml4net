@@ -15,6 +15,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return R2RMLMappings.CreateUriNode(RrPredicatePropety);
         }
 
+        protected internal override IUriNode CreateMapPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(RrPredicateMapPropety);
+        }
+
         #endregion
     }
 }

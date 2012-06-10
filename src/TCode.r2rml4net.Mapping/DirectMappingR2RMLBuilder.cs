@@ -65,33 +65,17 @@ namespace TCode.r2rml4net.Mapping
         {
             currentTriplesMapConfiguration = _R2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
             currentTriplesMapConfiguration.SubjectMap
-                .AddClass(new Uri(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name))).TermType.IsBlankNode();
-
-            AssertSubjectMapTriples(table);
-        }
-
-        private void AssertSubjectMapTriples(TableMetadata table)
-        {
-            currentTriplesMapConfiguration = _R2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
-
-            var subjectMap = R2RMLGraph.CreateUriNode("rr:subjectMap");
-            var rrClass = R2RMLGraph.CreateUriNode("rr:class");
-            var rrTemplate = R2RMLGraph.CreateUriNode("rr:template");
-            var termType = R2RMLGraph.CreateUriNode("rr:termType");
-            var blankNode = R2RMLGraph.CreateUriNode("rr:BlankNode");
-            var template = R2RMLGraph.CreateLiteralNode(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name));
-            var subjectMapDef = R2RMLGraph.CreateBlankNode();
-            var classDef = R2RMLGraph.CreateBlankNode();
-
-            R2RMLGraph.Assert(currentTripleMap, subjectMap, subjectMapDef);
-            R2RMLGraph.Assert(subjectMapDef, termType, blankNode);
-            R2RMLGraph.Assert(subjectMapDef, rrClass, classDef);
-            R2RMLGraph.Assert(classDef, rrTemplate, template);
+                .AddClass(new Uri(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name)))
+                .TermType.IsBlankNode();
         }
 
         public void Visit(ColumnMetadata column)
         {
-            AssertPredicateObjectMap(column);
+            Uri predicateUri = new Uri(string.Format("{0}{1}#{2}", this.MappedDataBaseUri, column.Table.Name, column.Name));
+
+            var propertyObjectMap = currentTriplesMapConfiguration.CreatePropertyObjectMap();
+            propertyObjectMap.CreatePropertyMap().IsConstantValued(predicateUri);
+            propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
         }
 
         private void AssertPredicateObjectMap(ColumnMetadata column)

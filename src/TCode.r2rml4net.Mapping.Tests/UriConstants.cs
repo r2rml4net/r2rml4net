@@ -2,6 +2,7 @@
 {
     static class UriConstants
     {
+        internal const string RrColumnProperty = "http://www.w3.org/ns/r2rml#column";
         internal const string RrGraphProperty = "http://www.w3.org/ns/r2rml#graph";
         internal const string RrPredicateProperty = "http://www.w3.org/ns/r2rml#predicate";
         internal const string RrObjectProperty = "http://www.w3.org/ns/r2rml#object";

@@ -43,5 +43,40 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(uri));
             _termMapConfigurationMock.VerifyAll();
         }
+
+        [Test]
+        public void TermMapCanBeColumnValued()
+        {
+            // given
+            const string columnName = "Name";
+            _termMapConfigurationMock
+                .Setup(config => config.CreateMapPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
+
+            // when
+            _termMapConfiguration.IsColumnValued(columnName);
+
+            // then
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.CreateMapPropertyNode()).Any());
+            _termMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrColumnProperty, columnName);
+        }
+
+        public void ColumnValueCanONlyBeSetOnce()
+        {
+            // given
+            const string columnName = "Name";
+            _termMapConfigurationMock
+                .Setup(config => config.CreateMapPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
+
+            // when
+            _termMapConfiguration.IsColumnValued(columnName);
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
+            _termMapConfigurationMock.VerifyAll();
+        }
     }
 }

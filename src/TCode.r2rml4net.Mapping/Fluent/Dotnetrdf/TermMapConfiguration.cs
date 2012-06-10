@@ -42,6 +42,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return this;
         }
 
+        public void IsColumnValued(string columnName)
+        {
+            IBlankNode node = R2RMLMappings.CreateBlankNode();
+
+            R2RMLMappings.Assert(TermMapNode, CreateMapPropertyNode(), node);
+            R2RMLMappings.Assert(node, R2RMLMappings.CreateUriNode(RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+        }
+
         #endregion
 
         #region Implementation of ITermTypeConfiguration
@@ -128,6 +136,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #endregion
 
+        /// <summary>
+        /// Returns a <see cref="IUriNode"/> for the shorcut property as described on http://www.w3.org/TR/r2rml/#constant
+        /// </summary>
         protected internal abstract IUriNode CreateConstantPropertyNode();
+        /// <summary>
+        /// Returns a term map property
+        /// </summary>
+        /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
+        protected internal abstract IUriNode CreateMapPropertyNode();
     }
 }
