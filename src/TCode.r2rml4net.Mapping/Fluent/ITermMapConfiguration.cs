@@ -14,5 +14,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         ITermTypeConfiguration TermType { get; }
 
         ITermTypeConfiguration IsConstantValued(Uri uri);
+        void IsColumnValued(string columnName);
     }
 }

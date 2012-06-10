@@ -30,6 +30,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return R2RMLMappings.CreateUriNode(RrObjectProperty);
         }
 
+        protected internal override IUriNode CreateMapPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(RrObjectMapProperty);
+        }
+
         #endregion
     }
 }
