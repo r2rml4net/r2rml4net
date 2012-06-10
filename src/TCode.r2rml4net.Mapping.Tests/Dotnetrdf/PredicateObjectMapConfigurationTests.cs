@@ -6,24 +6,24 @@ using VDS.RDF;
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
     [TestFixture]
-    public class PropertyObjectMapConfigurationTests
+    public class PredicateObjectMapConfigurationTests
     {
-        private PropertyObjectMapConfiguration _propertyObjectMap;
+        private PredicateObjectMapConfiguration _predicateObjectMap;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             var triplesMapNode = graph.CreateUriNode(new Uri("http://tests.example.com/TriplesMap"));
-            _propertyObjectMap = new PropertyObjectMapConfiguration(triplesMapNode, graph);
+            _predicateObjectMap = new PredicateObjectMapConfiguration(triplesMapNode, graph);
         }
 
         [Test]
         public void CanCreateObjectMaps()
         {
             // when 
-            var objectMap1 = _propertyObjectMap.CreateObjectMap();
-            var objectMap2 = _propertyObjectMap.CreateObjectMap();
+            var objectMap1 = _predicateObjectMap.CreateObjectMap();
+            var objectMap2 = _predicateObjectMap.CreateObjectMap();
 
             // then
             Assert.AreNotSame(objectMap1, objectMap2);
@@ -35,8 +35,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CanCreatePredicateMaps()
         {
             // when 
-            var propertyMap1 = _propertyObjectMap.CreatePropertyMap();
-            var propertyMap2 = _propertyObjectMap.CreatePropertyMap();
+            var propertyMap1 = _predicateObjectMap.CreatePredicateMap();
+            var propertyMap2 = _predicateObjectMap.CreatePredicateMap();
 
             // then
             Assert.AreNotSame(propertyMap1, propertyMap2);

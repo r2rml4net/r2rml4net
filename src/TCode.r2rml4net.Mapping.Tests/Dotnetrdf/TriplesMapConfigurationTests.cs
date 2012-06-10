@@ -230,7 +230,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         [Test, ExpectedException(typeof(InvalidOperationException))]
         public void CannotCreatePropertyMapBeforeInitializingTriplesMap()
         {
-            IPropertyObjectMapConfiguration propertyObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
+            IPredicateObjectMapConfiguration predicateObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
         }
 
         [Test]
@@ -240,11 +240,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _triplesMapConfiguration.TableName = "Table";
 
             // when
-            IPropertyObjectMapConfiguration propertyObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
+            IPredicateObjectMapConfiguration predicateObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
 
             // then
-            Assert.IsNotNull(propertyObjectMap);
-            Assert.IsInstanceOf<PropertyObjectMapConfiguration>(propertyObjectMap);
+            Assert.IsNotNull(predicateObjectMap);
+            Assert.IsInstanceOf<PredicateObjectMapConfiguration>(predicateObjectMap);
         }
     }
 }

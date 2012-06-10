@@ -6,20 +6,20 @@ using VDS.RDF;
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 {
     [TestFixture]
-    public class PropertyMapConfigurationTests
+    public class PredicateMapConfigurationTests
     {
-        private PropertyMapConfiguration _objectMap;
+        private PredicateMapConfiguration _objectMap;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            _objectMap = new PropertyMapConfiguration(triplesMapNode, graph);
+            _objectMap = new PredicateMapConfiguration(triplesMapNode, graph);
         }
 
         [Test]
-        public void PropertyMapCanBeIRIConstantValued()
+        public void PredicateMapCanBeIRIConstantValued()
         {
             // given
             Uri uri = new Uri("http://example.com/SomeResource");

@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
         private string _triplesMapUri;
         private SubjectMapConfiguration _subjectMapConfiguration;
-        private readonly IList<IPropertyObjectMapConfiguration> _propertyObjectMaps = new List<IPropertyObjectMapConfiguration>();
+        private readonly IList<IPredicateObjectMapConfiguration> _propertyObjectMaps = new List<IPredicateObjectMapConfiguration>();
 
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -209,11 +209,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.CreatePropertyObjectMap"/>
         /// </summary>
-        public IPropertyObjectMapConfiguration CreatePropertyObjectMap()
+        public IPredicateObjectMapConfiguration CreatePropertyObjectMap()
         {
             AssertTriplesMapInitialized();
 
-            var propertyObjectMap = new PropertyObjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            var propertyObjectMap = new PredicateObjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
             _propertyObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
         }

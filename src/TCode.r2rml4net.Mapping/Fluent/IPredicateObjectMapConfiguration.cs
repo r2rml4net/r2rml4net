@@ -1,8 +1,8 @@
 ﻿namespace TCode.r2rml4net.Mapping.Fluent
 {
-    public interface IPropertyObjectMapConfiguration
+    public interface IPredicateObjectMapConfiguration
     {
         ITermMapConfiguration CreateObjectMap();
-        ITermMapConfiguration CreatePropertyMap();
+        ITermMapConfiguration CreatePredicateMap();
     }
 }

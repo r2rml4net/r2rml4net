@@ -74,7 +74,7 @@ namespace TCode.r2rml4net.Mapping
             Uri predicateUri = new Uri(string.Format("{0}{1}#{2}", this.MappedDataBaseUri, column.Table.Name, column.Name));
 
             var propertyObjectMap = currentTriplesMapConfiguration.CreatePropertyObjectMap();
-            propertyObjectMap.CreatePropertyMap().IsConstantValued(predicateUri);
+            propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
             propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
         }
 
