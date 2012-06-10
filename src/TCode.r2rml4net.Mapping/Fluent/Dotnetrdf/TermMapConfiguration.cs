@@ -25,11 +25,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         #region Implementation of ITermMapConfiguration
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.TermTypeIRI"/>
-        /// </summary>
-        public abstract Uri TermTypeIRI { get; }
-
-        /// <summary>
         /// <see cref="ITermMapConfiguration.TermType"/>
         /// </summary>
         public ITermTypeConfiguration TermType
@@ -44,15 +39,82 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// <see cref="ITermTypeConfiguration.IsBlankNode"/>
         /// </summary>
-        public abstract ITermMapConfiguration IsBlankNode();
+        public virtual ITermMapConfiguration IsBlankNode()
+        {
+            AssertTermTypeNotSet();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrBlankNode));
+            return this;
+        }
+
         /// <summary>
         /// <see cref="ITermTypeConfiguration.IsIRI"/>
         /// </summary>
-        public abstract ITermMapConfiguration IsIRI();
+        public virtual ITermMapConfiguration IsIRI()
+        {
+            AssertTermTypeNotSet();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrIRI));
+            return this;
+        }
+
         /// <summary>
         /// <see cref="ITermTypeConfiguration.IsLiteral"/>
         /// </summary>
-        public abstract ITermMapConfiguration IsLiteral();
+        public virtual ITermMapConfiguration IsLiteral()
+        {
+            AssertTermTypeNotSet();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrLiteral));
+            return this;
+        }
+
+        /// <summary>
+        /// <see cref="ITermTypeConfiguration.URI"/>
+        /// </summary>
+        public virtual Uri URI
+        {
+            get
+            {
+                return ExplicitTermType ?? R2RMLMappings.CreateUriNode(RrIRI).Uri;
+            }
+        }
+
+        /// <summary>
+        /// Gets explicitly set
+        /// </summary>
+        private Uri ExplicitTermType
+        {
+            get
+            {
+                var termTypeNodes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode,
+                                                                                 R2RMLMappings.CreateUriNode(RrTermTypeProperty)).ToArray();
+
+                if (termTypeNodes.Length > 1)
+                    throw new InvalidTriplesMapException(string.Format("TermMap has {0} (should be zero or one)", termTypeNodes.Length));
+
+                if (termTypeNodes.Length == 1)
+                {
+                    IUriNode termTypeNode = termTypeNodes[0].Object as IUriNode;
+                    if (termTypeNode == null)
+                        throw new InvalidTriplesMapException("Term type must be an IRI");
+
+                    return termTypeNode.Uri;
+                }
+
+                return null;
+            }
+        }
+
+        ///<summary>
+        /// Checks wheather term type is already set
+        /// </summary>
+        /// <exception cref="InvalidTriplesMapException" />
+        protected void AssertTermTypeNotSet()
+        {
+            if(ExplicitTermType != null)
+                throw new InvalidTriplesMapException("Term type already set");
+        }
 
         #endregion
     }
