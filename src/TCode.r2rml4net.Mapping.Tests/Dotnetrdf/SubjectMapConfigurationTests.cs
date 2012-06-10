@@ -43,7 +43,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _subjectMapConfiguration.TermType.IsIRI();
 
             // then
-            Assert.AreEqual("http://www.w3.org/ns/r2rml#IRI", _subjectMapConfiguration.TermTypeIRI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermType.URI.ToString());
+            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrIRI);
         }
 
         [Test]
@@ -53,7 +54,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _subjectMapConfiguration.TermType.IsBlankNode();
 
             // then
-            Assert.AreEqual("http://www.w3.org/ns/r2rml#BlankNode", _subjectMapConfiguration.TermTypeIRI.ToString());
+            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermType.URI.ToString());
+            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]
@@ -67,6 +69,23 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CreatingSubjectMapAddsTriplesToGraph()
         {
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankObject(_triplesMapNode.Uri, UriConstants.RrSubjectMapProperty);
+        }
+
+        [Test]
+        public void DefaultTermTypeIsIRI()
+        {
+            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.URI.ToString());
+        }
+
+        [Test]
+        public void CannoSetTermTypeTwice()
+        {
+            // when
+            _subjectMapConfiguration.TermType.IsIRI();
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsIRI());
+            Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsBlankNode());
         }
     }
 }

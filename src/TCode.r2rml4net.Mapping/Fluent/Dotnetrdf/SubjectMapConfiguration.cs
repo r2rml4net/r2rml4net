@@ -46,30 +46,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         #region Overrides of TermMapConfiguration
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.TermTypeIRI"/>
-        /// </summary>
-        public override Uri TermTypeIRI
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Sets this subject node to produce blank nodes
-        /// </summary>
-        public override ITermMapConfiguration IsBlankNode()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Sets this subject node to produce IRI nodes
-        /// </summary>
-        public override ITermMapConfiguration IsIRI()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Throws exception
         /// </summary>
         public override ITermMapConfiguration IsLiteral()

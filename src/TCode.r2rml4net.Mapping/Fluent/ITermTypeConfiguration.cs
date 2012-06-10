@@ -1,3 +1,5 @@
+using System;
+
 namespace TCode.r2rml4net.Mapping.Fluent
 {
     /// <summary>
@@ -19,5 +21,11 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// Sets Term Map's term type to blank node. Throws an exception if term map is not an object map
         /// </summary>
         ITermMapConfiguration IsLiteral();
+
+        /// <summary>
+        /// Returns term type set with <see cref="IsBlankNode"/>, <see cref="IsIRI"/> or <see cref="IsLiteral"/> methods 
+        /// or a default value as described on http://www.w3.org/TR/r2rml/#dfn-term-type 
+        /// </summary>
+        Uri URI { get; }
     }
 }
