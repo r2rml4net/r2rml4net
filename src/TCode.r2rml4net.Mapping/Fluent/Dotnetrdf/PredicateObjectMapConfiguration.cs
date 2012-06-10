@@ -3,19 +3,19 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    class PropertyObjectMapConfiguration : BaseConfiguration, IPropertyObjectMapConfiguration
+    class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
         private readonly IUriNode _triplesMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
-        private readonly IList<PropertyMapConfiguration> _propertyMaps = new List<PropertyMapConfiguration>();
+        private readonly IList<PredicateMapConfiguration> _propertyMaps = new List<PredicateMapConfiguration>();
 
-        internal PropertyObjectMapConfiguration(IUriNode triplesMapNode, IGraph r2RMLMappings)
+        internal PredicateObjectMapConfiguration(IUriNode triplesMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
             _triplesMapNode = triplesMapNode;
         }
 
-        #region Implementation of IPropertyObjectMapConfiguration
+        #region Implementation of IPredicateObjectMapConfiguration
 
         public ITermMapConfiguration CreateObjectMap()
         {
@@ -24,9 +24,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return objectMap;
         }
 
-        public ITermMapConfiguration CreatePropertyMap()
+        public ITermMapConfiguration CreatePredicateMap()
         {
-            var propertyMap = new PropertyMapConfiguration(_triplesMapNode, R2RMLMappings);
+            var propertyMap = new PredicateMapConfiguration(_triplesMapNode, R2RMLMappings);
             _propertyMaps.Add(propertyMap);
             return propertyMap;
         }

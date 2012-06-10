@@ -56,9 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dotnetrdf\GraphMapConfigurationTests.cs" />
-    <Compile Include="Dotnetrdf\PropertyMapConfigurationTests.cs" />
+    <Compile Include="Dotnetrdf\PredicateMapConfigurationTests.cs" />
     <Compile Include="Dotnetrdf\ObjectMapConfigurationTests.cs" />
-    <Compile Include="Dotnetrdf\PropertyObjectMapConfigurationTests.cs" />
+    <Compile Include="Dotnetrdf\PredicateObjectMapConfigurationTests.cs" />
     <Compile Include="Dotnetrdf\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="Program.cs" />

@@ -29,6 +29,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// from logical rows as described on http://www.w3.org/TR/r2rml/#predicate-object-map
         /// <remarks>Triples map can contain many property-object maps</remarks>
         /// </summary>
-        IPropertyObjectMapConfiguration CreatePropertyObjectMap();
+        IPredicateObjectMapConfiguration CreatePropertyObjectMap();
     }
 }
