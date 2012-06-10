@@ -34,7 +34,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
-            throw new NotImplementedException();
+            R2RMLMappings.Assert(TermMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
+
+            return this;
         }
 
         #endregion
@@ -122,5 +124,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         }
 
         #endregion
+
+        protected abstract IUriNode CreateConstantPropertyNode();
     }
 }

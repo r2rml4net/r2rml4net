@@ -12,7 +12,18 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public IObjectMapConfiguration IsConstantValued(string literal)
         {
-            throw new System.NotImplementedException();
+            R2RMLMappings.Assert(TermMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
+
+            return this;
+        }
+
+        #endregion
+
+        #region Overrides of TermMapConfiguration
+
+        protected override IUriNode CreateConstantPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(RrObjectProperty);
         }
 
         #endregion
