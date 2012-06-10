@@ -32,6 +32,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             get { return this; }
         }
 
+        public ITermTypeConfiguration IsConstantValued(Uri uri)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Implementation of ITermTypeConfiguration

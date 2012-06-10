@@ -27,5 +27,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// or a default value as described on http://www.w3.org/TR/r2rml/#dfn-term-type 
         /// </summary>
         Uri URI { get; }
+
     }
 }
