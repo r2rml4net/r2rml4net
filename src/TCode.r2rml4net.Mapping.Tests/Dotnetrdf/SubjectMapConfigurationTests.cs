@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CanSetTermMapsTermTypeToIRI()
         {
             // when
-            _subjectMapConfiguration.TermType().IsIRI();
+            _subjectMapConfiguration.TermType.IsIRI();
 
             // then
             Assert.AreEqual("http://www.w3.org/ns/r2rml#IRI", _subjectMapConfiguration.TermTypeIRI.ToString());
@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CanSetTermMapsTermTypeToBlankNode()
         {
             // when
-            _subjectMapConfiguration.TermType().IsBlankNode();
+            _subjectMapConfiguration.TermType.IsBlankNode();
 
             // then
             Assert.AreEqual("http://www.w3.org/ns/r2rml#BlankNode", _subjectMapConfiguration.TermTypeIRI.ToString());
@@ -60,7 +60,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CannnotSetTermMapsTermTypeToLiteral()
         {
             // when
-            _subjectMapConfiguration.TermType().IsLiteral();
+            _subjectMapConfiguration.TermType.IsLiteral();
         }
 
         [Test]

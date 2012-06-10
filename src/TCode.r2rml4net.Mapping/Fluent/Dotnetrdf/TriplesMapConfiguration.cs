@@ -14,6 +14,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     {
         private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
         private string _triplesMapUri;
+        private SubjectMapConfiguration _subjectMapConfiguration;
 
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -190,9 +191,15 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.SubjectMap"/>
         /// </summary>
-        public ISubjectMapConfiguration SubjectMap()
+        public ISubjectMapConfiguration SubjectMap
         {
-            return new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            get
+            {
+                if (_subjectMapConfiguration == null)
+                    _subjectMapConfiguration= new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+
+                return _subjectMapConfiguration;
+            }
         }
 
         #endregion
@@ -214,7 +221,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         }
 
         /// <summary>
-        /// <see cref="SetSqlVersion(Uri)"/>
+        /// <see cref="SetSqlVersion(System.Uri)"/>
         /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(string uri)
         {

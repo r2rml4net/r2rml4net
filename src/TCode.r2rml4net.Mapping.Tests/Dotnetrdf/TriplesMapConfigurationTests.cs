@@ -190,11 +190,5 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 () => _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
             );
         }
-
-        [Test]
-        public void SubjectNodeCanBeCreatesOnlyOnce()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
