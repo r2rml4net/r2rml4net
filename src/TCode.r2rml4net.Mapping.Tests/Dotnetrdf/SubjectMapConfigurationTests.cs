@@ -8,13 +8,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     public class SubjectMapConfigurationTests
     {
         private SubjectMapConfiguration _subjectMapConfiguration;
-        private IBlankNode _triplesMapNode;
+        private IUriNode _triplesMapNode;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            _triplesMapNode = graph.CreateBlankNode();
+            _triplesMapNode = graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
             _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMapNode, graph);
         }
 
@@ -61,6 +61,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             // when
             _subjectMapConfiguration.TermType().IsLiteral();
+        }
+
+        [Test]
+        public void CreatingSubjectMapAddsTriplesToGraph()
+        {
+            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankObject(_triplesMapNode.Uri, UriConstants.RrSubjectMapProperty);
         }
     }
 }
