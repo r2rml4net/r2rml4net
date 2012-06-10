@@ -2,6 +2,9 @@
 {
     static class UriConstants
     {
+        internal const string RrGraphProperty = "http://www.w3.org/ns/r2rml#graph";
+        internal const string RrPredicateProperty = "http://www.w3.org/ns/r2rml#predicate";
+        internal const string RrObjectProperty = "http://www.w3.org/ns/r2rml#object";
         internal const string RrBlankNode = "http://www.w3.org/ns/r2rml#BlankNode";
         internal const string RrTermTypeProperty = "http://www.w3.org/ns/r2rml#termType";
         internal const string RrIRI = "http://www.w3.org/ns/r2rml#IRI";

@@ -55,12 +55,14 @@
   <ItemGroup>
     <Compile Include="DirectMappingR2RMLBuilder.cs" />
     <Compile Include="Fluent\Dotnetrdf\BaseConfiguration.cs" />
+    <Compile Include="Fluent\Dotnetrdf\GraphMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\ObjectMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\PropertyMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\PropertyObjectMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\SubjectMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\TermMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\TriplesMapConfiguration.cs" />
+    <Compile Include="Fluent\IObjectMapConfiguration.cs" />
     <Compile Include="Fluent\IPropertyObjectMapConfiguration.cs" />
     <Compile Include="Fluent\IR2RMLConfiguration.cs" />
     <Compile Include="Fluent\ISubjectMapConfiguration.cs" />

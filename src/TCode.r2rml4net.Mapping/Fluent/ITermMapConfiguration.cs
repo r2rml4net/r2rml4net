@@ -12,5 +12,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <remarks>Please see <see cref="ITermTypeConfiguration"/> members for info on valid values for different term maps</remarks>
         ITermTypeConfiguration TermType { get; }
+
+        ITermTypeConfiguration IsConstantValued(Uri uri);
     }
 }

@@ -87,5 +87,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsIRI());
             Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsBlankNode());
         }
+
+        [Test]
+        public void PropertyMapCanBeIRIConstantValued()
+        {
+            // given
+            Uri uri = new Uri("http://example.com/SomeResource");
+
+            // when
+            _subjectMapConfiguration.IsConstantValued(uri);
+
+            // then
+            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrSubjectProperty, uri);
+        }
     }
 }
