@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         }
 
         [Test]
-        public void ConstantValueCanBeSetOnlyOnce()
+        public void ConstantLiteralValueCanBeSetOnlyOnce()
         {
             // given
             const string literal = "Some text";

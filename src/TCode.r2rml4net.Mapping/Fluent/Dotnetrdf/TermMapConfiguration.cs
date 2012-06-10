@@ -34,6 +34,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateConstantPropertyNode()).Any())
+                throw new InvalidTriplesMapException("Term map can have at most one constant value");
+
             R2RMLMappings.Assert(TermMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
 
             return this;
@@ -125,6 +128,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #endregion
 
-        protected abstract IUriNode CreateConstantPropertyNode();
+        protected internal abstract IUriNode CreateConstantPropertyNode();
     }
 }
