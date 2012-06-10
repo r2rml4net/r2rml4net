@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
@@ -189,6 +190,40 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.Throws<InvalidTriplesMapException>(
                 () => _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
             );
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void CannotCreateSubjectMapBeforeInitializingTriplesMap()
+        {
+            var subjectMap = _triplesMapConfiguration.SubjectMap;
+        }
+
+        [Test]
+        public void CanCreateSubjectMaps()
+        {
+            // given
+            _triplesMapConfiguration.TableName = "Table";
+
+            // when
+            ISubjectMapConfiguration subjectMapConfiguration = _triplesMapConfiguration.SubjectMap;
+
+            // then
+            Assert.IsNotNull(subjectMapConfiguration);
+            Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
+        }
+
+        [Test]
+        public void SubjectMapAlwaysReturnsSameInstance()
+        {
+            // given 
+            _triplesMapConfiguration.TableName = "Table";
+            ISubjectMapConfiguration subjectMapConfiguration = _triplesMapConfiguration.SubjectMap;
+
+            // when
+            ISubjectMapConfiguration shouldBeTheSame = _triplesMapConfiguration.SubjectMap;
+
+            // then
+            Assert.AreSame(subjectMapConfiguration, shouldBeTheSame);
         }
     }
 }
