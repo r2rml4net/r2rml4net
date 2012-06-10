@@ -20,8 +20,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             TriplesMapNode = triplesMapNode;
             TermMapNode = R2RMLMappings.CreateBlankNode();
-
-            R2RMLMappings.Assert(TriplesMapNode, R2RMLMappings.CreateUriNode(RrSubjectMapProperty), TermMapNode);
         }
 
         #region Implementation of ITermMapConfiguration
