@@ -37,15 +37,5 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.AreSame(_termMapConfiguration.TermMapNode, triples.First().Object);
             Assert.AreEqual(_termMapConfiguration.R2RMLMappings.CreateUriNode("rr:subjectMap"), triples.First().Predicate);
         }
-
-        [Test]
-        public void CannotSetTermTypeTwice()
-        {
-            // when
-            _termMapConfiguration.TermType.IsBlankNode();
-
-            // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.TermType);
-        }
     }
 }
