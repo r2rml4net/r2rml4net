@@ -4,7 +4,7 @@
     {
         internal const string RrBlankNode = "http://www.w3.org/ns/r2rml#BlankNode";
         internal const string RrTermTypeProperty = "http://www.w3.org/ns/r2rml#termType";
-        internal const string RrIRI = "http://www.w3.org/ns/r2rml#URI";
+        internal const string RrIRI = "http://www.w3.org/ns/r2rml#IRI";
         internal const string RrTriplesMapClass = "http://www.w3.org/ns/r2rml#TriplesMap";
         internal const string RrLogicalTableProperty = "http://www.w3.org/ns/r2rml#logicalTable";
         internal const string RrTableNameProperty = "http://www.w3.org/ns/r2rml#tableName";

@@ -2,7 +2,7 @@
 {
     public interface IPropertyObjectMapConfiguration
     {
-        ITermMapConfiguration AddObjectMap();
-        ITermMapConfiguration AddPropertyMap();
+        ITermMapConfiguration CreateObjectMap();
+        ITermMapConfiguration CreatePropertyMap();
     }
 }
