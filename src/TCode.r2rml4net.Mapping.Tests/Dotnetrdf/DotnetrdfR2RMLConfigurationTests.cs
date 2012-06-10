@@ -96,9 +96,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.AreEqual(triplesMapUri, triplesMap.Uri.ToString());
-            _configuration.R2RMLMappings.VerifyHasTriple(triplesMapUri, RdfType, RrTriplesMapClass);
-            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMapUri, RrLogicalTableProperty);
-            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(RrTableNameProperty, tablename);
+            _configuration.R2RMLMappings.VerifyHasTriple(triplesMapUri, UriConstants.RdfType, UriConstants.RrTriplesMapClass);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMapUri, UriConstants.RrLogicalTableProperty);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrTableNameProperty, tablename);
         }
 
         [Test]
@@ -111,9 +111,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             var triplesMap = _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
 
             // then
-            _configuration.R2RMLMappings.VerifyHasTriple(triplesMap.Uri, RdfType, RrTriplesMapClass);
-            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMap.Uri, RrLogicalTableProperty);
-            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(RrSqlQueryProperty, sqlQuery);
+            _configuration.R2RMLMappings.VerifyHasTriple(triplesMap.Uri, UriConstants.RdfType, UriConstants.RrTriplesMapClass);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMap.Uri, UriConstants.RrLogicalTableProperty);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrSqlQueryProperty, sqlQuery);
         }
 
         [Test]
@@ -158,16 +158,5 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsNotNull(subjectMapConfiguration);
             Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
         }
-
-        #region Uri constants
-
-        private const string RrTriplesMapClass = "http://www.w3.org/ns/r2rml#TriplesMap";
-        private const string RrLogicalTableProperty = "http://www.w3.org/ns/r2rml#logicalTable";
-        private const string RrTableNameProperty = "http://www.w3.org/ns/r2rml#tableName";
-        private const string RrSqlQueryProperty = "http://www.w3.org/ns/r2rml#sqlQuery";
-
-        private const string RdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-
-        #endregion
     }
 }

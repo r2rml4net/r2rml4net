@@ -11,6 +11,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     {
         internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
+            R2RMLMappings.Assert(TriplesMapNode, R2RMLMappings.CreateUriNode(RrSubjectMapProperty), TermMapNode);
         }
 
         #region Implementation of ISubjectMapConfiguration
