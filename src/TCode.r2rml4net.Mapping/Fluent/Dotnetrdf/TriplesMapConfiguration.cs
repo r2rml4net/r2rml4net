@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VDS.RDF;
 using System.Text.RegularExpressions;
@@ -15,6 +16,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9]+)");
         private string _triplesMapUri;
         private SubjectMapConfiguration _subjectMapConfiguration;
+        private readonly IList<IPropertyObjectMapConfiguration> _propertyObjectMaps = new List<IPropertyObjectMapConfiguration>();
 
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -195,14 +197,25 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                if(Uri == null)
-                    throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
+                AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
                     _subjectMapConfiguration= new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
+        }
+
+        /// <summary>
+        /// <see cref="ITriplesMapConfiguration.CreatePropertyObjectMap"/>
+        /// </summary>
+        public IPropertyObjectMapConfiguration CreatePropertyObjectMap()
+        {
+            AssertTriplesMapInitialized();
+
+            var propertyObjectMap = new PropertyObjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            _propertyObjectMaps.Add(propertyObjectMap);
+            return propertyObjectMap;
         }
 
         #endregion
@@ -267,6 +280,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 return logicalTables.First().Object as IBlankNode;
             }
+        }
+
+        void AssertTriplesMapInitialized()
+        {
+            if (Uri == null)
+                throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
         }
     }
 }
