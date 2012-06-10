@@ -24,15 +24,5 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                                             CallBase = true
                                         }.Object;
         }
-
-        [Test]
-        public void TermMapCanBeIRIConstantValued()
-        {
-            // given
-            Uri value = new Uri("http://example.com/people/Adam#me");
-
-            // when
-            _termMapConfiguration.IsConstantValued(value);
-        }
     }
 }
