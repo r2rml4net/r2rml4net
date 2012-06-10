@@ -195,6 +195,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
+                if(Uri == null)
+                    throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
+
                 if (_subjectMapConfiguration == null)
                     _subjectMapConfiguration= new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
 

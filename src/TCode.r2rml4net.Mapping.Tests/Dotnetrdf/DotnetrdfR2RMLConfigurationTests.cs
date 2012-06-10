@@ -147,16 +147,5 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
         }
-
-        [Test]
-        public void CanCreateSubjectMaps()
-        {
-            // given
-            ISubjectMapConfiguration subjectMapConfiguration = _configuration.CreateTriplesMapFromTable("Table").SubjectMap;
-
-            // then
-            Assert.IsNotNull(subjectMapConfiguration);
-            Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
-        }
     }
 }
