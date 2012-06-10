@@ -39,12 +39,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         }
 
         [Test]
-        public void CannotSetTermMapTwice()
+        public void CannotSetTermTypeTwice()
         {
             // when
-            _termMapConfiguration.TermType().IsBlankNode();
+            _termMapConfiguration.TermType.IsBlankNode();
 
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.TermType());
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.TermType);
         }
     }
 }

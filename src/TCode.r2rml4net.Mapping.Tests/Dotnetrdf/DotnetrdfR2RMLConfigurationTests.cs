@@ -152,7 +152,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void CanCreateSubjectMaps()
         {
             // given
-            ISubjectMapConfiguration subjectMapConfiguration = _configuration.CreateTriplesMapFromTable("Table").SubjectMap();
+            ISubjectMapConfiguration subjectMapConfiguration = _configuration.CreateTriplesMapFromTable("Table").SubjectMap;
 
             // then
             Assert.IsNotNull(subjectMapConfiguration);

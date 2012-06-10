@@ -17,6 +17,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// Allows setting the term type of the current term map
         /// </summary>
         /// <remarks>Please see <see cref="ITermTypeConfiguration"/> members for info on valid values for different term maps</remarks>
-        ITermTypeConfiguration TermType();
+        ITermTypeConfiguration TermType { get; }
     }
 }

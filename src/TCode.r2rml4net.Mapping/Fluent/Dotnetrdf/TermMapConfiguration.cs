@@ -34,9 +34,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// <see cref="ITermMapConfiguration.TermType"/>
         /// </summary>
-        public ITermTypeConfiguration TermType()
+        public ITermTypeConfiguration TermType
         {
-            return this;
+            get { return this; }
         }
 
         #endregion
