@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dotnetrdf\PropertyObjectMapConfigurationTests.cs" />
     <Compile Include="Dotnetrdf\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="Program.cs" />

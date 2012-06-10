@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    public class PropertyObjectMapConfiguration : BaseConfiguration, IPropertyObjectMapConfiguration
+    class PropertyObjectMapConfiguration : BaseConfiguration, IPropertyObjectMapConfiguration
     {
         private readonly IUriNode _triplesMapNode;
+        private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
+        private readonly IList<PropertyMapConfiguration> _propertyMaps = new List<PropertyMapConfiguration>();
 
-        public PropertyObjectMapConfiguration(IUriNode triplesMapNode, IGraph r2RMLMappings)
+        internal PropertyObjectMapConfiguration(IUriNode triplesMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
             _triplesMapNode = triplesMapNode;
@@ -14,14 +17,18 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of IPropertyObjectMapConfiguration
 
-        public ITermMapConfiguration AddObjectMap()
+        public ITermMapConfiguration CreateObjectMap()
         {
-            throw new System.NotImplementedException();
+            var objectMap = new ObjectMapConfiguration(_triplesMapNode, R2RMLMappings);
+            _objectMaps.Add(objectMap);
+            return objectMap;
         }
 
-        public ITermMapConfiguration AddPropertyMap()
+        public ITermMapConfiguration CreatePropertyMap()
         {
-            throw new System.NotImplementedException();
+            var propertyMap = new PropertyMapConfiguration(_triplesMapNode, R2RMLMappings);
+            _propertyMaps.Add(propertyMap);
+            return propertyMap;
         }
 
         #endregion
