@@ -245,7 +245,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsNotNull(propertyObjectMap);
             Assert.IsInstanceOf<TermMapConfiguration>(propertyObjectMap);
-            Assert.IsInstanceOf<ITermMapConfiguration>(propertyObjectMap);
         }
     }
 }
