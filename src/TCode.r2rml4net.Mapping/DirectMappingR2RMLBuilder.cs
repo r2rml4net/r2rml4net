@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Mapping
         public DirectMappingR2RMLBuilder(RDB.IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
-            this._R2RMLConfiguration = _R2RMLConfiguration;
+            this._R2RMLConfiguration = r2RMLConfiguration;
 
             MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
             MappedDataBaseUri = new Uri("http://example.com/");
