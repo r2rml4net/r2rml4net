@@ -89,7 +89,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         }
 
         [Test]
-        public void PropertyMapCanBeIRIConstantValued()
+        public void SubjectMapCanBeIRIConstantValued()
         {
             // given
             Uri uri = new Uri("http://example.com/SomeResource");
