@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
@@ -25,6 +26,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public R2RMLConfiguration(Uri baseUri)
             : base(baseUri)
         {
+            R2RMLMappings.Changed += R2RMLMappingsChanged;
+        }
+
+        void R2RMLMappingsChanged(object sender, GraphEventArgs args)
+        {
+            _graphCopy = null;
         }
 
         /// <summary>
@@ -32,7 +39,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// and base URI set to <see cref="DefaultBaseUri"/>
         /// </summary>
         public R2RMLConfiguration()
-            : base(DefaultBaseUri)
+            : this(DefaultBaseUri)
         {
         }
 
@@ -54,6 +61,24 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings) { SqlQuery = sqlQuery };
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
+        }
+
+        IGraph _graphCopy;
+        /// <summary>
+        /// Returns copy of the mapping graph
+        /// </summary>
+        public IGraph GraphReadOnly
+        {
+            get
+            {
+                if (_graphCopy == null)
+                {
+                    _graphCopy = new Graph(R2RMLMappings.Triples);
+                    _graphCopy.NamespaceMap.Import(R2RMLMappings.NamespaceMap);
+                }
+
+                return _graphCopy;
+            }
         }
     }
 }

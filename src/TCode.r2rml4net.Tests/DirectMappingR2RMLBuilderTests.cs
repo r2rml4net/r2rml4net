@@ -1,10 +1,12 @@
 ﻿using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 using TCode.r2rml4net.RDB;
 using System.Data;
 using VDS.RDF;
 using System.IO;
+using VDS.RDF.Parsing;
 using VDS.RDF.Writing;
 using System.Collections.Generic;
 using TCode.r2rml4net.Mapping.Fluent;
@@ -16,14 +18,14 @@ namespace TCode.r2rml4net.Tests
     {
         private DirectMappingR2RMLBuilder _directMappingR2RMLBuilder;
         private Mock<IDatabaseMetadata> _databaseMetedata;
-        private Mock<IR2RMLConfiguration> _configuration;
+        private R2RMLConfiguration _configuration;
 
         [SetUp]
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _configuration = new Mock<IR2RMLConfiguration>();
-            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _configuration.Object);
+            _configuration = new R2RMLConfiguration();
+            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _configuration);
         }
 
         [Test, Description("Invoking DirectMappingR2RMLBuilder#BuildGraph should execute reading of metadata")]
@@ -74,7 +76,9 @@ namespace TCode.r2rml4net.Tests
             Graph expected = new Graph();
             expected.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.TestGraphs.{0}, TCode.r2rml4net.Tests", embeddedResourceGraph));
 
-            Assert.IsTrue(_directMappingR2RMLBuilder.R2RMLGraph.Equals(expected));
+            var serializedGraph = Serialize(_configuration.GraphReadOnly);
+            var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n {0}", serializedGraph);
+            Assert.IsTrue(_configuration.GraphReadOnly.Equals(expected), message);
         }
 
         [Test]
@@ -95,11 +99,11 @@ namespace TCode.r2rml4net.Tests
             TestMappingGeneration(RelationalTestMappings.D003_1table3columns, "R2RMLTC0003.ttl");
         }
 
-        private string Serialize<TWriter>(IGraph graph) where TWriter : IRdfWriter, new()
+        private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())
             {
-                IRdfWriter turtle = new TWriter();
+                var turtle = new CompressingTurtleWriter(10);
                 turtle.Save(graph, writer);
                 return writer.ToString();
             }
