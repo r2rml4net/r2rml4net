@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _predicateMap.TriplesMapNode,
+                    _predicateMap.ParentMapNode,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
         }

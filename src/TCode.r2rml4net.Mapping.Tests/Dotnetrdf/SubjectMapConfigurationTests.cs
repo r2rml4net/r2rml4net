@@ -94,7 +94,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _subjectMapConfiguration.TriplesMapNode,
+                    _subjectMapConfiguration.ParentMapNode,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
         }

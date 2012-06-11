@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
-                _termMapConfiguration.TriplesMapNode,
+                _termMapConfiguration.ParentMapNode,
                 _termMapConfiguration.CreateMapPropertyNode(),
                 _termMapConfiguration.TermMapNode)));
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(

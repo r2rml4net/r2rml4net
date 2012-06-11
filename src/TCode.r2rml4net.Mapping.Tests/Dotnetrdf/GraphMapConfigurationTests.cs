@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _graphMap.TriplesMapNode,
+                    _graphMap.ParentMapNode,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
         }
