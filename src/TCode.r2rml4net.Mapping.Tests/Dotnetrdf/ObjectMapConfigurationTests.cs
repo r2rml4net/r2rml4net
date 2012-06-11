@@ -34,7 +34,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _objectMap.TriplesMapNode,
+                    _objectMap.ParentMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(literal))));
         }
@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _objectMap.TriplesMapNode,
+                    _objectMap.ParentMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(uri))));
         }
@@ -87,10 +87,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RdfInteger)))));
             Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.URI.ToString());
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _objectMap.TriplesMapNode,
+                _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
             Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _objectMap.TriplesMapNode,
+                _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
             Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.TermMapNode,
@@ -119,10 +119,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
             Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.URI.ToString());
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _objectMap.TriplesMapNode,
+                _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
             Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _objectMap.TriplesMapNode,
+                _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
             Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.TermMapNode,

@@ -17,10 +17,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             CheckRelationWithParentMap(true);
 
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode()).Any())
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
-            R2RMLMappings.Assert(TriplesMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
+            R2RMLMappings.Assert(ParentMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
 
             return this;
         }
@@ -122,7 +122,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         private void ReplaceShortcutWithWithMapProperty()
         {
-            var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode()).ToArray();
+            var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
 
             if(shortcutTriples.Length > 1)
                 throw new InvalidTriplesMapException("Predicated object map contains multiple constant object maps");
