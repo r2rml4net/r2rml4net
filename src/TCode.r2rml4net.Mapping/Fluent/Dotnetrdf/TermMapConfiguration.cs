@@ -55,6 +55,21 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return this;
         }
 
+        /// <summary>
+        /// <see cref="ITermMapConfiguration.IsTemplateValued"/>
+        /// </summary>
+        public ITermTypeConfiguration IsTemplateValued(string template)
+        {
+            IUriNode templateProperty = R2RMLMappings.CreateUriNode(UrisHelper.RrTemplateProperty);
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, templateProperty).Any())
+                throw new InvalidTriplesMapException("Term map can have at most one template");
+
+            CheckRelationWithParentMap();
+
+            R2RMLMappings.Assert(TermMapNode, templateProperty, R2RMLMappings.CreateLiteralNode(template));
+            return this;
+        }
+
         #endregion
 
         #region Implementation of ITermTypeConfiguration

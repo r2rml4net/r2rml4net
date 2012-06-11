@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
@@ -24,6 +23,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                                             {
                                                 CallBase = true
                                             };
+            _termMapConfigurationMock
+                .Setup(config => config.CreateConstantPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
+            _termMapConfigurationMock
+                .Setup(config => config.CreateMapPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
             _termMapConfiguration = _termMapConfigurationMock.Object;
         }
 
@@ -32,12 +37,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             // given
             Uri uri = new Uri("http://example.com/SomeResource");
-            _termMapConfigurationMock
-                .Setup(config => config.CreateConstantPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
-            _termMapConfigurationMock
-                .Setup(config => config.CreateMapPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
 
             // when
             _termMapConfiguration.IsConstantValued(uri);
@@ -52,12 +51,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             // given
             const string columnName = "Name";
-            _termMapConfigurationMock
-                .Setup(config => config.CreateConstantPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
-            _termMapConfigurationMock
-                .Setup(config => config.CreateMapPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
 
             // when
             _termMapConfiguration.IsColumnValued(columnName);
@@ -79,12 +72,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             // given
             const string columnName = "Name";
-            _termMapConfigurationMock
-                .Setup(config => config.CreateMapPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
-            _termMapConfigurationMock
-                .Setup(config => config.CreateConstantPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
 
             // when
             _termMapConfiguration.IsColumnValued(columnName);
@@ -92,6 +79,41 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
             _termMapConfigurationMock.VerifyAll();
+        }
+
+        [Test]
+        public void TermMapCanBeTemplateValued()
+        {
+            // given
+            const string template = @"\\{\\{\\{ \\\\o/ {TITLE} \\\\o/ \\}\\}\\}";
+
+            // when
+            _termMapConfiguration.IsTemplateValued(template);
+
+            //then
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+                _termMapConfiguration.ParentMapNode,
+                _termMapConfiguration.CreateMapPropertyNode(),
+                _termMapConfiguration.TermMapNode)));
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
+                _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
+        }
+
+        [Test]
+        public void TemplateCanOnlyBeSetOnce()
+        {
+            // given
+            const string template = @"\\{\\{\\{ \\\\o/ {TITLE} \\\\o/ \\}\\}\\}";
+
+            // when
+            _termMapConfiguration.IsTemplateValued(template);
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued(template));
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued("something else"));
         }
     }
 }
