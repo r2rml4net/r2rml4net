@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             CheckRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             AssertTermTypeNotSet();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrBlankNode));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrBlankNode));
             return this;
         }
 
@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             AssertTermTypeNotSet();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrIRI));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrIRI));
             return this;
         }
 
@@ -84,7 +84,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             AssertTermTypeNotSet();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrTermTypeProperty), R2RMLMappings.CreateUriNode(RrLiteral));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral));
             return this;
         }
 
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                return ExplicitTermType ?? R2RMLMappings.CreateUriNode(RrIRI).Uri;
+                return ExplicitTermType ?? R2RMLMappings.CreateUriNode(UrisHelper.RrIRI).Uri;
             }
         }
 
@@ -107,7 +107,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             get
             {
                 var termTypeNodes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode,
-                                                                                 R2RMLMappings.CreateUriNode(RrTermTypeProperty)).ToArray();
+                                                                                 R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty)).ToArray();
 
                 if (termTypeNodes.Length > 1)
                     throw new InvalidTriplesMapException(string.Format("TermMap has {0} (should be zero or one)", termTypeNodes.Length));

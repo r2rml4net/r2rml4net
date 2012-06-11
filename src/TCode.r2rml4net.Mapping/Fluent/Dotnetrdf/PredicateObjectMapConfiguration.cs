@@ -13,7 +13,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             : base(r2RMLMappings)
         {
             _predicateObjectMapNode = R2RMLMappings.CreateBlankNode();
-            R2RMLMappings.Assert(triplesMapNode, R2RMLMappings.CreateUriNode(RrPredicateObjectMapPropety), _predicateObjectMapNode);
+            R2RMLMappings.Assert(triplesMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrPredicateObjectMapPropety), _predicateObjectMapNode);
         }
 
         #region Implementation of IPredicateObjectMapConfiguration

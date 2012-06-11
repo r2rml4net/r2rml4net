@@ -37,12 +37,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         protected internal override IUriNode CreateConstantPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrObjectProperty);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrObjectProperty);
         }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrObjectMapProperty);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrObjectMapProperty);
         }
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 // term type is literal is column valued, or has datatype or language tag
                 if (IsLiteralTermType)
-                    return R2RMLMappings.CreateUriNode(RrLiteral).Uri;
+                    return R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral).Uri;
 
                 // in other cases is rr:IRI
-                return R2RMLMappings.CreateUriNode(RrIRI).Uri;
+                return R2RMLMappings.CreateUriNode(UrisHelper.RrIRI).Uri;
             }
         }
 
@@ -71,16 +71,16 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                var columnPropertyNode = R2RMLMappings.CreateUriNode(RrColumnProperty);
+                var columnPropertyNode = R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty);
                 var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, columnPropertyNode).ToArray();
 
                 if (columnTriples.Any())
                     return true;
 
-                var languageTagNode = R2RMLMappings.CreateUriNode(RrLanguageTagPropety);
+                var languageTagNode = R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety);
                 var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, languageTagNode).ToArray();
 
-                var datatypeNode = R2RMLMappings.CreateUriNode(RrDatatypePropety);
+                var datatypeNode = R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety);
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, datatypeNode).ToArray();
 
                 if (languageTagTriples.Any() && datatypeTriples.Any())
@@ -104,7 +104,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             EnsureOnlyLanguageTagOrDatatype();
             ReplaceShortcutWithWithMapProperty();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
 
         public void HasLanguageTag(string languagTag)
@@ -112,7 +112,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             EnsureOnlyLanguageTagOrDatatype();
             ReplaceShortcutWithWithMapProperty();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
         }
 
         public void HasLanguageTag(CultureInfo cultureInfo)
@@ -131,15 +131,15 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             {
                 Triple shortcutTriple = shortcutTriples[0];
                 R2RMLMappings.Retract(shortcutTriple);
-                R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrConstantProperty), shortcutTriple.Object);
+                R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty), shortcutTriple.Object);
                 CheckRelationWithParentMap();
             }
         }
 
         private void EnsureOnlyLanguageTagOrDatatype()
         {
-            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrDatatypePropety));
-            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrLanguageTagPropety));
+            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety));
+            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety));
 
             if (datatypeTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a datatype");

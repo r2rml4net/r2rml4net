@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
             R2RMLMappings.Assert(
                 TermMapNode,
-                R2RMLMappings.CreateUriNode(RrClassProperty),
+                R2RMLMappings.CreateUriNode(UrisHelper.RrClassProperty),
                 R2RMLMappings.CreateUriNode(classIri));
 
             return this;
@@ -38,7 +38,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrClassProperty));
+                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrClassProperty));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }
@@ -57,12 +57,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         protected internal override IUriNode CreateConstantPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrSubjectProperty);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrSubjectProperty);
         }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrSubjectMapProperty);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrSubjectMapProperty);
         }
 
         #endregion
