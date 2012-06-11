@@ -66,12 +66,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         }
 
         [Test]
-        public void CreatingSubjectMapAddsTriplesToGraph()
-        {
-            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankObject(_triplesMapNode.Uri, UriConstants.RrSubjectMapProperty);
-        }
-
-        [Test]
         public void DefaultTermTypeIsIRI()
         {
             Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.URI.ToString());
@@ -98,7 +92,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _subjectMapConfiguration.IsConstantValued(uri);
 
             // then
-            _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrSubjectProperty, uri);
+            Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _subjectMapConfiguration.TriplesMapNode,
+                    _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)),
+                    _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
         }
     }
 }

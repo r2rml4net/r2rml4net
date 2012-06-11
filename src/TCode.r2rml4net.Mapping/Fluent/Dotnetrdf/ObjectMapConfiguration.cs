@@ -13,10 +13,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public IObjectMapConfiguration IsConstantValued(string literal)
         {
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateConstantPropertyNode()).Any())
+            CheckRelationWithParentMap(true);
+
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode()).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
-            R2RMLMappings.Assert(TermMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
+            R2RMLMappings.Assert(TriplesMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
 
             return this;
         }

@@ -28,7 +28,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _objectMap.IsConstantValued(literal);
 
             // then
-            _objectMap.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrObjectProperty, literal);
+            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _objectMap.TriplesMapNode,
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
+                    _objectMap.R2RMLMappings.CreateLiteralNode(literal))));
         }
 
         [Test]
@@ -54,7 +58,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _objectMap.IsConstantValued(uri);
 
             // then
-            _objectMap.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrObjectProperty, uri);
+            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _objectMap.TriplesMapNode,
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
+                    _objectMap.R2RMLMappings.CreateUriNode(uri))));
         }
     }
 }

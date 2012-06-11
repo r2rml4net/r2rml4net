@@ -75,6 +75,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                 {
                     _graphCopy = new Graph(R2RMLMappings.Triples);
                     _graphCopy.NamespaceMap.Import(R2RMLMappings.NamespaceMap);
+                    _graphCopy.BaseUri = R2RMLMappings.BaseUri;
                 }
 
                 return _graphCopy;

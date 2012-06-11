@@ -10,18 +10,18 @@
     rr:subjectMap 
 	[ 
 	  rr:termType rr:BlankNode;  
-	  rr:class [ rr:template "http://example.com/Student" ]
+	  rr:class <http://example.com/Student>
 	];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate		[ rr:template "http://example.com/Student#ID" ] ; 
-      rr:objectMap		[ rr:column "ID"; rr:datatype xsd:integer ]
+      rr:predicate <http://example.com/Student#ID> ; 
+      rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
     ];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate		[ rr:template "http://example.com/Student#Name" ] ; 
-      rr:objectMap		[ rr:column "Name" ]
+      rr:predicate <http://example.com/Student#Name> ; 
+      rr:objectMap [ rr:column "Name" ]
     ]
     .

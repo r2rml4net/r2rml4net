@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
@@ -24,7 +25,7 @@ namespace TCode.r2rml4net.Tests
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _configuration = new R2RMLConfiguration();
+            _configuration = new R2RMLConfiguration(new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/"));
             _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _configuration);
         }
 
@@ -77,7 +78,7 @@ namespace TCode.r2rml4net.Tests
             expected.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.TestGraphs.{0}, TCode.r2rml4net.Tests", embeddedResourceGraph));
 
             var serializedGraph = Serialize(_configuration.GraphReadOnly);
-            var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n {0}", serializedGraph);
+            var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n{0}", serializedGraph);
             Assert.IsTrue(_configuration.GraphReadOnly.Equals(expected), message);
         }
 

@@ -201,7 +201,7 @@ namespace TCode.r2rml4net.Mapping.Tests
             {
                 Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Object.NodeType);
             }
-        } 
+        }
 
         #endregion
 

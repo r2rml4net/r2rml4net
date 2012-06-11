@@ -11,7 +11,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     {
         internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
-            R2RMLMappings.Assert(TriplesMapNode, R2RMLMappings.CreateUriNode(RrSubjectMapProperty), TermMapNode);
         }
 
         #region Implementation of ISubjectMapConfiguration
@@ -21,9 +20,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public ISubjectMapConfiguration AddClass(Uri classIri)
         {
+            CheckRelationWithParentMap();
+
             R2RMLMappings.Assert(
                 TermMapNode,
-                R2RMLMappings.CreateUriNode(RrClassClass),
+                R2RMLMappings.CreateUriNode(RrClassProperty),
                 R2RMLMappings.CreateUriNode(classIri));
 
             return this;
@@ -36,7 +37,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrClassClass));
+                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrClassProperty));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }

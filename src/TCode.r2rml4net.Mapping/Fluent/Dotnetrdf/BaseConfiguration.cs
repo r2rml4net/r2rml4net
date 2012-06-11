@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         internal const string RrSqlQueryProperty = "rr:sqlQuery";
         internal const string RrSqlVersionProperty = "rr:sqlVersion";
         internal const string RrTriplesMapClass = "rr:TriplesMap";
-        internal const string RrClassClass = "rr:Class";
+        internal const string RrClassProperty = "rr:class";
         internal const string RrSubjectMapProperty = "rr:subjectMap";
         internal const string RrBlankNode = "rr:BlankNode";
         internal const string RrLiteral = "rr:Literal";
@@ -28,6 +28,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         internal const string RrObjectMapProperty = "rr:objectMap";
         internal const string RrGraphMapPropety = "rr:graphMap";
         internal const string RrColumnProperty = "rr:column";
+        internal const string RrPredicateObjectMapPropety = "rr:predicateObjectMap";
 
         /// <summary>
         /// DotNetRDF graph containing the R2RML mappings
