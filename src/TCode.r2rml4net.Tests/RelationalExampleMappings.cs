@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Tests
         /// <summary>
         /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D002-1table2columns1row
         /// </summary>
-        public static TableCollection D002_1table2columns
+        public static TableCollection TypedColumns
         {
             get
             {
@@ -40,13 +40,78 @@ namespace TCode.r2rml4net.Tests
                             {
                                 new ColumnMetadata
                                 {
-                                    Name = "ID",
+                                    Name = "Int32",
                                     Type = DbType.Int32
                                 },
                                 new ColumnMetadata
                                 {
-                                    Name = "Name",
+                                    Name = "Varchar",
                                     Type = DbType.AnsiString
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "NVarchar",
+                                    Type = DbType.String
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Float",
+                                    Type = DbType.Single
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Double",
+                                    Type = DbType.Double
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Decimal",
+                                    Type = DbType.Decimal
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Money",
+                                    Type = DbType.Currency
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Date",
+                                    Type = DbType.Date
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Time",
+                                    Type = DbType.Time
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "DateTime",
+                                    Type = DbType.DateTime
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "DateTime2",
+                                    Type = DbType.DateTime2
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Boolean",
+                                    Type = DbType.Boolean
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Binary",
+                                    Type = DbType.Binary
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Int16",
+                                    Type = DbType.Int16
+                                },
+                                new ColumnMetadata
+                                {
+                                    Name = "Int64",
+                                    Type = DbType.Int64
                                 }
                             };
                 studentsTable.Name = "Student";
