@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Linq;
 using VDS.RDF;
@@ -95,12 +96,23 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public void HasDataType(string dataTypeUri)
         {
+            HasDataType(new Uri(dataTypeUri));
+        }
+
+        public void HasDataType(Uri dataTypeUri)
+        {
+            EnsureOnlyLanguageTagOrDatatype();
             ReplaceShortcutWithWithMapProperty();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
 
         public void HasLanguageTag(string languagTag)
         {
+            EnsureOnlyLanguageTagOrDatatype();
             ReplaceShortcutWithWithMapProperty();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
         }
 
         public void HasLanguageTag(CultureInfo cultureInfo)
@@ -110,7 +122,29 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         private void ReplaceShortcutWithWithMapProperty()
         {
+            var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode()).ToArray();
 
+            if(shortcutTriples.Length > 1)
+                throw new InvalidTriplesMapException("Predicated object map contains multiple constant object maps");
+
+            if(shortcutTriples.Any())
+            {
+                Triple shortcutTriple = shortcutTriples[0];
+                R2RMLMappings.Retract(shortcutTriple);
+                R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrConstantProperty), shortcutTriple.Object);
+                CheckRelationWithParentMap();
+            }
+        }
+
+        private void EnsureOnlyLanguageTagOrDatatype()
+        {
+            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrDatatypePropety));
+            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(RrLanguageTagPropety));
+
+            if (datatypeTriples.Any())
+                throw new InvalidTriplesMapException("Object map already has a datatype");
+            if (languageTagTriples.Any())
+                throw new InvalidTriplesMapException("Object map already has a language tag");
         }
 
         #endregion

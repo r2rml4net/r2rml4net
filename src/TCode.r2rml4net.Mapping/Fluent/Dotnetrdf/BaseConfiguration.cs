@@ -10,6 +10,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     {
         internal const string RdfType = "rdf:type";
         internal const string RrIRI = "rr:IRI";
+        internal const string RrConstantProperty = "rr:constant";
         internal const string RrTermTypeProperty = "rr:termType";
         internal const string RrLogicalTableProperty = "rr:logicalTable";
         internal const string RrTableNameProperty = "rr:tableName";

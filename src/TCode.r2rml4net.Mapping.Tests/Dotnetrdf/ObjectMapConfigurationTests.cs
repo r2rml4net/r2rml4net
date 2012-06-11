@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 using VDS.RDF;
@@ -10,12 +11,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     public class ObjectMapConfigurationTests
     {
         private ObjectMapConfiguration _objectMap;
+        private Uri _tripesMapURI;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
+            _tripesMapURI = new Uri("http://test.example.com/TestMapping");
+            IUriNode triplesMapNode = graph.CreateUriNode(_tripesMapURI);
             _objectMap = new ObjectMapConfiguration(triplesMapNode, graph);
         }
 
@@ -73,15 +76,25 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             const string literal = "5";
 
             // when
-            _objectMap.IsConstantValued(literal).HasDataType(UriConstants.RdfInteger);
+            _objectMap.IsConstantValued(literal).HasDataType(new Uri(UriConstants.RdfInteger));
 
             // then
+
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.TermMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrDataTypeProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RdfInteger)))));
             Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.URI.ToString());
+            Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TriplesMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
+            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TriplesMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
+            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TermMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
         }
 
         [Test]
@@ -94,12 +107,26 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _objectMap.IsConstantValued(literal).HasLanguageTag("pl");
 
             // then
+            AssertLanguageTag("pl");
+        }
+
+        private void AssertLanguageTag(string languagTagValue)
+        {
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.TermMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageTagProperty)),
-                    _objectMap.R2RMLMappings.CreateLiteralNode("pl"))));
+                    _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
             Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.URI.ToString());
+            Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TriplesMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
+            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TriplesMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
+            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.TermMapNode,
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
         }
 
         [Test]
@@ -112,12 +139,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _objectMap.IsConstantValued(literal).HasLanguageTag(new CultureInfo("pl-PL"));
 
             // then
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
-                new Triple(
-                    _objectMap.TermMapNode,
-                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageTagProperty)),
-                    _objectMap.R2RMLMappings.CreateLiteralNode("pl-pl"))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.URI.ToString());
+            AssertLanguageTag("pl-pl");
         }
 
         [Test]
@@ -132,6 +154,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasDataType(UriConstants.RdfInteger));
+            Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasLanguageTag("pl-PL"));
         }
     }
 }
