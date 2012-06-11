@@ -20,5 +20,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// Asserted using the shortcut properties described on http://www.w3.org/TR/r2rml/#constant
         /// </remarks>
         ITermTypeConfiguration IsConstantValued(Uri uri);
+
+        ITermTypeConfiguration IsTemplateValued(string template);
     }
 }

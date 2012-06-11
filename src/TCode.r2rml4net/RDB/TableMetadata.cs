@@ -18,6 +18,14 @@ namespace TCode.r2rml4net.RDB
         public string Name { get; internal set; }
 
         /// <summary>
+        /// Primary key column (or columns in case of composite key)
+        /// </summary>
+        public ColumnMetadata[] PrimaryKey
+        {
+            get { return _columns.Where(c => c.IsPrimaryKey).ToArray(); }
+        }
+
+        /// <summary>
         /// Visits self and contained columns
         /// </summary>
         public void Accept(IDatabaseMetadataVisitor visitor)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 
@@ -54,9 +55,24 @@ namespace TCode.r2rml4net.Mapping
         public void Visit(TableMetadata table)
         {
             _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
-            _currentTriplesMapConfiguration.SubjectMap
-                .AddClass(new Uri(string.Format("{0}{1}", this.MappedDataBaseUri, table.Name)))
-                .TermType.IsBlankNode();
+
+            var classIri = new Uri(this.MappedDataBaseUri + table.Name);
+            if (table.PrimaryKey.Length == 0)
+            {
+                // empty primary key generates blank node subjects
+                _currentTriplesMapConfiguration.SubjectMap
+                    .AddClass(classIri)
+                    .TermType.IsBlankNode();
+            }
+            else
+            {
+                string template = classIri.ToString();
+                template += string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={{{0}}}", pk.Name)));
+
+                _currentTriplesMapConfiguration.SubjectMap
+                    .AddClass(classIri)
+                    .IsTemplateValued(template);
+            }
         }
 
         public void Visit(ColumnMetadata column)

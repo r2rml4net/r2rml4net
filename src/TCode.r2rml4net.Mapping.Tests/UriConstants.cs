@@ -2,6 +2,7 @@
 {
     static class UriConstants
     {
+        internal const string RrTemplateProperty = "http://www.w3.org/ns/r2rml#template";
         internal const string RrConstantProperty = "http://www.w3.org/ns/r2rml#constant";
         internal const string RrLiteral = "http://www.w3.org/ns/r2rml#Literal";
         internal const string RrDataTypeProperty = "http://www.w3.org/ns/r2rml#datatype";

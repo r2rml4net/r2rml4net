@@ -57,6 +57,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return prefix + datatype;
         }
 
+        internal const string RrTemplateProperty = "rr:template";
         internal const string RdfType = "rdf:type";
         internal const string RrIRI = "rr:IRI";
         internal const string RrConstantProperty = "rr:constant";
