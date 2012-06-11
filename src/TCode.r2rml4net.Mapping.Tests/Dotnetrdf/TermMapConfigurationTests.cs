@@ -63,10 +63,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _termMapConfiguration.IsColumnValued(columnName);
 
             // then
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+                _termMapConfiguration.TriplesMapNode,
+                _termMapConfiguration.CreateMapPropertyNode(),
+                _termMapConfiguration.TermMapNode)));
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.TermMapNode,
-                _termMapConfiguration.CreateMapPropertyNode()).Any());
-            _termMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrColumnProperty, columnName);
+                _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
+                _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
         }
 
@@ -78,6 +82,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _termMapConfigurationMock
                 .Setup(config => config.CreateMapPropertyNode())
                 .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
+            _termMapConfigurationMock
+                .Setup(config => config.CreateConstantPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
 
             // when
             _termMapConfiguration.IsColumnValued(columnName);
