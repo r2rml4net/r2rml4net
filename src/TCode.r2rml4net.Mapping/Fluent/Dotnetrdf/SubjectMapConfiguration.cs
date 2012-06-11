@@ -20,7 +20,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public ISubjectMapConfiguration AddClass(Uri classIri)
         {
-            CheckRelationWithParentMap();
+            // create TermMap - TriplesMap relation if no class has been added
+            CheckRelationWithParentMap(addRelationIfMissing: ClassIris.Length == 0);
 
             R2RMLMappings.Assert(
                 TermMapNode,

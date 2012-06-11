@@ -147,7 +147,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
         protected internal abstract IUriNode CreateMapPropertyNode();
 
-        protected void CheckRelationWithParentMap(bool useShortcutProperty = false)
+        protected void CheckRelationWithParentMap(bool useShortcutProperty = false, bool addRelationIfMissing = true)
         {
             var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(TriplesMapNode, CreateMapPropertyNode(), TermMapNode));
             var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode());
@@ -155,7 +155,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if((containsMapPropertyTriple && !useShortcutProperty) || (shortcutPropertyTriples.Any() && useShortcutProperty))
                 throw new InvalidTriplesMapException(string.Format("Cannot use {0} and {1} properties simultanously", CreateConstantPropertyNode(), CreateMapPropertyNode()));
 
-            if(!useShortcutProperty)
+            if(!useShortcutProperty && addRelationIfMissing)
             {
                 R2RMLMappings.Assert(TriplesMapNode, CreateMapPropertyNode(), TermMapNode);
             }
