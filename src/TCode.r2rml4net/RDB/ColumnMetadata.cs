@@ -24,6 +24,8 @@ namespace TCode.r2rml4net.RDB
         /// </summary>
         public TableMetadata Table { get; internal set; }
 
+        public bool IsPrimaryKey { get; internal set; }
+
         /// <summary>
         /// Implementation of <see cref="IVistitable{T}"/>. Only visits this
         /// </summary>

@@ -1,0 +1,21 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<StudentTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Student"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/Student/Name={Name}";  
+	  rr:class <http://example.com/Student>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicate <http://example.com/Student#Name>; 
+      rr:objectMap [ rr:column "Name"; ]
+    ]
+    .

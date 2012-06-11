@@ -156,5 +156,27 @@ namespace TCode.r2rml4net.Tests
                        };
             }
         }
+
+        public static TableCollection D006_1table1primarykey1column
+        {
+            get
+            {
+                var studentsTable = new TableMetadata
+                                        {
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "Name",
+                                                    Type = DbType.AnsiString,
+                                                    IsPrimaryKey = true
+                                                }
+                                        };
+                studentsTable.Name = "Student";
+
+                return new TableCollection
+                       {
+                           studentsTable
+                       };
+            }
+        }
     }
 }
