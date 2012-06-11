@@ -8,14 +8,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     [TestFixture]
     public class PredicateMapConfigurationTests
     {
-        private PredicateMapConfiguration _objectMap;
+        private PredicateMapConfiguration _predicateMap;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            _objectMap = new PredicateMapConfiguration(triplesMapNode, graph);
+            _predicateMap = new PredicateMapConfiguration(triplesMapNode, graph);
         }
 
         [Test]
@@ -25,10 +25,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Uri uri = new Uri("http://example.com/SomeResource");
 
             // when
-            _objectMap.IsConstantValued(uri);
+            _predicateMap.IsConstantValued(uri);
 
             // then
-            _objectMap.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrPredicateProperty, uri);
+            Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _predicateMap.TriplesMapNode,
+                    _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateProperty)),
+                    _predicateMap.R2RMLMappings.CreateUriNode(uri))));
         }
     }
 }

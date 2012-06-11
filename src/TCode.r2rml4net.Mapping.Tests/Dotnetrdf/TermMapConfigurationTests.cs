@@ -34,7 +34,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Uri uri = new Uri("http://example.com/SomeResource");
             _termMapConfigurationMock
                 .Setup(config => config.CreateConstantPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrGraphProperty)));
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
+            _termMapConfigurationMock
+                .Setup(config => config.CreateMapPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
 
             // when
             _termMapConfiguration.IsConstantValued(uri);
@@ -49,6 +52,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             // given
             const string columnName = "Name";
+            _termMapConfigurationMock
+                .Setup(config => config.CreateConstantPropertyNode())
+                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
             _termMapConfigurationMock
                 .Setup(config => config.CreateMapPropertyNode())
                 .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));

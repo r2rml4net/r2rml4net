@@ -37,17 +37,18 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateConstantPropertyNode()).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
-            R2RMLMappings.Assert(TermMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
+            CheckRelationWithParentMap(true);
+
+            R2RMLMappings.Assert(TriplesMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
 
             return this;
         }
 
         public void IsColumnValued(string columnName)
         {
-            IBlankNode node = R2RMLMappings.CreateBlankNode();
+            CheckRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, CreateMapPropertyNode(), node);
-            R2RMLMappings.Assert(node, R2RMLMappings.CreateUriNode(RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
         #endregion
@@ -145,5 +146,19 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
         protected internal abstract IUriNode CreateMapPropertyNode();
+
+        protected void CheckRelationWithParentMap(bool useShortcutProperty = false)
+        {
+            var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(TriplesMapNode, CreateMapPropertyNode(), TermMapNode));
+            var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TriplesMapNode, CreateConstantPropertyNode());
+
+            if((containsMapPropertyTriple && !useShortcutProperty) || (shortcutPropertyTriples.Any() && useShortcutProperty))
+                throw new InvalidTriplesMapException(string.Format("Cannot use {0} and {1} properties simultanously", CreateConstantPropertyNode(), CreateMapPropertyNode()));
+
+            if(!useShortcutProperty)
+            {
+                R2RMLMappings.Assert(TriplesMapNode, CreateMapPropertyNode(), TermMapNode);
+            }
+        }
     }
 }

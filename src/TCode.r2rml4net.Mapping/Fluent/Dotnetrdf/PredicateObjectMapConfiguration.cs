@@ -5,6 +5,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
     class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
+        private readonly INode _predicateObjectMapNode;
         private readonly IUriNode _triplesMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
         private readonly IList<PredicateMapConfiguration> _propertyMaps = new List<PredicateMapConfiguration>();
@@ -13,20 +14,23 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             : base(r2RMLMappings)
         {
             _triplesMapNode = triplesMapNode;
+
+            _predicateObjectMapNode = R2RMLMappings.CreateBlankNode();
+            R2RMLMappings.Assert(triplesMapNode, R2RMLMappings.CreateUriNode(RrPredicateObjectMapPropety), _predicateObjectMapNode);
         }
 
         #region Implementation of IPredicateObjectMapConfiguration
 
         public ITermMapConfiguration CreateObjectMap()
         {
-            var objectMap = new ObjectMapConfiguration(_triplesMapNode, R2RMLMappings);
+            var objectMap = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _objectMaps.Add(objectMap);
             return objectMap;
         }
 
         public ITermMapConfiguration CreatePredicateMap()
         {
-            var propertyMap = new PredicateMapConfiguration(_triplesMapNode, R2RMLMappings);
+            var propertyMap = new PredicateMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _propertyMaps.Add(propertyMap);
             return propertyMap;
         }

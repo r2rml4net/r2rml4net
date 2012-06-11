@@ -9,13 +9,21 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     public class PredicateObjectMapConfigurationTests
     {
         private PredicateObjectMapConfiguration _predicateObjectMap;
+        private Uri _triplesMapURI;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            var triplesMapNode = graph.CreateUriNode(new Uri("http://tests.example.com/TriplesMap"));
+            _triplesMapURI = new Uri("http://tests.example.com/TriplesMap");
+            var triplesMapNode = graph.CreateUriNode(_triplesMapURI);
             _predicateObjectMap = new PredicateObjectMapConfiguration(triplesMapNode, graph);
+        }
+
+        [Test]
+        public void CreatingPredicateObjectMapCreatesTriple()
+        {
+            _predicateObjectMap.R2RMLMappings.VerifyHasTripleWithBlankObject(_triplesMapURI, UriConstants.RrPredicateObjectMapProperty);
         }
 
         [Test]

@@ -8,27 +8,31 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
     [TestFixture]
     public class GraphMapConfigurationTests
     {
-        private GraphMapConfiguration _objectMap;
+        private GraphMapConfiguration _graphMap;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            _objectMap = new GraphMapConfiguration(triplesMapNode, graph);
+            _graphMap = new GraphMapConfiguration(triplesMapNode, graph);
         }
 
         [Test]
-        public void PropertyMapCanBeIRIConstantValued()
+        public void GraphMapCanBeIRIConstantValued()
         {
             // given
             Uri uri = new Uri("http://example.com/SomeResource");
 
             // when
-            _objectMap.IsConstantValued(uri);
+            _graphMap.IsConstantValued(uri);
 
             // then
-            _objectMap.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrGraphProperty, uri);
+            Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _graphMap.TriplesMapNode,
+                    _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphProperty)),
+                    _graphMap.R2RMLMappings.CreateUriNode(uri))));
         }
     }
 }
