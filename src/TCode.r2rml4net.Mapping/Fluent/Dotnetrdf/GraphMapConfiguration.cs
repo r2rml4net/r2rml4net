@@ -12,12 +12,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         protected internal override IUriNode CreateConstantPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrGraphPropety);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrGraphPropety);
         }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(RrGraphMapPropety);
+            return R2RMLMappings.CreateUriNode(UrisHelper.RrGraphMapPropety);
         }
 
         #endregion

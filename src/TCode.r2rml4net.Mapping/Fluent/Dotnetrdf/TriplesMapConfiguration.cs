@@ -101,7 +101,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
 
-            var tableName = R2RMLMappings.CreateUriNode(RrTableNameProperty);
+            var tableName = R2RMLMappings.CreateUriNode(UrisHelper.RrTableNameProperty);
             var tableNameLiteral = R2RMLMappings.CreateLiteralNode(tablename);
 
             R2RMLMappings.Assert(tableDefinition, tableName, tableNameLiteral);
@@ -116,7 +116,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             AssertTriplesMapsTriples(out tableDefinition);
 
             var sqlQueryLiteral = R2RMLMappings.CreateLiteralNode(sqlQuery);
-            var sqlQueryProperty = R2RMLMappings.CreateUriNode(RrSqlQueryProperty);
+            var sqlQueryProperty = R2RMLMappings.CreateUriNode(UrisHelper.RrSqlQueryProperty);
 
             R2RMLMappings.Assert(tableDefinition, sqlQueryProperty, sqlQueryLiteral);
         }
@@ -181,9 +181,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
         {
             var tripleMap = R2RMLMappings.CreateUriNode(Uri);
-            var tripleMapClass = R2RMLMappings.CreateUriNode(RrTriplesMapClass);
-            var type = R2RMLMappings.CreateUriNode(RdfType);
-            var logicalTable = R2RMLMappings.CreateUriNode(RrLogicalTableProperty);
+            var tripleMapClass = R2RMLMappings.CreateUriNode(UrisHelper.RrTriplesMapClass);
+            var type = R2RMLMappings.CreateUriNode(UrisHelper.RdfType);
+            var logicalTable = R2RMLMappings.CreateUriNode(UrisHelper.RrLogicalTableProperty);
             tableDefinition = R2RMLMappings.CreateBlankNode();
 
             R2RMLMappings.Assert(tripleMap, type, tripleMapClass);
@@ -231,7 +231,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (TableName != null)
                 throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", Uri);
 
-            R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode(RrSqlVersionProperty), R2RMLMappings.CreateUriNode(uri));
+            R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode(UrisHelper.RrSqlVersionProperty), R2RMLMappings.CreateUriNode(uri));
 
             return this;
         }
@@ -256,7 +256,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                 if (logicalTableNode == null)
                     return new Uri[0];
 
-                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode(RrSqlVersionProperty));
+                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode(UrisHelper.RrSqlVersionProperty));
                 return triples.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }
@@ -272,7 +272,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
                     R2RMLMappings.CreateUriNode(Uri),
-                    R2RMLMappings.CreateUriNode(RrLogicalTableProperty)
+                    R2RMLMappings.CreateUriNode(UrisHelper.RrLogicalTableProperty)
                     ).ToArray();
 
                 if (logicalTables.Count() > 1)
