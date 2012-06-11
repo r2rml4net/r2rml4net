@@ -30,7 +30,7 @@
     rr:predicateObjectMap
     [ 
       rr:predicate <http://example.com/Student#NVarchar> ; 
-      rr:objectMap [ rr:column "Varchar" ]
+      rr:objectMap [ rr:column "NVarchar" ]
     ];
 
     rr:predicateObjectMap
@@ -83,12 +83,6 @@
 
     rr:predicateObjectMap
     [ 
-      rr:predicate <http://example.com/Student#Timestamp> ; 
-      rr:objectMap [ rr:column "Timestamp"; rr:datatype xsd:dateTime ]
-    ];
-
-    rr:predicateObjectMap
-    [ 
       rr:predicate <http://example.com/Student#Boolean> ; 
       rr:objectMap [ rr:column "Boolean"; rr:datatype xsd:boolean ]
     ];
@@ -108,6 +102,6 @@
     rr:predicateObjectMap
     [ 
       rr:predicate <http://example.com/Student#Int64> ; 
-      rr:objectMap [ rr:column "Int64"; rr:datatype xsd:interger ]
+      rr:objectMap [ rr:column "Int64"; rr:datatype xsd:integer ]
     ]
     .
