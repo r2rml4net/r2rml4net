@@ -4,8 +4,11 @@ namespace TCode.r2rml4net.Mapping.Fluent
 {
     class UrisHelper
     {
-        public static string LiterlUriNode(DbType columnType)
+        public static string GetXsdDataType(DbType columnType)
         {
+            const string prefix = "http://www.w3.org/2001/XMLSchema#";
+            string datatype;
+
             switch (columnType)
             {
                 case DbType.Int16:
@@ -14,30 +17,44 @@ namespace TCode.r2rml4net.Mapping.Fluent
                 case DbType.UInt16:
                 case DbType.UInt32:
                 case DbType.UInt64:
-                    return "xsd:integer";
+                    datatype = "integer";
+                    break;
                 case DbType.Boolean:
-                    return "xsd:boolean";
+                    datatype = "boolean";
+                    break;
                 case DbType.Byte:
-                    return "xsd:unsignedByte";
+                    datatype = "unsignedByte";
+                    break;
                 case DbType.Date:
-                    return "xsd:date";
+                    datatype = "date";
+                    break;
                 case DbType.DateTime:
                 case DbType.DateTime2:
                 case DbType.DateTimeOffset:
-                    return "xsd:datetime";
+                    datatype = "dateTime";
+                    break;
                 case DbType.Currency:
                 case DbType.Decimal:
-                    return "xsd:decimal";
+                    datatype = "decimal";
+                    break;
                 case DbType.Double:
                 case DbType.Single:
-                    return "xsd:double";
+                    datatype = "double";
+                    break;
                 case DbType.SByte:
-                    return "xsd:byte";
+                    datatype = "byte";
+                    break;
                 case DbType.Time:
-                    return "xsd:time";
+                    datatype = "time";
+                    break;
+                case DbType.Binary:
+                    datatype = "hexBinary";
+                    break;
                 default:
                     return null;
             }
+
+            return prefix + datatype;
         }
 
         internal const string RdfType = "rdf:type";

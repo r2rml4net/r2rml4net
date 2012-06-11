@@ -65,7 +65,11 @@ namespace TCode.r2rml4net.Mapping
 
             var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
-            propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
+            var literalTermMap = propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
+
+            var dataTypeUri = UrisHelper.GetXsdDataType(column.Type);
+            if(dataTypeUri != null)
+                literalTermMap.HasDataType(dataTypeUri);
         }     
 
         #endregion
