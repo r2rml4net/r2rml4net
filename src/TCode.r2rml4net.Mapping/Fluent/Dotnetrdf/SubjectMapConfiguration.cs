@@ -56,11 +56,17 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             throw new InvalidTriplesMapException("Subject map cannot be of term type rr:Literal");
         }
 
+        /// <summary>
+        /// Returns rr:subject
+        /// </summary>
         protected internal override IUriNode CreateConstantPropertyNode()
         {
             return R2RMLMappings.CreateUriNode(UrisHelper.RrSubjectProperty);
         }
 
+        /// <summary>
+        /// Returns rr:subjectMap
+        /// </summary>
         protected internal override IUriNode CreateMapPropertyNode()
         {
             return R2RMLMappings.CreateUriNode(UrisHelper.RrSubjectMapProperty);

@@ -12,7 +12,13 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <remarks>Please see <see cref="ITermTypeConfiguration"/> members for info on valid values for different term maps</remarks>
         ITermTypeConfiguration TermType { get; }
-
+        /// <summary>
+        /// Sets the term map as constant-valued
+        /// </summary>
+        /// <param name="uri">Constant value URI</param>
+        /// <remarks>
+        /// Asserted using the shortcut properties described on http://www.w3.org/TR/r2rml/#constant
+        /// </remarks>
         ITermTypeConfiguration IsConstantValued(Uri uri);
     }
 }
