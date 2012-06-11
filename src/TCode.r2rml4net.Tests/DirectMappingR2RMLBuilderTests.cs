@@ -91,7 +91,7 @@ namespace TCode.r2rml4net.Tests
         [Test]
         public void DirectGraphTC0002_MappingGeneration()
         {
-            TestMappingGeneration(RelationalTestMappings.D002_1table2columns, "R2RMLTC0002.ttl");
+            TestMappingGeneration(RelationalTestMappings.TypedColumns, "R2RMLTC0002.ttl");
         }
 
         [Test]
