@@ -4,20 +4,16 @@ using Moq;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 using TCode.r2rml4net.RDB;
-using System.Data;
 using VDS.RDF;
 using System.IO;
-using VDS.RDF.Parsing;
 using VDS.RDF.Writing;
-using System.Collections.Generic;
-using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Tests
 {
     [TestFixture]
-    public class DirectMappingR2RMLBuilderTests
+    public class DefaultR2RMLMappingGeneratorTests
     {
-        private DirectMappingR2RMLBuilder _directMappingR2RMLBuilder;
+        private DefaultR2RMLMappingGenerator _defaultR2RMLMappingGenerator;
         private Mock<IDatabaseMetadata> _databaseMetedata;
         private R2RMLConfiguration _configuration;
 
@@ -26,14 +22,14 @@ namespace TCode.r2rml4net.Tests
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
             _configuration = new R2RMLConfiguration(new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/"));
-            _directMappingR2RMLBuilder = new DirectMappingR2RMLBuilder(_databaseMetedata.Object, _configuration);
+            _defaultR2RMLMappingGenerator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
         }
 
-        [Test, Description("Invoking DirectMappingR2RMLBuilder#BuildGraph should execute reading of metadata")]
+        [Test, Description("Invoking DefaultR2RMLMappingGenerator#GenerateMappings should execute reading of metadata")]
         public void AccesingGraphReadsDatabaseMetadata()
         {
             // when
-            _directMappingR2RMLBuilder.BuildGraph();
+            _defaultR2RMLMappingGenerator.GenerateMappings();
 
             // then
             _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
@@ -43,8 +39,8 @@ namespace TCode.r2rml4net.Tests
         public void AccesingGraphTwiceReadsDatabaseMetadataOnlyOnce()
         {
             // when
-            _directMappingR2RMLBuilder.BuildGraph();
-            _directMappingR2RMLBuilder.BuildGraph();
+            _defaultR2RMLMappingGenerator.GenerateMappings();
+            _defaultR2RMLMappingGenerator.GenerateMappings();
 
             // then
             _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
@@ -58,11 +54,11 @@ namespace TCode.r2rml4net.Tests
             _databaseMetedata.Setup(db => db.Tables).Returns(tables);
 
             // when
-            _directMappingR2RMLBuilder.BuildGraph();
+            _defaultR2RMLMappingGenerator.GenerateMappings();
 
             // then
             _databaseMetedata.Verify(db => db.Tables, Times.Once());
-            Assert.IsNotNull(_directMappingR2RMLBuilder.R2RMLGraph);
+            Assert.IsFalse(_configuration.GraphReadOnly.IsEmpty);
         }
 
         private void TestMappingGeneration(TableCollection tables, string embeddedResourceGraph)
@@ -71,7 +67,7 @@ namespace TCode.r2rml4net.Tests
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when 
-            _directMappingR2RMLBuilder.BuildGraph();
+            _defaultR2RMLMappingGenerator.GenerateMappings();
 
             // then
             Graph expected = new Graph();
@@ -83,19 +79,19 @@ namespace TCode.r2rml4net.Tests
         }
 
         [Test]
-        public void DirectGraphTC0001_MappingGeneration()
+        public void SimpleTableMappingGeneration()
         {
             TestMappingGeneration(RelationalTestMappings.D001_1table1column, "R2RMLTC0001.ttl");
         }
 
         [Test]
-        public void DirectGraphTC0002_MappingGeneration()
+        public void TypedColumnsMappingGeneration()
         {
             TestMappingGeneration(RelationalTestMappings.TypedColumns, "R2RMLTC0002.ttl");
         }
 
         [Test]
-        public void DirectGraphTC0003_MappingGeneration()
+        public void TableWithSimplePrimaryKeyMappingGeneration()
         {
             TestMappingGeneration(RelationalTestMappings.D003_1table3columns, "R2RMLTC0003.ttl");
         }

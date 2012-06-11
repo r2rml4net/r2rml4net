@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectMappingR2RMLBuilder.cs" />
+    <Compile Include="DefaultR2RMLMappingGenerator.cs" />
     <Compile Include="Fluent\Dotnetrdf\BaseConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\GraphMapConfiguration.cs" />
     <Compile Include="Fluent\INonLiteralTermMapConfigutarion.cs" />
@@ -73,6 +73,7 @@
     <Compile Include="Fluent\ITriplesMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\R2RMLConfiguration.cs" />
     <Compile Include="Fluent\ITriplesMapFromR2RMLViewConfiguration.cs" />
+    <Compile Include="Fluent\UrisHelper.cs" />
     <Compile Include="InvalidTriplesMapException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
