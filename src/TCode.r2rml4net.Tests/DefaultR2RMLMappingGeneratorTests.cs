@@ -91,9 +91,15 @@ namespace TCode.r2rml4net.Tests
         }
 
         [Test]
-        public void TableWithSimplePrimaryKeyMappingGeneration()
+        public void SimpleTableWith3ColumnsMappingGeneration()
         {
             TestMappingGeneration(RelationalTestMappings.D003_1table3columns, "R2RMLTC0003.ttl");
+        }
+
+        [Test]
+        public void TableWithVarcharPrimaryKey()
+        {
+            TestMappingGeneration(RelationalTestMappings.D006_1table1primarykey1column, "R2RMLTC0006.ttl");
         }
 
         private string Serialize(IGraph graph) 
