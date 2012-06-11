@@ -34,5 +34,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
         }
+
+        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        public void GraphMapCannotBeOfTypeLiteral()
+        {
+            _graphMap.TermType.IsLiteral();
+        }
+
+
+        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        public void GraphMapCannotBeOfTypeBlankNode()
+        {
+            _graphMap.TermType.IsBlankNode();
+        }
     }
 }

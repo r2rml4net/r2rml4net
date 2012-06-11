@@ -49,14 +49,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         #region Overrides of TermMapConfiguration
 
         /// <summary>
-        /// Throws exception
-        /// </summary>
-        public override ITermMapConfiguration IsLiteral()
-        {
-            throw new InvalidTriplesMapException("Subject map cannot be of term type rr:Literal");
-        }
-
-        /// <summary>
         /// Returns rr:subject
         /// </summary>
         protected internal override IUriNode CreateConstantPropertyNode()
