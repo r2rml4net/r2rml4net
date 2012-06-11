@@ -7,7 +7,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// <summary>
     /// Fluent configuration of subject map backed by a DotNetRDF graph (see <see cref="ISubjectMapConfiguration"/>)
     /// </summary>
-    public class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration
+    public class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion
     {
         internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {

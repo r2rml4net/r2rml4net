@@ -67,9 +67,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.TermMapNode,
                 _termMapConfiguration.CreateMapPropertyNode()).Any());
             _termMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrColumnProperty, columnName);
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
         }
 
-        public void ColumnValueCanONlyBeSetOnce()
+        [Test]
+        public void ColumnValueCanOnlyBeSetOnce()
         {
             // given
             const string columnName = "Name";
