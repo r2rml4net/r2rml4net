@@ -29,6 +29,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         internal const string RrGraphMapPropety = "rr:graphMap";
         internal const string RrColumnProperty = "rr:column";
         internal const string RrPredicateObjectMapPropety = "rr:predicateObjectMap";
+        internal const string RrLanguageTagPropety = "rr:languageTag";
+        internal const string RrDatatypePropety = "rr:datatype";
 
         /// <summary>
         /// DotNetRDF graph containing the R2RML mappings

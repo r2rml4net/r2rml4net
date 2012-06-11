@@ -102,7 +102,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// Gets explicitly set
         /// </summary>
-        private Uri ExplicitTermType
+        protected Uri ExplicitTermType
         {
             get
             {

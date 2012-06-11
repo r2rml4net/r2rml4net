@@ -2,6 +2,9 @@
 {
     static class UriConstants
     {
+        internal const string RrLiteral = "http://www.w3.org/ns/r2rml#Literal";
+        internal const string RrDataTypeProperty = "http://www.w3.org/ns/r2rml#datatype";
+        internal const string RrLanguageTagProperty = "http://www.w3.org/ns/r2rml#languageTag";
         internal const string RrPredicateObjectMapProperty = "http://www.w3.org/ns/r2rml#predicateObjectMap";
         internal const string RrColumnProperty = "http://www.w3.org/ns/r2rml#column";
         internal const string RrGraphProperty = "http://www.w3.org/ns/r2rml#graph";
@@ -18,5 +21,6 @@
         internal const string RrSubjectProperty = "http://www.w3.org/ns/r2rml#subject";
 
         internal const string RdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        internal const string RdfInteger = "http://www.w3.org/1999/02/22-rdf-syntax-ns#integer";
     }
 }

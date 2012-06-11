@@ -56,6 +56,8 @@
     <Compile Include="DirectMappingR2RMLBuilder.cs" />
     <Compile Include="Fluent\Dotnetrdf\BaseConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\GraphMapConfiguration.cs" />
+    <Compile Include="Fluent\INonLiteralTermMapConfigutarion.cs" />
+    <Compile Include="Fluent\ILiteralTermMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\ObjectMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\PredicateMapConfiguration.cs" />
     <Compile Include="Fluent\Dotnetrdf\PredicateObjectMapConfiguration.cs" />
