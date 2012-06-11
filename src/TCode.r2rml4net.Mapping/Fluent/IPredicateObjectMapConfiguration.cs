@@ -1,8 +1,19 @@
 ﻿namespace TCode.r2rml4net.Mapping.Fluent
 {
+    /// <summary>
+    /// Configuration for predicate-object maps described on http://www.w3.org/TR/r2rml/#predicate-object-map
+    /// </summary>
     public interface IPredicateObjectMapConfiguration
     {
-        ITermMapConfiguration CreateObjectMap();
+        /// <summary>
+        /// Creates a new object map
+        /// </summary>
+        /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many object maps</remarks>
+        IObjectMapConfiguration CreateObjectMap();
+        /// <summary>
+        /// Creates a new predicate map
+        /// </summary>
+        /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many predicate maps</remarks>
         ITermMapConfiguration CreatePredicateMap();
     }
 }

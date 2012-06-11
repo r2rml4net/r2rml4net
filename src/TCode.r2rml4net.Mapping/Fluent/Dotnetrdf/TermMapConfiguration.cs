@@ -40,6 +40,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             get { return this; }
         }
 
+        /// <summary>
+        /// <see cref="ITermMapConfiguration.IsConstantValued"/>
+        /// </summary>
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
             if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateConstantPropertyNode()).Any())
@@ -50,13 +53,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(ParentMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
 
             return this;
-        }
-
-        public void IsColumnValued(string columnName)
-        {
-            CheckRelationWithParentMap();
-
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
         #endregion
@@ -154,13 +150,21 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
         protected internal abstract IUriNode CreateMapPropertyNode();
-
+        /// <summary>
+        /// Verifies that the term map doensn't have both shortcut and "full" property set
+        /// </summary>
+        /// <param name="useShortcutProperty">if false, will create a relation with <see cref="TermMapNode"/> and <see cref="ParentMapNode"/>. 
+        /// This relation is not needed when using constant value shortcut. If the latter is true, the value is connected directly to <see cref="ParentMapNode"/>
+        /// using the property created by <see cref="CreateConstantPropertyNode"/></param>
+        /// <example>An example invalid graph (object map): [] rr:subject "value"; rr:subjectMap [ rr:column "ColumnName" ; ] .</example>
         protected void CheckRelationWithParentMap(bool useShortcutProperty = false)
         {
             var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), TermMapNode));
-            var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode());
+            var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
 
-            if((containsMapPropertyTriple && !useShortcutProperty) || (shortcutPropertyTriples.Any() && useShortcutProperty))
+            if ((containsMapPropertyTriple && shortcutPropertyTriples.Any()) 
+                || (containsMapPropertyTriple && !useShortcutProperty) 
+                || (shortcutPropertyTriples.Any() && useShortcutProperty))
                 throw new InvalidTriplesMapException(string.Format("Cannot use {0} and {1} properties simultanously", CreateConstantPropertyNode(), CreateMapPropertyNode()));
 
             if(!useShortcutProperty)
@@ -175,6 +179,16 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         protected void CreateParentMapRelation()
         {
             R2RMLMappings.Assert(ParentMapNode, CreateMapPropertyNode(), TermMapNode);
+        }
+
+        /// <summary>
+        /// <see cref="INonLiteralTermMapConfigutarion.IsColumnValued"/>
+        /// </summary>
+        public void IsColumnValued(string columnName)
+        {
+            CheckRelationWithParentMap();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
     }
 }
