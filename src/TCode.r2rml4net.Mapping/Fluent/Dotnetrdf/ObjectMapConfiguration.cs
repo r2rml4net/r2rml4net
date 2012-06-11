@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <summary>
         /// Overriden, because object maps can be of term type rr:Literal
         /// </summary>
-        public override System.Uri URI
+        public override Uri URI
         {
             get
             {
@@ -88,6 +88,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 return datatypeTriples.Any() || languageTagTriples.Any();
             }
+        }
+
+        public override ITermMapConfiguration IsLiteral()
+        {
+            AssertTermTypeNotSet();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral));
+            return this;
         }
 
         #endregion

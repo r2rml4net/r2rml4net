@@ -101,10 +101,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public virtual ITermMapConfiguration IsLiteral()
         {
-            AssertTermTypeNotSet();
-
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral));
-            return this;
+            throw new InvalidTriplesMapException("Only object map can be of term type rr:Literal");
         }
 
         /// <summary>

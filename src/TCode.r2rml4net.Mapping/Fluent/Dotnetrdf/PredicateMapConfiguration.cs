@@ -20,6 +20,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             return R2RMLMappings.CreateUriNode(UrisHelper.RrPredicateMapPropety);
         }
 
+        public override ITermMapConfiguration IsBlankNode()
+        {
+            throw new InvalidTriplesMapException("Only object map and subject map can be of term type rr:Literal");
+        }
+
         #endregion
     }
 }
