@@ -61,7 +61,9 @@
     <Compile Include="RDB\TableCollection.cs" />
     <Compile Include="RDB\TableMetadata.cs" />
     <Compile Include="RDF\InvalidTriplesMapException.cs" />
+    <Compile Include="RDF\IObjectMap.cs" />
     <Compile Include="RDF\ITermMap.cs" />
+    <Compile Include="RDF\ITermType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -77,7 +77,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.TermMapNode,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
             Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
         }
 
@@ -113,7 +113,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.TermMapNode,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
             Assert.AreEqual(template, _termMapConfiguration.Template);
         }
 

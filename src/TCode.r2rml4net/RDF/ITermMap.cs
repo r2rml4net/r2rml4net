@@ -22,5 +22,7 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         /// <exception cref="InvalidTriplesMapException"></exception>
         Uri ConstantValue { get; }
+
+        ITermType TermType { get; }
     }
 }
