@@ -2,6 +2,8 @@
 {
     static class UriConstants
     {
+        internal const string RrPredicateMapProperty = "http://www.w3.org/ns/r2rml#predicateMap";
+        internal const string RrGraphMapProperty = "http://www.w3.org/ns/r2rml#graphMap";
         internal const string RrTemplateProperty = "http://www.w3.org/ns/r2rml#template";
         internal const string RrConstantProperty = "http://www.w3.org/ns/r2rml#constant";
         internal const string RrLiteral = "http://www.w3.org/ns/r2rml#Literal";

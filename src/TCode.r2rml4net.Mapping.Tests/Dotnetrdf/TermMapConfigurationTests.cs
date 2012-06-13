@@ -44,7 +44,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(uri));
-            _termMapConfigurationMock.VerifyAll();
         }
 
         public void CanBeConstantIRIValued()
@@ -92,7 +91,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
-            _termMapConfigurationMock.VerifyAll();
         }
 
         [Test]

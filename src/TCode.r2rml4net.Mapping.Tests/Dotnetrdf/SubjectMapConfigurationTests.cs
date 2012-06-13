@@ -96,8 +96,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _subjectMapConfiguration.ParentMapNode,
-                    _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)),
+                    _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)),
+                    _subjectMapConfiguration.TermMapNode)));
+            Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _subjectMapConfiguration.TermMapNode,
+                    _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
+            Assert.AreEqual(uri, _subjectMapConfiguration.ConstantValue);
         }
 
         [Test]

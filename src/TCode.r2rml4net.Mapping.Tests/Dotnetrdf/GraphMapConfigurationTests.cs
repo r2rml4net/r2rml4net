@@ -32,7 +32,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _graphMap.ParentMapNode,
-                    _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphProperty)),
+                    _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphMapProperty)),
+                    _graphMap.TermMapNode)));
+            Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _graphMap.TermMapNode,
+                    _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
             Assert.AreEqual(uri, _graphMap.Graph);
         }
@@ -42,7 +47,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             _graphMap.TermType.IsLiteral();
         }
-
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]
         public void GraphMapCannotBeOfTypeBlankNode()

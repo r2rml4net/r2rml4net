@@ -36,7 +36,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.ParentMapNode,
-                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty)),
+                    _objectMap.TermMapNode)));
+            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _objectMap.TermMapNode,
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(literal))));
             Assert.AreEqual(literal, _objectMap.Literal);
         }
@@ -67,7 +72,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.ParentMapNode,
-                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty)),
+                    _objectMap.TermMapNode)));
+            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _objectMap.TermMapNode,
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(uri))));
             Assert.AreEqual(uri, _objectMap.ConstantValue);
         }

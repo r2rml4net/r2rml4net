@@ -15,19 +15,19 @@
 
     rr:predicateObjectMap
     [ 
-      rr:predicate <http://example.com/Student#ID>; 
+      rr:predicateMap [ rr:constant <http://example.com/Student#ID> ] ; 
       rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
     ];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate <http://example.com/Student#Name>; 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Name> ] ; 
       rr:objectMap [ rr:column "Name" ]
     ];
 
     rr:predicateObjectMap
     [ 
-      rr:predicate <http://example.com/Student#LastName>; 
+      rr:predicateMap [ rr:constant <http://example.com/Student#LastName> ] ; 
       rr:objectMap [ rr:column "LastName" ]
     ]
     .

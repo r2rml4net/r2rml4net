@@ -32,8 +32,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _predicateMap.ParentMapNode,
-                    _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateProperty)),
+                    _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateMapProperty)),
+                    _predicateMap.TermMapNode)));
+            Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
+                new Triple(
+                    _predicateMap.TermMapNode,
+                    _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
+            Assert.AreEqual(uri, _predicateMap.ConstantValue);
         }
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]
