@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf

@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
@@ -46,6 +47,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _termMapConfigurationMock.VerifyAll();
         }
 
+        public void CanBeConstantIRIValued()
+        {
+            // given
+            Uri uri = new Uri("http://example.com/SomeResource");
+
+            // when
+            _termMapConfiguration.IsConstantValued(uri);
+
+            // then
+            Assert.AreEqual(uri, _termMapConfiguration.ConstantValue);
+        }
+
         [Test]
         public void TermMapCanBeColumnValued()
         {
@@ -65,6 +78,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
         }
 
         [Test]
@@ -100,6 +114,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(template, _termMapConfiguration.Template);
         }
 
         [Test]

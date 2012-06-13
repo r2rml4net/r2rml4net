@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TCode.r2rml4net.Mapping
+namespace TCode.r2rml4net.RDF
 {
     /// <summary>
     /// Represents a validation error in Triples Map structure
