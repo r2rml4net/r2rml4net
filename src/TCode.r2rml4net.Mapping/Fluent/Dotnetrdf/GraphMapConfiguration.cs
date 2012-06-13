@@ -1,4 +1,5 @@
-﻿using VDS.RDF;
+﻿using TCode.r2rml4net.RDF;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
