@@ -15,7 +15,7 @@
 
     rr:predicateObjectMap
     [ 
-      rr:predicate <http://example.com/Student#Name>; 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Name> ] ; 
       rr:objectMap [ rr:column "Name"; ]
     ]
     .

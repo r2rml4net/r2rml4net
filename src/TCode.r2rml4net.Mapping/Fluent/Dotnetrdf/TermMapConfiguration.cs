@@ -49,9 +49,9 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (ConstantValue != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
-            CheckRelationWithParentMap(true);
+            EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(ParentMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
 
             return this;
         }
@@ -65,7 +65,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, templateProperty).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one template");
 
-            CheckRelationWithParentMap();
+            EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, templateProperty, R2RMLMappings.CreateLiteralNode(template));
             return this;
@@ -194,17 +194,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// This relation is not needed when using constant value shortcut. If the latter is true, the value is connected directly to <see cref="ParentMapNode"/>
         /// using the property created by <see cref="CreateConstantPropertyNode"/></param>
         /// <example>An example invalid graph (object map): [] rr:subject "value"; rr:subjectMap [ rr:column "ColumnName" ; ] .</example>
-        protected void CheckRelationWithParentMap(bool useShortcutProperty = false)
+        protected void EnsureRelationWithParentMap()
         {
             var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), TermMapNode));
-            var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
 
-            if ((containsMapPropertyTriple && shortcutPropertyTriples.Any())
-                || (containsMapPropertyTriple && useShortcutProperty)
-                || (shortcutPropertyTriples.Any() && !useShortcutProperty))
-                throw new InvalidTriplesMapException(string.Format("Cannot use {0} and {1} properties simultanously", CreateConstantPropertyNode(), CreateMapPropertyNode()));
-
-            if (!useShortcutProperty)
+            if (!containsMapPropertyTriple)
             {
                 CreateParentMapRelation();
             }
@@ -226,7 +220,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             if (ColumnName != null)
                 throw new InvalidTriplesMapException("Term map can have only one column name");
 
-            CheckRelationWithParentMap();
+            EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }

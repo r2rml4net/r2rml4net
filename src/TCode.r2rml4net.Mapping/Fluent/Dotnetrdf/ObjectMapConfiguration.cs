@@ -16,12 +16,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ILiteralTermMapConfiguration IsConstantValued(string literal)
         {
-            CheckRelationWithParentMap(true);
-
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).Any())
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateMapPropertyNode()).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
-            R2RMLMappings.Assert(ParentMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateLiteralNode(literal));
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty), R2RMLMappings.CreateLiteralNode(literal));
 
             return this;
         }
@@ -111,7 +111,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public void HasDataType(Uri dataTypeUri)
         {
             EnsureOnlyLanguageTagOrDatatype();
-            ReplaceShortcutWithWithMapProperty();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
@@ -119,7 +118,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public void HasLanguageTag(string languagTag)
         {
             EnsureOnlyLanguageTagOrDatatype();
-            ReplaceShortcutWithWithMapProperty();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
         }
@@ -127,22 +125,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public void HasLanguageTag(CultureInfo cultureInfo)
         {
             HasLanguageTag(cultureInfo.Name);
-        }
-
-        private void ReplaceShortcutWithWithMapProperty()
-        {
-            var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
-
-            if(shortcutTriples.Length > 1)
-                throw new InvalidTriplesMapException("Predicated object map contains multiple constant object maps");
-
-            if(shortcutTriples.Any())
-            {
-                Triple shortcutTriple = shortcutTriples[0];
-                R2RMLMappings.Retract(shortcutTriple);
-                R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty), shortcutTriple.Object);
-                CheckRelationWithParentMap();
-            }
         }
 
         private void EnsureOnlyLanguageTagOrDatatype()
