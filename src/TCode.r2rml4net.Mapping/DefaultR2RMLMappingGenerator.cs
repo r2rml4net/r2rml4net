@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Mapping
             else
             {
                 string template = classIri.ToString();
-                template += string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={{{0}}}", pk.Name)));
+                template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={{{0}}}", pk.Name)));
 
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
