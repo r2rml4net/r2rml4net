@@ -98,5 +98,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
         }
+
+        [Test]
+        public void CanHaveClassesAndBeTemplateValued()
+        {
+            // given
+            Uri class1 = new Uri("http://example.com/ontology#class");
+            string template = "http://www.example.com/res/{column}";
+
+            // when
+            _subjectMapConfiguration.AddClass(class1).IsTemplateValued(template);
+
+            // then
+            Assert.Contains(class1, _subjectMapConfiguration.ClassIris);
+            Assert.AreEqual(template, _subjectMapConfiguration.Template);
+        }
     }
 }

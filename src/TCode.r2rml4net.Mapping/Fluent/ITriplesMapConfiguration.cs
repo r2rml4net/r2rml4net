@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         ISubjectMapConfiguration SubjectMap { get; }
         /// <summary>
-        /// Adds a property-object map, which is used together with subject map to create complete triples
+        /// Adds a property-object map, which is used together with subject map to create complete triples\r\n
         /// from logical rows as described on http://www.w3.org/TR/r2rml/#predicate-object-map
         /// <remarks>Triples map can contain many property-object maps</remarks>
         /// </summary>
