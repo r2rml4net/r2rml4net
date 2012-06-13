@@ -102,6 +102,12 @@ namespace TCode.r2rml4net.Tests
             TestMappingGeneration(RelationalTestMappings.D006_1table1primarykey1column, "R2RMLTC0006.ttl");
         }
 
+        [Test]
+        public void TableWithCompositePrimaryKey()
+        {
+            TestMappingGeneration(RelationalTestMappings.D008_1table1compositeprimarykey3columns, "R2RMLTC0008.ttl");
+        }
+
         private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())

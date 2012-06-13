@@ -178,5 +178,38 @@ namespace TCode.r2rml4net.Tests
                        };
             }
         }
+
+        public static TableCollection D008_1table1compositeprimarykey3columns
+        {
+            get
+            {
+                var studentsTable = new TableMetadata
+                                        {
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "Name",
+                                                    Type = DbType.AnsiString,
+                                                    IsPrimaryKey = true
+                                                },
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "LastName",
+                                                    Type = DbType.AnsiString,
+                                                    IsPrimaryKey = true
+                                                },
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "Age",
+                                                    Type = DbType.Int32
+                                                }
+                                        };
+                studentsTable.Name = "Student";
+
+                return new TableCollection
+                       {
+                           studentsTable
+                       };
+            }
+        }
     }
 }
