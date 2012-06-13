@@ -34,6 +34,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _graphMap.ParentMapNode,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
+            Assert.AreEqual(uri, _graphMap.Graph);
         }
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]

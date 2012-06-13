@@ -160,9 +160,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of IObjectMap
 
-        public string ConstantValueLiteral
+        public Uri Object
         {
-            get { throw new NotImplementedException(); }
+            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+        }
+
+        public string Literal
+        {
+            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
         }
 
         #endregion
