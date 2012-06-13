@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
@@ -7,7 +8,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// <summary>
     /// Fluent configuration of subject map backed by a DotNetRDF graph (see <see cref="ISubjectMapConfiguration"/>)
     /// </summary>
-    public class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion
+    public class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion, ISubjectMap
     {
         internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
@@ -62,6 +63,15 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         protected internal override IUriNode CreateMapPropertyNode()
         {
             return R2RMLMappings.CreateUriNode(UrisHelper.RrSubjectMapProperty);
+        }
+
+        #endregion
+
+        #region Implementation of ISubjectMap
+
+        public Uri Subject
+        {
+            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
         }
 
         #endregion

@@ -154,6 +154,30 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #endregion
 
+        #region Implementation of ITermMap
+
+        public string ColumnName
+        {
+            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty)); }
+        }
+
+        public string Template
+        {
+            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrTemplateProperty)); }
+        }
+
+        public Uri ConstantValue
+        {
+            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+        }
+
+        ITermType ITermMap.TermType
+        {
+            get { return this; }
+        }
+
+        #endregion
+
         /// <summary>
         /// Returns a <see cref="IUriNode"/> for the shorcut property as described on http://www.w3.org/TR/r2rml/#constant
         /// </summary>
@@ -199,7 +223,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public void IsColumnValued(string columnName)
         {
-            if(ColumnName != null)
+            if (ColumnName != null)
                 throw new InvalidTriplesMapException("Term map can have only one column name");
 
             CheckRelationWithParentMap();
@@ -207,81 +231,42 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
-        #region Implementation of ITermMap
-
-        public string ColumnName
+        protected string GetSingleLiteralValueForPredicate(IUriNode predicate)
         {
-            get
-            {
-                var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty)).ToArray();
+            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();
 
-                if (columnTriples.Length == 1)
-                    if (columnTriples[0].Object is ILiteralNode)
-                        return columnTriples[0].Object.ToString();
-                    else
-                        throw new InvalidTriplesMapException("Term map column must be a literal");
+            if (triplesForPredicate.Length == 1)
+                if (triplesForPredicate[0].Object is ILiteralNode)
+                    return triplesForPredicate[0].Object.ToString();
+                else
+                    throw new InvalidTriplesMapException(string.Format("Term map value for {0} must be a literal", predicate.Uri));
 
-                if (columnTriples.Length == 0)
-                    return null;
+            if (triplesForPredicate.Length == 0)
+                return null;
 
-                throw new InvalidTriplesMapException(
-                    string.Format("Term map contains multiple column names:\r\n{0}",
-                                  string.Join("\r\n", columnTriples.Select(triple => triple.Object.ToString()))));
-            }
+            throw new InvalidTriplesMapException(
+                string.Format("Term map contains multiple values for {1}:\r\n{0}",
+                              string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
+                              predicate.Uri));
         }
 
-        public string Template
+        protected Uri GetSingleUriValueForPredicate(IUriNode predicate)
         {
-            get
-            {
-                var templateTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTemplateProperty)).ToArray();
+            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();
 
-                if (templateTriples.Length == 1)
-                    if (templateTriples[0].Object is ILiteralNode)
-                        return templateTriples[0].Object.ToString();
-                    else
-                        throw new InvalidTriplesMapException("Term map template must be a literal");
+            if (triplesForPredicate.Length == 1)
+                if (triplesForPredicate[0].Object is IUriNode)
+                    return ((IUriNode)triplesForPredicate[0].Object).Uri;
+                else
+                    throw new InvalidTriplesMapException(string.Format("Term map value for {0} must be a URI", predicate.Uri));
 
-                if (templateTriples.Length == 0)
-                    return null;
+            if (triplesForPredicate.Length == 0)
+                return null;
 
-                throw new InvalidTriplesMapException(
-                    string.Format("Term map contains multiple templates:\r\n{0}",
-                                  string.Join("\r\n", templateTriples.Select(triple => triple.Object.ToString()))));
-            }
+            throw new InvalidTriplesMapException(
+                string.Format("Term map contains multiple values for {1}:\r\n{0}",
+                              string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
+                              predicate.Uri));
         }
-
-        public Uri ConstantValue
-        {
-            get
-            {
-                var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
-                var constantTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateMapPropertyNode()).ToArray();
-
-                if (shortcutTriples.Length == 0 && constantTriples.Length == 0)
-                    return null;
-
-                if (shortcutTriples.Any() && constantTriples.Any() || shortcutTriples.Length > 1 || constantTriples.Length > 1)
-                    throw new InvalidTriplesMapException("Term map can have at most one constant value");
-
-                IUriNode uriNode = null;
-                if (shortcutTriples.Any())
-                    uriNode = shortcutTriples[0].Object as IUriNode;
-                else if (constantTriples.Any())
-                    uriNode = constantTriples[0].Object as IUriNode;
-
-                if (uriNode == null)
-                    throw new InvalidTriplesMapException("Constant value must be a URI");
-
-                return uriNode.Uri;
-            }
-        }
-
-        ITermType ITermMap.TermType
-        {
-            get { return this; }
-        }
-
-        #endregion
     }
 }

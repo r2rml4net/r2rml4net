@@ -38,7 +38,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _objectMap.ParentMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(literal))));
-            Assert.AreEqual(literal, _objectMap.ConstantValueLiteral);
+            Assert.AreEqual(literal, _objectMap.Literal);
         }
 
         [Test]

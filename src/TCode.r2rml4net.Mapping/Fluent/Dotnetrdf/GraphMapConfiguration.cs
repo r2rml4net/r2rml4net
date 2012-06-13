@@ -1,9 +1,10 @@
-﻿using TCode.r2rml4net.RDF;
+﻿using System;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion
+    internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMap
     {
         internal GraphMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
@@ -24,6 +25,15 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public override ITermMapConfiguration IsBlankNode()
         {
             throw new InvalidTriplesMapException("Only object map and subject map can be of term type rr:Literal");
+        }
+
+        #endregion
+
+        #region Implementation of IGraphMap
+
+        public Uri Graph
+        {
+            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
         }
 
         #endregion
