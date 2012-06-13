@@ -12,6 +12,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <remarks>Please see <see cref="ITermTypeConfiguration"/> members for info on valid values for different term maps</remarks>
         ITermTypeConfiguration TermType { get; }
+
+        string Template { get; }
+
         /// <summary>
         /// Sets the term map as constant-valued
         /// </summary>

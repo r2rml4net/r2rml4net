@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateConstantPropertyNode()).Any())
+            if (ConstantValue != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
             CheckRelationWithParentMap(true);
@@ -53,6 +53,32 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(ParentMapNode, CreateConstantPropertyNode(), R2RMLMappings.CreateUriNode(uri));
 
             return this;
+        }
+
+        public Uri ConstantValue
+        {
+            get
+            {
+                var shortcutTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
+                var constantTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateMapPropertyNode()).ToArray();
+
+                if (shortcutTriples.Length == 0 && constantTriples.Length == 0)
+                    return null;
+
+                if (shortcutTriples.Any() && constantTriples.Any() || shortcutTriples.Length > 1 || constantTriples.Length > 1)
+                    throw new InvalidTriplesMapException("Term map can have at most one constant value");
+
+                IUriNode uriNode = null;
+                if (shortcutTriples.Any())
+                    uriNode = shortcutTriples[0].Object as IUriNode;
+                else if (constantTriples.Any())
+                    uriNode = constantTriples[0].Object as IUriNode;
+
+                if (uriNode == null)
+                    throw new InvalidTriplesMapException("Constant value must be a URI");
+
+                return uriNode.Uri;
+            }
         }
 
         /// <summary>
@@ -68,6 +94,27 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
             R2RMLMappings.Assert(TermMapNode, templateProperty, R2RMLMappings.CreateLiteralNode(template));
             return this;
+        }
+
+        public string Template
+        {
+            get
+            {
+                var templateTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTemplateProperty)).ToArray();
+
+                if (templateTriples.Length == 1)
+                    if (templateTriples[0].Object is ILiteralNode)
+                        return templateTriples[0].Object.ToString();
+                    else
+                        throw new InvalidTriplesMapException("Term map template must be a literal");
+
+                if (templateTriples.Length == 0)
+                    return null;
+
+                throw new InvalidTriplesMapException(
+                    string.Format("Term map contains multiple templates:\r\n{0}",
+                                  string.Join("\r\n", templateTriples.Select(triple => triple.Object.ToString()))));
+            }
         }
 
         #endregion
@@ -147,7 +194,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <exception cref="InvalidTriplesMapException" />
         protected void AssertTermTypeNotSet()
         {
-            if(ExplicitTermType != null)
+            if (ExplicitTermType != null)
                 throw new InvalidTriplesMapException("Term type already set");
         }
 
@@ -163,7 +210,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
         protected internal abstract IUriNode CreateMapPropertyNode();
         /// <summary>
-        /// Verifies that the term map doensn't have both shortcut and "full" property set
+        /// Verifies that the term map doesn't have both shortcut and "full" property set
         /// </summary>
         /// <param name="useShortcutProperty">if false, will create a relation with <see cref="TermMapNode"/> and <see cref="ParentMapNode"/>. 
         /// This relation is not needed when using constant value shortcut. If the latter is true, the value is connected directly to <see cref="ParentMapNode"/>
@@ -174,12 +221,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), TermMapNode));
             var shortcutPropertyTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, CreateConstantPropertyNode()).ToArray();
 
-            if ((containsMapPropertyTriple && shortcutPropertyTriples.Any()) 
-                || (containsMapPropertyTriple && !useShortcutProperty) 
-                || (shortcutPropertyTriples.Any() && useShortcutProperty))
+            if ((containsMapPropertyTriple && shortcutPropertyTriples.Any())
+                || (containsMapPropertyTriple && useShortcutProperty)
+                || (shortcutPropertyTriples.Any() && !useShortcutProperty))
                 throw new InvalidTriplesMapException(string.Format("Cannot use {0} and {1} properties simultanously", CreateConstantPropertyNode(), CreateMapPropertyNode()));
 
-            if(!useShortcutProperty)
+            if (!useShortcutProperty)
             {
                 CreateParentMapRelation();
             }
@@ -198,9 +245,33 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// </summary>
         public void IsColumnValued(string columnName)
         {
+            if(ColumnName != null)
+                throw new InvalidTriplesMapException("Term map can have only one column name");
+
             CheckRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+        }
+
+        public string ColumnName
+        {
+            get
+            {
+                var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty)).ToArray();
+
+                if (columnTriples.Length == 1)
+                    if (columnTriples[0].Object is ILiteralNode)
+                        return columnTriples[0].Object.ToString();
+                    else
+                        throw new InvalidTriplesMapException("Term map column must be a literal");
+
+                if (columnTriples.Length == 0)
+                    return null;
+
+                throw new InvalidTriplesMapException(
+                    string.Format("Term map contains multiple column names:\r\n{0}",
+                                  string.Join("\r\n", columnTriples.Select(triple => triple.Object.ToString()))));
+            }
         }
     }
 }
