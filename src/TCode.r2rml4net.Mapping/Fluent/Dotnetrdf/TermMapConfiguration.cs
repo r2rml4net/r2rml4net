@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 
     /// backed by a DotNetRDF graph (see <see cref="ITermMapConfiguration"/>)
     /// </summary>
-    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermMap
+    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermMap, ITermType
     {
         /// <summary>
         /// The parent node for the current <see cref="TermMapNode"/>.
@@ -275,6 +275,11 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 return uriNode.Uri;
             }
+        }
+
+        ITermType ITermMap.TermType
+        {
+            get { return this; }
         }
 
         #endregion

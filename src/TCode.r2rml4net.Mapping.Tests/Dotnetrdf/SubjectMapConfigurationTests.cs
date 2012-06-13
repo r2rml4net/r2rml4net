@@ -44,7 +44,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _subjectMapConfiguration.TermType.IsIRI();
 
             // then
-            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermType.GetURI().ToString());
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrIRI);
         }
 
@@ -55,7 +55,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             _subjectMapConfiguration.TermType.IsBlankNode();
 
             // then
-            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermType.URI.ToString());
+            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermType.GetURI().ToString());
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 

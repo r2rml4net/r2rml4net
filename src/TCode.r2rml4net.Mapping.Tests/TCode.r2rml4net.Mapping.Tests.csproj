@@ -66,6 +66,7 @@
     <Compile Include="Dotnetrdf\DotnetrdfR2RMLConfigurationTests.cs" />
     <Compile Include="Dotnetrdf\TermMapConfigurationTests.cs" />
     <Compile Include="Dotnetrdf\TriplesMapConfigurationTests.cs" />
+    <Compile Include="TestExtensions.cs" />
     <Compile Include="UriConstants.cs" />
   </ItemGroup>
   <ItemGroup>

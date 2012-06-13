@@ -6,7 +6,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration
+    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, IObjectMap
     {
         internal ObjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
@@ -154,6 +154,15 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                 throw new InvalidTriplesMapException("Object map already has a datatype");
             if (languageTagTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a language tag");
+        }
+
+        #endregion
+
+        #region Implementation of IObjectMap
+
+        public string ConstantValueLiteral
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #endregion
