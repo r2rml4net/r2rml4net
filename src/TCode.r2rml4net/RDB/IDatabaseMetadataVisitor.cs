@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TCode.r2rml4net.RDB
+﻿namespace TCode.r2rml4net.RDB
 {
     /// <summary>
     /// Interface for the Visitor pattern, which visits tables and columns to extract 
@@ -23,5 +18,9 @@ namespace TCode.r2rml4net.RDB
         /// Visits a <see cref="ColumnMetadata"/>
         /// </summary>
         void Visit(ColumnMetadata column);
+        /// <summary>
+        /// Visist a <see cref="ForeignKeyMetadata"/>
+        /// </summary>
+        void Visit(ForeignKeyMetadata foreignKey);
     }
 }

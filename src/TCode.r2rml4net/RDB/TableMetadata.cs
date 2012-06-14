@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace TCode.r2rml4net.RDB
 {
@@ -12,6 +10,8 @@ namespace TCode.r2rml4net.RDB
     {
         private readonly IList<ColumnMetadata> _columns = new List<ColumnMetadata>();
 
+        public ForeignKeyMetadata ForeignKey { get; internal set; }
+
         /// <summary>
         /// Table name
         /// </summary>
@@ -20,6 +20,7 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Primary key column (or columns in case of composite key)
         /// </summary>
+        /// todo: consider change type to string[]
         public ColumnMetadata[] PrimaryKey
         {
             get { return _columns.Where(c => c.IsPrimaryKey).ToArray(); }
@@ -34,6 +35,9 @@ namespace TCode.r2rml4net.RDB
 
             foreach (ColumnMetadata column in this)
                 column.Accept(visitor);
+
+            if(this.ForeignKey != null)
+                visitor.Visit(this.ForeignKey);
         }
 
         /// <summary>

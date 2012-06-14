@@ -56,6 +56,7 @@
     <Compile Include="IVistitable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
+    <Compile Include="RDB\ForeignKeyMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadataVisitor.cs" />
     <Compile Include="RDB\TableCollection.cs" />

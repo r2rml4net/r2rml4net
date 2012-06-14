@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 
@@ -56,7 +58,7 @@ namespace TCode.r2rml4net.Mapping
         {
             _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
 
-            var classIri = new Uri(this.MappedDataBaseUri + table.Name);
+            var classIri = CreateUriForTable(table.Name);
             if (table.PrimaryKey.Length == 0)
             {
                 // empty primary key generates blank node subjects
@@ -66,8 +68,7 @@ namespace TCode.r2rml4net.Mapping
             }
             else
             {
-                string template = classIri.ToString();
-                template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={{{0}}}", pk.Name)));
+                string template = CreateTemplateForPrimaryKey(table.Name, table.PrimaryKey.Select(pk => pk.Name));
 
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
@@ -86,8 +87,59 @@ namespace TCode.r2rml4net.Mapping
             var dataTypeUri = UrisHelper.GetXsdDataType(column.Type);
             if(dataTypeUri != null)
                 literalTermMap.HasDataType(dataTypeUri);
-        }     
+        }
+
+        public void Visit(ForeignKeyMetadata foreignKey)
+        {
+            var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
+
+            Uri foreignKeyRefUri = CreateUriForReferenceProperty(foreignKey.TableName, foreignKey.ReferencedTableName);
+            foreignKeyMap.CreatePredicateMap()
+                .IsConstantValued(foreignKeyRefUri);
+
+            foreignKeyMap.CreateObjectMap()
+                .IsTemplateValued(CreateTemplateForForeignKey(foreignKey.ReferencedTableName, foreignKey.ForeignKeyColumns, foreignKey.ReferencedColumns));
+        }
 
         #endregion
+
+        private Uri CreateUriForTable(string name)
+        {
+            return new Uri(this.MappedDataBaseUri + name);
+        }
+
+        private Uri CreateUriForReferenceProperty(string tableName, string referencedTableName)
+        {
+            string uri = this.MappedDataBaseUri + tableName + "#ref-" + referencedTableName;
+
+            return new Uri(uri);
+        }
+
+        private string CreateTemplateForPrimaryKey(string tableName, IEnumerable<string> primaryKey)
+        {
+            string template = CreateUriForTable(tableName).ToString();
+            template += "/" + string.Join(";", primaryKey.Select(pk => string.Format("{0}={{{0}}}", pk)));
+            return template;
+        }
+
+        private string CreateTemplateForForeignKey(string tableName, IEnumerable<string> foreignKey, IEnumerable<string> referencedPrimaryKey)
+        {
+            foreignKey = foreignKey.ToArray();
+            referencedPrimaryKey = referencedPrimaryKey.ToArray();
+
+            if(foreignKey.Count() != referencedPrimaryKey.Count())
+                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", tableName), "foreignKey");
+
+            if(!foreignKey.Any())
+                throw new ArgumentException("Empty foreign key", "foreignKey");
+
+            StringBuilder template = new StringBuilder(CreateUriForTable(tableName) + "/");
+            template.AppendFormat("{0}={{{1}}}", referencedPrimaryKey.ElementAt(0), foreignKey.ElementAt(0));
+            for (int i = 1; i < foreignKey.Count(); i++)
+            {
+                template.AppendFormat(";{0}={{{1}}}", referencedPrimaryKey.ElementAt(1), foreignKey.ElementAt(1));
+            }
+            return template.ToString();
+        }
     }
 }
