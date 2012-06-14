@@ -81,13 +81,13 @@
 
     rr:predicateObjectMap
     [ 
-      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-Sport> ] ; 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Sport> ] ; 
       rr:objectMap [ rr:template "http://example.com/Sport/ID={ID_Sport}"; ]
     ];
 
     rr:predicateObjectMap
     [ 
-      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-Student> ] ; 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Student> ] ; 
       rr:objectMap [ rr:template "http://example.com/Student/ID={ID_Student}"; ]
     ]
 	.
