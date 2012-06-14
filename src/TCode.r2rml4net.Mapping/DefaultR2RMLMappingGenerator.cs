@@ -93,7 +93,7 @@ namespace TCode.r2rml4net.Mapping
         {
             var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
 
-            Uri foreignKeyRefUri = CreateUriForReferenceProperty(foreignKey.TableName, foreignKey.ReferencedTableName);
+            Uri foreignKeyRefUri = CreateUriForReferenceProperty(foreignKey.TableName, foreignKey.ForeignKeyColumns);
             foreignKeyMap.CreatePredicateMap()
                 .IsConstantValued(foreignKeyRefUri);
 
@@ -108,9 +108,9 @@ namespace TCode.r2rml4net.Mapping
             return new Uri(this.MappedDataBaseUri + UrlEncode(name));
         }
 
-        private Uri CreateUriForReferenceProperty(string tableName, string referencedTableName)
+        private Uri CreateUriForReferenceProperty(string tableName, IEnumerable<string> foreignKey)
         {
-            string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + referencedTableName;
+            string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKey.Select(UrlEncode));
 
             return new Uri(uri);
         }
