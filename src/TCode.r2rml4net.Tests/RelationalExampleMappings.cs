@@ -211,5 +211,61 @@ namespace TCode.r2rml4net.Tests
                        };
             }
         }
+
+        public static TableCollection D009_2tables1primarykey1foreignkey
+        {
+            get
+            {
+                var studentsTable = new TableMetadata
+                                        {
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "ID",
+                                                    Type = DbType.Int32,
+                                                    IsPrimaryKey = true
+                                                },
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "Name",
+                                                    Type = DbType.AnsiString
+                                                },
+                                            new ColumnMetadata
+                                                {
+                                                    Name = "Sport",
+                                                    Type = DbType.Int32
+                                                }
+                                        };
+                studentsTable.Name = "Student";
+                studentsTable.ForeignKey = new ForeignKeyMetadata
+                                               {
+                                                   TableName = "Student",
+                                                   ReferencedTableName = "Sport",
+                                                   ForeignKeyColumns = new[] { "Sport" },
+                                                   ReferencedColumns = new[] { "ID" }
+                                               };
+
+                var sportTable = new TableMetadata
+                                     {
+                                         new ColumnMetadata
+                                             {
+                                                 Name = "ID",
+                                                 Type = DbType.Int32,
+                                                 IsPrimaryKey = true
+                                             },
+                                         new ColumnMetadata
+                                             {
+                                                 Name = "Name",
+                                                 Type = DbType.AnsiString
+                                             }
+                                     };
+                sportTable.Name = "Sport";
+
+                return new TableCollection
+                       {
+                           studentsTable,
+                           sportTable
+                       };
+            }
+        }
     }
 }
