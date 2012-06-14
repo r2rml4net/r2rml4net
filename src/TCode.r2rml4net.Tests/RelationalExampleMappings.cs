@@ -386,5 +386,99 @@ namespace TCode.r2rml4net.Tests
                            };
             }
         }
+
+        public static TableCollection D014_3tables1primarykey1foreignkey
+        {
+            get
+            {
+                TableMetadata empTable = new TableMetadata
+                                             {
+                                                 new ColumnMetadata
+                                                     {
+                                                         Name ="empno",
+                                                         IsPrimaryKey = true,
+                                                         Type = DbType.Int32
+                                                     },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "deptno",
+                                                          Type = DbType.Int32
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "ename",
+                                                          Type = DbType.AnsiString
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "job",
+                                                          Type = DbType.AnsiString
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "etype",
+                                                          Type = DbType.AnsiString
+                                                      }
+                                             };
+                TableMetadata likesTable= new TableMetadata
+                                              {
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "id",
+                                                          Type = DbType.Int32
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "likeType",
+                                                          Type = DbType.AnsiString
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "likedOj",
+                                                          Type = DbType.AnsiString
+                                                      }
+                                              };
+                TableMetadata deptTable = new TableMetadata
+                                              {
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "deptno",
+                                                          Type = DbType.Int32
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "dname",
+                                                          Type = DbType.AnsiString
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "loc",
+                                                          Type = DbType.AnsiString
+                                                      }
+                                              };
+
+                empTable.Name = "EMP";
+                likesTable.Name = "LIKES";
+                deptTable.Name = "DEPT";
+
+                empTable.ForeignKeys = new[]
+                                           {
+                                               new ForeignKeyMetadata
+                                                   {
+                                                       ForeignKeyColumns = new[] {"deptno"},
+                                                       ReferencedColumns = new[] {"deptno"},
+                                                       ReferencedTableName = "DEPT",
+                                                       TableName = "EMP"
+                                                   }
+                                           };
+
+                return new TableCollection
+                           {
+                               empTable,
+                               likesTable,
+                               deptTable
+                           };
+            }
+        }
     }
 }
