@@ -14,7 +14,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
     /// </summary>
     public class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
-        private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9 ]+)");
+        private static readonly Regex TableNameRegex = new Regex("([a-zA-Z0-9 _]+)");
         private string _triplesMapUri;
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<IPredicateObjectMapConfiguration> _propertyObjectMaps = new List<IPredicateObjectMapConfiguration>();
