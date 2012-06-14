@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
@@ -75,7 +76,11 @@ namespace TCode.r2rml4net.Tests
 
             var serializedGraph = Serialize(_configuration.GraphReadOnly);
             var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n{0}", serializedGraph);
-            Assert.IsTrue(_configuration.GraphReadOnly.Equals(expected), message);
+
+            // todo: bug in rdfdotnet? 
+            // diff.AreEqual returns false when the below returns true
+            var diff = expected.Difference(_configuration.GraphReadOnly);
+            Assert.IsFalse(diff.AddedMSGs.Any() || diff.RemovedMSGs.Any() || diff.AddedTriples.Any() || diff.RemovedTriples.Any(), message);
         }
 
         [Test]
