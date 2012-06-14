@@ -114,6 +114,12 @@ namespace TCode.r2rml4net.Tests
             TestMappingGeneration(RelationalTestMappings.D009_2tables1primarykey1foreignkey, "R2RMLTC0009.ttl");
         }
 
+        [Test]
+        public void TableWithSpacesInNames()
+        {
+            TestMappingGeneration(RelationalTestMappings.D010_1table1primarykey3colums, "R2RMLTC0010.ttl");
+        }
+
         private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())

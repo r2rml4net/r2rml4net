@@ -105,20 +105,20 @@ namespace TCode.r2rml4net.Mapping
 
         private Uri CreateUriForTable(string name)
         {
-            return new Uri(this.MappedDataBaseUri + name);
+            return new Uri(this.MappedDataBaseUri + UrlEncode(name));
         }
 
         private Uri CreateUriForReferenceProperty(string tableName, string referencedTableName)
         {
-            string uri = this.MappedDataBaseUri + tableName + "#ref-" + referencedTableName;
+            string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + referencedTableName;
 
             return new Uri(uri);
         }
 
         private string CreateTemplateForPrimaryKey(string tableName, IEnumerable<string> primaryKey)
         {
-            string template = CreateUriForTable(tableName).ToString();
-            template += "/" + string.Join(";", primaryKey.Select(pk => string.Format("{0}={{{0}}}", pk)));
+            string template = UrlEncode(CreateUriForTable(tableName).ToString());
+            template += "/" + string.Join(";", primaryKey.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
             return template;
         }
 
@@ -134,12 +134,17 @@ namespace TCode.r2rml4net.Mapping
                 throw new ArgumentException("Empty foreign key", "foreignKey");
 
             StringBuilder template = new StringBuilder(CreateUriForTable(tableName) + "/");
-            template.AppendFormat("{0}={{{1}}}", referencedPrimaryKey.ElementAt(0), foreignKey.ElementAt(0));
+            template.AppendFormat("{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(0)), foreignKey.ElementAt(0));
             for (int i = 1; i < foreignKey.Count(); i++)
             {
-                template.AppendFormat(";{0}={{{1}}}", referencedPrimaryKey.ElementAt(1), foreignKey.ElementAt(1));
+                template.AppendFormat(";{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(1)), foreignKey.ElementAt(1));
             }
             return template.ToString();
+        }
+
+        string UrlEncode(string unescapedString)
+        {
+            return Uri.EscapeUriString(unescapedString);
         }
     }
 }
