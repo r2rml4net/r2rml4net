@@ -10,8 +10,6 @@ namespace TCode.r2rml4net.RDB
     {
         private readonly IList<ColumnMetadata> _columns = new List<ColumnMetadata>();
 
-        public ForeignKeyMetadata ForeignKey { get; internal set; }
-
         /// <summary>
         /// Table name
         /// </summary>
@@ -26,6 +24,8 @@ namespace TCode.r2rml4net.RDB
             get { return _columns.Where(c => c.IsPrimaryKey).ToArray(); }
         }
 
+        public ForeignKeyMetadata[] ForeignKeys { get; internal set; }
+
         /// <summary>
         /// Visits self and contained columns
         /// </summary>
@@ -36,8 +36,11 @@ namespace TCode.r2rml4net.RDB
             foreach (ColumnMetadata column in this)
                 column.Accept(visitor);
 
-            if(this.ForeignKey != null)
-                visitor.Visit(this.ForeignKey);
+            if(this.ForeignKeys != null)
+                foreach (var foreignKey in ForeignKeys)
+                {
+                    visitor.Visit(foreignKey);   
+                }
         }
 
         /// <summary>

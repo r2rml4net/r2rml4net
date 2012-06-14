@@ -236,13 +236,16 @@ namespace TCode.r2rml4net.Tests
                                                 }
                                         };
                 studentsTable.Name = "Student";
-                studentsTable.ForeignKey = new ForeignKeyMetadata
-                                               {
-                                                   TableName = "Student",
-                                                   ReferencedTableName = "Sport",
-                                                   ForeignKeyColumns = new[] { "Sport" },
-                                                   ReferencedColumns = new[] { "ID" }
-                                               };
+                studentsTable.ForeignKeys = new[]
+                                                {
+                                                    new ForeignKeyMetadata
+                                                        {
+                                                            TableName = "Student",
+                                                            ReferencedTableName = "Sport",
+                                                            ForeignKeyColumns = new[] {"Sport"},
+                                                            ReferencedColumns = new[] {"ID"}
+                                                        }
+                                                };
 
                 var sportTable = new TableMetadata
                                      {
@@ -296,6 +299,90 @@ namespace TCode.r2rml4net.Tests
                 return new TableCollection
                            {
                                countryTable
+                           };
+            }
+        }
+
+        public static TableCollection D011_M2MRelations
+        {
+            get
+            {
+                TableMetadata studentTable = new TableMetadata
+                                                 {
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "ID",
+                                                             Type = DbType.Int32,
+                                                             IsPrimaryKey = true
+                                                         },
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "FirstName",
+                                                             Type = DbType.AnsiString
+                                                         },
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "LastName",
+                                                             Type = DbType.AnsiString
+                                                         }
+                                                 };
+                TableMetadata sportTable = new TableMetadata
+                                               {
+                                                   new ColumnMetadata
+                                                       {
+                                                           Name = "ID",
+                                                           Type = DbType.Int32,
+                                                           IsPrimaryKey = true
+                                                       },
+                                                   new ColumnMetadata
+                                                       {
+                                                           Name = "Description",
+                                                           Type = DbType.AnsiString
+                                                       }
+                                               };
+                TableMetadata relationTable = new TableMetadata
+                                                  {
+                                                      new ColumnMetadata
+                                                          {
+                                                              Name = "ID_Student",
+                                                             Type = DbType.Int32,
+                                                              IsPrimaryKey = true
+                                                          },
+                                                      new ColumnMetadata
+                                                          {
+                                                              Name = "ID_Sport",
+                                                             Type = DbType.Int32,
+                                                              IsPrimaryKey = true
+                                                          }
+                                                  };
+
+                studentTable.Name = "Student";
+                sportTable.Name = "Sport";
+                relationTable.Name = "Student_Sport";
+
+                relationTable.ForeignKeys = new[]
+                                                {
+                                                    new ForeignKeyMetadata
+                                                        {
+                                                            ForeignKeyColumns = new[] {"ID_Student"},
+                                                            ReferencedColumns = new[] {"ID"},
+                                                            ReferencedTableName = "Student",
+                                                            TableName = "Student_Sport"
+                                                        },
+                                                    new ForeignKeyMetadata
+                                                        {
+                                                            ForeignKeyColumns = new[] {"ID_Sport"},
+                                                            ReferencedColumns = new[] {"ID"},
+                                                            ReferencedTableName = "Sport",
+                                                            TableName = "Student_Sport"
+                                                        }
+                                                };
+
+                return new TableCollection
+                           {
+                               studentTable,
+                               sportTable,
+                               relationTable
                            };
             }
         }
