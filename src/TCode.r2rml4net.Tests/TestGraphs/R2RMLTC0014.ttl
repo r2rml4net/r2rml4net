@@ -1,0 +1,111 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<EMPTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "EMP"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/EMP/empno={empno}";
+	  rr:class <http://example.com/EMP>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#empno> ] ; 
+      rr:objectMap [ rr:column "empno"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#deptno> ] ; 
+      rr:objectMap [ rr:column "deptno"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#ename> ] ; 
+      rr:objectMap [ rr:column "ename"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#etype> ] ; 
+      rr:objectMap [ rr:column "etype"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#job> ] ; 
+      rr:objectMap [ rr:column "job"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/EMP#ref-deptno> ] ; 
+      rr:objectMap [ rr:termType rr:BlankNode ]
+    ]
+    .
+
+<LIKESTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "LIKES"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:termType rr:BlankNode ;
+	  rr:class <http://example.com/LIKES>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/LIKES#id> ] ; 
+      rr:objectMap [ rr:column "id"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/LIKES#likeType> ] ; 
+      rr:objectMap [ rr:column "likeType"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/LIKES#likedObj> ] ; 
+      rr:objectMap [ rr:column "likedObj"; ]
+    ]
+	.
+
+<DEPTTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "DEPT"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:termType rr:BlankNode ;
+	  rr:class <http://example.com/DEPT>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/DEPT#deptno> ] ; 
+      rr:objectMap [ rr:column "deptno"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/DEPT#dname> ] ; 
+      rr:objectMap [ rr:column "dname"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/DEPT#loc> ] ; 
+      rr:objectMap [ rr:column "loc"; ]
+    ]
+	.
