@@ -434,7 +434,7 @@ namespace TCode.r2rml4net.Tests
                                                       },
                                                   new ColumnMetadata
                                                       {
-                                                          Name = "likedOj",
+                                                          Name = "likedObj",
                                                           Type = DbType.AnsiString
                                                       }
                                               };
@@ -468,7 +468,8 @@ namespace TCode.r2rml4net.Tests
                                                        ForeignKeyColumns = new[] {"deptno"},
                                                        ReferencedColumns = new[] {"deptno"},
                                                        ReferencedTableName = "DEPT",
-                                                       TableName = "EMP"
+                                                       TableName = "EMP",
+                                                       IsCandidateKeyReference = true
                                                    }
                                            };
 

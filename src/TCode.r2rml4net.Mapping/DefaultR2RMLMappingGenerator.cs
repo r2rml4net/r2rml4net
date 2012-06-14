@@ -97,8 +97,18 @@ namespace TCode.r2rml4net.Mapping
             foreignKeyMap.CreatePredicateMap()
                 .IsConstantValued(foreignKeyRefUri);
 
-            foreignKeyMap.CreateObjectMap()
-                .IsTemplateValued(CreateTemplateForForeignKey(foreignKey.ReferencedTableName, foreignKey.ForeignKeyColumns, foreignKey.ReferencedColumns));
+            if (foreignKey.IsCandidateKeyReference)
+            {
+                foreignKeyMap.CreateObjectMap().TermType.IsBlankNode();
+            }
+            else
+            {
+                var templateForForeignKey = CreateTemplateForForeignKey(foreignKey.ReferencedTableName,
+                                                                        foreignKey.ForeignKeyColumns,
+                                                                        foreignKey.ReferencedColumns);
+                foreignKeyMap.CreateObjectMap()
+                    .IsTemplateValued(templateForForeignKey);
+            }
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
@@ -127,6 +128,23 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued(template));
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued("something else"));
+        }
+
+        [Test]
+        public void CanBeOfTypeBlankNode()
+        {
+            // when
+            _termMapConfiguration.TermType.IsBlankNode();
+
+            // then
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+                _termMapConfiguration.ParentMapNode, 
+                _termMapConfiguration.CreateMapPropertyNode(),
+                _termMapConfiguration.TermMapNode)));
+            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
+            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermType.GetURI().ToString());
         }
     }
 }
