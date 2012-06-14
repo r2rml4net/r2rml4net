@@ -81,6 +81,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public virtual ITermMapConfiguration IsBlankNode()
         {
             AssertTermTypeNotSet();
+            EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrBlankNode));
             return this;
@@ -92,6 +93,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public virtual ITermMapConfiguration IsIRI()
         {
             AssertTermTypeNotSet();
+            EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrIRI));
             return this;
@@ -173,7 +175,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         ITermType ITermMap.TermType
         {
-            get { return this; }
+            get
+            {
+                return this;
+            }
         }
 
         #endregion

@@ -23,7 +23,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public override ITermMapConfiguration IsBlankNode()
         {
-            throw new InvalidTriplesMapException("Only object map and subject map can be of term type rr:Literal");
+            throw new InvalidTriplesMapException("Only object map and subject map can be of term type rr:BlankNode");
         }
 
         #endregion

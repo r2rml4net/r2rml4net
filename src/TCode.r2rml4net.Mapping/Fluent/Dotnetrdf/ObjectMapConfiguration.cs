@@ -94,6 +94,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         public override ITermMapConfiguration IsLiteral()
         {
             AssertTermTypeNotSet();
+            EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral));
             return this;
