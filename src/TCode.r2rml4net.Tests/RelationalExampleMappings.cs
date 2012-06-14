@@ -267,5 +267,37 @@ namespace TCode.r2rml4net.Tests
                        };
             }
         }
+
+        public static TableCollection D010_1table1primarykey3colums
+        {
+            get
+            {
+                TableMetadata countryTable = new TableMetadata
+                                                 {
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "Country Code",
+                                                             Type = DbType.Int32,
+                                                             IsPrimaryKey = true
+                                                         },
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "Name",
+                                                             Type = DbType.AnsiString
+                                                         },
+                                                     new ColumnMetadata
+                                                         {
+                                                             Name = "ISO 3166",
+                                                             Type = DbType.AnsiString
+                                                         }
+                                                 };
+                countryTable.Name = "Country Info";
+
+                return new TableCollection
+                           {
+                               countryTable
+                           };
+            }
+        }
     }
 }
