@@ -146,5 +146,23 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
             Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermType.GetURI().ToString());
         }
+
+        [Test]
+        public void ColumnNameIsNullByDefault()
+        {
+            Assert.IsNull(_termMapConfiguration.ColumnName);
+        }
+
+        [Test]
+        public void TemplateIsNullByDefault()
+        {
+            Assert.IsNull(_termMapConfiguration.Template);
+        }
+
+        [Test]
+        public void ConstantValueIsNullByDefault()
+        {
+            Assert.IsNull(_termMapConfiguration.ConstantValue);
+        }
     }
 }

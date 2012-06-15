@@ -39,7 +39,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _predicateMap.TermMapNode,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _predicateMap.ConstantValue);
+            Assert.AreEqual(uri, _predicateMap.URI);
         }
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]
@@ -52,6 +52,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         public void PredicateMapCannotBeOfTypeBlankNode()
         {
             _predicateMap.TermType.IsBlankNode();
+        }
+
+        [Test]
+        public void PredicateIsNullByDefault()
+        {
+            Assert.IsNull(_predicateMap.Predicate);
         }
     }
 }

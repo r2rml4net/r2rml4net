@@ -17,6 +17,10 @@ namespace TCode.r2rml4net.RDF
         /// Gets the term map's <see cref="ITermType"/>
         /// </summary>
         ITermType TermType { get; }
+        /// <summary>
+        /// Gets column or null if not set
+        /// </summary>
+        /// <exception cref="InvalidTriplesMapException"></exception>
         string ColumnName { get; }
     }
 }
