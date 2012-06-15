@@ -53,5 +53,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
         {
             _graphMap.TermType.IsBlankNode();
         }
+
+        [Test]
+        public void GraphUriIsNullByDefault()
+        {
+            Assert.IsNull(_graphMap.Graph);
+        }
     }
 }

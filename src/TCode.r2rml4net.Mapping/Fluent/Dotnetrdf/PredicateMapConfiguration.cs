@@ -28,9 +28,13 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #endregion
 
+        #region Implementation of IPredicateMap
+
         public System.Uri Predicate
         {
             get { return ConstantValue; }
         }
+
+        #endregion
     }
 }

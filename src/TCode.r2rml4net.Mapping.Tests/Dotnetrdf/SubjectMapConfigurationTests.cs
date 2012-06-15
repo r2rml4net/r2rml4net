@@ -103,7 +103,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _subjectMapConfiguration.TermMapNode,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _subjectMapConfiguration.ConstantValue);
+            Assert.AreEqual(uri, _subjectMapConfiguration.Subject);
         }
 
         [Test]
@@ -119,6 +119,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.Contains(class1, _subjectMapConfiguration.ClassIris);
             Assert.AreEqual(template, _subjectMapConfiguration.Template);
+        }
+
+        [Test]
+        public void SubjectIsNullByDefault()
+        {
+            Assert.IsNull(_subjectMapConfiguration.Subject);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
                     _objectMap.TermMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _objectMap.ConstantValue);
+            Assert.AreEqual(uri, _objectMap.Object);
         }
 
         [Test]
@@ -168,6 +168,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
             // then
             Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasDataType(UriConstants.RdfInteger));
             Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasLanguageTag("pl-PL"));
+        }
+
+        [Test]
+        public void DefaultValuesAreNull()
+        {
+            IObjectMap map = _objectMap;
+            Assert.IsNull(map.ColumnName);
+            Assert.IsNull(map.Literal);
+            Assert.IsNull(map.Object);
+            Assert.IsNull(map.Template);
         }
     }
 }
