@@ -18,10 +18,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <param name="uri">Constant value URI</param>
         /// <remarks>
-        /// Asserted using the shortcut properties described on http://www.w3.org/TR/r2rml/#constant
+        /// Asserted using the rr:constant property described on http://www.w3.org/TR/r2rml/#constant
         /// </remarks>
         ITermTypeConfiguration IsConstantValued(Uri uri);
 
+        /// <summary>
+        /// Sets the term map as template-values
+        /// </summary>
+        /// <param name="template">A valid template</param>
+        /// <remarks>
+        /// For details on templates read more on http://www.w3.org/TR/r2rml/#from-template
+        /// </remarks>
         ITermTypeConfiguration IsTemplateValued(string template);
     }
 }

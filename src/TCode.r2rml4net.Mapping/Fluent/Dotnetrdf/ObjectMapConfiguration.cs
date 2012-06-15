@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public ILiteralTermMapConfiguration IsConstantValued(string literal)
         {
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, CreateMapPropertyNode()).Any())
+            if(Literal != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
             EnsureRelationWithParentMap();
@@ -145,7 +145,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public Uri Object
         {
-            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+            get { return ConstantValue; }
         }
 
         public string Literal

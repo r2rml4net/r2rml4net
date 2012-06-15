@@ -2,8 +2,15 @@
 
 namespace TCode.r2rml4net.RDF
 {
+    /// <summary>
+    /// Represents a graph map 
+    /// </summary>
+    /// <remarks>See more at http://www.w3.org/TR/r2rml/#dfn-graph-map</remarks>
     public interface IGraphMap : ITermMap
     {
+        /// <summary>
+        /// Get the Graph URI or null if no URI has been set
+        /// </summary>
         Uri Graph { get; }
     }
 }

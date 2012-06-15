@@ -10,7 +10,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <param name="literal">Constant value literal</param>
         /// <remarks>
-        /// Asserted using the shortcut properties described on http://www.w3.org/TR/r2rml/#constant
+        /// Asserted using the rr:constant property as described on http://www.w3.org/TR/r2rml/#constant
         /// </remarks>
         ILiteralTermMapConfiguration IsConstantValued(string literal);
         /// <summary>

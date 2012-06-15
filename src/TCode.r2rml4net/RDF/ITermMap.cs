@@ -3,8 +3,9 @@
 namespace TCode.r2rml4net.RDF
 {
     /// <summary>
-    /// Provides read-only access to term maps
+    /// Represents a term map
     /// </summary>
+    /// <remarks>Read more on http://www.w3.org/TR/r2rml/#dfn-term-map</remarks>
     public interface ITermMap
     {
         /// <summary>
@@ -12,7 +13,10 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         /// <exception cref="InvalidTriplesMapException"></exception>
         string Template { get; }
-
+        /// <summary>
+        /// Gets the term map's <see cref="ITermType"/>
+        /// </summary>
         ITermType TermType { get; }
+        string ColumnName { get; }
     }
 }

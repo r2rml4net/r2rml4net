@@ -24,6 +24,9 @@ namespace TCode.r2rml4net.RDB
             get { return _columns.Where(c => c.IsPrimaryKey).ToArray(); }
         }
 
+        /// <summary>
+        /// Gets all the foreign keys
+        /// </summary>
         public ForeignKeyMetadata[] ForeignKeys { get; internal set; }
 
         /// <summary>
