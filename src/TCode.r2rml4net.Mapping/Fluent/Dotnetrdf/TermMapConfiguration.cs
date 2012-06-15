@@ -108,7 +108,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         }
 
         /// <summary>
-        /// <see cref="ITermTypeConfiguration.URI"/>
+        /// <see cref="ITermType.URI"/>
         /// </summary>
         public virtual Uri URI
         {
@@ -158,17 +158,27 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ITermMap
 
+        /// <summary>
+        /// <see cref="ITermMap.ColumnName"/>
+        /// </summary>
         public string ColumnName
         {
             get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty)); }
         }
 
+        /// <summary>
+        /// <see cref="ITermMap.Template"/>
+        /// </summary>
         public string Template
         {
             get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrTemplateProperty)); }
         }
 
-        public Uri ConstantValue
+        /// <summary>
+        /// Gets the constant URI value for this term map
+        /// </summary>
+        /// <remarks>Read more on http://www.w3.org/TR/r2rml/#constant</remarks>
+        protected internal Uri ConstantValue
         {
             get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
         }
@@ -193,12 +203,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
         protected internal abstract IUriNode CreateMapPropertyNode();
         /// <summary>
-        /// Verifies that the term map doesn't have both shortcut and "full" property set
+        /// Ensures that <see cref="ParentMapNode"/> and this <see cref="TermMapNode"/> are 
+        /// connected with the appropriate property
         /// </summary>
-        /// <param name="useShortcutProperty">if false, will create a relation with <see cref="TermMapNode"/> and <see cref="ParentMapNode"/>. 
-        /// This relation is not needed when using constant value shortcut. If the latter is true, the value is connected directly to <see cref="ParentMapNode"/>
-        /// using the property created by <see cref="CreateConstantPropertyNode"/></param>
-        /// <example>An example invalid graph (object map): [] rr:subject "value"; rr:subjectMap [ rr:column "ColumnName" ; ] .</example>
+        /// <remarks>The two nodes will be connected by return value of <see cref="CreateMapPropertyNode"/> method</remarks>
         protected void EnsureRelationWithParentMap()
         {
             var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), TermMapNode));
@@ -230,6 +238,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
+        /// <summary>
+        /// Gets a single literal object value for <see cref="TermMapNode"/> ans <paramref name="predicate"/> predicate
+        /// </summary>
+        /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a literal</exception>
         protected string GetSingleLiteralValueForPredicate(IUriNode predicate)
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();
@@ -249,6 +261,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
                               predicate.Uri));
         }
 
+        /// <summary>
+        /// Gets a single URI object value for <see cref="TermMapNode"/> ans <paramref name="predicate"/> predicate
+        /// </summary>
+        /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a URI</exception>
         protected Uri GetSingleUriValueForPredicate(IUriNode predicate)
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();

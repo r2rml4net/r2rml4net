@@ -69,9 +69,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         #region Implementation of ISubjectMap
 
+        /// <summary>
+        /// <see cref="ISubjectMap.Subject"/>
+        /// </summary>
         public Uri Subject
         {
-            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+            get { return ConstantValue; }
         }
 
         #endregion

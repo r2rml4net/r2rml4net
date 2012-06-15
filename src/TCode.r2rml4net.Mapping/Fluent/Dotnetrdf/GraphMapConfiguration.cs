@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public Uri Graph
         {
-            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+            get { return ConstantValue; }
         }
 
         #endregion

@@ -3,7 +3,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 {
-    internal class PredicateMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion
+    internal class PredicateMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IPredicateMap
     {
         internal PredicateMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
         {
@@ -27,5 +27,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         }
 
         #endregion
+
+        public System.Uri Predicate
+        {
+            get { return ConstantValue; }
+        }
     }
 }
