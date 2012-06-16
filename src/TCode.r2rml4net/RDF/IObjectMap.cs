@@ -18,10 +18,5 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         /// <exception cref="InvalidTriplesMapException"></exception>
         string Literal { get; }
-        /// <summary>
-        /// Gets column name or null if absent
-        /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
-        string ColumnName { get; }
     }
 }
