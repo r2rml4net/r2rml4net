@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
+using System.Web;
 
 #pragma warning disable
 
@@ -78,7 +79,8 @@ namespace TCode.r2rml4net.Mapping
 
         public void Visit(ColumnMetadata column)
         {
-            Uri predicateUri = new Uri(string.Format("{0}{1}#{2}", this.MappedDataBaseUri, column.Table.Name, column.Name));
+            string predicateUriString = string.Format("{0}{1}#{2}", this.MappedDataBaseUri, column.Table.Name, column.Name);
+            Uri predicateUri = new Uri(predicateUriString);
 
             var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
@@ -107,7 +109,7 @@ namespace TCode.r2rml4net.Mapping
                                                                         foreignKey.ForeignKeyColumns,
                                                                         foreignKey.ReferencedColumns);
                 foreignKeyMap.CreateObjectMap()
-                    .IsTemplateValued(templateForForeignKey);
+                    .IsTemplateValued(UrlEncode(templateForForeignKey));
             }
         }
 
@@ -122,7 +124,7 @@ namespace TCode.r2rml4net.Mapping
         {
             string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKey.Select(UrlEncode));
 
-            return new Uri(uri);
+            return new Uri(UrlEncode(uri));
         }
 
         private string CreateTemplateForPrimaryKey(string tableName, IEnumerable<string> primaryKey)
@@ -154,7 +156,7 @@ namespace TCode.r2rml4net.Mapping
 
         string UrlEncode(string unescapedString)
         {
-            return Uri.EscapeUriString(unescapedString);
+            return HttpUtility.UrlDecode(unescapedString);
         }
     }
 }

@@ -1,0 +1,69 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<植物TriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "植物"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/植物/名={名};使用部={使用部}";
+	  rr:class <http://example.com/植物>;
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/植物#名> ] ; 
+      rr:objectMap [ rr:column "名" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/植物#使用部> ] ; 
+      rr:objectMap [ rr:column "使用部" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/植物#条件> ] ; 
+      rr:objectMap [ rr:column "条件" ]
+    ]
+    .
+
+<成分TriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "成分"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:termType rr:BlankNode ;
+	  rr:class <http://example.com/成分>;
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/成分#植物名> ] ; 
+      rr:objectMap [ rr:column "植物名" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/成分#使用部> ] ; 
+      rr:objectMap [ rr:column "使用部" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/成分#皿> ] ; 
+      rr:objectMap [ rr:column "皿" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/成分#ref-植物名;使用部> ] ; 
+      rr:objectMap [ rr:template "http://example.com/植物/名={植物名};使用部={使用部}" ]
+    ]
+    .

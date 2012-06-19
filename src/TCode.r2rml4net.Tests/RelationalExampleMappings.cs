@@ -583,5 +583,70 @@ namespace TCode.r2rml4net.Tests
                 };
             }
         }
+
+        public static TableCollection D017_I18NnoSpecialChars
+        {
+            get
+            {
+                TableMetadata i18N1 = new TableMetadata
+                {
+                    new ColumnMetadata
+                    {
+                        Name="植物名",
+                        Type = DbType.String
+                    },
+                    new ColumnMetadata
+                    {
+                        Name="使用部",
+                        Type = DbType.String
+                    },
+                    new ColumnMetadata
+                    {
+                        Name="皿",
+                        Type = DbType.String
+                    }
+                };
+
+                TableMetadata i18N2 = new TableMetadata
+                {
+                    new ColumnMetadata
+                    {
+                        Name="名",
+                        IsPrimaryKey = true,
+                        Type = DbType.String
+                    },
+                    new ColumnMetadata
+                    {
+                        Name="使用部",
+                        IsPrimaryKey = true,
+                        Type = DbType.String
+                    },
+                    new ColumnMetadata
+                    {
+                        Name="条件",
+                        Type = DbType.String
+                    }
+                };
+
+                i18N1.ForeignKeys = new[]
+                {
+                    new ForeignKeyMetadata
+                    {
+                        ForeignKeyColumns=new[] {"植物名", "使用部"},
+                        ReferencedColumns = new [] {"名", "使用部"},
+                        ReferencedTableName = "植物",
+                        TableName = "成分"
+                    }
+                };
+
+                i18N1.Name = "成分";
+                i18N2.Name = "植物";
+
+                return new TableCollection
+                {
+                    i18N1, i18N2
+                };
+            }
+        }
     }
 }
