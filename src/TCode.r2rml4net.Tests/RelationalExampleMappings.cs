@@ -515,5 +515,73 @@ namespace TCode.r2rml4net.Tests
                            };
             }
         }
+
+        public static TableCollection D016_1table1primarykey10columnsSQLdatatypes
+        {
+            get
+            {
+                TableMetadata patientTable = new TableMetadata
+                                             {
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "ID",
+                                                     IsPrimaryKey = true,
+                                                     Type = DbType.Int32
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "FirstName",
+                                                     Type = DbType.AnsiString
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "LastName",
+                                                     Type = DbType.AnsiString
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "Sex",
+                                                     Type = DbType.AnsiString
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "Weight",
+                                                     Type = DbType.Double
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "Height",
+                                                     Type = DbType.Double
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "BirthDate",
+                                                     Type = DbType.Date
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "EntranceDate",
+                                                     Type = DbType.DateTime
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "PaidInAdvance",
+                                                     Type = DbType.Boolean
+                                                 },
+                                                 new ColumnMetadata
+                                                 {
+                                                     Name = "Photo",
+                                                     Type = DbType.Binary
+                                                 }
+                                             };
+
+                patientTable.Name = "Patient";
+
+                return new TableCollection
+                {
+                    patientTable
+                };
+            }
+        }
     }
 }
