@@ -7,7 +7,7 @@ using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Tests.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
 {
     [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests

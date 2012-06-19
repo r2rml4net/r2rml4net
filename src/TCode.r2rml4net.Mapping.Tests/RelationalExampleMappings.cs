@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using TCode.r2rml4net.RDB;
 
-namespace TCode.r2rml4net.Tests
+namespace TCode.r2rml4net.Mapping.Tests
 {
     public class RelationalTestMappings
     {

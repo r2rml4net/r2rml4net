@@ -35,4 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+[assembly: InternalsVisibleTo("TCode.r2rml4net.Mapping.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("TCode.r2rml4net.Tests", AllInternalsVisible = true)]
