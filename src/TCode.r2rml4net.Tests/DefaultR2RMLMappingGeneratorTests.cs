@@ -143,6 +143,12 @@ namespace TCode.r2rml4net.Tests
             TestMappingGeneration(RelationalTestMappings.D015_1table3columns1composityeprimarykey, "R2RMLTC0015.ttl");
         }
 
+        [Test]
+        public void TableWithManyDatatypes()
+        {
+            TestMappingGeneration(RelationalTestMappings.D016_1table1primarykey10columnsSQLdatatypes, "R2RMLTC0016.ttl");
+        }
+
         private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())
