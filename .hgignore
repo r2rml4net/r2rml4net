@@ -1,6 +1,6 @@
 syntax: regexp
-[oObj]/
-[Bbin]/
+[oO]bj/
+[Bb]in/
 syntax: glob
 src/TCode.r2rml4net/packages/
 *.suo
