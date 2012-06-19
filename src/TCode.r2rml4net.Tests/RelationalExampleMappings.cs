@@ -420,7 +420,7 @@ namespace TCode.r2rml4net.Tests
                                                           Type = DbType.AnsiString
                                                       }
                                              };
-                TableMetadata likesTable= new TableMetadata
+                TableMetadata likesTable = new TableMetadata
                                               {
                                                   new ColumnMetadata
                                                       {
@@ -478,6 +478,40 @@ namespace TCode.r2rml4net.Tests
                                empTable,
                                likesTable,
                                deptTable
+                           };
+            }
+        }
+
+        public static TableCollection D015_1table3columns1composityeprimarykey
+        {
+            get
+            {
+                TableMetadata countryTable = new TableMetadata
+                                             {
+                                                 new ColumnMetadata
+                                                     {
+                                                         Name ="Code",
+                                                         IsPrimaryKey = true,
+                                                         Type = DbType.AnsiString
+                                                     },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "Lan",
+                                                          IsPrimaryKey = true,
+                                                          Type = DbType.AnsiString
+                                                      },
+                                                  new ColumnMetadata
+                                                      {
+                                                          Name = "Name",
+                                                          Type = DbType.AnsiString
+                                                      }
+                                             };
+
+                countryTable.Name = "Country";
+
+                return new TableCollection
+                           {
+                               countryTable
                            };
             }
         }

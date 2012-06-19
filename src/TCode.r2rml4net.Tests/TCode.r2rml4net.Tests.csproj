@@ -110,6 +110,9 @@
   <ItemGroup>
     <EmbeddedResource Include="TestGraphs\R2RMLTC0014.ttl" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestGraphs\R2RMLTC0015.ttl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
