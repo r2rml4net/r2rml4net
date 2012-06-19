@@ -9,7 +9,7 @@ using VDS.RDF;
 using System.IO;
 using VDS.RDF.Writing;
 
-namespace TCode.r2rml4net.Tests
+namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     [TestFixture]
     public class DefaultR2RMLMappingGeneratorTests
@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Tests
 
             // then
             Graph expected = new Graph();
-            expected.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.TestGraphs.{0}, TCode.r2rml4net.Tests", embeddedResourceGraph));
+            expected.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator.TestGraphs.{0}, TCode.r2rml4net.Mapping.Tests", embeddedResourceGraph));
 
             var serializedGraph = Serialize(_configuration.GraphReadOnly);
             var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n{0}", serializedGraph);
