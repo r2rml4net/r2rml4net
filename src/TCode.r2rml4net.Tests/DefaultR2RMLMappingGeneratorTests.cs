@@ -149,6 +149,12 @@ namespace TCode.r2rml4net.Tests
             TestMappingGeneration(RelationalTestMappings.D016_1table1primarykey10columnsSQLdatatypes, "R2RMLTC0016.ttl");
         }
 
+        [Test]
+        public void InternationalizedTable()
+        {
+            TestMappingGeneration(RelationalTestMappings.D017_I18NnoSpecialChars, "R2RMLTC0017.ttl");
+        }
+
         private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())
