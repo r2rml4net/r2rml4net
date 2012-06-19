@@ -157,6 +157,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D006-1table1primarykey1column1row
+        /// </summary>
         public static TableCollection D006_1table1primarykey1column
         {
             get
@@ -178,7 +181,10 @@ namespace TCode.r2rml4net.Tests
                        };
             }
         }
-
+        
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D008-1table1compositeprimarykey3columns1row
+        /// </summary>
         public static TableCollection D008_1table1compositeprimarykey3columns
         {
             get
@@ -212,6 +218,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D009-2tables1primarykey1foreignkey
+        /// </summary>
         public static TableCollection D009_2tables1primarykey1foreignkey
         {
             get
@@ -271,6 +280,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D010-1table1primarykey3colums3rows
+        /// </summary>
         public static TableCollection D010_1table1primarykey3colums
         {
             get
@@ -303,6 +315,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D011-M2MRelations
+        /// </summary>
         public static TableCollection D011_M2MRelations
         {
             get
@@ -387,6 +402,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D014-3tables1primarykey1foreignkey
+        /// </summary>
         public static TableCollection D014_3tables1primarykey1foreignkey
         {
             get
@@ -482,6 +500,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D015-1table3columns1composityeprimarykey3rows2languages
+        /// </summary>
         public static TableCollection D015_1table3columns1composityeprimarykey
         {
             get
@@ -516,6 +537,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D016-1table1primarykey10columns3rowsSQLdatatypes
+        /// </summary>
         public static TableCollection D016_1table1primarykey10columnsSQLdatatypes
         {
             get
@@ -584,6 +608,9 @@ namespace TCode.r2rml4net.Tests
             }
         }
 
+        /// <summary>
+        /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D017-I18NnoSpecialChars
+        /// </summary>
         public static TableCollection D017_I18NnoSpecialChars
         {
             get
