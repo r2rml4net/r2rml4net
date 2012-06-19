@@ -36,6 +36,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DatabaseSchemaReader">
+      <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
+    </Reference>
     <Reference Include="dotNetRDF">
       <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\dotNetRDF.dll</HintPath>
     </Reference>
@@ -56,6 +59,7 @@
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
