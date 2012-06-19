@@ -35,6 +35,9 @@
     <DocumentationFile>..\bin\Release\TCode.r2rml4net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DatabaseSchemaReader">
+      <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
+    </Reference>
     <Reference Include="dotNetRDF">
       <HintPath>packages\dotNetRDF.0.6.2\lib\net40\dotNetRDF.dll</HintPath>
     </Reference>
@@ -56,6 +59,7 @@
     <Compile Include="IVistitable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
+    <Compile Include="RDB\DatabaseSchemaReader\DatabaseSchemaAdapter.cs" />
     <Compile Include="RDB\ForeignKeyMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadataVisitor.cs" />
