@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTests.cs" />
     <Compile Include="Metadata\TableMetadataTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +82,10 @@
       <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
       <Name>TCode.r2rml4net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseSchemaReader\TestDbScripts\SqlServer.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
