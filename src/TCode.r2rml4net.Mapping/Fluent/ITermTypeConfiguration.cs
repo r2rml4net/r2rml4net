@@ -1,5 +1,3 @@
-using System;
-
 namespace TCode.r2rml4net.Mapping.Fluent
 {
     /// <summary>
