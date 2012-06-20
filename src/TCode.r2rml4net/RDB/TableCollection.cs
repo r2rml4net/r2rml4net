@@ -21,11 +21,24 @@ namespace TCode.r2rml4net.RDB
                 table.Accept(visitor);
         }
 
+        /// <summary>
+        /// Gets the table with the specified name
+        /// </summary>
+        /// <exception cref="IndexOutOfRangeException" />
         public TableMetadata this[string tableName]
         {
             get
             {
-                return this.SingleOrDefault(t => t.Name == tableName);
+                if (tableName == null)
+                    throw new ArgumentNullException("tableName");
+                if(string.IsNullOrWhiteSpace(tableName))
+                    throw new ArgumentOutOfRangeException("tableName");
+
+                var table = this.SingleOrDefault(t => t.Name == tableName);
+                if (table == null)
+                    throw new IndexOutOfRangeException(string.Format("TableCollection does not contain table {0}", tableName));
+
+                return table;
             }
         }
     }
