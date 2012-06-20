@@ -20,5 +20,13 @@ namespace TCode.r2rml4net.RDB
             foreach (TableMetadata table in this)
                 table.Accept(visitor);
         }
+
+        public TableMetadata this[string tableName]
+        {
+            get
+            {
+                return this.SingleOrDefault(t => t.Name == tableName);
+            }
+        }
     }
 }

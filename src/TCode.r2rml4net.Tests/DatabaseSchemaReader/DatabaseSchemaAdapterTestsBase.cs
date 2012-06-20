@@ -55,5 +55,17 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.AreEqual("CandidateRef", CandidateRefTable.ForeignKeys[0].TableName);
             Assert.AreEqual("CandidateKey", CandidateRefTable.ForeignKeys[0].ReferencedTableName);
         }
+
+        [Test]
+        public void ReadsPrimaryKeysCorrectly()
+        {
+            Assert.IsEmpty(_databaseSchema.Tables["CandidateKey"].PrimaryKey);
+            Assert.IsEmpty(_databaseSchema.Tables["CandidateRef"].PrimaryKey);
+            Assert.IsEmpty(_databaseSchema.Tables["ManyDataTypes"].PrimaryKey);
+
+            Assert.AreEqual(1, _databaseSchema.Tables["HasPrimaryKey"].PrimaryKey.Length);
+            Assert.AreEqual("Id", _databaseSchema.Tables["HasPrimaryKey"].PrimaryKey[0].Name);
+            Assert.AreEqual("ForeignKey", _databaseSchema.Tables["ForeignKeyReference"].PrimaryKey[0].Name);
+        }
     }
 }
