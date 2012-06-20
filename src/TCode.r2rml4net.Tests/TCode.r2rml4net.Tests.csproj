@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTestsBase.cs" />
+    <Compile Include="Metadata\TableCollectionTests.cs" />
     <Compile Include="Metadata\TableMetadataTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
