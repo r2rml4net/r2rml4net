@@ -18,8 +18,6 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             _schema = reader.DatabaseSchema;
         }
 
-        public void ReadMetadata() { }
-
         public TableCollection Tables
         {
             get

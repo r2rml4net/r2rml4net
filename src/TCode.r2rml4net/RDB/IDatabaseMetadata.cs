@@ -6,10 +6,6 @@
     public interface IDatabaseMetadata
     {
         /// <summary>
-        /// Reads metadata from the relational database
-        /// </summary>
-        void ReadMetadata();
-        /// <summary>
         /// Collecion of tables contained by the current database
         /// </summary>
         TableCollection Tables { get; }
