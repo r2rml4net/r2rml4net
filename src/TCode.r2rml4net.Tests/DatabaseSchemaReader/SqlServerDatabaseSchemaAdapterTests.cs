@@ -10,7 +10,7 @@ using DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
-    [TestFixture(Category = "Database required")]
+    [TestFixture(Category = "Database")]
     public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
         protected override DatabaseReader SetupAdapter()
@@ -22,10 +22,11 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
                 dbInitScript = reader.ReadToEnd();
             }
 
+            var conStringMaster = System.Configuration.ConfigurationManager.ConnectionStrings["SqlServerMaster"].ConnectionString;
             var conString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
             using (var connection = System.Data.SqlClient.SqlClientFactory.Instance.CreateConnection())
             {
-                connection.ConnectionString = conString;
+                connection.ConnectionString = conStringMaster;
                 connection.Open();
 
                 foreach (var commandText in dbInitScript.Split(new[] { "go", "GO" }, StringSplitOptions.RemoveEmptyEntries))
