@@ -109,10 +109,10 @@ GO
 SET ANSI_PADDING OFF
 GO
 /****** Object:  ForeignKey [FK_HasPrimaryKey_ForeignKeyReference]    Script Date: 06/19/2012 15:33:28 ******/
-ALTER TABLE [dbo].[HasPrimaryKey]  WITH CHECK ADD  CONSTRAINT [FK_HasPrimaryKey_ForeignKeyReference] FOREIGN KEY([Id])
-REFERENCES [dbo].[ForeignKeyReference] ([ForeignKey])
+ALTER TABLE [dbo].[ForeignKeyReference]  WITH CHECK ADD  CONSTRAINT [FK_HasPrimaryKey_ForeignKeyReference] FOREIGN KEY([ForeignKey])
+REFERENCES [dbo].[HasPrimaryKey] ([Id])
 GO
-ALTER TABLE [dbo].[HasPrimaryKey] CHECK CONSTRAINT [FK_HasPrimaryKey_ForeignKeyReference]
+ALTER TABLE [dbo].[ForeignKeyReference] CHECK CONSTRAINT [FK_HasPrimaryKey_ForeignKeyReference]
 GO
 /****** Object:  ForeignKey [FK_CandidateRef_CandidateKey]    Script Date: 06/19/2012 15:33:28 ******/
 ALTER TABLE [dbo].[CandidateRef]  WITH CHECK ADD  CONSTRAINT [FK_CandidateRef_CandidateKey] FOREIGN KEY([RefCol1], [RefCol2])
