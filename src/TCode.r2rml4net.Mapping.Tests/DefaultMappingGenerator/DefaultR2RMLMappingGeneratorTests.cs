@@ -26,27 +26,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _defaultR2RMLMappingGenerator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
         }
 
-        [Test, Description("Invoking DefaultR2RMLMappingGenerator#GenerateMappings should execute reading of metadata")]
-        public void AccesingGraphReadsDatabaseMetadata()
-        {
-            // when
-            _defaultR2RMLMappingGenerator.GenerateMappings();
-
-            // then
-            _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
-        }
-
-        [Test, Description("Metadata should be read from db only once")]
-        public void AccesingGraphTwiceReadsDatabaseMetadataOnlyOnce()
-        {
-            // when
-            _defaultR2RMLMappingGenerator.GenerateMappings();
-            _defaultR2RMLMappingGenerator.GenerateMappings();
-
-            // then
-            _databaseMetedata.Verify(provider => provider.ReadMetadata(), Times.Once());
-        }
-
         [Test, Description("Building graph visits the table collection")]
         public void BuildingGraphReadsTablesCollection()
         {
@@ -59,7 +38,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // then
             _databaseMetedata.Verify(db => db.Tables, Times.Exactly(2));
-            Assert.IsFalse(_configuration.GraphReadOnly.IsEmpty);
+            Assert.IsTrue(_configuration.GraphReadOnly.IsEmpty);
         }
 
         private void TestMappingGeneration(TableCollection tables, string embeddedResourceGraph)
