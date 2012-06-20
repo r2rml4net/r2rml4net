@@ -10,7 +10,7 @@ using DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
-    [TestFixture]
+    [TestFixture(Category = "Database required")]
     public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
         protected override DatabaseReader SetupAdapter()
