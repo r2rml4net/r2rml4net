@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _defaultR2RMLMappingGenerator.GenerateMappings();
 
             // then
-            _databaseMetedata.Verify(db => db.Tables, Times.Once());
+            _databaseMetedata.Verify(db => db.Tables, Times.Exactly(2));
             Assert.IsFalse(_configuration.GraphReadOnly.IsEmpty);
         }
 

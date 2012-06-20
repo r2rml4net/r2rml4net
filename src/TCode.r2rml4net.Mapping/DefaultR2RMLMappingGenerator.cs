@@ -156,7 +156,7 @@ namespace TCode.r2rml4net.Mapping
 
         string UrlEncode(string unescapedString)
         {
-            return HttpUtility.UrlDecode(unescapedString);
+            return HttpUtility.UrlDecode(unescapedString).Replace(" ", "%20");
         }
     }
 }
