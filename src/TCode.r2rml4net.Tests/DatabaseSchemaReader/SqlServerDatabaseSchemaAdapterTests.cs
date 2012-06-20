@@ -6,14 +6,14 @@ using NUnit.Framework;
 using DatabaseSchemaReader.DataSchema;
 using System.Reflection;
 using System.IO;
+using DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
     [TestFixture]
-    public class DatabaseSchemaAdapterTests
+    public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
-        [Test]
-        public void TestSqlServer()
+        protected override DatabaseReader SetupAdapter()
         {
             string dbInitScript;
             Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TCode.r2rml4net.Tests.DatabaseSchemaReader.TestDbScripts.SqlServer.sql");
@@ -27,13 +27,17 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             {
                 connection.ConnectionString = conString;
                 connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = dbInitScript;
-                command.ExecuteNonQuery();
+
+                foreach (var commandText in dbInitScript.Split(new[] { "go", "GO" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var command = connection.CreateCommand();
+                    command.CommandText = commandText;
+                    command.ExecuteNonQuery();
+                }
                 connection.Close();
             }
 
-            DatabaseSchema _schema = new DatabaseSchema(conString, SqlType.SqlServer);
+            return new DatabaseReader(conString, SqlType.SqlServer);
         }
     }
 }
