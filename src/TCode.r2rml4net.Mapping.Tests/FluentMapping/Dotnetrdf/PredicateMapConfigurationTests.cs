@@ -39,7 +39,7 @@ namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
                     _predicateMap.TermMapNode,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _predicateMap.URI);
+            Assert.AreEqual(uri, _predicateMap.ConstantValue);
         }
 
         [Test, ExpectedException(typeof(InvalidTriplesMapException))]
