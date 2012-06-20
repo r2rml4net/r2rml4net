@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using DatabaseSchemaReader.DataSchema;
 using DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 {
+    /// <summary>
+    /// Implementation of <see cref="IDatabaseMetadata"/> using <a href="http://dbschemareader.codeplex.com/">Database Schema Reader project</a>
+    /// </summary>
     public class DatabaseSchemaAdapter : IDatabaseMetadata
     {
         readonly DatabaseSchema _schema;
         TableCollection _tables;
 
+        /// <summary>
+        /// Creates an instance of <see cref="DatabaseSchemaAdapter"/>
+        /// </summary>
+        /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
         public DatabaseSchemaAdapter(DatabaseReader reader)
         {
             reader.ReadAll();
