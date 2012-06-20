@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DatabaseSchemaReader.DataSchema;
+using DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 {
@@ -11,16 +12,17 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         readonly DatabaseSchema _schema;
         TableCollection _tables;
 
-        public DatabaseSchemaAdapter(DatabaseSchema schema)
+        public DatabaseSchemaAdapter(DatabaseReader reader)
         {
-            _schema = schema;
+            reader.ReadAll();
+            _schema = reader.DatabaseSchema;
         }
 
         public void ReadMetadata() { }
 
         public TableCollection Tables
         {
-            get 
+            get
             {
                 if (_tables == null)
                 {
@@ -55,13 +57,27 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Type = System.Data.DbType.Object // todo
                 });
 
-            table.ForeignKeys = dbTable.ForeignKeys.Select(fk => new ForeignKeyMetadata
+            table.ForeignKeys = dbTable.ForeignKeys.Select(fk =>
             {
-                TableName = table.Name,
-                ForeignKeyColumns = fk.Columns.ToArray(),
-                ReferencedColumns = fk.ReferencedColumns(_schema).ToArray(),
-                ReferencedTableName = fk.ReferencedTable(_schema).Name,
-                IsCandidateKeyReference = string.IsNullOrEmpty(fk.RefersToConstraint)
+                string[] referencedColumns;
+                DatabaseTable referencedTable = fk.ReferencedTable(_schema);
+                if (referencedTable.PrimaryKey == null)
+                {
+                    referencedColumns = referencedTable.UniqueKeys.Single(key => key.Name == fk.RefersToConstraint).Columns.ToArray();
+                }
+                else
+                {
+                    referencedColumns = fk.ReferencedColumns(_schema).ToArray();
+                }
+
+                return new ForeignKeyMetadata
+                {
+                    TableName = table.Name,
+                    ForeignKeyColumns = fk.Columns.ToArray(),
+                    ReferencedColumns = referencedColumns,
+                    ReferencedTableName = referencedTable.Name,
+                    IsCandidateKeyReference = referencedTable.PrimaryKey == null
+                };
             }).ToArray();
 
             return table;
