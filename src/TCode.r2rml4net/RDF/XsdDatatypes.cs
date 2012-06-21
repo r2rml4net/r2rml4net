@@ -48,9 +48,14 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         public const string Binary = "http://www.w3.org/2001/XMLSchema#hexBinary";
 
-        public static Uri GetDataType(DbType column)
+        /// <summary>
+        /// Get a xsd type URI for the given <see cref="DbType"/>
+        /// </summary>
+        /// <returns>a URI or null for string/undefined type</returns>
+        /// <remarks>Read more on http://www.w3.org/TR/r2rml/#natural-mapping</remarks>
+        public static Uri GetDataType(DbType columnType)
         {
-            switch (column)
+            switch (columnType)
             {
                 case DbType.Binary:
                     return new Uri(Binary);
