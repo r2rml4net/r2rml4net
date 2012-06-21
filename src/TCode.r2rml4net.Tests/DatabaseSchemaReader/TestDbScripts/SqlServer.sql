@@ -1,6 +1,11 @@
 ﻿USE [master]
 GO
 IF EXISTS(SELECT * FROM SYS.DATABASES WHERE NAME='SchemaReaderTest')
+	ALTER DATABASE [SchemaReaderTest]
+	SET SINGLE_USER
+	WITH ROLLBACK IMMEDIATE
+GO
+IF EXISTS(SELECT * FROM SYS.DATABASES WHERE NAME='SchemaReaderTest')
 	DROP DATABASE [SchemaReaderTest]
 go
 /****** Object:  Database [SchemaReaderTest]    Script Date: 06/19/2012 15:33:27 ******/

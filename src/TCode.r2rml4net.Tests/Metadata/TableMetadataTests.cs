@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using TCode.r2rml4net.RDB;
 
@@ -52,6 +49,42 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Contains(primaryKeyColumn1, primaryKey);
             Assert.Contains(primaryKeyColumn2, primaryKey);
             Assert.Contains(primaryKeyColumn3, primaryKey);
+        }
+
+        [Test]
+        public void CanBeIndexed()
+        {
+            // given
+            var column1 = new ColumnMetadata {Name = "Column1"};
+            var column2 = new ColumnMetadata {Name = "Column2"};
+            var table = new TableMetadata
+                             {
+                                 column1,
+                                 column2
+                             };
+
+            // then
+            Assert.AreSame(column1, table["Column1"]);
+            Assert.AreSame(column2, table["Column2"]);
+        }
+
+        [Test]
+        public void ThrowsWhenIndexingWithAnInvalidColumnName()
+        {
+            // given
+            var column1 = new ColumnMetadata { Name = "Column1" };
+            var column2 = new ColumnMetadata { Name = "Column2" };
+            var table = new TableMetadata
+                             {
+                                 column1,
+                                 column2
+                             };
+
+            // then
+            Assert.Throws<IndexOutOfRangeException>(() => { var column = table["column"]; });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { var column = table[""]; });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { var column = table[" "]; });
+            Assert.Throws<ArgumentNullException>(() => { var column = table[null]; });
         }
     }
 }
