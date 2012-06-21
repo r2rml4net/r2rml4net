@@ -24,6 +24,8 @@ namespace TCode.r2rml4net.RDB
         /// Gets the table with the specified name
         /// </summary>
         /// <exception cref="IndexOutOfRangeException" />
+        /// <exception cref="ArgumentNullException" />
+        /// <exception cref="ArgumentOutOfRangeException" />
         public TableMetadata this[string tableName]
         {
             get

@@ -7,10 +7,14 @@
     public enum DbType
     {
         /// <summary>
+        /// An undefined SQL type. Values will be interpreted as string literals
+        /// </summary>
+        Undefined,
+        /// <summary>
         /// Any string type 
         /// </summary>
         /// <remarks>In Core SQL 2008: CHARACTER, CHARACTER VARYING, CHARACTER LARGE OBJECT, NATIONAL CHARACTER, NATIONAL CHARACTER VARYING, NATIONAL CHARACTER LARGE OBJECT</remarks>
-        String = 1,
+        String,
         /// <summary>
         /// A binary type
         /// </summary>

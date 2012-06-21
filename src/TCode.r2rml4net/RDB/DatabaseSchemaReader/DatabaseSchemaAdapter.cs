@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DatabaseSchemaReader.DataSchema;
 using DatabaseSchemaReader;
 
@@ -59,7 +60,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Name = column.Name,
                     Table = table,
                     IsPrimaryKey = column.IsPrimaryKey,
-                    Type = default(DbType)
+                    Type = GetColumnTypeFromColumn(column.DataType)
                 });
 
             table.ForeignKeys = dbTable.ForeignKeys.Select(fk =>
@@ -86,6 +87,43 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             }).ToArray();
 
             return table;
+        }
+
+        // todo: refactor for other RDBMS
+        private DbType GetColumnTypeFromColumn(DataType dataType)
+        {
+            if(dataType.IsString || dataType.IsStringClob)
+                return DbType.String;
+
+            Type type = dataType.GetNetType();
+
+            if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
+                return DbType.Integer;
+
+            if (dataType.IsDateTime)
+            {
+                if(dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
+                    return DbType.Date;
+
+                return DbType.DateTime;
+            }
+
+            if (new[] { typeof(float), typeof(double) }.Contains(type))
+                return DbType.FloatingPoint;
+
+            if (type == typeof(decimal))
+                return DbType.Decimal;
+
+            if (type == typeof(TimeSpan))
+                return DbType.Time;
+
+            if (dataType.GetNetType() == typeof(byte[]))
+                return DbType.Binary;
+
+            if (dataType.GetNetType() == typeof(bool))
+                return DbType.Boolean;
+
+            return DbType.Undefined;
         }
     }
 }

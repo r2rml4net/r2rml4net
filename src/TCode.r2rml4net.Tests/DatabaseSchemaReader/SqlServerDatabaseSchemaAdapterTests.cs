@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using DatabaseSchemaReader.DataSchema;
 using System.Reflection;
 using System.IO;
 using DatabaseSchemaReader;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
@@ -39,6 +37,37 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             }
 
             return new DatabaseReader(conString, SqlType.SqlServer);
+        }
+
+        [TestCase(DbType.Integer, "Long")]
+        [TestCase(DbType.Integer, "Short")]
+        [TestCase(DbType.Integer, "Integer")]
+        [TestCase(DbType.Integer, "Tiny")]
+        [TestCase(DbType.String, "UnicodeText")]
+        [TestCase(DbType.String, "Text")]
+        [TestCase(DbType.String, "FixedLength")]
+        [TestCase(DbType.String, "UnicodeFixedLength")]
+        [TestCase(DbType.Boolean, "Boolean")]
+        [TestCase(DbType.Binary, "Binary")]
+        [TestCase(DbType.Binary, "Image")]
+        [TestCase(DbType.Binary, "Timestamp")]
+        [TestCase(DbType.Date, "Date")]
+        [TestCase(DbType.DateTime, "Datetime")]
+        [TestCase(DbType.DateTime, "Datetime2")]
+        [TestCase(DbType.Time, "Time")]
+        [TestCase(DbType.Decimal, "Decimal")]
+        [TestCase(DbType.FloatingPoint, "Float")]
+        [TestCase(DbType.Decimal, "Money")]
+        [TestCase(DbType.Undefined, "Guid")]
+        [TestCase(DbType.FloatingPoint, "Real")]
+        public void CorrectlyMapsSqlTypes(DbType dbType, string columnName)
+        {
+            // when
+            TableMetadata table = DatabaseSchema.Tables["ManyDataTypes"];
+
+            // then
+            Assert.AreEqual(21, table.ColumnsCount, "Column count mismatch. Some columns not tested");
+            Assert.AreEqual(dbType, table[columnName].Type);
         }
     }
 }
