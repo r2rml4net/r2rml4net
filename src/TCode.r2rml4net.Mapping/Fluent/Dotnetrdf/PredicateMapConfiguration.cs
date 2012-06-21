@@ -13,12 +13,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         protected internal override IUriNode CreateConstantPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(UrisHelper.RrPredicatePropety);
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicatePropety);
         }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(UrisHelper.RrPredicateMapPropety);
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicateMapPropety);
         }
 
         public override ITermMapConfiguration IsBlankNode()
