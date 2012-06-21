@@ -5,6 +5,7 @@ using System.Text;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using System.Web;
+using TCode.r2rml4net.RDF;
 
 #pragma warning disable
 
@@ -86,7 +87,7 @@ namespace TCode.r2rml4net.Mapping
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
             var literalTermMap = propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
 
-            var dataTypeUri = UrisHelper.GetXsdDataType(column.Type);
+            var dataTypeUri = XsdDatatypes.GetDataType(column.Type);
             if(dataTypeUri != null)
                 literalTermMap.HasDataType(dataTypeUri);
         }

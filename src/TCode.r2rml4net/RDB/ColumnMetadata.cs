@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using System;
 
 namespace TCode.r2rml4net.RDB
 {
@@ -12,9 +12,13 @@ namespace TCode.r2rml4net.RDB
         /// </summary>
         public string Name { get; internal set; }
         /// <summary>
-        /// Column <see cref="DbType"/>
+        /// Gets the .NET column <see cref="Type"/> as mapped in ADO.NET
         /// </summary>
         public DbType Type { get; internal set; }
+        /// <summary>
+        /// Gets the native column type as declared in the source RDBMS
+        /// </summary>
+        public string NativeType { get; internal set; }
         /// <summary>
         /// The <see cref="TableMetadata" />, which contains this column
         /// </summary>

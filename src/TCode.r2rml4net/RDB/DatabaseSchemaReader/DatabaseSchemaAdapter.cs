@@ -56,7 +56,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Name = column.Name,
                     Table = table,
                     IsPrimaryKey = column.IsPrimaryKey,
-                    Type = System.Data.DbType.Object // todo
+                    Type = default(DbType)
                 });
 
             table.ForeignKeys = dbTable.ForeignKeys.Select(fk =>

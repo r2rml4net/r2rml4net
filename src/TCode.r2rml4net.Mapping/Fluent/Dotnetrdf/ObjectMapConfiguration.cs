@@ -21,7 +21,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty), R2RMLMappings.CreateLiteralNode(literal));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateLiteralNode(literal));
 
             return this;
         }
@@ -38,12 +38,12 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         protected internal override IUriNode CreateConstantPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(UrisHelper.RrObjectProperty);
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectProperty);
         }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
-            return R2RMLMappings.CreateUriNode(UrisHelper.RrObjectMapProperty);
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty);
         }
 
         /// <summary>
@@ -58,10 +58,10 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
                 // term type is literal is column valued, or has datatype or language tag
                 if (IsLiteralTermType)
-                    return R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral).Uri;
+                    return R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri;
 
                 // in other cases is rr:IRI
-                return R2RMLMappings.CreateUriNode(UrisHelper.RrIRI).Uri;
+                return R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri;
             }
         }
 
@@ -72,16 +72,16 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             get
             {
-                var columnPropertyNode = R2RMLMappings.CreateUriNode(UrisHelper.RrColumnProperty);
+                var columnPropertyNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty);
                 var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, columnPropertyNode).ToArray();
 
                 if (columnTriples.Any())
                     return true;
 
-                var languageTagNode = R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety);
+                var languageTagNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety);
                 var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, languageTagNode).ToArray();
 
-                var datatypeNode = R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety);
+                var datatypeNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety);
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, datatypeNode).ToArray();
 
                 if (languageTagTriples.Any() && datatypeTriples.Any())
@@ -96,7 +96,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
             AssertTermTypeNotSet();
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrTermTypeProperty), R2RMLMappings.CreateUriNode(UrisHelper.RrLiteral));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral));
             return this;
         }
 
@@ -113,14 +113,14 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         {
             EnsureOnlyLanguageTagOrDatatype();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
 
         public void HasLanguageTag(string languagTag)
         {
             EnsureOnlyLanguageTagOrDatatype();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
+            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
         }
 
         public void HasLanguageTag(CultureInfo cultureInfo)
@@ -130,8 +130,8 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         private void EnsureOnlyLanguageTagOrDatatype()
         {
-            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrDatatypePropety));
-            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(UrisHelper.RrLanguageTagPropety));
+            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
 
             if (datatypeTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a datatype");
@@ -150,7 +150,7 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
 
         public string Literal
         {
-            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(UrisHelper.RrConstantProperty)); }
+            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)); }
         }
 
         #endregion

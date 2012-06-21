@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\DatabaseSchemaAdapter.cs" />
+    <Compile Include="RDB\DbType.cs" />
     <Compile Include="RDB\ForeignKeyMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadataVisitor.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="RDF\ISubjectMap.cs" />
     <Compile Include="RDF\ITermMap.cs" />
     <Compile Include="RDF\ITermType.cs" />
+    <Compile Include="RDF\XsdDatatypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
