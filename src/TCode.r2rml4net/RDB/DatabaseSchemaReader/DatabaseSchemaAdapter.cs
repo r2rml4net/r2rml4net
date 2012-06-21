@@ -22,6 +22,9 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             _schema = reader.DatabaseSchema;
         }
 
+        /// <summary>
+        /// Reads database schema if required and gets all tables
+        /// </summary>
         public TableCollection Tables
         {
             get
