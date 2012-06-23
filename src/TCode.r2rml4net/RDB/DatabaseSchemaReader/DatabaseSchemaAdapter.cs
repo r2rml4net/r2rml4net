@@ -92,36 +92,39 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         // todo: refactor for other RDBMS
         private DbType GetColumnTypeFromColumn(DataType dataType)
         {
-            if(dataType.IsString || dataType.IsStringClob)
-                return DbType.String;
-
-            Type type = dataType.GetNetType();
-
-            if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
-                return DbType.Integer;
-
-            if (dataType.IsDateTime)
+            if (dataType != null)
             {
-                if(dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
-                    return DbType.Date;
+                if (dataType.IsString || dataType.IsStringClob)
+                    return DbType.String;
 
-                return DbType.DateTime;
+                Type type = dataType.GetNetType();
+
+                if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
+                    return DbType.Integer;
+
+                if (dataType.IsDateTime || dataType.GetNetType() == typeof(DateTimeOffset))
+                {
+                    if (dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
+                        return DbType.Date;
+
+                    return DbType.DateTime;
+                }
+
+                if (new[] { typeof(float), typeof(double) }.Contains(type))
+                    return DbType.FloatingPoint;
+
+                if (type == typeof(decimal))
+                    return DbType.Decimal;
+
+                if (type == typeof(TimeSpan))
+                    return DbType.Time;
+
+                if (dataType.GetNetType() == typeof(byte[]))
+                    return DbType.Binary;
+
+                if (dataType.GetNetType() == typeof(bool))
+                    return DbType.Boolean;
             }
-
-            if (new[] { typeof(float), typeof(double) }.Contains(type))
-                return DbType.FloatingPoint;
-
-            if (type == typeof(decimal))
-                return DbType.Decimal;
-
-            if (type == typeof(TimeSpan))
-                return DbType.Time;
-
-            if (dataType.GetNetType() == typeof(byte[]))
-                return DbType.Binary;
-
-            if (dataType.GetNetType() == typeof(bool))
-                return DbType.Boolean;
 
             return DbType.Undefined;
         }

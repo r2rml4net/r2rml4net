@@ -59,14 +59,26 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         [TestCase(DbType.FloatingPoint, "Float")]
         [TestCase(DbType.Decimal, "Money")]
         [TestCase(DbType.Undefined, "Guid")]
-        [TestCase(DbType.FloatingPoint, "Real")]
+        [TestCase(DbType.String, "Char")]
+        [TestCase(DbType.DateTime, "DatetimeOffset")]
+        [TestCase(DbType.Undefined, "Geography")]
+        [TestCase(DbType.Undefined, "Geometry")]
+        [TestCase(DbType.Undefined, "Hierarchy")]
+        [TestCase(DbType.String, "Nchar")]
+        [TestCase(DbType.String, "Ntext")]
+        [TestCase(DbType.Decimal, "Numeric")]
+        [TestCase(DbType.DateTime, "Smalldatetime")]
+        [TestCase(DbType.Undefined, "SqlVariant")]
+        [TestCase(DbType.String, "Text")]
+        [TestCase(DbType.Binary, "Varbinary")]
+        [TestCase(DbType.String, "XML")]
         public void CorrectlyMapsSqlTypes(DbType dbType, string columnName)
         {
             // when
             TableMetadata table = DatabaseSchema.Tables["ManyDataTypes"];
 
             // then
-            Assert.AreEqual(21, table.ColumnsCount, "Column count mismatch. Some columns not tested");
+            Assert.AreEqual(35, table.ColumnsCount, "Column count mismatch. Some columns not tested");
             Assert.AreEqual(dbType, table[columnName].Type);
         }
     }
