@@ -4,7 +4,7 @@
     /// Enumeration of types valid for mapping to RDF
     /// </summary>
     /// <remarks>Refer to each enum member for corresponding Core SQL 2008 types. Note that for each non-standard RDBMS implementation there may be other types or they may have different meaning</remarks>
-    public enum DbType
+    public enum R2RMLType
     {
         /// <summary>
         /// An undefined SQL type. Values will be interpreted as string literals

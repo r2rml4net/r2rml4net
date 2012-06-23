@@ -39,47 +39,47 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             return new DatabaseReader(conString, SqlType.SqlServer);
         }
 
-        [TestCase(DbType.Integer, "Long")]
-        [TestCase(DbType.Integer, "Short")]
-        [TestCase(DbType.Integer, "Integer")]
-        [TestCase(DbType.Integer, "Tiny")]
-        [TestCase(DbType.String, "UnicodeText")]
-        [TestCase(DbType.String, "Text")]
-        [TestCase(DbType.String, "FixedLength")]
-        [TestCase(DbType.String, "UnicodeFixedLength")]
-        [TestCase(DbType.Boolean, "Boolean")]
-        [TestCase(DbType.Binary, "Binary")]
-        [TestCase(DbType.Binary, "Image")]
-        [TestCase(DbType.Binary, "Timestamp")]
-        [TestCase(DbType.Date, "Date")]
-        [TestCase(DbType.DateTime, "Datetime")]
-        [TestCase(DbType.DateTime, "Datetime2")]
-        [TestCase(DbType.Time, "Time")]
-        [TestCase(DbType.Decimal, "Decimal")]
-        [TestCase(DbType.FloatingPoint, "Float")]
-        [TestCase(DbType.Decimal, "Money")]
-        [TestCase(DbType.Undefined, "Guid")]
-        [TestCase(DbType.String, "Char")]
-        [TestCase(DbType.DateTime, "DatetimeOffset")]
-        [TestCase(DbType.Undefined, "Geography")]
-        [TestCase(DbType.Undefined, "Geometry")]
-        [TestCase(DbType.Undefined, "Hierarchy")]
-        [TestCase(DbType.String, "Nchar")]
-        [TestCase(DbType.String, "Ntext")]
-        [TestCase(DbType.Decimal, "Numeric")]
-        [TestCase(DbType.DateTime, "Smalldatetime")]
-        [TestCase(DbType.Undefined, "SqlVariant")]
-        [TestCase(DbType.String, "Text")]
-        [TestCase(DbType.Binary, "Varbinary")]
-        [TestCase(DbType.String, "XML")]
-        public void CorrectlyMapsSqlTypes(DbType dbType, string columnName)
+        [TestCase(R2RMLType.Integer, "Long")]
+        [TestCase(R2RMLType.Integer, "Short")]
+        [TestCase(R2RMLType.Integer, "Integer")]
+        [TestCase(R2RMLType.Integer, "Tiny")]
+        [TestCase(R2RMLType.String, "UnicodeText")]
+        [TestCase(R2RMLType.String, "Text")]
+        [TestCase(R2RMLType.String, "FixedLength")]
+        [TestCase(R2RMLType.String, "UnicodeFixedLength")]
+        [TestCase(R2RMLType.Boolean, "Boolean")]
+        [TestCase(R2RMLType.Binary, "Binary")]
+        [TestCase(R2RMLType.Binary, "Image")]
+        [TestCase(R2RMLType.Binary, "Timestamp")]
+        [TestCase(R2RMLType.Date, "Date")]
+        [TestCase(R2RMLType.DateTime, "Datetime")]
+        [TestCase(R2RMLType.DateTime, "Datetime2")]
+        [TestCase(R2RMLType.Time, "Time")]
+        [TestCase(R2RMLType.Decimal, "Decimal")]
+        [TestCase(R2RMLType.FloatingPoint, "Float")]
+        [TestCase(R2RMLType.Decimal, "Money")]
+        [TestCase(R2RMLType.Undefined, "Guid")]
+        [TestCase(R2RMLType.String, "Char")]
+        [TestCase(R2RMLType.DateTime, "DatetimeOffset")]
+        [TestCase(R2RMLType.Undefined, "Geography")]
+        [TestCase(R2RMLType.Undefined, "Geometry")]
+        [TestCase(R2RMLType.Undefined, "Hierarchy")]
+        [TestCase(R2RMLType.String, "Nchar")]
+        [TestCase(R2RMLType.String, "Ntext")]
+        [TestCase(R2RMLType.Decimal, "Numeric")]
+        [TestCase(R2RMLType.DateTime, "Smalldatetime")]
+        [TestCase(R2RMLType.Undefined, "SqlVariant")]
+        [TestCase(R2RMLType.String, "Text")]
+        [TestCase(R2RMLType.Binary, "Varbinary")]
+        [TestCase(R2RMLType.String, "XML")]
+        public void CorrectlyMapsSqlTypes(R2RMLType r2RMLType, string columnName)
         {
             // when
             TableMetadata table = DatabaseSchema.Tables["ManyDataTypes"];
 
             // then
             Assert.AreEqual(35, table.ColumnsCount, "Column count mismatch. Some columns not tested");
-            Assert.AreEqual(dbType, table[columnName].Type);
+            Assert.AreEqual(r2RMLType, table[columnName].Type);
         }
     }
 }
