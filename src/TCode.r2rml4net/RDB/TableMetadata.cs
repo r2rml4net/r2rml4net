@@ -40,10 +40,10 @@ namespace TCode.r2rml4net.RDB
             foreach (ColumnMetadata column in this)
                 column.Accept(visitor);
 
-            if(this.ForeignKeys != null)
+            if (this.ForeignKeys != null)
                 foreach (var foreignKey in ForeignKeys)
                 {
-                    visitor.Visit(foreignKey);   
+                    visitor.Visit(foreignKey);
                 }
         }
 
@@ -68,6 +68,9 @@ namespace TCode.r2rml4net.RDB
         /// </summary>
         internal void Add(ColumnMetadata column)
         {
+            if (_columns.Any(col => col.Name == column.Name))
+                throw new ArgumentException(string.Format("Table already contains column named {0}", column.Name));
+
             column.Table = this;
             _columns.Add(column);
         }

@@ -27,12 +27,28 @@ namespace TCode.r2rml4net.Tests.Metadata
             var table1 = new TableMetadata { Name = "Table1" };
             var table2 = new TableMetadata { Name = "Table2" };
             TableCollection tables = new TableCollection { table1, table2 };
-            
+
             // then
             Assert.Throws<IndexOutOfRangeException>(() => { var table = tables["table"]; });
             Assert.Throws<ArgumentOutOfRangeException>(() => { var table = tables[""]; });
             Assert.Throws<ArgumentOutOfRangeException>(() => { var table = tables[" "]; });
             Assert.Throws<ArgumentNullException>(() => { var table = tables[null]; });
+        }
+
+        [Test]
+        public void CanContainUniquellyNamedTables()
+        {
+            // given
+            TableCollection tables = new TableCollection();
+
+            // when
+            tables.Add(new TableMetadata
+                           {
+                               Name = "Table"
+                           });
+
+            // then
+            Assert.Throws<ArgumentException>(() => tables.Add(new TableMetadata { Name = "Table" }));
         }
     }
 }
