@@ -1,11 +1,11 @@
 ﻿USE [master]
 GO
-IF EXISTS(SELECT * FROM SYS.DATABASES WHERE NAME='SchemaReaderTest')
+IF EXISTS(SELECT * FROM sys.databases WHERE name='SchemaReaderTest')
 	ALTER DATABASE [SchemaReaderTest]
 	SET SINGLE_USER
 	WITH ROLLBACK IMMEDIATE
 GO
-IF EXISTS(SELECT * FROM SYS.DATABASES WHERE NAME='SchemaReaderTest')
+IF EXISTS(SELECT * FROM sys.databases WHERE name='SchemaReaderTest')
 	DROP DATABASE [SchemaReaderTest]
 go
 /****** Object:  Database [SchemaReaderTest]    Script Date: 06/19/2012 15:33:27 ******/
@@ -65,7 +65,7 @@ CREATE TABLE [dbo].[ManyDataTypes](
 	[Integer] [int] NULL,
 	[Tiny] [tinyint] NULL,
 	[UnicodeText] [nvarchar](50) NULL,
-	[Text] [varchar](50) NULL,
+	[Varchar] [varchar](50) NULL,
 	[FixedLength] [char](10) NULL,
 	[UnicodeFixedLength] [nchar](10) NULL,
 	[Boolean] [bit] NULL,
@@ -80,7 +80,21 @@ CREATE TABLE [dbo].[ManyDataTypes](
 	[Float] [float] NULL,
 	[Money] [money] NULL,
 	[Guid] [uniqueidentifier] NULL,
-	[Real] [real] NULL
+	[Real] [real] NULL,
+	[Char] [char](10) NULL,
+	[DatetimeOffset] [datetimeoffset](7) NULL,
+	[Geography] [geography] NULL,
+	[Geometry] [geometry] NULL,
+	[Hierarchy] [hierarchyid] NULL,
+	[Nchar] [nchar](10) NULL,
+	[Ntext] [ntext] NULL,
+	[Numeric] [numeric](18, 0) NULL,
+	[Smalldatetime] [smalldatetime] NULL,
+	[Smallmoney] [smallmoney] NULL,
+	[SqlVariant] [sql_variant] NULL,
+	[Text] [text] NULL,
+	[Varbinary] [varbinary](50) NULL,
+	[XML] [xml] NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF
