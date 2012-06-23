@@ -90,43 +90,43 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         }
 
         // todo: refactor for other RDBMS
-        private DbType GetColumnTypeFromColumn(DataType dataType)
+        private R2RMLType GetColumnTypeFromColumn(DataType dataType)
         {
             if (dataType != null)
             {
                 if (dataType.IsString || dataType.IsStringClob)
-                    return DbType.String;
+                    return R2RMLType.String;
 
                 Type type = dataType.GetNetType();
 
                 if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
-                    return DbType.Integer;
+                    return R2RMLType.Integer;
 
                 if (dataType.IsDateTime || dataType.GetNetType() == typeof(DateTimeOffset))
                 {
                     if (dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
-                        return DbType.Date;
+                        return R2RMLType.Date;
 
-                    return DbType.DateTime;
+                    return R2RMLType.DateTime;
                 }
 
                 if (new[] { typeof(float), typeof(double) }.Contains(type))
-                    return DbType.FloatingPoint;
+                    return R2RMLType.FloatingPoint;
 
                 if (type == typeof(decimal))
-                    return DbType.Decimal;
+                    return R2RMLType.Decimal;
 
                 if (type == typeof(TimeSpan))
-                    return DbType.Time;
+                    return R2RMLType.Time;
 
                 if (dataType.GetNetType() == typeof(byte[]))
-                    return DbType.Binary;
+                    return R2RMLType.Binary;
 
                 if (dataType.GetNetType() == typeof(bool))
-                    return DbType.Boolean;
+                    return R2RMLType.Boolean;
             }
 
-            return DbType.Undefined;
+            return R2RMLType.Undefined;
         }
     }
 }

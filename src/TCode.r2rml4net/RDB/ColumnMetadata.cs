@@ -14,7 +14,7 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Gets the .NET column <see cref="Type"/> as mapped in ADO.NET
         /// </summary>
-        public DbType Type { get; internal set; }
+        public R2RMLType Type { get; internal set; }
         /// <summary>
         /// Gets the native column type as declared in the source RDBMS
         /// </summary>

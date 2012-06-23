@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                                 new ColumnMetadata
                                 {
                                     Name = "Name",
-                                    Type = DbType.String
+                                    Type = R2RMLType.String
                                 }
                             };
                 studentsTable.Name = "Student";
@@ -40,77 +40,77 @@ namespace TCode.r2rml4net.Mapping.Tests
                                 new ColumnMetadata
                                 {
                                     Name = "Int32",
-                                    Type = DbType.Integer
+                                    Type = R2RMLType.Integer
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Varchar",
-                                    Type = DbType.String
+                                    Type = R2RMLType.String
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "NVarchar",
-                                    Type = DbType.String
+                                    Type = R2RMLType.String
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Float",
-                                    Type = DbType.FloatingPoint
+                                    Type = R2RMLType.FloatingPoint
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Double",
-                                    Type = DbType.FloatingPoint
+                                    Type = R2RMLType.FloatingPoint
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Decimal",
-                                    Type = DbType.Decimal
+                                    Type = R2RMLType.Decimal
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Money",
-                                    Type = DbType.Decimal
+                                    Type = R2RMLType.Decimal
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Date",
-                                    Type = DbType.Date
+                                    Type = R2RMLType.Date
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Time",
-                                    Type = DbType.Time
+                                    Type = R2RMLType.Time
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "DateTime",
-                                    Type = DbType.DateTime
+                                    Type = R2RMLType.DateTime
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "DateTime2",
-                                    Type = DbType.DateTime
+                                    Type = R2RMLType.DateTime
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Boolean",
-                                    Type = DbType.Boolean
+                                    Type = R2RMLType.Boolean
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Binary",
-                                    Type = DbType.Binary
+                                    Type = R2RMLType.Binary
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Int16",
-                                    Type = DbType.Integer
+                                    Type = R2RMLType.Integer
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Int64",
-                                    Type = DbType.Integer
+                                    Type = R2RMLType.Integer
                                 }
                             };
                 studentsTable.Name = "Student";
@@ -134,17 +134,17 @@ namespace TCode.r2rml4net.Mapping.Tests
                                 new ColumnMetadata
                                 {
                                     Name = "ID",
-                                    Type = DbType.Integer
+                                    Type = R2RMLType.Integer
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "Name",
-                                    Type = DbType.String
+                                    Type = R2RMLType.String
                                 },
                                 new ColumnMetadata
                                 {
                                     Name = "LastName",
-                                    Type = DbType.String
+                                    Type = R2RMLType.String
                                 }
                             };
                 studentsTable.Name = "Student";
@@ -168,7 +168,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                                             new ColumnMetadata
                                                 {
                                                     Name = "Name",
-                                                    Type = DbType.String,
+                                                    Type = R2RMLType.String,
                                                     IsPrimaryKey = true
                                                 }
                                         };
@@ -193,19 +193,19 @@ namespace TCode.r2rml4net.Mapping.Tests
                                             new ColumnMetadata
                                                 {
                                                     Name = "Name",
-                                                    Type = DbType.String,
+                                                    Type = R2RMLType.String,
                                                     IsPrimaryKey = true
                                                 },
                                             new ColumnMetadata
                                                 {
                                                     Name = "LastName",
-                                                    Type = DbType.String,
+                                                    Type = R2RMLType.String,
                                                     IsPrimaryKey = true
                                                 },
                                             new ColumnMetadata
                                                 {
                                                     Name = "Age",
-                                                    Type = DbType.Integer
+                                                    Type = R2RMLType.Integer
                                                 }
                                         };
                 studentsTable.Name = "Student";
@@ -229,18 +229,18 @@ namespace TCode.r2rml4net.Mapping.Tests
                                             new ColumnMetadata
                                                 {
                                                     Name = "ID",
-                                                    Type = DbType.Integer,
+                                                    Type = R2RMLType.Integer,
                                                     IsPrimaryKey = true
                                                 },
                                             new ColumnMetadata
                                                 {
                                                     Name = "Name",
-                                                    Type = DbType.String
+                                                    Type = R2RMLType.String
                                                 },
                                             new ColumnMetadata
                                                 {
                                                     Name = "Sport",
-                                                    Type = DbType.Integer
+                                                    Type = R2RMLType.Integer
                                                 }
                                         };
                 studentsTable.Name = "Student";
@@ -260,13 +260,13 @@ namespace TCode.r2rml4net.Mapping.Tests
                                          new ColumnMetadata
                                              {
                                                  Name = "ID",
-                                                 Type = DbType.Integer,
+                                                 Type = R2RMLType.Integer,
                                                  IsPrimaryKey = true
                                              },
                                          new ColumnMetadata
                                              {
                                                  Name = "Name",
-                                                 Type = DbType.String
+                                                 Type = R2RMLType.String
                                              }
                                      };
                 sportTable.Name = "Sport";
@@ -291,18 +291,18 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                      new ColumnMetadata
                                                          {
                                                              Name = "Country Code",
-                                                             Type = DbType.Integer,
+                                                             Type = R2RMLType.Integer,
                                                              IsPrimaryKey = true
                                                          },
                                                      new ColumnMetadata
                                                          {
                                                              Name = "Name",
-                                                             Type = DbType.String
+                                                             Type = R2RMLType.String
                                                          },
                                                      new ColumnMetadata
                                                          {
                                                              Name = "ISO 3166",
-                                                             Type = DbType.String
+                                                             Type = R2RMLType.String
                                                          }
                                                  };
                 countryTable.Name = "Country Info";
@@ -326,18 +326,18 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                      new ColumnMetadata
                                                          {
                                                              Name = "ID",
-                                                             Type = DbType.Integer,
+                                                             Type = R2RMLType.Integer,
                                                              IsPrimaryKey = true
                                                          },
                                                      new ColumnMetadata
                                                          {
                                                              Name = "FirstName",
-                                                             Type = DbType.String
+                                                             Type = R2RMLType.String
                                                          },
                                                      new ColumnMetadata
                                                          {
                                                              Name = "LastName",
-                                                             Type = DbType.String
+                                                             Type = R2RMLType.String
                                                          }
                                                  };
                 TableMetadata sportTable = new TableMetadata
@@ -345,13 +345,13 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                    new ColumnMetadata
                                                        {
                                                            Name = "ID",
-                                                           Type = DbType.Integer,
+                                                           Type = R2RMLType.Integer,
                                                            IsPrimaryKey = true
                                                        },
                                                    new ColumnMetadata
                                                        {
                                                            Name = "Description",
-                                                           Type = DbType.String
+                                                           Type = R2RMLType.String
                                                        }
                                                };
                 TableMetadata relationTable = new TableMetadata
@@ -359,13 +359,13 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                       new ColumnMetadata
                                                           {
                                                               Name = "ID_Student",
-                                                             Type = DbType.Integer,
+                                                             Type = R2RMLType.Integer,
                                                               IsPrimaryKey = true
                                                           },
                                                       new ColumnMetadata
                                                           {
                                                               Name = "ID_Sport",
-                                                             Type = DbType.Integer,
+                                                             Type = R2RMLType.Integer,
                                                               IsPrimaryKey = true
                                                           }
                                                   };
@@ -414,27 +414,27 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                      {
                                                          Name ="empno",
                                                          IsPrimaryKey = true,
-                                                         Type = DbType.Integer
+                                                         Type = R2RMLType.Integer
                                                      },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "deptno",
-                                                          Type = DbType.Integer
+                                                          Type = R2RMLType.Integer
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "ename",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "job",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "etype",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       }
                                              };
                 TableMetadata likesTable = new TableMetadata
@@ -442,17 +442,17 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                   new ColumnMetadata
                                                       {
                                                           Name = "id",
-                                                          Type = DbType.Integer
+                                                          Type = R2RMLType.Integer
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "likeType",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "likedObj",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       }
                                               };
                 TableMetadata deptTable = new TableMetadata
@@ -460,17 +460,17 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                   new ColumnMetadata
                                                       {
                                                           Name = "deptno",
-                                                          Type = DbType.Integer
+                                                          Type = R2RMLType.Integer
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "dname",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "loc",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       }
                                               };
 
@@ -512,18 +512,18 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                      {
                                                          Name ="Code",
                                                          IsPrimaryKey = true,
-                                                         Type = DbType.String
+                                                         Type = R2RMLType.String
                                                      },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "Lan",
                                                           IsPrimaryKey = true,
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       },
                                                   new ColumnMetadata
                                                       {
                                                           Name = "Name",
-                                                          Type = DbType.String
+                                                          Type = R2RMLType.String
                                                       }
                                              };
 
@@ -549,52 +549,52 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                  {
                                                      Name = "ID",
                                                      IsPrimaryKey = true,
-                                                     Type = DbType.Integer
+                                                     Type = R2RMLType.Integer
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "FirstName",
-                                                     Type = DbType.String
+                                                     Type = R2RMLType.String
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "LastName",
-                                                     Type = DbType.String
+                                                     Type = R2RMLType.String
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "Sex",
-                                                     Type = DbType.String
+                                                     Type = R2RMLType.String
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "Weight",
-                                                     Type = DbType.FloatingPoint
+                                                     Type = R2RMLType.FloatingPoint
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "Height",
-                                                     Type = DbType.FloatingPoint
+                                                     Type = R2RMLType.FloatingPoint
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "BirthDate",
-                                                     Type = DbType.Date
+                                                     Type = R2RMLType.Date
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "EntranceDate",
-                                                     Type = DbType.DateTime
+                                                     Type = R2RMLType.DateTime
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "PaidInAdvance",
-                                                     Type = DbType.Boolean
+                                                     Type = R2RMLType.Boolean
                                                  },
                                                  new ColumnMetadata
                                                  {
                                                      Name = "Photo",
-                                                     Type = DbType.Binary
+                                                     Type = R2RMLType.Binary
                                                  }
                                              };
 
@@ -619,17 +619,17 @@ namespace TCode.r2rml4net.Mapping.Tests
                     new ColumnMetadata
                     {
                         Name="植物名",
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     },
                     new ColumnMetadata
                     {
                         Name="使用部",
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     },
                     new ColumnMetadata
                     {
                         Name="皿",
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     }
                 };
 
@@ -639,18 +639,18 @@ namespace TCode.r2rml4net.Mapping.Tests
                     {
                         Name="名",
                         IsPrimaryKey = true,
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     },
                     new ColumnMetadata
                     {
                         Name="使用部",
                         IsPrimaryKey = true,
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     },
                     new ColumnMetadata
                     {
                         Name="条件",
-                        Type = DbType.String
+                        Type = R2RMLType.String
                     }
                 };
 

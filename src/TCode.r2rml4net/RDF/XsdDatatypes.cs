@@ -49,29 +49,29 @@ namespace TCode.r2rml4net.RDF
         public const string Binary = "http://www.w3.org/2001/XMLSchema#hexBinary";
 
         /// <summary>
-        /// Get a xsd type URI for the given <see cref="DbType"/>
+        /// Get a xsd type URI for the given <see cref="R2RMLType"/>
         /// </summary>
         /// <returns>a URI or null for string/undefined type</returns>
         /// <remarks>Read more on http://www.w3.org/TR/r2rml/#natural-mapping</remarks>
-        public static Uri GetDataType(DbType columnType)
+        public static Uri GetDataType(R2RMLType columnType)
         {
             switch (columnType)
             {
-                case DbType.Binary:
+                case R2RMLType.Binary:
                     return new Uri(Binary);
-                case DbType.Integer:
+                case R2RMLType.Integer:
                     return new Uri(Integer);
-                case DbType.Decimal:
+                case R2RMLType.Decimal:
                     return new Uri(Decimal);
-                case DbType.FloatingPoint:
+                case R2RMLType.FloatingPoint:
                     return new Uri(Double);
-                case DbType.Date:
+                case R2RMLType.Date:
                     return new Uri(Date);
-                case DbType.Time:
+                case R2RMLType.Time:
                     return new Uri(Time);
-                case DbType.DateTime:
+                case R2RMLType.DateTime:
                     return new Uri(DateTime);
-                case DbType.Boolean:
+                case R2RMLType.Boolean:
                     return new Uri(Boolean);
                 default:
                     return null;
