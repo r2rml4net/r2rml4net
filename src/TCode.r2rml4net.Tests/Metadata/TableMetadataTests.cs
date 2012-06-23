@@ -32,8 +32,8 @@ namespace TCode.r2rml4net.Tests.Metadata
         {
             // given
             var primaryKeyColumn1 = new ColumnMetadata { Name = "OtherColumn", IsPrimaryKey = true };
-            var primaryKeyColumn2 = new ColumnMetadata { Name = "OtherColumn", IsPrimaryKey = true };
-            var primaryKeyColumn3 = new ColumnMetadata { Name = "OtherColumn", IsPrimaryKey = true };
+            var primaryKeyColumn2 = new ColumnMetadata { Name = "OtherColumn2", IsPrimaryKey = true };
+            var primaryKeyColumn3 = new ColumnMetadata { Name = "OtherColumn3", IsPrimaryKey = true };
             TableMetadata table = new TableMetadata
                                       {
                                           primaryKeyColumn1,
@@ -55,8 +55,8 @@ namespace TCode.r2rml4net.Tests.Metadata
         public void CanBeIndexed()
         {
             // given
-            var column1 = new ColumnMetadata {Name = "Column1"};
-            var column2 = new ColumnMetadata {Name = "Column2"};
+            var column1 = new ColumnMetadata { Name = "Column1" };
+            var column2 = new ColumnMetadata { Name = "Column2" };
             var table = new TableMetadata
                              {
                                  column1,
@@ -85,6 +85,22 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Throws<ArgumentOutOfRangeException>(() => { var column = table[""]; });
             Assert.Throws<ArgumentOutOfRangeException>(() => { var column = table[" "]; });
             Assert.Throws<ArgumentNullException>(() => { var column = table[null]; });
+        }
+
+        [Test]
+        public void CanContainUniquellyNamedColumns()
+        {
+            // given
+            TableMetadata table = new TableMetadata();
+
+            // when
+            table.Add(new ColumnMetadata
+            {
+                Name = "Column"
+            });
+
+            // then
+            Assert.Throws<ArgumentException>(() => table.Add(new ColumnMetadata { Name = "Column" }));
         }
     }
 }
