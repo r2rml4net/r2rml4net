@@ -5,13 +5,14 @@ using System.Reflection;
 using System.IO;
 using DatabaseSchemaReader;
 using TCode.r2rml4net.RDB;
+using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
     [TestFixture(Category = "Database")]
     public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
-        protected override DatabaseReader SetupAdapter()
+        protected override DatabaseSchemaAdapter SetupAdapter()
         {
             string dbInitScript;
             Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TCode.r2rml4net.Tests.DatabaseSchemaReader.TestDbScripts.SqlServer.sql");
@@ -36,7 +37,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
                 connection.Close();
             }
 
-            return new DatabaseReader(conString, SqlType.SqlServer);
+            return new DatabaseSchemaAdapter(new DatabaseReader(conString, SqlType.SqlServer), new MSSQLServerColumTypeMapper());
         }
 
         [TestCase(R2RMLType.Integer, "Long")]

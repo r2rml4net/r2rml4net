@@ -50,5 +50,30 @@ namespace TCode.r2rml4net.Tests.Metadata
             // then
             Assert.Throws<ArgumentException>(() => tables.Add(new TableMetadata { Name = "Table" }));
         }
+
+        [Test]
+        public void IsCreatedEmpty()
+        {
+            // given
+            var collection = new TableCollection();
+
+            // then
+            Assert.AreEqual(0, collection.Count);
+        }
+
+        [Test]
+        public void HasCorrectCount()
+        {
+            // given
+            var collection = new TableCollection();
+
+            // when
+            collection.Add(new TableMetadata { Name = "a" });
+            collection.Add(new TableMetadata { Name = "b" });
+            collection.Add(new TableMetadata { Name = "c" });
+
+            // then
+            Assert.AreEqual(3, collection.Count);
+        }
     }
 }

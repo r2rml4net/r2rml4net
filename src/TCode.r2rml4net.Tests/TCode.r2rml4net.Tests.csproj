@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterCommonTests.cs" />
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTestsBase.cs" />
     <Compile Include="Metadata\TableCollectionTests.cs" />
