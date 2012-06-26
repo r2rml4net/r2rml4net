@@ -13,10 +13,10 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         [TestFixtureSetUp]
         public void Setup()
         {
-            DatabaseSchema = new DatabaseSchemaAdapter(SetupAdapter());
+            DatabaseSchema = SetupAdapter();
         }
 
-        protected abstract DatabaseReader SetupAdapter();
+        protected abstract DatabaseSchemaAdapter SetupAdapter();
 
         [Test]
         public void ContainsTablesCorrectly()

@@ -13,12 +13,30 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         readonly DatabaseSchema _schema;
         TableCollection _tables;
 
+        internal IColumnTypeMapper ColumnTypeMapper { get; private set; }
+
         /// <summary>
         /// Creates an instance of <see cref="DatabaseSchemaAdapter"/>
         /// </summary>
         /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
         public DatabaseSchemaAdapter(DatabaseReader reader)
+            : this(reader, new CoreSQL2008ColumTypeMapper())
         {
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="DatabaseSchemaAdapter"/>
+        /// </summary>
+        /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
+        /// <param name="columnTypeMapper">Implementation of <see cref="IColumnTypeMapper"/> responsible for transforming column type read by <see cref="DatabaseReader"/> to <see cref="R2RMLType"/></param>
+        public DatabaseSchemaAdapter(DatabaseReader reader, IColumnTypeMapper columnTypeMapper)
+        {
+            if (reader == null)
+                throw new ArgumentNullException("reader");
+            if (columnTypeMapper == null)
+                throw new ArgumentNullException("columnTypeMapper");
+
+            ColumnTypeMapper = columnTypeMapper;
             reader.ReadAll();
             _schema = reader.DatabaseSchema;
         }
@@ -60,7 +78,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Name = column.Name,
                     Table = table,
                     IsPrimaryKey = column.IsPrimaryKey,
-                    Type = GetColumnTypeFromColumn(column.DataType)
+                    Type = ColumnTypeMapper.GetColumnTypeFromColumn(column.DataType)
                 });
 
             table.ForeignKeys = dbTable.ForeignKeys.Select(fk =>
@@ -87,46 +105,6 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             }).ToArray();
 
             return table;
-        }
-
-        // todo: refactor for other RDBMS
-        private R2RMLType GetColumnTypeFromColumn(DataType dataType)
-        {
-            if (dataType != null)
-            {
-                if (dataType.IsString || dataType.IsStringClob)
-                    return R2RMLType.String;
-
-                Type type = dataType.GetNetType();
-
-                if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
-                    return R2RMLType.Integer;
-
-                if (dataType.IsDateTime || dataType.GetNetType() == typeof(DateTimeOffset))
-                {
-                    if (dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
-                        return R2RMLType.Date;
-
-                    return R2RMLType.DateTime;
-                }
-
-                if (new[] { typeof(float), typeof(double) }.Contains(type))
-                    return R2RMLType.FloatingPoint;
-
-                if (type == typeof(decimal))
-                    return R2RMLType.Decimal;
-
-                if (type == typeof(TimeSpan))
-                    return R2RMLType.Time;
-
-                if (dataType.GetNetType() == typeof(byte[]))
-                    return R2RMLType.Binary;
-
-                if (dataType.GetNetType() == typeof(bool))
-                    return R2RMLType.Boolean;
-            }
-
-            return R2RMLType.Undefined;
         }
     }
 }
