@@ -19,7 +19,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         /// Creates an instance of <see cref="DatabaseSchemaAdapter"/>
         /// </summary>
         /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
-        public DatabaseSchemaAdapter(DatabaseReader reader)
+        public DatabaseSchemaAdapter(IDatabaseReader reader)
             : this(reader, new CoreSQL2008ColumTypeMapper())
         {
         }
@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         /// </summary>
         /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
         /// <param name="columnTypeMapper">Implementation of <see cref="IColumnTypeMapper"/> responsible for transforming column type read by <see cref="DatabaseReader"/> to <see cref="R2RMLType"/></param>
-        public DatabaseSchemaAdapter(DatabaseReader reader, IColumnTypeMapper columnTypeMapper)
+        public DatabaseSchemaAdapter(IDatabaseReader reader, IColumnTypeMapper columnTypeMapper)
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
