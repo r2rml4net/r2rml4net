@@ -63,7 +63,7 @@
 
     rr:predicateObjectMap
     [ 
-      rr:predicateMap [ rr:constant <http://example.com/成分#ref-植物名;使用部> ] ; 
+      rr:predicateMap [ rr:constant <http://example.com/成分#ref-植物名.使用部> ] ; 
       rr:objectMap [ rr:template "http://example.com/植物/名={植物名};使用部={使用部}" ]
     ]
     .
