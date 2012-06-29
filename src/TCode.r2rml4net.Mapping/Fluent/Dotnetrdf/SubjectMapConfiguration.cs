@@ -50,14 +50,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         #region Overrides of TermMapConfiguration
 
         /// <summary>
-        /// Returns rr:subject
-        /// </summary>
-        protected internal override IUriNode CreateConstantPropertyNode()
-        {
-            return R2RMLMappings.CreateUriNode(R2RMLUris.RrSubjectProperty);
-        }
-
-        /// <summary>
         /// Returns rr:subjectMap
         /// </summary>
         protected internal override IUriNode CreateMapPropertyNode()
