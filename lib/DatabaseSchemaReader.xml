@@ -195,6 +195,12 @@
             </summary>
             <value><c>true</c> if to write project files; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:DatabaseSchemaReader.CodeGen.CodeWriterSettings.IncludeViews">
+            <summary>
+            Gets or sets a value indicating whether to include views.
+            </summary>
+            <value><c>true</c> if include views; otherwise, <c>false</c>.</value>
+        </member>
         <member name="T:DatabaseSchemaReader.CodeGen.CollectionNamer">
             <summary>
             Names collections by adding "Collection" at the end. Or use <see cref="T:DatabaseSchemaReader.CodeGen.PluralizingNamer"/>
@@ -493,6 +499,74 @@
             Either load independent objects (list of Tables, StoredProcedures), fuller information (a Table with all Columns, constraints...), or full database schemas (<see cref="M:DatabaseSchemaReader.DatabaseReader.ReadAll"/>: all tables, views, stored procedures with all information; the DatabaseSchema object will hook up the relationships). Obviously the fuller versions will be slow on moderate to large databases.
             </remarks>
         </member>
+        <member name="T:DatabaseSchemaReader.IDatabaseReader">
+            <summary>
+            Read database schema into schema objects
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.ReadAll">
+            <summary>
+            Gets all of the schema in one call. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.AllUsers">
+            <summary>
+            Gets the users (specifically for Oracle)
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.TableList">
+            <summary>
+            Gets all tables (just names, no columns).
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.AllTables">
+            <summary>
+            Gets all tables (plus constraints, indexes and triggers).
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.AllViews">
+            <summary>
+            Gets all views.
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.Table(System.String)">
+            <summary>
+            Gets the table. If <see cref="P:DatabaseSchemaReader.DatabaseReader.Owner"/> is specified, it is used.
+            </summary>
+            <param name="tableName">Name of the table. Oracle names can be case sensitive.</param>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.StoredProcedureList">
+            <summary>
+            Gets all stored procedures (no arguments, for Oracle no packages)
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.AllStoredProcedures">
+            <summary>
+            Gets all stored procedures (and functions) with their arguments
+            </summary>
+            <remarks>
+            <para>We also get the source (if available)</para>
+            <para>We don't get functions here.</para>
+            <para>In Oracle stored procedures are often in packages. We read the non-packaged stored procedures, then add packaged stored procedures if they have arguments. If they don't have arguments, they are not found.</para>
+            </remarks>
+        </member>
+        <member name="M:DatabaseSchemaReader.IDatabaseReader.DataTypes">
+            <summary>
+            Gets all datatypes (and updates columns/arguments if already loaded)
+            </summary>
+        </member>
+        <member name="P:DatabaseSchemaReader.IDatabaseReader.Owner">
+            <summary>
+            Gets or sets the owner user. Always set it with Oracle (otherwise you'll get SYS, MDSYS etc...)
+            </summary>
+            <value>The user.</value>
+        </member>
+        <member name="P:DatabaseSchemaReader.IDatabaseReader.DatabaseSchema">
+            <summary>
+            Gets the database schema. Only call AFTER calling <see cref="M:DatabaseSchemaReader.IDatabaseReader.ReadAll"/> or one or more other methods such as <see cref="M:DatabaseSchemaReader.IDatabaseReader.AllTables"/>. A collection of Tables, Views and StoredProcedures. Use <see cref="M:DatabaseSchemaReader.DataSchema.DatabaseSchemaFixer.UpdateReferences(DatabaseSchemaReader.DataSchema.DatabaseSchema)"/> to update object references after loaded. Use <see cref="M:DatabaseSchemaReader.DataSchema.DatabaseSchemaFixer.UpdateDataTypes(DatabaseSchemaReader.DataSchema.DatabaseSchema)"/> to add datatypes from DbDataType string after loaded.
+            </summary>
+        </member>
         <member name="M:DatabaseSchemaReader.DatabaseReader.#ctor(System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:DatabaseSchemaReader.DatabaseReader"/> class. For Oracle, use the overload.
@@ -766,6 +840,17 @@
             A column in the database
             </summary>
         </member>
+        <member name="M:DatabaseSchemaReader.DataSchema.DatabaseColumn.#ctor">
+            <summary>
+            Initialize optional properties to default values for a DatabaseColumn
+            </summary>
+        </member>
+        <member name="M:DatabaseSchemaReader.DataSchema.DatabaseColumn.IsNonTrivialIdentity">
+            <summary>
+            Get non-triviality of an identity column
+            </summary>
+            <returns>True if the identity sequence does not start at 1 and increment by 1.</returns>
+        </member>
         <member name="M:DatabaseSchemaReader.DataSchema.DatabaseColumn.ToString">
             <summary>
             Returns a <see cref="T:System.String"/> that represents this instance.
@@ -853,6 +938,16 @@
             <value>
             The name of the table.
             </value>
+        </member>
+        <member name="P:DatabaseSchemaReader.DataSchema.DatabaseColumn.IdentitySeed">
+            <summary>
+            Gets or sets the seed value for an identity column (or equivalent)
+            </summary>
+        </member>
+        <member name="P:DatabaseSchemaReader.DataSchema.DatabaseColumn.IdentityIncrement">
+            <summary>
+            Gets or sets the identity increment for an identity column (or equivalent)
+            </summary>
         </member>
         <member name="P:DatabaseSchemaReader.DataSchema.DatabaseColumn.IsForeignKey">
             <summary>
@@ -3031,6 +3126,11 @@
             Indicates whether schema will be written in DDL
             </summary>
             <value><c>true</c> if schema is written; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:DatabaseSchemaReader.SqlGen.PostgreSql.AutoIncrementWriter">
+            <summary>
+            Turn a column defined as IDENTITY into a PostgreSql sequence
+            </summary>
         </member>
         <member name="T:DatabaseSchemaReader.SqlGen.SqlTranslator">
             <summary>

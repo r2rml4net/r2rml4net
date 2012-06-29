@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
     [TestFixture]
     public class DatabaseSchemaAdapterCommonTests
     {
-        private Mock<DatabaseReader> _databaseReader;
+        private Mock<IDatabaseReader> _databaseReader;
         private Mock<IColumnTypeMapper> _columnTypeMapper;
         private DatabaseSchemaAdapter _adapter;
 
@@ -17,7 +17,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         public void SetupAdapter()
         {
             _columnTypeMapper = new Mock<IColumnTypeMapper>();
-            _databaseReader = new Mock<DatabaseReader>();
+            _databaseReader = new Mock<IDatabaseReader>();
 
             _adapter = new DatabaseSchemaAdapter(_databaseReader.Object, _columnTypeMapper.Object);
         }
