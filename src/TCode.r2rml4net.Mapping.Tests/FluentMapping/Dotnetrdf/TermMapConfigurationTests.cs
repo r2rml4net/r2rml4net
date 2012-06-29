@@ -26,9 +26,6 @@ namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
                                                 CallBase = true
                                             };
             _termMapConfigurationMock
-                .Setup(config => config.CreateConstantPropertyNode())
-                .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectProperty)));
-            _termMapConfigurationMock
                 .Setup(config => config.CreateMapPropertyNode())
                 .Returns(_graph.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)));
             _termMapConfiguration = _termMapConfigurationMock.Object;

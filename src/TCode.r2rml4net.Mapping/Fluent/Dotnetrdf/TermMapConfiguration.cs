@@ -194,10 +194,6 @@ namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
         #endregion
 
         /// <summary>
-        /// Returns a <see cref="IUriNode"/> for the shorcut property as described on http://www.w3.org/TR/r2rml/#constant
-        /// </summary>
-        protected internal abstract IUriNode CreateConstantPropertyNode();
-        /// <summary>
         /// Returns a term map property
         /// </summary>
         /// <returns>one of the following: rr:subjectMap, rr:objectMap, rr:propertyMap or rr:graphMap</returns>
