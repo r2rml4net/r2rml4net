@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using VDS.RDF.Query;
 
-namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     /// <summary>
     /// Implementation of fluent configuration interface for <a href="http://www.w3.org/TR/r2rml/#triples-map">Triples Maps</a>

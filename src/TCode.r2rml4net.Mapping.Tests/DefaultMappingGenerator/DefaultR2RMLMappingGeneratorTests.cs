@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
-using TCode.r2rml4net.Mapping.Fluent.Dotnetrdf;
+using TCode.r2rml4net.Mapping.Dotnetrdf;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 using System.IO;

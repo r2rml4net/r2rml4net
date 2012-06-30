@@ -1,4 +1,4 @@
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Interface for setting term map's term type. More info on http://www.w3.org/TR/r2rml/#dfn-term-type

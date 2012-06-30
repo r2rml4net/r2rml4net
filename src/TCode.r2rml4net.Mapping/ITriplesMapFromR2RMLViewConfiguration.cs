@@ -1,6 +1,6 @@
 using System;
 
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration of Triples Map, which source is a R2RML View as described on http://www.w3.org/TR/r2rml/#r2rml-views

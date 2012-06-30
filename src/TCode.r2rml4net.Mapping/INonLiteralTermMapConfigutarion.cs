@@ -1,4 +1,4 @@
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration of term maps, which cannot be of term type rr:Literal. See http://www.w3.org/TR/r2rml/#termtype

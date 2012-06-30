@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Interface for creating configuration of term maps as described on http://www.w3.org/TR/r2rml/#term-map
