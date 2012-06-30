@@ -4,10 +4,16 @@ using DatabaseSchemaReader.DataSchema;
 
 namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 {
+    /// <summary>
+    /// Implementation of <see cref="IColumnTypeMapper"/> which maps Microsoft SQL Server datatypes
+    /// </summary>
     public class MSSQLServerColumTypeMapper : IColumnTypeMapper
     {
         #region Implementation of IColumnTypeMapper
 
+        /// <summary>
+        /// Gets a member of <see cref="R2RMLType"/> enumeration for a given MS SQL Server <see cref="DataType"/>
+        /// </summary>
         public R2RMLType GetColumnTypeFromColumn(DataType dataType)
         {
             if (dataType != null)
