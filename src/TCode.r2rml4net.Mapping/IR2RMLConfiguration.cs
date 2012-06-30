@@ -1,4 +1,4 @@
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Entrypoint to all of R2RML fluent configuration interfaces

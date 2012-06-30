@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     /// <summary>
     /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF

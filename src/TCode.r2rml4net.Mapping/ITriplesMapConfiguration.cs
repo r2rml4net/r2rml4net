@@ -1,5 +1,6 @@
 ﻿using System;
-namespace TCode.r2rml4net.Mapping.Fluent
+
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration of the Triples Map graph as described on http://www.w3.org/TR/r2rml/#triples-map

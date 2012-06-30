@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {

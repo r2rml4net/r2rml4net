@@ -1,7 +1,7 @@
 ﻿using System;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Fluent.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     /// <summary>
     /// Base for DotNetRDF-backed fluent R2RML configuration

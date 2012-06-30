@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using System.Web;
 using TCode.r2rml4net.RDF;

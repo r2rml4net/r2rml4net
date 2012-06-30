@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration for term maps which can be of term-type rr:Literal. See http://www.w3.org/TR/r2rml/#termtype

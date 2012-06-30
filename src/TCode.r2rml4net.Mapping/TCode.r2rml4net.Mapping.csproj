@@ -55,26 +55,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultR2RMLMappingGenerator.cs" />
-    <Compile Include="Fluent\Dotnetrdf\BaseConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\GraphMapConfiguration.cs" />
-    <Compile Include="Fluent\INonLiteralTermMapConfigutarion.cs" />
-    <Compile Include="Fluent\ILiteralTermMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\ObjectMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\PredicateMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\PredicateObjectMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\SubjectMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\TermMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\TriplesMapConfiguration.cs" />
-    <Compile Include="Fluent\IObjectMapConfiguration.cs" />
-    <Compile Include="Fluent\IPredicateObjectMapConfiguration.cs" />
-    <Compile Include="Fluent\IR2RMLConfiguration.cs" />
-    <Compile Include="Fluent\ISubjectMapConfiguration.cs" />
-    <Compile Include="Fluent\ITermMapConfiguration.cs" />
-    <Compile Include="Fluent\ITermTypeConfiguration.cs" />
-    <Compile Include="Fluent\ITriplesMapConfiguration.cs" />
-    <Compile Include="Fluent\Dotnetrdf\R2RMLConfiguration.cs" />
-    <Compile Include="Fluent\ITriplesMapFromR2RMLViewConfiguration.cs" />
-    <Compile Include="Fluent\R2RMLUris.cs" />
+    <Compile Include="Dotnetrdf\BaseConfiguration.cs" />
+    <Compile Include="Dotnetrdf\GraphMapConfiguration.cs" />
+    <Compile Include="INonLiteralTermMapConfigutarion.cs" />
+    <Compile Include="ILiteralTermMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\ObjectMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\PredicateMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\PredicateObjectMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\SubjectMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\TermMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\TriplesMapConfiguration.cs" />
+    <Compile Include="IObjectMapConfiguration.cs" />
+    <Compile Include="IPredicateObjectMapConfiguration.cs" />
+    <Compile Include="IR2RMLConfiguration.cs" />
+    <Compile Include="ISubjectMapConfiguration.cs" />
+    <Compile Include="ITermMapConfiguration.cs" />
+    <Compile Include="ITermTypeConfiguration.cs" />
+    <Compile Include="ITriplesMapConfiguration.cs" />
+    <Compile Include="Dotnetrdf\R2RMLConfiguration.cs" />
+    <Compile Include="ITriplesMapFromR2RMLViewConfiguration.cs" />
+    <Compile Include="R2RMLUris.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

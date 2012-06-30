@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace TCode.r2rml4net.Mapping.Fluent
+﻿namespace TCode.r2rml4net.Mapping
 {
     class R2RMLUris
     {
