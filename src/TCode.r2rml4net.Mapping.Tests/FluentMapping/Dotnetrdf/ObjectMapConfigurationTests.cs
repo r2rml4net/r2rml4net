@@ -179,5 +179,27 @@ namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
             Assert.IsNull(map.Object);
             Assert.IsNull(map.Template);
         }
+
+        [Test]
+        public void CanBeOfTermTypeLiteral()
+        {
+            // when
+            _objectMap.TermType.IsLiteral();
+
+            // then
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.GetURI().ToString());
+        }
+
+        [Test]
+        public void TermTypeCannotBeSetTwice()
+        {
+            // when
+            _objectMap.TermType.IsLiteral();
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsBlankNode());
+            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsIRI());
+            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsLiteral());
+        }
     }
 }
