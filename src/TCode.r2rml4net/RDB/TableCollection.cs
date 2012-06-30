@@ -48,6 +48,9 @@ namespace TCode.r2rml4net.RDB
 
         #region Implementation of IEnumerable
 
+        /// <summary>
+        /// Gets enumerator for <see cref="IEnumerable{T}"/> of <see cref="TableMetadata"/>
+        /// </summary>
         public IEnumerator<TableMetadata> GetEnumerator()
         {
             return _tables.GetEnumerator();
@@ -68,6 +71,9 @@ namespace TCode.r2rml4net.RDB
             _tables.Add(table);
         }
 
+        /// <summary>
+        /// Gets the table count
+        /// </summary>
         public int Count
         {
             get { return _tables.Count; }
