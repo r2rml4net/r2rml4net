@@ -11,33 +11,34 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class R2RMLLoaderTests
     {
-        private const string testGraph = @"@prefix rr: <http://www.w3.org/ns/r2rml#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+        private const string TestGraph =
+            @"@prefix rr: <http://www.w3.org/ns/r2rml#> .
+                                        @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+                                        @base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
 
-<StudentTriplesMap>
-     a rr:TriplesMap;
+                                        <StudentTriplesMap>
+                                             a rr:TriplesMap;
     
-    rr:logicalTable [ rr:tableName \"Student\"; ];
+                                            rr:logicalTable [ rr:tableName ""Student""; ];
 
-    rr:subjectMap 
-	[ 
-	  rr:termType rr:BlankNode;  
-	  rr:class <http://example.com/Student>
-	];
+                                            rr:subjectMap 
+	                                        [ 
+	                                          rr:termType rr:BlankNode;  
+	                                          rr:class <http://example.com/Student>
+	                                        ];
 
-    rr:predicateObjectMap
-    [ 
-      rr:predicateMap	[ rr:constant <http://example.com/Student#Name> ] ;
-      rr:objectMap		[ rr:column \"Name\" ]
-    ]
-    .";
+                                            rr:predicateObjectMap
+                                            [ 
+                                              rr:predicateMap	[ rr:constant <http://example.com/Student#Name> ] ;
+                                              rr:objectMap		[ rr:column ""Name"" ]
+                                            ]
+                                            .";
 
         [Test]
         public void CanLoadR2RMLFromString()
         {
             // when
-            IR2RML mappings = R2RMLLoader.Load(testGraph);
+            IR2RML mappings = R2RMLLoader.Load(TestGraph);
 
             // then
             Assert.IsNotNull(mappings);
@@ -51,7 +52,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             {
                 using (StreamWriter writer = new StreamWriter(graphStream))
                 {
-                    writer.Write(testGraph);
+                    writer.Write(TestGraph);
                 }
                 graphStream.Seek(0, SeekOrigin.Begin);
 

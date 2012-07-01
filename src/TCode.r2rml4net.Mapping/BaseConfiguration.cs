@@ -37,5 +37,11 @@ namespace TCode.r2rml4net.Mapping
             if (!R2RMLMappings.NamespaceMap.HasNamespace("rr"))
                 R2RMLMappings.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
         }
+
+        /// <summary>
+        /// Reads all maps contained in the current configuration and creates configuration objects
+        /// </summary>
+        /// <remarks>Used in loading configuration from an exinsting graph</remarks>
+        protected internal abstract void RecursiveInitializeSubMapsFromCurrentGraph();
     }
 }

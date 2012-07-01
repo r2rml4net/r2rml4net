@@ -80,5 +80,14 @@ namespace TCode.r2rml4net.Mapping
         }
 
         #endregion
+
+        #region Overrides of BaseConfiguration
+
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
