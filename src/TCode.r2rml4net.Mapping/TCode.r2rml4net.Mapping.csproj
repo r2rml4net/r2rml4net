@@ -55,16 +55,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultR2RMLMappingGenerator.cs" />
-    <Compile Include="Dotnetrdf\BaseConfiguration.cs" />
-    <Compile Include="Dotnetrdf\GraphMapConfiguration.cs" />
+    <Compile Include="BaseConfiguration.cs" />
+    <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />
     <Compile Include="ILiteralTermMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\ObjectMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\PredicateMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\PredicateObjectMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\SubjectMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\TermMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\TriplesMapConfiguration.cs" />
+    <Compile Include="ObjectMapConfiguration.cs" />
+    <Compile Include="PredicateMapConfiguration.cs" />
+    <Compile Include="PredicateObjectMapConfiguration.cs" />
+    <Compile Include="R2RMLLoader.cs" />
+    <Compile Include="SubjectMapConfiguration.cs" />
+    <Compile Include="TermMapConfiguration.cs" />
+    <Compile Include="TriplesMapConfiguration.cs" />
     <Compile Include="IObjectMapConfiguration.cs" />
     <Compile Include="IPredicateObjectMapConfiguration.cs" />
     <Compile Include="IR2RMLConfiguration.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="ITermMapConfiguration.cs" />
     <Compile Include="ITermTypeConfiguration.cs" />
     <Compile Include="ITriplesMapConfiguration.cs" />
-    <Compile Include="Dotnetrdf\R2RMLConfiguration.cs" />
+    <Compile Include="R2RMLConfiguration.cs" />
     <Compile Include="ITriplesMapFromR2RMLViewConfiguration.cs" />
     <Compile Include="R2RMLUris.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Dotnetrdf
+namespace TCode.r2rml4net.Mapping
 {
     class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
