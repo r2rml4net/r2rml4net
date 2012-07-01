@@ -6,7 +6,7 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMap
     {
-        internal GraphMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
+        internal GraphMapConfiguration(INode parentMapNode, IGraph r2RMLMappings) : base(parentMapNode, r2RMLMappings)
         {
         }
 

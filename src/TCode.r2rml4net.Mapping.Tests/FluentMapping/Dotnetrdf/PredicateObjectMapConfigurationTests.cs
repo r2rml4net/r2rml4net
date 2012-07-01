@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Dotnetrdf;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
@@ -50,6 +51,19 @@ namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
             Assert.AreNotSame(propertyMap1, propertyMap2);
             Assert.IsInstanceOf<TermMapConfiguration>(propertyMap1);
             Assert.IsInstanceOf<TermMapConfiguration>(propertyMap2);
+        }
+
+        [Test]
+        public void CanCreateMultipleGraphMap()
+        {
+            // when
+            IGraphMap graphMap1 = _predicateObjectMap.CreateGraphMap();
+            IGraphMap graphMap2 = _predicateObjectMap.CreateGraphMap();
+
+            // then
+            Assert.AreNotSame(graphMap1, graphMap2);
+            Assert.IsInstanceOf<TermMapConfiguration>(graphMap1);
+            Assert.IsInstanceOf<TermMapConfiguration>(graphMap2);
         }
     }
 }

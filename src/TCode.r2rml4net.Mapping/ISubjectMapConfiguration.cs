@@ -1,4 +1,5 @@
 using System;
+using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -16,5 +17,9 @@ namespace TCode.r2rml4net.Mapping
         /// All classes added to this subject map
         /// </summary>
         Uri[] ClassIris { get; }
+        /// <summary>
+        /// Creates an attached <see cref="IGraphMap"/>
+        /// </summary>
+        IGraphMap CreateGraphMap();
     }
 }

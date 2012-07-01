@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Dotnetrdf
@@ -8,8 +9,9 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
         private readonly INode _predicateObjectMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
         private readonly IList<PredicateMapConfiguration> _propertyMaps = new List<PredicateMapConfiguration>();
+        private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
-        internal PredicateObjectMapConfiguration(IUriNode triplesMapNode, IGraph r2RMLMappings)
+        internal PredicateObjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
             _predicateObjectMapNode = R2RMLMappings.CreateBlankNode();
@@ -30,6 +32,13 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
             var propertyMap = new PredicateMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _propertyMaps.Add(propertyMap);
             return propertyMap;
+        }
+
+        public IGraphMap CreateGraphMap()
+        {
+            var graphMap = new GraphMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            _graphMaps.Add(graphMap);
+            return graphMap;
         }
 
         #endregion
