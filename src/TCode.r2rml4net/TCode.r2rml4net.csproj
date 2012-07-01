@@ -77,6 +77,7 @@
     <Compile Include="RDF\ISubjectMap.cs" />
     <Compile Include="RDF\ITermMap.cs" />
     <Compile Include="RDF\ITermType.cs" />
+    <Compile Include="RDF\ITriplesMap.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
   </ItemGroup>
   <ItemGroup>
