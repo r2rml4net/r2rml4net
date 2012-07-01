@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
@@ -7,7 +9,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF
     /// </summary>
-    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration
+    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration, IR2RML
     {
         internal static Uri DefaultBaseUri
         {
@@ -28,6 +30,38 @@ namespace TCode.r2rml4net.Mapping
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
+
+        internal R2RMLConfiguration(IGraph mappingsGraph)
+            : base(mappingsGraph)
+        {
+
+        }
+
+        #region Overrides of BaseConfiguration
+
+        /// <summary>
+        /// Creates triples maps configuration objects for the current mapping file
+        /// </summary>
+        /// <remarks>Used in loading configuration from an exinsting graph</remarks>
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        {
+            if (R2RMLMappings == null)
+                return;
+
+            var rdfType = R2RMLMappings.CreateUriNode(R2RMLUris.RdfType);
+            var triplesMapClass = R2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
+            var triplesMaps = R2RMLMappings.GetTriplesWithPredicateObject(rdfType, triplesMapClass);
+
+            foreach (IUriNode triplesMap in triplesMaps.Select(triple => triple.Subject))
+            {
+                TriplesMapConfiguration triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
+                triplesMapConfiguration.Uri = triplesMap.Uri;
+                triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
+                _triplesMaps.Add(triplesMapConfiguration);
+            }
+        }
+
+        #endregion
 
         void R2RMLMappingsChanged(object sender, GraphEventArgs args)
         {

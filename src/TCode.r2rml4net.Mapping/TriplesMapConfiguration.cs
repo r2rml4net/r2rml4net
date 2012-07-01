@@ -177,6 +177,7 @@ namespace TCode.r2rml4net.Mapping
                 
                 return new Uri(Uri.EscapeUriString(_triplesMapUri));
             }
+            internal set { _triplesMapUri = value.ToString(); }
         }
 
         private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
@@ -288,5 +289,14 @@ namespace TCode.r2rml4net.Mapping
             if (Uri == null)
                 throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
         }
+
+        #region Overrides of BaseConfiguration
+
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
