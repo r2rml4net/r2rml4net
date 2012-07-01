@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -10,7 +11,9 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
     /// </summary>
     internal class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion, ISubjectMap
     {
-        internal SubjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
+        private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
+
+        internal SubjectMapConfiguration(INode parentMapNode, IGraph r2RMLMappings) : base(parentMapNode, r2RMLMappings)
         {
         }
 
@@ -43,6 +46,13 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
                 var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
+        }
+
+        public IGraphMap CreateGraphMap()
+        {
+            var graphMap = new GraphMapConfiguration(TermMapNode, R2RMLMappings);
+            _graphMaps.Add(graphMap);
+            return graphMap;
         }
 
         #endregion

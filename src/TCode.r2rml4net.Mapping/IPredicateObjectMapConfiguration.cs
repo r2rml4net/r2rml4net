@@ -1,4 +1,6 @@
-﻿namespace TCode.r2rml4net.Mapping
+﻿using TCode.r2rml4net.RDF;
+
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration for predicate-object maps described on http://www.w3.org/TR/r2rml/#predicate-object-map
@@ -15,5 +17,9 @@
         /// </summary>
         /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many predicate maps</remarks>
         ITermMapConfiguration CreatePredicateMap();
+        /// <summary>
+        /// Creates an attached <see cref="IGraphMap"/>
+        /// </summary>
+        IGraphMap CreateGraphMap();
     }
 }

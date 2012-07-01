@@ -24,10 +24,10 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
 
         /// <summary>
         /// </summary>
-        protected TermMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
+        protected TermMapConfiguration(INode parentMapNode, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
-            ParentMapNode = triplesMapNode;
+            ParentMapNode = parentMapNode;
             TermMapNode = R2RMLMappings.CreateBlankNode();
         }
 

@@ -8,7 +8,7 @@ namespace TCode.r2rml4net.Mapping.Dotnetrdf
 {
     internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, IObjectMap
     {
-        internal ObjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings) : base(triplesMapNode, r2RMLMappings)
+        internal ObjectMapConfiguration(INode parentMapNode, IGraph r2RMLMappings) : base(parentMapNode, r2RMLMappings)
         {
         }
 
