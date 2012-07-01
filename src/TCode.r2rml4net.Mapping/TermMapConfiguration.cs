@@ -3,7 +3,7 @@ using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Dotnetrdf
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 

@@ -73,6 +73,7 @@
     <Compile Include="RDF\InvalidTriplesMapException.cs" />
     <Compile Include="RDF\IObjectMap.cs" />
     <Compile Include="RDF\IPredicateMap.cs" />
+    <Compile Include="RDF\IR2RML.cs" />
     <Compile Include="RDF\ISubjectMap.cs" />
     <Compile Include="RDF\ITermMap.cs" />
     <Compile Include="RDF\ITermType.cs" />

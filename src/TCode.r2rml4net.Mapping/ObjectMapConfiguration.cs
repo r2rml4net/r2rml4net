@@ -4,7 +4,7 @@ using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Dotnetrdf
+namespace TCode.r2rml4net.Mapping
 {
     internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, IObjectMap
     {
