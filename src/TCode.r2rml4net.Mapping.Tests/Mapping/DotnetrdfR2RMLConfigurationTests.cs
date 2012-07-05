@@ -5,7 +5,7 @@ using Moq;
 using NUnit.Framework;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Tests.FluentMapping.Dotnetrdf
+namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests

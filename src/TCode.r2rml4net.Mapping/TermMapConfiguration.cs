@@ -20,7 +20,7 @@ namespace TCode.r2rml4net.Mapping
         /// or subject map (for graph maps)
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
-        internal INode TermMapNode { get; private set; }
+        protected internal INode TermMapNode { get; protected set; }
 
         /// <summary>
         /// </summary>
