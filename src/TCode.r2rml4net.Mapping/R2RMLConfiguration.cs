@@ -115,5 +115,14 @@ namespace TCode.r2rml4net.Mapping
                 return _graphCopy;
             }
         }
+
+        #region Implementation of IR2RML
+
+        public IEnumerable<ITriplesMap> TriplesMaps
+        {
+            get { return _triplesMaps; }
+        }
+
+        #endregion
     }
 }
