@@ -56,18 +56,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\GraphMapConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\PredicateMapConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\ObjectMapConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\PredicateObjectMapConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\SubjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
+    <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
+    <Compile Include="Mapping\ObjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\PredicateObjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\DotnetrdfR2RMLConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\TermMapConfigurationTests.cs" />
-    <Compile Include="FluentMapping\Dotnetrdf\TriplesMapConfigurationTests.cs" />
+    <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
+    <Compile Include="Mapping\TermMapConfigurationTests.cs" />
+    <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
     <Compile Include="RelationalExampleMappings.cs" />
     <Compile Include="TestExtensions.cs" />
     <Compile Include="UriConstants.cs" />

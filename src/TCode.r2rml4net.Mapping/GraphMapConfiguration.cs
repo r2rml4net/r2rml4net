@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -37,7 +38,10 @@ namespace TCode.r2rml4net.Mapping
 
         protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
         {
-            throw new NotImplementedException();
+            var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
+            var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, graphMapPropety);
+
+            TermMapNode = graphTriples.Single().Object;
         }
 
         #endregion
