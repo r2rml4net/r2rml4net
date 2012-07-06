@@ -84,13 +84,26 @@ namespace TCode.r2rml4net.Mapping
             get { return ConstantValue; }
         }
 
+        public IEnumerable<IGraphMap> Graphs
+        {
+            get { return _graphMaps; }
+        }
+
         #endregion
 
         #region Overrides of BaseConfiguration
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            throw new NotImplementedException();
+            var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
+            var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, graphMapPropety);
+
+            foreach (var triple in graphTriples)
+            {
+                var graphMap = new GraphMapConfiguration(TermMapNode, R2RMLMappings);
+                graphMap.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
+                _graphMaps.Add(graphMap);
+            }
         }
 
         #endregion

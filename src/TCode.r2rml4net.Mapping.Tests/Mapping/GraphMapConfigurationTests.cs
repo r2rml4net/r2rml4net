@@ -38,16 +38,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _graphMap.TermMapNode,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _graphMap.Graph);
+            Assert.AreEqual(uri, _graphMap.GraphUri);
         }
 
-        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof (InvalidTriplesMapException))]
         public void GraphMapCannotBeOfTypeLiteral()
         {
             _graphMap.TermType.IsLiteral();
         }
 
-        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof (InvalidTriplesMapException))]
         public void GraphMapCannotBeOfTypeBlankNode()
         {
             _graphMap.TermType.IsBlankNode();
@@ -56,15 +56,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void GraphUriIsNullByDefault()
         {
-            Assert.IsNull(_graphMap.Graph);
+            Assert.IsNull(_graphMap.GraphUri);
         }
-        
+
         [Test]
         public void CanBeInitializedWithExistingGraph()
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
                                    @prefix rr: <http://www.w3.org/ns/r2rml#>.
 
                                    ex:triplesMap rr:subjectMap ex:subject .
@@ -75,11 +76,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // when
             _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
+            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", _graphMap.Template);
-            Assert.AreEqual("http://www.example.com/subject", ((IUriNode)_graphMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual("http://www.example.com/subject", ((IUriNode) _graphMap.ParentMapNode).Uri.ToString());
         }
 
         [Test]
@@ -87,7 +88,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
                                    @prefix rr: <http://www.w3.org/ns/r2rml#>.
 
                                    ex:triplesMap rr:subjectMap ex:subject .
@@ -98,18 +100,19 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // when
             _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
+            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);
-        }    
+        }
 
         [Test]
         public void CanBeInitializedWithConstantValueUsingShortcut()
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
                                    @prefix rr: <http://www.w3.org/ns/r2rml#>.
 
                                    ex:triplesMap rr:subjectMap ex:subject .
@@ -120,30 +123,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // when
             _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
+            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);
-        }
-
-        [Test]
-        public void InitializationWithoutGraphMapThrowsException()
-        {
-            // given
-            IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"" .");
-
-            // when
-            _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-
-            // then
-            Assert.Throws<InvalidOperationException>(() => _graphMap.RecursiveInitializeSubMapsFromCurrentGraph());
         }
     }
 }

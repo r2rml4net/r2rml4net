@@ -41,8 +41,9 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Reads all maps contained in the current configuration and creates configuration objects
         /// </summary>
+        /// <param name="currentNode"> </param>
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
-        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
         {
             InitializeSubMapsFromCurrentGraph();
         }

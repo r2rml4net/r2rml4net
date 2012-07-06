@@ -177,7 +177,6 @@ namespace TCode.r2rml4net.Mapping
                 
                 return new Uri(Uri.EscapeUriString(_triplesMapUri));
             }
-            internal set { _triplesMapUri = value.ToString(); }
         }
 
         private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
@@ -291,6 +290,15 @@ namespace TCode.r2rml4net.Mapping
         }
 
         #region Overrides of BaseConfiguration
+
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
+        {
+            var uriNode = currentNode as IUriNode;
+            if (uriNode != null)
+                _triplesMapUri = (uriNode).Uri.ToString();
+
+            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
+        }
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {

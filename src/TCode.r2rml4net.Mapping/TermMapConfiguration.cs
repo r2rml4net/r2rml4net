@@ -28,7 +28,7 @@ WHERE {{ }}";
         /// or subject map (for graph maps)
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
-        protected internal INode TermMapNode { get; protected set; }
+        protected internal INode TermMapNode { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -203,10 +203,14 @@ WHERE {{ }}";
 
         #region Overrides of BaseConfiguration
         
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
         {
+            if(currentNode == null)
+                throw new ArgumentNullException("currentNode");
+
             EnsureGraphHasNoShortcutProperties();
-            base.RecursiveInitializeSubMapsFromCurrentGraph();
+            TermMapNode = currentNode;
+            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         } 
 
         #endregion

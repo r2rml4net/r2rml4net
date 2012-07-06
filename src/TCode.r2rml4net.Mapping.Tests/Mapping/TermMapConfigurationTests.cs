@@ -160,5 +160,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             Assert.IsNull(_termMapConfiguration.ConstantValue);
         }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void MustBeInitializedWithANode()
+        {
+            _termMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
+        }
     }
 }
