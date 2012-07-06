@@ -1,8 +1,5 @@
 ﻿using System;
 using VDS.RDF;
-using VDS.RDF.Parsing;
-using VDS.RDF.Query.Datasets;
-using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping
 {

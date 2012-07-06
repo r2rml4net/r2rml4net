@@ -125,5 +125,25 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);
         }
+
+        [Test]
+        public void InitializationWithoutGraphMapThrowsException()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+                                   ex:triplesMap rr:subjectMap ex:subject .
+  
+                                   ex:subject 
+	                                   rr:template ""http://data.example.com/employee/{EMPNO}"" .");
+
+            // when
+            _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
+
+            // then
+            Assert.Throws<InvalidOperationException>(() => _graphMap.RecursiveInitializeSubMapsFromCurrentGraph());
+        }
     }
 }

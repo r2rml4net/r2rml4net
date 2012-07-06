@@ -49,7 +49,12 @@ namespace TCode.r2rml4net.Mapping
             var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
             var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, graphMapPropety);
 
-            TermMapNode = graphTriples.Single().Object;
+            Triple graphTriple = graphTriples.SingleOrDefault();
+
+            if (graphTriple != null)
+                TermMapNode = graphTriple.Object;
+            else
+                throw new InvalidOperationException(string.Format("Cannot initialize. Subject Map {0} has no graph map", ParentMapNode));
         }
 
         #endregion
