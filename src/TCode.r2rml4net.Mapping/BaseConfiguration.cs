@@ -1,5 +1,8 @@
 ﻿using System;
 using VDS.RDF;
+using VDS.RDF.Parsing;
+using VDS.RDF.Query.Datasets;
+using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -42,6 +45,11 @@ namespace TCode.r2rml4net.Mapping
         /// Reads all maps contained in the current configuration and creates configuration objects
         /// </summary>
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
-        protected internal abstract void RecursiveInitializeSubMapsFromCurrentGraph();
+        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph()
+        {
+            InitializeSubMapsFromCurrentGraph();
+        }
+
+        protected abstract void InitializeSubMapsFromCurrentGraph();
     }
 }

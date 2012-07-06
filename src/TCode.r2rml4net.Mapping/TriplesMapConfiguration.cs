@@ -292,7 +292,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Overrides of BaseConfiguration
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected override void InitializeSubMapsFromCurrentGraph()
         {
             throw new NotImplementedException();
         }

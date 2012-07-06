@@ -67,6 +67,11 @@ namespace TCode.r2rml4net.Mapping
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrSubjectMapProperty);
         }
 
+        protected internal override IUriNode CreateShortcutPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrSubjectProperty);
+        }
+
         #endregion
 
         #region Implementation of ISubjectMap
@@ -83,7 +88,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Overrides of BaseConfiguration
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected override void InitializeSubMapsFromCurrentGraph()
         {
             throw new NotImplementedException();
         }
