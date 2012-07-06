@@ -41,6 +41,11 @@ namespace TCode.r2rml4net.Mapping
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty);
         }
 
+        protected internal override IUriNode CreateShortcutPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectProperty);
+        }
+
         /// <summary>
         /// Overriden, because object maps can be of term type rr:Literal
         /// </summary>
@@ -152,7 +157,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Overrides of BaseConfiguration
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected override void InitializeSubMapsFromCurrentGraph()
         {
             throw new NotImplementedException();
         }

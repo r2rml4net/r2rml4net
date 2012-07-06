@@ -43,7 +43,7 @@ namespace TCode.r2rml4net.Mapping
         /// Creates triples maps configuration objects for the current mapping file
         /// </summary>
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected override void InitializeSubMapsFromCurrentGraph()
         {
             if (R2RMLMappings == null)
                 return;

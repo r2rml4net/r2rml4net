@@ -2,6 +2,9 @@
 using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
+using VDS.RDF.Parsing;
+using VDS.RDF.Query.Datasets;
+using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -16,6 +19,11 @@ namespace TCode.r2rml4net.Mapping
         protected internal override IUriNode CreateMapPropertyNode()
         {
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
+        }
+
+        protected internal override IUriNode CreateShortcutPropertyNode()
+        {
+            return R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphPropety);
         }
 
         public override ITermMapConfiguration IsBlankNode()
@@ -36,7 +44,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Overrides of BaseConfiguration
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        protected override void InitializeSubMapsFromCurrentGraph()
         {
             var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
             var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(ParentMapNode, graphMapPropety);
