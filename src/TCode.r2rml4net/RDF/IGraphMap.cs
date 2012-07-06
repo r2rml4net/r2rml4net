@@ -9,8 +9,8 @@ namespace TCode.r2rml4net.RDF
     public interface IGraphMap : ITermMap
     {
         /// <summary>
-        /// Get the Graph URI or null if no URI has been set
+        /// Get the GraphUri URI or null if no URI has been set
         /// </summary>
-        Uri Graph { get; }
+        Uri GraphUri { get; }
     }
 }

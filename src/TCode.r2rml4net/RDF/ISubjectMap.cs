@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TCode.r2rml4net.RDF
 {
@@ -12,5 +13,7 @@ namespace TCode.r2rml4net.RDF
         /// Gets the subject URI or null if not set
         /// </summary>
         Uri Subject { get; }
+
+        IEnumerable<IGraphMap> Graphs { get; }
     }
 }

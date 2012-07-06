@@ -55,8 +55,7 @@ namespace TCode.r2rml4net.Mapping
             foreach (IUriNode triplesMap in triplesMaps.Select(triple => triple.Subject))
             {
                 TriplesMapConfiguration triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
-                triplesMapConfiguration.Uri = triplesMap.Uri;
-                triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
+                triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triplesMap);
                 _triplesMaps.Add(triplesMapConfiguration);
             }
         }

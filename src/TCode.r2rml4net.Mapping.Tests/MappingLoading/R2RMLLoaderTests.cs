@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class R2RMLLoaderTests
     {
-        #region Simple Test Graph
+        #region Simple Test GraphUri
         private const string TestGraph =
             @"@prefix rr: <http://www.w3.org/ns/r2rml#> .
                                         @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
