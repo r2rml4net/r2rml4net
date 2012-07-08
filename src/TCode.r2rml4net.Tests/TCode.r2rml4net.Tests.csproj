@@ -39,17 +39,18 @@
     <Reference Include="DatabaseSchemaReader">
       <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
     </Reference>
-    <Reference Include="dotNetRDF">
-      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\dotNetRDF.dll</HintPath>
+    <Reference Include="dotNetRDF, Version=0.7.0.2246, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\dotNetRDF.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\dotNetRDF.0.6.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit-gui-runner">
       <HintPath>..\packages\NUnit.Runners.2.6.0.12051\tools\lib\nunit-gui-runner.dll</HintPath>
