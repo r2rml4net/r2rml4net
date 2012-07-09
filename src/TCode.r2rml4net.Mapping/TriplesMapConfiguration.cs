@@ -15,7 +15,7 @@ namespace TCode.r2rml4net.Mapping
     internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration, ITriplesMap
     {
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private string _triplesMapUri;
+        private INode _triplesMapNode;
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<IPredicateObjectMapConfiguration> _propertyObjectMaps = new List<IPredicateObjectMapConfiguration>();
 
@@ -33,17 +33,20 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (_triplesMapUri != null)
+                if (_triplesMapNode != null)
                 {
-                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(string.Format(@"
-                                    PREFIX rr: <http://www.w3.org/ns/r2rml#>
+                    var sparqlQuery = new SparqlParameterizedString(
+@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 
-                                    SELECT ?tableName
-                                    WHERE 
-                                    {{
-                                      <{0}> rr:logicalTable ?lt .
-                                      ?lt rr:tableName ?tableName
-                                    }}", _triplesMapUri));
+SELECT ?tableName
+WHERE 
+{{
+    @triplesMap rr:logicalTable ?lt .
+    ?lt rr:tableName ?tableName
+}}");
+
+                    sparqlQuery.SetParameter("triplesMap", _triplesMapNode);
+                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
 
                     if (result.Count > 1)
                         throw new InvalidTriplesMapException("Triples map contains multiple table names", Uri);
@@ -96,8 +99,7 @@ namespace TCode.r2rml4net.Mapping
 
         private void AssertTableNameTriples(string tablename)
         {
-            // TODO: refactor with new version of dotNetRDF
-            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, tablename);
+            _triplesMapNode = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -110,8 +112,7 @@ namespace TCode.r2rml4net.Mapping
 
         private void AssertSqlQueryTriples(string sqlQuery)
         {
-            // TODO: refactor for something else than GUID
-            _triplesMapUri = string.Format("{0}{1}TriplesMap", R2RMLMappings.BaseUri, Guid.NewGuid());
+            _triplesMapNode = R2RMLMappings.CreateBlankNode();
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -129,17 +130,19 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (_triplesMapUri != null)
+                if (_triplesMapNode != null)
                 {
-                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(string.Format(@"
-                                    PREFIX rr: <http://www.w3.org/ns/r2rml#>
+                    var sparqlQuery = new SparqlParameterizedString(
+@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 
-                                    SELECT ?sqlQuery
-                                    WHERE 
-                                    {{
-                                      <{0}> rr:logicalTable ?lt .
-                                      ?lt rr:sqlQuery ?sqlQuery
-                                    }}", _triplesMapUri));
+SELECT ?sqlQuery
+WHERE 
+{{
+    @triplesMap rr:logicalTable ?lt .
+    ?lt rr:sqlQuery ?sqlQuery
+}}");
+                    sparqlQuery.SetParameter("triplesMap", _triplesMapNode);
+                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
 
                     if (result.Count > 1)
                         throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", Uri);
@@ -172,23 +175,22 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_triplesMapUri))
+                if (_triplesMapNode== null || !(_triplesMapNode is IUriNode))
                     return null;
-                
-                return new Uri(Uri.EscapeUriString(_triplesMapUri));
+
+                return (_triplesMapNode as IUriNode).Uri;
             }
         }
 
         private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
         {
-            var tripleMap = R2RMLMappings.CreateUriNode(Uri);
             var tripleMapClass = R2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
             var type = R2RMLMappings.CreateUriNode(R2RMLUris.RdfType);
             var logicalTable = R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty);
             tableDefinition = R2RMLMappings.CreateBlankNode();
 
-            R2RMLMappings.Assert(tripleMap, type, tripleMapClass);
-            R2RMLMappings.Assert(tripleMap, logicalTable, tableDefinition);
+            R2RMLMappings.Assert(_triplesMapNode, type, tripleMapClass);
+            R2RMLMappings.Assert(_triplesMapNode, logicalTable, tableDefinition);
         }
 
         /// <summary>
@@ -268,11 +270,8 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (Uri == null)
-                    throw new Exception("No TriplesMap URI!");
-
                 var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
-                    R2RMLMappings.CreateUriNode(Uri),
+                    _triplesMapNode,
                     R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty)
                     ).ToArray();
 
@@ -291,12 +290,12 @@ namespace TCode.r2rml4net.Mapping
 
         #region Overrides of BaseConfiguration
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
         {
-            var uriNode = currentNode as IUriNode;
-            if (uriNode != null)
-                _triplesMapUri = (uriNode).Uri.ToString();
+            if(currentNode == null)
+                throw new ArgumentNullException("currentNode");
 
+            _triplesMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 

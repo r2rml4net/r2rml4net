@@ -15,7 +15,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                return new Uri("http://r2rml.net/mappings#");
+                return new Uri("http://r2rml.net/mappings/");
             }
         }
 

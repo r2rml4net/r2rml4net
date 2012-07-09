@@ -15,10 +15,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [SetUp]
         public void Setup()
         {
-            new Mock<Graph>
-                {
-                    CallBase = true
-                };
             _configuration = new R2RMLConfiguration();// {R2RMLMappings = _graph.Object};
         }
 
@@ -106,11 +102,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             const string sqlQuery = "SELECT * from X";
 
             // when
-            var triplesMap = _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
+            _configuration.CreateTriplesMapFromR2RMLView(sqlQuery);
 
             // then
-            _configuration.R2RMLMappings.VerifyHasTriple(triplesMap.Uri, UriConstants.RdfType, UriConstants.RrTriplesMapClass);
-            _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMap.Uri, UriConstants.RrLogicalTableProperty);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RdfType, UriConstants.RrTriplesMapClass);
+            _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndObject(UriConstants.RrLogicalTableProperty);
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrSqlQueryProperty, sqlQuery);
         }
 
