@@ -52,7 +52,7 @@ WHERE { ?map rr:graph ?value }";
         /// Reads all maps contained in the current configuration and creates configuration objects
         /// </summary>
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
-        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
+        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
         {
             InitializeSubMapsFromCurrentGraph();
         }

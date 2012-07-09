@@ -237,13 +237,15 @@ namespace TCode.r2rml4net.Mapping
         #endregion
 
         #region Overrides of BaseConfiguration
-        
+
         /// <summary>
         /// Initializes the current term map and removes shortcup properties
         /// </summary>
         /// <param name="currentNode">node is required fo term maps</param>
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
         {
+            // todo: move code to BaseConfiguration ?
+
             if(currentNode == null)
                 throw new ArgumentNullException("currentNode");
 

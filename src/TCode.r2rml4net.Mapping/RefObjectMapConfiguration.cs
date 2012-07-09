@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Mapping
         {
         }
 
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode refObjectMapNode = null)
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode refObjectMapNode)
         {
             if (refObjectMapNode == null)
                 throw new ArgumentNullException("refObjectMapNode");
