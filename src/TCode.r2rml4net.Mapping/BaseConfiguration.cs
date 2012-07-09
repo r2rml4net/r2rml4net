@@ -68,8 +68,10 @@ WHERE { ?map rr:graph ?value }";
         /// <example>{ [] rr:graph ex:instance } should become { [] rr:graphMap [ rr:constant ex:instance ] }</example>
         protected void EnsureNoShortcutSubmaps()
         {
-            var dataset = new InMemoryDataset(true);
-            dataset.AddGraph(R2RMLMappings);
+            TripleStore store = new TripleStore();
+            store.Add(R2RMLMappings);
+
+            var dataset = new InMemoryDataset(store, R2RMLMappings.BaseUri);
             ISparqlUpdateProcessor processor = new LeviathanUpdateProcessor(dataset);
             var updateParser = new SparqlUpdateParser();
 
