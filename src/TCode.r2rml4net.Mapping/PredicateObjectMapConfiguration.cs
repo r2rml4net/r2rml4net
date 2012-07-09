@@ -46,12 +46,12 @@ namespace TCode.r2rml4net.Mapping
             return graphMap;
         }
 
-        public IRefObjectMapConfiguration CreateRefObjectMap()
+        public IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration triplesMap)
         {
             if (_objectMaps.Any())
                 throw new InvalidTriplesMapException("Cannot create ref object map because predicate-object map already contains one or more object map");
 
-            var refObjectMap = new RefObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            var refObjectMap = new RefObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings.CreateUriNode(triplesMap.Uri), R2RMLMappings);
             _refObjectMaps.Add(refObjectMap);
             return refObjectMap;
         }

@@ -12,6 +12,7 @@
         internal const string RrSqlQueryProperty = "rr:sqlQuery";
         internal const string RrSqlVersionProperty = "rr:sqlVersion";
         internal const string RrTriplesMapClass = "rr:TriplesMap";
+        internal const string RrParentTriplesMapProperty = "rr:parentTriplesMap";
         internal const string RrClassProperty = "rr:class";
         internal const string RrSubjectMapProperty = "rr:subjectMap";
         internal const string RrBlankNode = "rr:BlankNode";
