@@ -64,5 +64,34 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsInstanceOf<TermMapConfiguration>(graphMap1);
             Assert.IsInstanceOf<TermMapConfiguration>(graphMap2);
         }
+
+        [Test]
+        public void CanCreateRefObjectMaps()
+        {
+            // when 
+            var objectMap1 = _predicateObjectMap.CreateRefObjectMap();
+            var objectMap2 = _predicateObjectMap.CreateRefObjectMap();
+
+            // then
+            Assert.AreNotSame(objectMap1, objectMap2);
+            Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap1);
+            Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap2);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void CannotCreateObjectMapAndRefObjectMap(bool refMapFirst)
+        {
+            if (refMapFirst)
+            {
+                _predicateObjectMap.CreateRefObjectMap();
+                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateObjectMap());
+            }
+            else
+            {
+                _predicateObjectMap.CreateObjectMap();
+                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateRefObjectMap());
+            }
+        }
     }
 }

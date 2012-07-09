@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -8,6 +9,7 @@ namespace TCode.r2rml4net.Mapping
     {
         private readonly INode _predicateObjectMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
+        private readonly IList<RefObjectMapConfiguration> _refObjectMaps = new List<RefObjectMapConfiguration>();
         private readonly IList<PredicateMapConfiguration> _propertyMaps = new List<PredicateMapConfiguration>();
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
@@ -22,6 +24,9 @@ namespace TCode.r2rml4net.Mapping
 
         public IObjectMapConfiguration CreateObjectMap()
         {
+            if (_refObjectMaps.Any())
+                throw new InvalidTriplesMapException("Cannot create object map because predicate-object map already contains one or more ref object map");
+
             var objectMap = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _objectMaps.Add(objectMap);
             return objectMap;
@@ -39,6 +44,16 @@ namespace TCode.r2rml4net.Mapping
             var graphMap = new GraphMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _graphMaps.Add(graphMap);
             return graphMap;
+        }
+
+        public IRefObjectMapConfiguration CreateRefObjectMap()
+        {
+            if (_objectMaps.Any())
+                throw new InvalidTriplesMapException("Cannot create ref object map because predicate-object map already contains one or more object map");
+
+            var refObjectMap = new RefObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            _refObjectMaps.Add(refObjectMap);
+            return refObjectMap;
         }
 
         #endregion

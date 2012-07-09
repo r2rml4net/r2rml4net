@@ -60,10 +60,12 @@
     <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />
     <Compile Include="ILiteralTermMapConfiguration.cs" />
+    <Compile Include="IRefObjectMapConfiguration.cs" />
     <Compile Include="ObjectMapConfiguration.cs" />
     <Compile Include="PredicateMapConfiguration.cs" />
     <Compile Include="PredicateObjectMapConfiguration.cs" />
     <Compile Include="R2RMLLoader.cs" />
+    <Compile Include="RefObjectMapConfiguration.cs" />
     <Compile Include="SubjectMapConfiguration.cs" />
     <Compile Include="TermMapConfiguration.cs" />
     <Compile Include="TriplesMapConfiguration.cs" />
