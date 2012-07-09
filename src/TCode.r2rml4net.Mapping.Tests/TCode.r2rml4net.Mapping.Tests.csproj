@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
     <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
     <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
