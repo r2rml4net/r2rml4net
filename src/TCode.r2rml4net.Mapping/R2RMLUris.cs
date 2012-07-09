@@ -28,5 +28,8 @@
         internal const string RrPredicateObjectMapPropety = "rr:predicateObjectMap";
         internal const string RrLanguageTagPropety = "rr:languageTag";
         internal const string RrDatatypePropety = "rr:datatype";
+        internal const string RrJoinCondition = "rr:joinCondition";
+        internal const string RrChild = "rr:child";
+        internal const string RrParent = "rr:parent";
     }
 }
