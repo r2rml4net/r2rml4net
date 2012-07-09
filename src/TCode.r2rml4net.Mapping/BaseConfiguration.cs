@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
 using VDS.RDF;
+using VDS.RDF.Parsing;
+using VDS.RDF.Query.Datasets;
+using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -8,6 +12,11 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class BaseConfiguration
     {
+        private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
+DELETE { ?map rr:graph ?value . }
+INSERT { ?map rr:graphMap [ rr:constant ?value ] . }
+WHERE { ?map rr:graph ?value }";
+
         /// <summary>
         /// DotNetRDF graph containing the R2RML mappings
         /// </summary>
@@ -29,6 +38,7 @@ namespace TCode.r2rml4net.Mapping
         protected BaseConfiguration(IGraph existingMappingsGraph)
         {
             R2RMLMappings = existingMappingsGraph;
+            EnsureNoShortcutSubmaps();
             EnsurePrefixes();
         }
 
@@ -51,5 +61,19 @@ namespace TCode.r2rml4net.Mapping
         /// Implemented in child classes should create submaps and for each of the run the <see cref="BaseConfiguration.RecursiveInitializeSubMapsFromCurrentGraph"/> method
         /// </summary>
         protected abstract void InitializeSubMapsFromCurrentGraph();
+
+        /// <summary>
+        /// Overriden in child classes should change shortcut properties to maps
+        /// </summary>
+        /// <example>{ [] rr:graph ex:instance } should become { [] rr:graphMap [ rr:constant ex:instance ] }</example>
+        protected void EnsureNoShortcutSubmaps()
+        {
+            var dataset = new InMemoryDataset(true);
+            dataset.AddGraph(R2RMLMappings);
+            ISparqlUpdateProcessor processor = new LeviathanUpdateProcessor(dataset);
+            var updateParser = new SparqlUpdateParser();
+
+            processor.ProcessCommandSet(updateParser.ParseFromString(ShortcutSubmapsReplaceSparql));
+        }
     }
 }

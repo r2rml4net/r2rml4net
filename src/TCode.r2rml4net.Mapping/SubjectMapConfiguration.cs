@@ -98,7 +98,7 @@ namespace TCode.r2rml4net.Mapping
             var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
             var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, graphMapPropety);
 
-            foreach (var triple in graphTriples)
+            foreach (var triple in graphTriples.ToArray())
             {
                 var graphMap = new GraphMapConfiguration(TermMapNode, R2RMLMappings);
                 graphMap.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);

@@ -82,7 +82,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(_graphMap.R2RMLMappings.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);

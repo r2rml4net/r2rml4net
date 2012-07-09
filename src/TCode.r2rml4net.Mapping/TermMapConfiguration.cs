@@ -2,9 +2,6 @@
 using System.Linq;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
-using VDS.RDF.Parsing;
-using VDS.RDF.Query.Datasets;
-using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -14,11 +11,6 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermMap, ITermType
     {
-        private const string ShortcutReplaceSparqlFormat = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
-DELETE {{ ?map <{0}> ?value . }}
-INSERT {{ ?map <{1}> [ rr:constant ?value ] . }}
-WHERE {{ }}";
-
         /// <summary>
         /// The parent node for the current term map
         /// </summary>
@@ -255,30 +247,11 @@ WHERE {{ }}";
             if(currentNode == null)
                 throw new ArgumentNullException("currentNode");
 
-            EnsureGraphHasNoShortcutProperties();
             TermMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         } 
 
         #endregion
-
-        /// <summary>
-        /// Overriden in child classes should change shortcut properties to maps
-        /// </summary>
-        /// <example>{ [] rr:graph ex:instance } should become { [] rr:graphMap [ rr:constant ex:instance ] }</example>
-        private void EnsureGraphHasNoShortcutProperties()
-        {
-            var dataset = new InMemoryDataset(true);
-            dataset.AddGraph(R2RMLMappings);
-            ISparqlUpdateProcessor processor = new LeviathanUpdateProcessor(dataset);
-            var updateParser = new SparqlUpdateParser();
-
-            var rrShortcutProperty = CreateShortcutPropertyNode();
-            var rrMapProperty = CreateMapPropertyNode();
-            var sparqlQuery = string.Format(ShortcutReplaceSparqlFormat, rrShortcutProperty, rrMapProperty);
-
-            processor.ProcessCommandSet(updateParser.ParseFromString(sparqlQuery));
-        }
 
         /// <summary>
         /// Returns a term map property

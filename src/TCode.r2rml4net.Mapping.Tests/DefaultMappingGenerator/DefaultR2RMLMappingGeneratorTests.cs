@@ -55,8 +55,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var serializedGraph = Serialize(_configuration.GraphReadOnly);
             var message = string.Format("Graphs aren't equal. Actual graph was:\r\n\r\n{0}", serializedGraph);
 
-            // todo: bug in rdfdotnet? 
-            // diff.AreEqual returns false when the below returns true
             var diff = expected.Difference(_configuration.GraphReadOnly);
             Assert.IsFalse(diff.AddedMSGs.Any() || diff.RemovedMSGs.Any() || diff.AddedTriples.Any() || diff.RemovedTriples.Any(), message);
         }
