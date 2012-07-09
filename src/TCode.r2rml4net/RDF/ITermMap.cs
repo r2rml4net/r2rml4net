@@ -20,5 +20,11 @@
         /// </summary>
         /// <exception cref="InvalidTriplesMapException"></exception>
         string ColumnName { get; }
+        /// <summary>
+        /// Gets the inverse expression associated with this <see cref="ITermMap"/> or null if not set
+        /// </summary>
+        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <remarks>See http://www.w3.org/TR/r2rml/#inverse</remarks>
+        string InverseExpression { get; }
     }
 }
