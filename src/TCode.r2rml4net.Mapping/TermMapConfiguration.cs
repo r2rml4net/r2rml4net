@@ -20,7 +20,7 @@ INSERT {{ ?map <{1}> [ rr:constant ?value ] . }}
 WHERE {{ }}";
 
         /// <summary>
-        /// The parent node for the current <see cref="TermMapNode"/>.
+        /// The parent node for the current term map
         /// </summary>
         /// <remarks>
         /// Depending on the type the parent can be a triples map (for property-object maps, subject maps), 
@@ -28,6 +28,9 @@ WHERE {{ }}";
         /// or subject map (for graph maps)
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
+        /// <summary>
+        /// <see cref="INode"/> of the current term map
+        /// </summary>
         protected internal INode TermMapNode { get; private set; }
 
         /// <summary>
@@ -203,6 +206,10 @@ WHERE {{ }}";
 
         #region Overrides of BaseConfiguration
         
+        /// <summary>
+        /// Initializes the current term map and removes shortcup properties
+        /// </summary>
+        /// <param name="currentNode">node is required fo term maps</param>
         protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode = null)
         {
             if(currentNode == null)

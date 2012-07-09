@@ -117,6 +117,9 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IR2RML
 
+        /// <summary>
+        /// <see cref="IR2RML.TriplesMaps"/>
+        /// </summary>
         public IEnumerable<ITriplesMap> TriplesMaps
         {
             get { return _triplesMaps; }
