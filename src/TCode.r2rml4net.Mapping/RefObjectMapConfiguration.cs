@@ -11,11 +11,12 @@ namespace TCode.r2rml4net.Mapping
     {
         INode _refObjectMapNode;
 
-        public RefObjectMapConfiguration(INode predicateObjectMapNode, IGraph mappings)
+        public RefObjectMapConfiguration(INode predicateObjectMapNode, INode referencedTriplesMap, IGraph mappings)
             : base(mappings)
         {
             _refObjectMapNode = mappings.CreateBlankNode();
             mappings.Assert(predicateObjectMapNode, mappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
+            mappings.Assert(_refObjectMapNode, mappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), referencedTriplesMap);
         }
 
         #region Overrides of BaseConfiguration

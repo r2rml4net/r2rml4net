@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
+using Moq;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
@@ -70,9 +71,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void CanCreateRefObjectMaps()
         {
+            // given
+            Mock<ITriplesMapConfiguration> parentTriplesMap = new Mock<ITriplesMapConfiguration>();
+            parentTriplesMap.Setup(tMap => tMap.Uri).Returns(new Uri("http://tests.example.com/OtherTriplesMap"));
+
             // when 
-            var objectMap1 = _predicateObjectMap.CreateRefObjectMap();
-            var objectMap2 = _predicateObjectMap.CreateRefObjectMap();
+            var objectMap1 = _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
+            var objectMap2 = _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
 
             // then
             Assert.AreNotSame(objectMap1, objectMap2);
@@ -85,15 +90,19 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [TestCase(false)]
         public void CannotCreateObjectMapAndRefObjectMap(bool refMapFirst)
         {
+            // given
+            Mock<ITriplesMapConfiguration> parentTriplesMap = new Mock<ITriplesMapConfiguration>();
+            parentTriplesMap.Setup(tMap => tMap.Uri).Returns(new Uri("http://tests.example.com/OtherTriplesMap"));
+
             if (refMapFirst)
             {
-                _predicateObjectMap.CreateRefObjectMap();
+                _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
                 Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateObjectMap());
             }
             else
             {
                 _predicateObjectMap.CreateObjectMap();
-                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateRefObjectMap());
+                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object));
             }
         }
     }
