@@ -30,5 +30,11 @@ namespace TCode.r2rml4net.Mapping
         /// For details on templates read more on http://www.w3.org/TR/r2rml/#from-template
         /// </remarks>
         ITermTypeConfiguration IsTemplateValued(string template);
+
+        /// <summary>
+        /// Sets the term map's inverse expression template
+        /// </summary>
+        /// <remarks>See http://www.w3.org/TR/r2rml/#inverse</remarks>
+        ITermMapConfiguration SetInverseExpression(string stringTemplate);
     }
 }

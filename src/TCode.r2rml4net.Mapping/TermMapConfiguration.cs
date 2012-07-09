@@ -60,6 +60,9 @@ WHERE {{ }}";
             if (ConstantValue != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
+            if (InverseExpression != null)
+                throw new InvalidTriplesMapException("Only column-valued term map or template-value term map can have an inverse expression");
+
             EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
@@ -79,6 +82,22 @@ WHERE {{ }}";
             EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(TermMapNode, templateProperty, R2RMLMappings.CreateLiteralNode(template));
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the inverse expression. <see cref="ITermMapConfiguration.SetInverseExpression"/>
+        /// </summary>
+        public ITermMapConfiguration SetInverseExpression(string stringTemplate)
+        {
+            if (ConstantValue != null)
+                throw new InvalidTriplesMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
+
+            R2RMLMappings.Assert(
+                TermMapNode, 
+                R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty), 
+                R2RMLMappings.CreateLiteralNode(stringTemplate));
+
             return this;
         }
 
@@ -199,6 +218,27 @@ WHERE {{ }}";
             get
             {
                 return this;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="ITermMap.InverseExpression"/>
+        /// </summary>
+        public string InverseExpression
+        {
+            get 
+            {
+                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty));
+
+                if (!expressionTriples.Any())
+                    return null;
+
+                if (expressionTriples.Count() == 1)
+                {
+                    return ((ILiteralNode)expressionTriples.Single().Object).Value;
+                }
+
+                throw new InvalidTriplesMapException("An inverse expression must be a literal node");
             }
         }
 

@@ -31,5 +31,6 @@
         internal const string RrJoinCondition = "rr:joinCondition";
         internal const string RrChild = "rr:child";
         internal const string RrParent = "rr:parent";
+        internal const string RrInverseExpressionProperty = "rr:inverseExpression";
     }
 }

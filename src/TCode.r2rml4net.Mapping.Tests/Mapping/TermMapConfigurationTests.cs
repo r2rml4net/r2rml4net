@@ -166,5 +166,44 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             _termMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
         }
+
+        [Test]
+        public void CanHaveInverseExpression()
+        {
+            // given
+            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+
+            // when
+            _termMapConfiguration.SetInverseExpression(expression);
+
+            // then
+            Assert.AreEqual(expression, _termMapConfiguration.InverseExpression);
+        }
+
+        [Test]
+        public void CannotHaveInverseExpressionWhenConstantValued()
+        {
+            // given
+            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+
+            // when
+            _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri"));
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.SetInverseExpression(expression));
+        }
+
+        [Test]
+        public void CannotConstantValueWhenInverseExpressionIsSet()
+        {
+            // given
+            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+
+            // when
+            _termMapConfiguration.SetInverseExpression(expression);
+
+            // then
+            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
+        }
     }
 }
