@@ -8,13 +8,13 @@ using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping
 {
-    public class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration, IRefObjectMap
+    internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration, IRefObjectMap
     {
         INode _refObjectMapNode;
         INode _predicateObjectMapNode;
         INode _referencedTriplesMap;
 
-        public RefObjectMapConfiguration(INode predicateObjectMapNode, INode referencedTriplesMap, IGraph mappings)
+        internal RefObjectMapConfiguration(INode predicateObjectMapNode, INode referencedTriplesMap, IGraph mappings)
             : base(mappings)
         {
             _refObjectMapNode = mappings.CreateBlankNode();

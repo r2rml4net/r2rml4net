@@ -13,7 +13,9 @@ namespace TCode.r2rml4net.RDF
         /// Gets the subject URI or null if not set
         /// </summary>
         Uri Subject { get; }
-
+        /// <summary>
+        /// Gets the graph maps associated with this <see cref="ISubjectMap"/>
+        /// </summary>
         IEnumerable<IGraphMap> Graphs { get; }
     }
 }
