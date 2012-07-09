@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             _refObjectMap = new RefObjectMapConfiguration(graph.GetBlankNode("autos1"), graph.GetUriNode("ex:TriplesMap2"), graph);
-            _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
+            _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos2"));
 
             // then
             Assert.AreEqual(1, _refObjectMap.JoinConditions.Count());
