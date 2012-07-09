@@ -86,24 +86,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(2, _predicateObjectMap.RefObjectMaps.Count());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void CannotCreateObjectMapAndRefObjectMap(bool refMapFirst)
+        [Test]
+        public void CanCreateObjectMapAndRefObjectMap()
         {
             // given
             Mock<ITriplesMapConfiguration> parentTriplesMap = new Mock<ITriplesMapConfiguration>();
             parentTriplesMap.Setup(tMap => tMap.Uri).Returns(new Uri("http://tests.example.com/OtherTriplesMap"));
 
-            if (refMapFirst)
-            {
-                _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
-                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateObjectMap());
-            }
-            else
-            {
-                _predicateObjectMap.CreateObjectMap();
-                Assert.Throws<InvalidTriplesMapException>(() => _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object));
-            }
+            // when
+            _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
+            _predicateObjectMap.CreateObjectMap();
+
+            // then
+            Assert.AreEqual(1, _predicateObjectMap.ObjectMaps.Count());
+            Assert.AreEqual(1, _predicateObjectMap.RefObjectMaps.Count());
         }
     }
 }
