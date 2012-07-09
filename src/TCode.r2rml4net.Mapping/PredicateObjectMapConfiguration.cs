@@ -24,9 +24,6 @@ namespace TCode.r2rml4net.Mapping
 
         public IObjectMapConfiguration CreateObjectMap()
         {
-            if (_refObjectMaps.Any())
-                throw new InvalidTriplesMapException("Cannot create object map because predicate-object map already contains one or more ref object map");
-
             var objectMap = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
             _objectMaps.Add(objectMap);
             return objectMap;
@@ -48,9 +45,6 @@ namespace TCode.r2rml4net.Mapping
 
         public IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration triplesMap)
         {
-            if (_objectMaps.Any())
-                throw new InvalidTriplesMapException("Cannot create ref object map because predicate-object map already contains one or more object map");
-
             var refObjectMap = new RefObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings.CreateUriNode(triplesMap.Uri), R2RMLMappings);
             _refObjectMaps.Add(refObjectMap);
             return refObjectMap;
