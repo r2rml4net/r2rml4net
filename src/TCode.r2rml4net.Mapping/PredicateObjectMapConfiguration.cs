@@ -66,5 +66,19 @@ namespace TCode.r2rml4net.Mapping
         }
 
         #endregion
+
+        #region Implementation of IPredicateObjectMap
+
+        public IEnumerable<IObjectMap> ObjectMaps
+        {
+            get { return _objectMaps; }
+        }
+
+        public IEnumerable<IRefObjectMap> RefObjectMaps
+        {
+            get { return _refObjectMaps; }
+        }
+
+        #endregion
     }
 }
