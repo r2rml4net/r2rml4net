@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -37,6 +38,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreNotSame(objectMap1, objectMap2);
             Assert.IsInstanceOf<TermMapConfiguration>(objectMap1);
             Assert.IsInstanceOf<TermMapConfiguration>(objectMap2);
+            Assert.AreEqual(2, _predicateObjectMap.ObjectMaps.Count());
         }
 
         [Test]
@@ -76,6 +78,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreNotSame(objectMap1, objectMap2);
             Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap1);
             Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap2);
+            Assert.AreEqual(2, _predicateObjectMap.RefObjectMaps.Count());
         }
 
         [TestCase(true)]

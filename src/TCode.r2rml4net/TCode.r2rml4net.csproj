@@ -76,6 +76,7 @@
     <Compile Include="RDF\IPredicateMap.cs" />
     <Compile Include="RDF\IPredicateObjectMap.cs" />
     <Compile Include="RDF\IR2RML.cs" />
+    <Compile Include="RDF\IRefObjectMap.cs" />
     <Compile Include="RDF\ISubjectMap.cs" />
     <Compile Include="RDF\ITermMap.cs" />
     <Compile Include="RDF\ITermType.cs" />
