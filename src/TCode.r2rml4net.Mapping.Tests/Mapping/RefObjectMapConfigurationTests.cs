@@ -27,5 +27,22 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _refObjectMap.R2RMLMappings.VerifyHasTripleWithBlankObject("http://test.example.com/PredicateObjectMap", UriConstants.RrObjectMapProperty);
             _refObjectMap.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrParentTriplesMapProperty, "http://test.example.com/TriplesMap");
         }
+
+        [Test]
+        public void CanCreateJoinConditions()
+        {
+            // given
+            string childColumn = "child";
+            string parentColumn = "parent";
+
+            // when
+            _refObjectMap.AddJoinCondition(childColumn + "1", parentColumn + "1");
+            _refObjectMap.AddJoinCondition(childColumn + "2", parentColumn + "2");
+
+            // then
+            Assert.AreEqual(2, _refObjectMap.JoinConditions.Count());
+            Assert.IsNotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child1" && jc.ParentColumn == "parent1"));
+            Assert.IsNotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child2" && jc.ParentColumn == "parent2"));
+        }
     }
 }

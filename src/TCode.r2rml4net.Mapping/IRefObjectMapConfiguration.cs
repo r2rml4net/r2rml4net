@@ -7,5 +7,6 @@ namespace TCode.r2rml4net.Mapping
 {
     public interface IRefObjectMapConfiguration
     {
+        void AddJoinCondition(string childColumn, string parentColumn);
     }
 }

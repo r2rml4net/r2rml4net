@@ -7,5 +7,6 @@ namespace TCode.r2rml4net.RDF
 {
     public interface IRefObjectMap
     {
+        IEnumerable<JoinCondition> JoinConditions { get; }
     }
 }
