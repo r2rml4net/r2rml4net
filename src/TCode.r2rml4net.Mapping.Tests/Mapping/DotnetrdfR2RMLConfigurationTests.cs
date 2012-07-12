@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
-using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
