@@ -90,5 +90,23 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(1, _subjectMapConfiguration.Graphs.Count(g => new Uri("http://data.example.com/shortGraph/").Equals(g.GraphUri)));
             Assert.AreEqual(1, _subjectMapConfiguration.Graphs.Count(g => new Uri("http://data.example.com/agraph/").Equals(g.GraphUri)));
         }
+
+        [Test]
+        public void CanBeInitializedWithConstantValueUsingShortcut()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:TriplesMap rr:subject ex:Value .");
+
+            // when
+            var subjectMap = new SubjectMapConfiguration(graph.GetUriNode("ex:TriplesMap"), graph);
+            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+
+            // then
+            Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, subjectMap.ConstantValue);
+        }
     }
 }
