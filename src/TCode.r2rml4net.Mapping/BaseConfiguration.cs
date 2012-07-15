@@ -15,7 +15,11 @@ namespace TCode.r2rml4net.Mapping
         private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 DELETE { ?map rr:graph ?value . }
 INSERT { ?map rr:graphMap [ rr:constant ?value ] . }
-WHERE { ?map rr:graph ?value }";
+WHERE { ?map rr:graph ?value } ;
+
+DELETE { ?map rr:object ?value . }
+INSERT { ?map rr:objectMap [ rr:constant ?value ] . }
+WHERE { ?map rr:object ?value }";
 
         /// <summary>
         /// DotNetRDF graph containing the R2RML mappings

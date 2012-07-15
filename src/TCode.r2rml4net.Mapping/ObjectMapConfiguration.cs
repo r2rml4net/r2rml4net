@@ -159,7 +159,7 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            throw new NotImplementedException();
+            // object map contains no submaps
         }
 
         #endregion
