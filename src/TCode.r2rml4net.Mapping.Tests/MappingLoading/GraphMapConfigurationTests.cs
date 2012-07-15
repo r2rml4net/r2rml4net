@@ -8,16 +8,6 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class GraphMapConfigurationTests
     {
-        private GraphMapConfiguration _graphMap;
-
-        [SetUp]
-        public void Setup()
-        {
-            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            _graphMap = new GraphMapConfiguration(triplesMapNode, graph);
-        }
-
         [Test]
         public void CanBeInitializedWithExistingGraph()
         {
@@ -34,12 +24,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:graphMap [ rr:template ""http://data.example.com/jobgraph/{JOB}"" ].");
 
             // when
-            _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
-            Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", _graphMap.Template);
-            Assert.AreEqual("http://www.example.com/subject", ((IUriNode) _graphMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", graphMap.Template);
+            Assert.AreEqual("http://www.example.com/subject", ((IUriNode) graphMap.ParentMapNode).Uri.ToString());
         }
 
         [Test]
@@ -58,11 +48,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:graphMap [ rr:constant ex:graph ].");
 
             // when
-            _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
-            Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);
+            Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
         }
 
         [Test]
@@ -81,11 +71,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:graph ex:graph .");
 
             // when
-            _graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
-            _graphMap.RecursiveInitializeSubMapsFromCurrentGraph(_graphMap.R2RMLMappings.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(graph.GetUriNode("ex:subject"), graph);
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graphMap.R2RMLMappings.GetBlankNode("autos1"));
 
             // then
-            Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, _graphMap.ConstantValue);
+            Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
         }
     }
 }
