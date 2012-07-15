@@ -220,7 +220,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get 
             {
-                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty));
+                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty)).ToArray();
 
                 if (!expressionTriples.Any())
                     return null;

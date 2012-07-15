@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query.Datasets;
