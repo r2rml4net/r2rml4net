@@ -18,7 +18,15 @@ WHERE { ?map rr:graph ?value } ;
 
 DELETE { ?map rr:object ?value . }
 INSERT { ?map rr:objectMap [ rr:constant ?value ] . }
-WHERE { ?map rr:object ?value }";
+WHERE { ?map rr:object ?value } ;
+
+DELETE { ?map rr:predicate ?value . }
+INSERT { ?map rr:predicateMap [ rr:constant ?value ] . }
+WHERE { ?map rr:predicate ?value } ;
+
+DELETE { ?map rr:subject ?value . }
+INSERT { ?map rr:subjectMap [ rr:constant ?value ] . }
+WHERE { ?map rr:subject ?value }";
 
         /// <summary>
         /// DotNetRDF graph containing the R2RML mappings

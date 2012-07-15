@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            throw new System.NotImplementedException();
+            // predicate maps have no submaps
         }
 
         #endregion
