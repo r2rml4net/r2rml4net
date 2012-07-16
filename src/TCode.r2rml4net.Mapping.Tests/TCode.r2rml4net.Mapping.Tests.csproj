@@ -68,6 +68,7 @@
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\PredicateObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
     <Compile Include="Mapping\GraphMapConfigurationTests.cs" />

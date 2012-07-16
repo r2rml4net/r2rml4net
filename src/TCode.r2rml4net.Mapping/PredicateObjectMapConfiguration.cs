@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using TCode.r2rml4net.RDF;
@@ -7,10 +8,10 @@ namespace TCode.r2rml4net.Mapping
 {
     class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration, IPredicateObjectMap
     {
-        private readonly INode _predicateObjectMapNode;
+        private INode _predicateObjectMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
         private readonly IList<RefObjectMapConfiguration> _refObjectMaps = new List<RefObjectMapConfiguration>();
-        private readonly IList<PredicateMapConfiguration> _propertyMaps = new List<PredicateMapConfiguration>();
+        private readonly IList<PredicateMapConfiguration> _predicateMaps = new List<PredicateMapConfiguration>();
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
         internal PredicateObjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
@@ -32,7 +33,7 @@ namespace TCode.r2rml4net.Mapping
         public ITermMapConfiguration CreatePredicateMap()
         {
             var propertyMap = new PredicateMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
-            _propertyMaps.Add(propertyMap);
+            _predicateMaps.Add(propertyMap);
             return propertyMap;
         }
 
@@ -56,7 +57,19 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            throw new System.NotImplementedException();
+            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(node, graph), _graphMaps);
+            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrObjectMapProperty, (node, graph) => new ObjectMapConfiguration(node, graph), _objectMaps);
+            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrPredicateMapPropety, (node, graph) => new PredicateMapConfiguration(node, graph), _predicateMaps);
+        }
+
+        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
+        {
+            if (currentNode == null)
+                throw new ArgumentNullException("currentNode");
+
+            _predicateObjectMapNode = currentNode;
+
+            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 
         #endregion
@@ -71,6 +84,11 @@ namespace TCode.r2rml4net.Mapping
         public IEnumerable<IRefObjectMap> RefObjectMaps
         {
             get { return _refObjectMaps; }
+        }
+
+        public IEnumerable<IPredicateMap> PredicateMaps
+        {
+            get { return _predicateMaps; }
         }
 
         #endregion
