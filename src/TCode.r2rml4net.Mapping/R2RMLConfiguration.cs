@@ -60,6 +60,11 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        protected internal override INode ConfigurationNode
+        {
+            get { return null; }
+        }
+
         #endregion
 
         void R2RMLMappingsChanged(object sender, GraphEventArgs args)

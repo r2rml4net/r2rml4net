@@ -36,6 +36,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(1, _refObjectMap.JoinConditions.Count());
             Assert.AreEqual("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
             Assert.AreEqual("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
+            Assert.AreEqual(graph.GetBlankNode("autos2"), _refObjectMap.ConfigurationNode);
         }
     }
 }

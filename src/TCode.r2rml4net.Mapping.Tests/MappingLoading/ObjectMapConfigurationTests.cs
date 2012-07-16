@@ -26,6 +26,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
             // then
             Assert.AreEqual("http://data.example.com/{JOB}", objectMap.Template);
             Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.ConfigurationNode);
         }
 
         [Test]
@@ -47,6 +48,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.ConfigurationNode);
         }
 
         [Test]
@@ -68,6 +70,7 @@ ex:PredicateObjectMap rr:object ex:someObject .");
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.ConfigurationNode);
         }
     }
 }

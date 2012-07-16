@@ -28,6 +28,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             // then
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", graphMap.Template);
             Assert.AreEqual("http://www.example.com/subject", ((IUriNode) graphMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
         }
 
         [Test]
@@ -51,6 +52,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
         }
 
         [Test]
@@ -74,6 +76,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
         }
     }
 }
