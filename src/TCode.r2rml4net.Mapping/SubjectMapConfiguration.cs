@@ -95,15 +95,7 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            var graphMapPropety = R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphMapPropety);
-            var graphTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, graphMapPropety);
-
-            foreach (var triple in graphTriples.ToArray())
-            {
-                var graphMap = new GraphMapConfiguration(TermMapNode, R2RMLMappings);
-                graphMap.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
-                _graphMaps.Add(graphMap);
-            }
+            CreateSubMaps(TermMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(node, graph), _graphMaps);
         }
 
         #endregion

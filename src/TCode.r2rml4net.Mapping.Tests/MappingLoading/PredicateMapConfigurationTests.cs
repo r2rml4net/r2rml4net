@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using TCode.r2rml4net.RDF;
+﻿using NUnit.Framework;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading

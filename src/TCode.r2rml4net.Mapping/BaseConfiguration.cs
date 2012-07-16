@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query.Datasets;
@@ -87,6 +89,20 @@ WHERE { ?map rr:subject ?value }";
             var updateParser = new SparqlUpdateParser();
 
             processor.ProcessCommandSet(updateParser.ParseFromString(ShortcutSubmapsReplaceSparql));
+        }
+
+        protected void CreateSubMaps<TConfiguration>(INode parentMap, string property, Func<INode, IGraph, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
+            where TConfiguration : BaseConfiguration
+        {
+            var mapPropety = R2RMLMappings.CreateUriNode(property);
+            var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(parentMap, mapPropety);
+
+            foreach (var triple in triples.ToArray())
+            {
+                var subConfiguration = createSubConfiguration(parentMap, R2RMLMappings);
+                subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
+                subMaps.Add(subConfiguration);
+            }
         }
     }
 }
