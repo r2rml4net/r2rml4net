@@ -91,6 +91,11 @@ namespace TCode.r2rml4net.Mapping
             get { return _predicateMaps; }
         }
 
+        public IEnumerable<IGraphMap> GraphMaps
+        {
+            get { return _graphMaps; }
+        }
+
         #endregion
     }
 }

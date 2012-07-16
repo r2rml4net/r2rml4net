@@ -55,5 +55,27 @@ ex:PredicateObjectMap rr:predicate ex:Employee, ex:Worker .");
             Assert.AreEqual(1, predicateObjectMap.PredicateMaps.Count(pm => new Uri("http://www.example.com/Employee").Equals(pm.Predicate)));
             Assert.AreEqual(1, predicateObjectMap.PredicateMaps.Count(pm => new Uri("http://www.example.com/Worker").Equals(pm.Predicate)));
         }
+
+        [Test]
+        public void CanBeInitializedWithGraphMapsUsingShortcut()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+  
+ex:PredicateObjectMap rr:graph ex:Employee, ex:Worker .");
+
+            // when
+            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+
+            // then
+            Assert.AreEqual(2, predicateObjectMap.GraphMaps.Count());
+            Assert.AreEqual(1, predicateObjectMap.GraphMaps.Count(pm => new Uri("http://www.example.com/Employee").Equals(pm.GraphUri)));
+            Assert.AreEqual(1, predicateObjectMap.GraphMaps.Count(pm => new Uri("http://www.example.com/Worker").Equals(pm.GraphUri)));
+        }
     }
 }
