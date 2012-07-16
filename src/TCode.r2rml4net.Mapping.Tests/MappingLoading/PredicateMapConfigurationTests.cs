@@ -25,6 +25,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
             // then
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateMap.Template);
             Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)predicateMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.ConfigurationNode);
         }
 
         [Test]
@@ -45,6 +46,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.ConfigurationNode);
         }
 
         [Test]
@@ -65,6 +67,7 @@ ex:PredicateObjectMap rr:predicate ex:Value .");
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.ConfigurationNode);
         }
     }
 }

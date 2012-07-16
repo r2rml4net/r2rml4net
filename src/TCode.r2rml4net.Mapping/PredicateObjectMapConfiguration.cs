@@ -62,6 +62,11 @@ namespace TCode.r2rml4net.Mapping
             CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrPredicateMapPropety, (node, graph) => new PredicateMapConfiguration(node, graph), _predicateMaps);
         }
 
+        protected internal override INode ConfigurationNode
+        {
+            get { return _predicateObjectMapNode; }
+        }
+
         protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
         {
             if (currentNode == null)

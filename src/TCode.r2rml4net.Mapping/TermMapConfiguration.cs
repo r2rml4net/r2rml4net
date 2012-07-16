@@ -251,7 +251,12 @@ namespace TCode.r2rml4net.Mapping
 
             TermMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
-        } 
+        }
+
+        protected internal override INode ConfigurationNode
+        {
+            get { return TermMapNode; }
+        }
 
         #endregion
 

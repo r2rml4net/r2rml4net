@@ -304,6 +304,11 @@ WHERE
             throw new NotImplementedException();
         }
 
+        protected internal override INode ConfigurationNode
+        {
+            get { return _triplesMapNode; }
+        }
+
         #endregion
     }
 }

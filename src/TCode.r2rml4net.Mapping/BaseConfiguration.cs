@@ -75,6 +75,8 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         protected abstract void InitializeSubMapsFromCurrentGraph();
 
+        protected internal abstract INode ConfigurationNode { get; }
+
         /// <summary>
         /// Overriden in child classes should change shortcut properties to maps
         /// </summary>
