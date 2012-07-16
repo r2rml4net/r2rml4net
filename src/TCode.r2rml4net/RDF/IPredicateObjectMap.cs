@@ -20,5 +20,9 @@ namespace TCode.r2rml4net.RDF
         /// Gets predicate maps associated with this <see cref="IPredicateObjectMap"/>
         /// </summary>
         IEnumerable<IPredicateMap> PredicateMaps { get; }
+        /// <summary>
+        /// Gets graph maps associated with this <see cref="IPredicateObjectMap"/>
+        /// </summary>
+        IEnumerable<IGraphMap> GraphMaps { get; }
     }
 }
