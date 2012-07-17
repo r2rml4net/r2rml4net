@@ -52,10 +52,10 @@ namespace TCode.r2rml4net.Mapping
             var triplesMapClass = R2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
             var triplesMaps = R2RMLMappings.GetTriplesWithPredicateObject(rdfType, triplesMapClass);
 
-            foreach (IUriNode triplesMap in triplesMaps.Select(triple => triple.Subject))
+            foreach (var triplesMapNode in triplesMaps.Select(triple => triple.Subject))
             {
-                TriplesMapConfiguration triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
-                triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triplesMap);
+                var triplesMapConfiguration = new TriplesMapConfiguration(R2RMLMappings);
+                triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triplesMapNode);
                 _triplesMaps.Add(triplesMapConfiguration);
             }
         }

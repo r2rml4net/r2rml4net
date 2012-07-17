@@ -36,7 +36,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     ]
     .
 
-<CourseTriplesMap> a rr:TriplesMap .";
+_:blankTriplesMap a rr:TriplesMap .";
         #endregion
 
         [Test]
@@ -51,9 +51,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/StudentTriplesMap"),
                 ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(0).ConfigurationNode).Uri);
-            Assert.AreEqual(
-                new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/CourseTriplesMap"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).ConfigurationNode).Uri);
+            Assert.AreEqual("blankTriplesMap", ((IBlankNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).ConfigurationNode).InternalID);
         }
 
         [Test]
