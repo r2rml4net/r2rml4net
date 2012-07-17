@@ -139,5 +139,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsInstanceOf<TermMapConfiguration>(graphMap1);
             Assert.IsInstanceOf<TermMapConfiguration>(graphMap2);
         }
+
+        [Test]
+        public void CreatesCorrectShortcutPropertyNode()
+        {
+            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#subject"), _subjectMapConfiguration.CreateShortcutPropertyNode().Uri);
+        }
     }
 }
