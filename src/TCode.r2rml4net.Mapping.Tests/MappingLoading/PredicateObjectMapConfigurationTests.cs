@@ -96,7 +96,11 @@ ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:objectMap 
     [ rr:constant ex:Employee ], 
-    [ rr:template ""http://data.example.com/user/{EMPNO}"" ] .");
+    [ rr:template ""http://data.example.com/user/{EMPNO}"" ] .
+
+ex:PredicateObjectMap rr:objectMap [
+    rr:parentTriplesMap ex:TriplesMap2
+] .");
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
@@ -132,6 +136,33 @@ ex:PredicateObjectMap rr:object ex:Employee, ex:Worker .");
             Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.ObjectMaps.ElementAt(1).Object);
             Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(0).ConfigurationNode);
             Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(1).ConfigurationNode);
+        }
+
+        [Test]
+        public void CanBeInitializedWithRefObjectMaps()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+  
+ex:PredicateObjectMap rr:objectMap 
+    [ rr:constant ex:Employee ], 
+    [ rr:template ""http://data.example.com/user/{EMPNO}"" ] .
+
+ex:PredicateObjectMap rr:objectMap ex:refObjectMap .
+ex:refObjectMap rr:parentTriplesMap ex:TriplesMap2 .");
+
+            // when
+            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+
+            // then
+            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.AreEqual(1, predicateObjectMap.RefObjectMaps.Count());
+            Assert.AreEqual(graph.CreateUriNode("ex:refObjectMap"), predicateObjectMap.RefObjectMaps.Cast<RefObjectMapConfiguration>().ElementAt(0).ConfigurationNode);
         }
     }
 }

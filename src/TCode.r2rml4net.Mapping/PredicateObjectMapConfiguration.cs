@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
+using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -58,8 +59,45 @@ namespace TCode.r2rml4net.Mapping
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(node, graph), _graphMaps);
-            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrObjectMapProperty, (node, graph) => new ObjectMapConfiguration(node, graph), _objectMaps);
             CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrPredicateMapPropety, (node, graph) => new PredicateMapConfiguration(node, graph), _predicateMaps);
+            CreateObjectMaps();
+            CreateRefObjectMaps();
+        }
+
+        private void CreateObjectMaps()
+        {
+            var query =
+                new SparqlParameterizedString(
+                    "SELECT ?objectMap WHERE { @parentMap @objectMapProperty ?objectMap FILTER NOT EXISTS { ?objectMap @parentTriplesMap ?triplesMap } }");
+            query.SetParameter("parentMap", _predicateObjectMapNode);
+            query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
+            query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
+            var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
+
+            foreach (var result in resultSet)
+            {
+                var subConfiguration = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+                subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
+                _objectMaps.Add(subConfiguration);
+            }
+        }
+
+        private void CreateRefObjectMaps()
+        {
+            var query = new SparqlParameterizedString(
+                "SELECT ?objectMap ?triplesMap WHERE { @parentMap @objectMapProperty ?objectMap . ?objectMap @parentTriplesMap ?triplesMap }");
+            query.SetParameter("parentMap", _predicateObjectMapNode);
+            query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
+            query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
+            var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
+
+            foreach (var result in resultSet)
+            {
+                var subConfiguration = new RefObjectMapConfiguration(_predicateObjectMapNode, result.Value("triplesMap"),
+                                                                     R2RMLMappings);
+                subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
+                _refObjectMaps.Add(subConfiguration);
+            }
         }
 
         protected internal override INode ConfigurationNode
