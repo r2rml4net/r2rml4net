@@ -200,5 +200,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsIRI());
             Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsLiteral());
         }
+
+        [Test]
+        public void CreatesCorrectShortcutPropertyNode()
+        {
+            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#object"), _objectMap.CreateShortcutPropertyNode().Uri);
+        }
     }
 }

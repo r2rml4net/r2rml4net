@@ -58,5 +58,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             Assert.IsNull(_predicateMap.Predicate);
         }
+
+        [Test]
+        public void CreatesCorrectShortcutPropertyNode()
+        {
+            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#predicate"), _predicateMap.CreateShortcutPropertyNode().Uri);
+        }
     }
 }
