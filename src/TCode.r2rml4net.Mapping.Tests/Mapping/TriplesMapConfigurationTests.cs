@@ -204,7 +204,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration.TableName = "Table";
 
             // when
-            ISubjectMapConfiguration subjectMapConfiguration = _triplesMapConfiguration.SubjectMap;
+            var subjectMapConfiguration = (ISubjectMapConfiguration) _triplesMapConfiguration.SubjectMap;
 
             // then
             Assert.IsNotNull(subjectMapConfiguration);
@@ -217,10 +217,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given 
             _triplesMapConfiguration.TableName = "Table";
-            ISubjectMapConfiguration subjectMapConfiguration = _triplesMapConfiguration.SubjectMap;
+            var subjectMapConfiguration = (ISubjectMapConfiguration) _triplesMapConfiguration.SubjectMap;
 
             // when
-            ISubjectMapConfiguration shouldBeTheSame = _triplesMapConfiguration.SubjectMap;
+            var shouldBeTheSame = (ISubjectMapConfiguration) _triplesMapConfiguration.SubjectMap;
 
             // then
             Assert.AreSame(subjectMapConfiguration, shouldBeTheSame);

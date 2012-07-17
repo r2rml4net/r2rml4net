@@ -17,7 +17,7 @@ namespace TCode.r2rml4net.Mapping
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private INode _triplesMapNode;
         private SubjectMapConfiguration _subjectMapConfiguration;
-        private readonly IList<IPredicateObjectMapConfiguration> _propertyObjectMaps = new List<IPredicateObjectMapConfiguration>();
+        private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
 
         internal TriplesMapConfiguration(IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -196,14 +196,14 @@ WHERE
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.SubjectMap"/>
         /// </summary>
-        public ISubjectMapConfiguration SubjectMap
+        ISubjectMapConfiguration ITriplesMapConfiguration.SubjectMap
         {
             get
             {
                 AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration= new SubjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+                    _subjectMapConfiguration= new SubjectMapConfiguration(_triplesMapNode, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
@@ -217,7 +217,7 @@ WHERE
             AssertTriplesMapInitialized();
 
             var propertyObjectMap = new PredicateObjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
-            _propertyObjectMaps.Add(propertyObjectMap);
+            _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
         }
 
@@ -301,12 +301,41 @@ WHERE
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            throw new NotImplementedException();
+            CreateSubMaps(_triplesMapNode, R2RMLUris.RrPredicateObjectMapPropety, (node, graph) => new PredicateObjectMapConfiguration(node, graph), _predicateObjectMaps);
+
+            var subjectMaps = new List<SubjectMapConfiguration>();
+            CreateSubMaps(_triplesMapNode, R2RMLUris.RrSubjectMapProperty, (node, graph) => new SubjectMapConfiguration(node, graph), subjectMaps);
+
+            if(subjectMaps.Count > 1)
+                throw new InvalidTriplesMapException("Triples map can only have one subject map");
+            _subjectMapConfiguration = subjectMaps.SingleOrDefault();
         }
 
         protected internal override INode ConfigurationNode
         {
             get { return _triplesMapNode; }
+        }
+
+        #endregion
+
+        #region Implementation of ITriplesMap
+
+        public IEnumerable<IPredicateObjectMap> PredicateObjectMaps
+        {
+            get { return _predicateObjectMaps; }
+        }
+
+        public ISubjectMap SubjectMap
+        {
+            get
+            {
+                AssertTriplesMapInitialized();
+
+                if (_subjectMapConfiguration == null)
+                    _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMapNode, R2RMLMappings);
+
+                return _subjectMapConfiguration;
+            }
         }
 
         #endregion
