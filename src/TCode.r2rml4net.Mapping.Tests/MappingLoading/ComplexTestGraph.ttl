@@ -1,5 +1,6 @@
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
 @base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
 
 <StudentTriplesMap>
@@ -20,7 +21,7 @@
     ]
     .
 
-<#DeptTableView> rr:sqlQuery """
+<DeptTableView> rr:sqlQuery """
 SELECT DEPTNO,
        DNAME,
        LOC,
@@ -28,7 +29,7 @@ SELECT DEPTNO,
 FROM DEPT;
 """.
 
-<#TriplesMap2>
+<TriplesMap2>
      a rr:TriplesMap;
     rr:logicalTable <#DeptTableView>;
     rr:subjectMap [
@@ -48,7 +49,7 @@ FROM DEPT;
         rr:objectMap [ rr:column "STAFF" ];
     ].
 
-<#TriplesMap1>
+<TriplesMap1>
      a rr:TriplesMap;
 
     rr:logicalTable [ rr:tableName "EMP" ];
@@ -61,7 +62,7 @@ FROM DEPT;
         rr:objectMap [ rr:column "ENAME" ];
     ].
 
-<#JoinedTriplesMap>
+<JoinedTriplesMap>
     rr:predicateObjectMap [
         rr:predicate ex:department;
         rr:objectMap [
@@ -73,7 +74,7 @@ FROM DEPT;
         ];
     ].
 
-<#ManyToManyTriplesMap>
+<ManyToManyTriplesMap>
      a rr:TriplesMap;
 
     rr:logicalTable [ rr:tableName "EMP2DEPT" ];
@@ -87,7 +88,7 @@ FROM DEPT;
         rr:objectMap [ rr:template "http://data.example.com/department/{DEPTNO}" ];
     ].
 
-<#SimplerManyToManyTriplesMap>
+<SimplerManyToManyTriplesMap>
      a rr:TriplesMap;
 
     rr:logicalTable [ rr:tableName "EMP2DEPT" ];
