@@ -71,6 +71,7 @@
     <Compile Include="MappingLoading\PredicateObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\TriplesMapConfigurationTests.cs" />
     <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
     <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
     <Compile Include="Mapping\ObjectMapConfigurationTests.cs" />

@@ -6,6 +6,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
+    [TestFixture]
     public class SubjectMapConfigurationTests
     {
         [Test]
