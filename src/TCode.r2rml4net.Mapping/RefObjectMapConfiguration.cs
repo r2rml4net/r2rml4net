@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using VDS.RDF;
 using TCode.r2rml4net.RDF;
 using VDS.RDF.Query;
@@ -15,11 +13,11 @@ namespace TCode.r2rml4net.Mapping
         readonly INode _referencedTriplesMapNode;
         ITriplesMap _referencedTriplesMap;
 
-        internal RefObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode predicateObjectMapNode, ITriplesMap referencedTriplesMap, IGraph mappings)
+        internal RefObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMap predicateObjectMap, ITriplesMap referencedTriplesMap, IGraph mappings)
             : base(parentTriplesMap, mappings)
         {
             _refObjectMapNode = mappings.CreateBlankNode();
-            _predicateObjectMapNode = predicateObjectMapNode;
+            _predicateObjectMapNode = predicateObjectMap.Node;
             _referencedTriplesMapNode = referencedTriplesMap.Node;
             _referencedTriplesMap = referencedTriplesMap;
 
@@ -30,11 +28,6 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-        }
-
-        protected internal override INode ConfigurationNode
-        {
-            get { return _refObjectMapNode; }
         }
 
         protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode refObjectMapNode)
@@ -87,6 +80,15 @@ WHERE {
                     yield return new JoinCondition(bindings["child"].ToString(), bindings["parent"].ToString());
                 }
             }
+        }
+
+        #endregion
+
+        #region Implementation of IMapBase
+
+        public override INode Node
+        {
+            get { return _refObjectMapNode; }
         }
 
         #endregion

@@ -5,7 +5,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Configuration for predicate-object maps described on http://www.w3.org/TR/r2rml/#predicate-object-map
     /// </summary>
-    public interface IPredicateObjectMapConfiguration
+    public interface IPredicateObjectMapConfiguration : IPredicateObjectMap, IGraphMapParent
     {
         /// <summary>
         /// Creates a new object map

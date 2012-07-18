@@ -17,11 +17,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
+            Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
+            predicateObjectMap.Setup(map => map.Node).Returns(graph.CreateBlankNode("predicateObjectMap"));
 
             _triplesMapNode = new Mock<ITriplesMapConfiguration>();
             _triplesMapNode.Setup(tm => tm.Node).Returns(triplesMapNode);
 
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, triplesMapNode, graph);
+            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, predicateObjectMap.Object, graph);
         }
 
         [Test]
@@ -38,10 +40,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 new Triple(
                     _predicateMap.ParentMapNode,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateMapProperty)),
-                    _predicateMap.TermMapNode)));
+                    _predicateMap.Node)));
             Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _predicateMap.TermMapNode,
+                    _predicateMap.Node,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
             Assert.AreEqual(uri, _predicateMap.ConstantValue);

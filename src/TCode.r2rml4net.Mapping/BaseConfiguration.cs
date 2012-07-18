@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Base for DotNetRDF-backed fluent R2RML configuration
     /// </summary>
-    public abstract class BaseConfiguration
+    public abstract class BaseConfiguration : IMapBase
     {
         private readonly ITriplesMapConfiguration _parentTriplesMap;
 
@@ -67,6 +67,12 @@ WHERE { ?map rr:subject ?value }";
             _parentTriplesMap = triplesMap;
         }
 
+        #region Implementation of IMapBase
+
+        public abstract INode Node { get; }
+
+        #endregion
+
         private void EnsurePrefixes()
         {
             if (!R2RMLMappings.NamespaceMap.HasNamespace("rr"))
@@ -87,8 +93,6 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         protected abstract void InitializeSubMapsFromCurrentGraph();
 
-        protected internal abstract INode ConfigurationNode { get; }
-
         /// <summary>
         /// Overriden in child classes should change shortcut properties to maps
         /// </summary>
@@ -105,15 +109,15 @@ WHERE { ?map rr:subject ?value }";
             processor.ProcessCommandSet(updateParser.ParseFromString(ShortcutSubmapsReplaceSparql));
         }
 
-        protected void CreateSubMaps<TConfiguration>(INode parentMap, string property, Func<INode, IGraph, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
+        protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
             where TConfiguration : BaseConfiguration
         {
             var mapPropety = R2RMLMappings.CreateUriNode(property);
-            var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(parentMap, mapPropety);
+            var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(this.Node, mapPropety);
 
             foreach (var triple in triples.ToArray())
             {
-                var subConfiguration = createSubConfiguration(parentMap, R2RMLMappings);
+                var subConfiguration = createSubConfiguration(R2RMLMappings);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
                 subMaps.Add(subConfiguration);
             }

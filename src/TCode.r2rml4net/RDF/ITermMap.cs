@@ -4,7 +4,7 @@
     /// Represents a term map
     /// </summary>
     /// <remarks>Read more on http://www.w3.org/TR/r2rml/#dfn-term-map</remarks>
-    public interface ITermMap
+    public interface ITermMap : IMapBase
     {
         /// <summary>
         /// Gets template or null if absent

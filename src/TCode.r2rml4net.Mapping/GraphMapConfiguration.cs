@@ -6,8 +6,8 @@ namespace TCode.r2rml4net.Mapping
 {
     internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMap
     {
-        internal GraphMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
-            : base(parentTriplesMap, parentMapNode, r2RMLMappings)
+        internal GraphMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraphMapParent parentMap, IGraph r2RMLMappings)
+            : base(parentTriplesMap, parentMap, r2RMLMappings)
         {
         }
 

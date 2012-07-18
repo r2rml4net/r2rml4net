@@ -19,6 +19,7 @@ namespace TCode.r2rml4net.Mapping
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
+        private INode _triplesMapNode;
 
         internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -101,7 +102,7 @@ WHERE
 
         private void AssertTableNameTriples(string tablename)
         {
-            Node = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
+            _triplesMapNode = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -114,7 +115,7 @@ WHERE
 
         private void AssertSqlQueryTriples(string sqlQuery)
         {
-            Node = R2RMLMappings.CreateBlankNode();
+            _triplesMapNode = R2RMLMappings.CreateBlankNode();
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -205,13 +206,13 @@ WHERE
                 AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration= new SubjectMapConfiguration(this, Node, R2RMLMappings);
+                    _subjectMapConfiguration= new SubjectMapConfiguration(this, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
         }
 
-        public INode Node { get; private set; }
+        public override INode Node { get { return _triplesMapNode; } }
 
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.CreatePropertyObjectMap"/>
@@ -220,7 +221,7 @@ WHERE
         {
             AssertTriplesMapInitialized();
 
-            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings);
             _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
         }
@@ -282,25 +283,20 @@ WHERE
             if(currentNode == null)
                 throw new ArgumentNullException("currentNode");
 
-            Node = currentNode;
+            _triplesMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(Node, R2RMLUris.RrPredicateObjectMapPropety, (node, graph) => new PredicateObjectMapConfiguration(this, node, graph), _predicateObjectMaps);
+            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, graph => new PredicateObjectMapConfiguration(this, graph), _predicateObjectMaps);
 
             var subjectMaps = new List<SubjectMapConfiguration>();
-            CreateSubMaps(Node, R2RMLUris.RrSubjectMapProperty, (node, graph) => new SubjectMapConfiguration(this, node, graph), subjectMaps);
+            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, graph => new SubjectMapConfiguration(this, graph), subjectMaps);
 
             if(subjectMaps.Count > 1)
                 throw new InvalidTriplesMapException("Triples map can only have one subject map");
             _subjectMapConfiguration = subjectMaps.SingleOrDefault();
-        }
-
-        protected internal override INode ConfigurationNode
-        {
-            get { return Node; }
         }
 
         protected internal override ITriplesMapConfiguration ParentTriplesMap
@@ -324,7 +320,7 @@ WHERE
                 AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(this, Node, R2RMLMappings);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }

@@ -58,6 +58,7 @@
     <Compile Include="DefaultR2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
     <Compile Include="GraphMapConfiguration.cs" />
+    <Compile Include="IGraphMapParent.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />
     <Compile Include="ILiteralTermMapConfiguration.cs" />
     <Compile Include="IRefObjectMapConfiguration.cs" />

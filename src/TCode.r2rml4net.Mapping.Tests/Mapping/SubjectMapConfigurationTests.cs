@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
@@ -21,7 +20,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
          
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _triplesMapNode, graph);
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, graph);
         }
 
         [Test]
@@ -102,10 +101,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 new Triple(
                     _subjectMapConfiguration.ParentMapNode,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)),
-                    _subjectMapConfiguration.TermMapNode)));
+                    _subjectMapConfiguration.Node)));
             Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
                 new Triple(
-                    _subjectMapConfiguration.TermMapNode,
+                    _subjectMapConfiguration.Node,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
             Assert.AreEqual(uri, _subjectMapConfiguration.Subject);
@@ -116,7 +115,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             Uri class1 = new Uri("http://example.com/ontology#class");
-            string template = "http://www.example.com/res/{column}";
+            const string template = "http://www.example.com/res/{column}";
 
             // when
             _subjectMapConfiguration.AddClass(class1).IsTemplateValued(template);

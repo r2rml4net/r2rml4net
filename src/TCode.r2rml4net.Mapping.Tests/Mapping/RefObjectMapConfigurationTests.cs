@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
@@ -18,13 +19,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode referencedTriplesMap = graph.CreateUriNode(new Uri("http://test.example.com/TriplesMap"));
-            IUriNode predicateObjectMap = graph.CreateUriNode(new Uri("http://test.example.com/PredicateObjectMap"));
+            Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
+            predicateObjectMap.Setup(map => map.Node).Returns(
+                graph.CreateUriNode(new Uri("http://test.example.com/PredicateObjectMap")));
 
             _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
             _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
             _referencedTriplesMap.Setup(tm => tm.Node).Returns(referencedTriplesMap);
 
-            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, predicateObjectMap, _referencedTriplesMap.Object, graph);
+            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, predicateObjectMap.Object, _referencedTriplesMap.Object, graph);
         }
 
         [Test]
@@ -38,8 +41,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CanCreateJoinConditions()
         {
             // given
-            string childColumn = "child";
-            string parentColumn = "parent";
+            const string childColumn = "child";
+            const string parentColumn = "parent";
 
             // when
             _refObjectMap.AddJoinCondition(childColumn + "1", parentColumn + "1");

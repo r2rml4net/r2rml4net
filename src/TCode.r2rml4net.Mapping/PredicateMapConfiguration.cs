@@ -5,8 +5,8 @@ namespace TCode.r2rml4net.Mapping
 {
     internal class PredicateMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IPredicateMap
     {
-        internal PredicateMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
-            : base(parentTriplesMap, parentMapNode, r2RMLMappings)
+        internal PredicateMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings)
+            : base(parentTriplesMap, parentMap, r2RMLMappings)
         {
         }
 
