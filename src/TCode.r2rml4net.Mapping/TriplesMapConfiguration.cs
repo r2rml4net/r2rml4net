@@ -14,14 +14,16 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration, ITriplesMap
     {
+        private readonly IR2RMLConfiguration _r2RMLConfiguration;
+
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private INode _triplesMapNode;
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
 
-        internal TriplesMapConfiguration(IGraph r2RMLMappings)
+        internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings)
             : base(r2RMLMappings)
         {
+            _r2RMLConfiguration = r2RMLConfiguration;
         }
 
         #region Implementation of ITriplesMapConfiguration
@@ -33,7 +35,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (_triplesMapNode != null)
+                if (Node != null)
                 {
                     var sparqlQuery = new SparqlParameterizedString(
 @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
@@ -45,7 +47,7 @@ WHERE
     ?lt rr:tableName ?tableName
 }}");
 
-                    sparqlQuery.SetParameter("triplesMap", _triplesMapNode);
+                    sparqlQuery.SetParameter("triplesMap", Node);
                     var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
 
                     if (result.Count > 1)
@@ -99,7 +101,7 @@ WHERE
 
         private void AssertTableNameTriples(string tablename)
         {
-            _triplesMapNode = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
+            Node = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -112,7 +114,7 @@ WHERE
 
         private void AssertSqlQueryTriples(string sqlQuery)
         {
-            _triplesMapNode = R2RMLMappings.CreateBlankNode();
+            Node = R2RMLMappings.CreateBlankNode();
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -130,7 +132,7 @@ WHERE
         {
             get
             {
-                if (_triplesMapNode != null)
+                if (Node != null)
                 {
                     var sparqlQuery = new SparqlParameterizedString(
 @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
@@ -141,7 +143,7 @@ WHERE
     @triplesMap rr:logicalTable ?lt .
     ?lt rr:sqlQuery ?sqlQuery
 }}");
-                    sparqlQuery.SetParameter("triplesMap", _triplesMapNode);
+                    sparqlQuery.SetParameter("triplesMap", Node);
                     var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
 
                     if (result.Count > 1)
@@ -175,10 +177,10 @@ WHERE
         {
             get
             {
-                if (_triplesMapNode== null || !(_triplesMapNode is IUriNode))
+                if (Node== null || !(Node is IUriNode))
                     return null;
 
-                return (_triplesMapNode as IUriNode).Uri;
+                return (Node as IUriNode).Uri;
             }
         }
 
@@ -189,8 +191,8 @@ WHERE
             var logicalTable = R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty);
             tableDefinition = R2RMLMappings.CreateBlankNode();
 
-            R2RMLMappings.Assert(_triplesMapNode, type, tripleMapClass);
-            R2RMLMappings.Assert(_triplesMapNode, logicalTable, tableDefinition);
+            R2RMLMappings.Assert(Node, type, tripleMapClass);
+            R2RMLMappings.Assert(Node, logicalTable, tableDefinition);
         }
 
         /// <summary>
@@ -203,11 +205,13 @@ WHERE
                 AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration= new SubjectMapConfiguration(_triplesMapNode, R2RMLMappings);
+                    _subjectMapConfiguration= new SubjectMapConfiguration(this, Node, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
         }
+
+        public INode Node { get; private set; }
 
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.CreatePropertyObjectMap"/>
@@ -216,9 +220,14 @@ WHERE
         {
             AssertTriplesMapInitialized();
 
-            var propertyObjectMap = new PredicateObjectMapConfiguration(R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
+            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings.GetUriNode(Uri), R2RMLMappings);
             _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
+        }
+
+        public IR2RMLConfiguration R2RMLConfiguration
+        {
+            get { return _r2RMLConfiguration; }
         }
 
         #endregion
@@ -266,28 +275,6 @@ WHERE
 
         #endregion
 
-        IBlankNode LogicalTableNode
-        {
-            get
-            {
-                var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
-                    _triplesMapNode,
-                    R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty)
-                    ).ToArray();
-
-                if (logicalTables.Count() > 1)
-                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", Uri);
-
-                return logicalTables.First().Object as IBlankNode;
-            }
-        }
-
-        void AssertTriplesMapInitialized()
-        {
-            if (Uri == null)
-                throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
-        }
-
         #region Overrides of BaseConfiguration
 
         protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
@@ -295,16 +282,16 @@ WHERE
             if(currentNode == null)
                 throw new ArgumentNullException("currentNode");
 
-            _triplesMapNode = currentNode;
+            Node = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(_triplesMapNode, R2RMLUris.RrPredicateObjectMapPropety, (node, graph) => new PredicateObjectMapConfiguration(node, graph), _predicateObjectMaps);
+            CreateSubMaps(Node, R2RMLUris.RrPredicateObjectMapPropety, (node, graph) => new PredicateObjectMapConfiguration(this, node, graph), _predicateObjectMaps);
 
             var subjectMaps = new List<SubjectMapConfiguration>();
-            CreateSubMaps(_triplesMapNode, R2RMLUris.RrSubjectMapProperty, (node, graph) => new SubjectMapConfiguration(node, graph), subjectMaps);
+            CreateSubMaps(Node, R2RMLUris.RrSubjectMapProperty, (node, graph) => new SubjectMapConfiguration(this, node, graph), subjectMaps);
 
             if(subjectMaps.Count > 1)
                 throw new InvalidTriplesMapException("Triples map can only have one subject map");
@@ -313,7 +300,12 @@ WHERE
 
         protected internal override INode ConfigurationNode
         {
-            get { return _triplesMapNode; }
+            get { return Node; }
+        }
+
+        protected internal override ITriplesMapConfiguration ParentTriplesMap
+        {
+            get { return this; }
         }
 
         #endregion
@@ -332,12 +324,34 @@ WHERE
                 AssertTriplesMapInitialized();
 
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMapNode, R2RMLMappings);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, Node, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
         }
 
         #endregion
+
+        IBlankNode LogicalTableNode
+        {
+            get
+            {
+                var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
+                    Node,
+                    R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty)
+                    ).ToArray();
+
+                if (logicalTables.Count() > 1)
+                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", Uri);
+
+                return logicalTables.First().Object as IBlankNode;
+            }
+        }
+
+        void AssertTriplesMapInitialized()
+        {
+            if (Uri == null)
+                throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
+        }
     }
 }

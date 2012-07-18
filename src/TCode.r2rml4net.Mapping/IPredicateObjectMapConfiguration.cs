@@ -25,6 +25,6 @@ namespace TCode.r2rml4net.Mapping
         /// Creates a new ref object map
         /// </summary>
         /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many ref object maps</remarks>
-        IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration triplesMap);
+        IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration referencedTriplesMap);
     }
 }

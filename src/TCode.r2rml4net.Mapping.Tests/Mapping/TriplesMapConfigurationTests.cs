@@ -13,7 +13,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void Setup()
         {
             // Initialize TriplesMapConfiguration with a default graph
-            _triplesMapConfiguration = new TriplesMapConfiguration(new R2RMLConfiguration().R2RMLMappings);
+            var r2RMLConfiguration = new R2RMLConfiguration();
+            _triplesMapConfiguration = new TriplesMapConfiguration(r2RMLConfiguration, r2RMLConfiguration.R2RMLMappings);
         }
 
         [Test]

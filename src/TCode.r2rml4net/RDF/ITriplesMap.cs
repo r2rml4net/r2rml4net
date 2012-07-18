@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.RDF
 {
@@ -10,5 +11,6 @@ namespace TCode.r2rml4net.RDF
     {
         IEnumerable<IPredicateObjectMap> PredicateObjectMaps { get; }
         ISubjectMap SubjectMap { get; }
+        INode Node { get; }
     }
 }

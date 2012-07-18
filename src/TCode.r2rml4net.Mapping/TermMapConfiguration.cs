@@ -27,8 +27,8 @@ namespace TCode.r2rml4net.Mapping
 
         /// <summary>
         /// </summary>
-        protected TermMapConfiguration(INode parentMapNode, IGraph r2RMLMappings)
-            : base(r2RMLMappings)
+        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
+            : base(parentTriplesMap, r2RMLMappings)
         {
             ParentMapNode = parentMapNode;
             TermMapNode = R2RMLMappings.CreateBlankNode();

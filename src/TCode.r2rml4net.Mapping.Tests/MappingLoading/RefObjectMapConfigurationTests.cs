@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Moq;
 using NUnit.Framework;
 using VDS.RDF;
 
@@ -8,6 +9,15 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     public class RefObjectMapConfigurationTests
     {
         RefObjectMapConfiguration _refObjectMap;
+        private Mock<ITriplesMapConfiguration> _parentTriplesMap;
+        private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
+
+        [SetUp]
+        public void Setup()
+        {
+            _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
+        }
 
         [Test]
         public void CanInitializeJoinConditions()
@@ -27,9 +37,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                            ];
                                        ];
                                    ].");
+            _referencedTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            _refObjectMap = new RefObjectMapConfiguration(graph.GetBlankNode("autos1"), graph.GetUriNode("ex:TriplesMap2"), graph);
+            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, graph.GetBlankNode("autos1"), _referencedTriplesMap.Object, graph);
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos2"));
 
             // then

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query.Datasets;
@@ -13,6 +14,8 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class BaseConfiguration
     {
+        private readonly ITriplesMapConfiguration _parentTriplesMap;
+
         private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 DELETE { ?map rr:graph ?value . }
 INSERT { ?map rr:graphMap [ rr:constant ?value ] . }
@@ -46,13 +49,22 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Constructor used by implementations other than <see cref="R2RMLConfiguration"/>
+        /// Constructor used by <see cref="TriplesMapConfiguration"/>
         /// </summary>
         protected BaseConfiguration(IGraph existingMappingsGraph)
         {
             R2RMLMappings = existingMappingsGraph;
             EnsureNoShortcutSubmaps();
             EnsurePrefixes();
+        }
+
+        /// <summary>
+        /// Constructor used by implementations other than <see cref="R2RMLConfiguration"/> and <see cref="TriplesMapConfiguration"/>
+        /// </summary>
+        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph)
+            : this(existingMappingsGraph)
+        {
+            _parentTriplesMap = triplesMap;
         }
 
         private void EnsurePrefixes()
@@ -105,6 +117,11 @@ WHERE { ?map rr:subject ?value }";
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
                 subMaps.Add(subConfiguration);
             }
+        }
+
+        protected internal virtual ITriplesMapConfiguration ParentTriplesMap
+        {
+            get { return _parentTriplesMap; }
         }
     }
 }

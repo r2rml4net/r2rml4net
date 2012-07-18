@@ -13,7 +13,8 @@ namespace TCode.r2rml4net.Mapping
     {
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
-        internal SubjectMapConfiguration(INode parentMapNode, IGraph r2RMLMappings) : base(parentMapNode, r2RMLMappings)
+        internal SubjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
+            : base(parentTriplesMap, parentMapNode, r2RMLMappings)
         {
         }
 
@@ -50,7 +51,7 @@ namespace TCode.r2rml4net.Mapping
 
         public IGraphMap CreateGraphMap()
         {
-            var graphMap = new GraphMapConfiguration(TermMapNode, R2RMLMappings);
+            var graphMap = new GraphMapConfiguration(ParentTriplesMap, TermMapNode, R2RMLMappings);
             _graphMaps.Add(graphMap);
             return graphMap;
         }
@@ -95,7 +96,7 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(TermMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(node, graph), _graphMaps);
+            CreateSubMaps(TermMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(ParentTriplesMap, node, graph), _graphMaps);
         }
 
         #endregion

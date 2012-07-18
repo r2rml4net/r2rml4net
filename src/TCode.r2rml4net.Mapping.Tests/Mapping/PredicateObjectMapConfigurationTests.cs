@@ -12,6 +12,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     {
         private PredicateObjectMapConfiguration _predicateObjectMap;
         private Uri _triplesMapURI;
+        private Mock<ITriplesMapConfiguration> _triplesMap;
 
         [SetUp]
         public void Setup()
@@ -19,7 +20,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             _triplesMapURI = new Uri("http://tests.example.com/TriplesMap");
             var triplesMapNode = graph.CreateUriNode(_triplesMapURI);
-            _predicateObjectMap = new PredicateObjectMapConfiguration(triplesMapNode, graph);
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+            _triplesMap.Setup(tm => tm.Node).Returns(triplesMapNode);
+            _predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, triplesMapNode, graph);
         }
 
         [Test]
@@ -73,7 +76,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             Mock<ITriplesMapConfiguration> parentTriplesMap = new Mock<ITriplesMapConfiguration>();
-            parentTriplesMap.Setup(tMap => tMap.Uri).Returns(new Uri("http://tests.example.com/OtherTriplesMap"));
+            parentTriplesMap.Setup(tMap => tMap.Node).Returns(_predicateObjectMap.R2RMLMappings.CreateUriNode(new Uri("http://tests.example.com/OtherTriplesMap")));
 
             // when 
             var objectMap1 = _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
@@ -91,7 +94,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             Mock<ITriplesMapConfiguration> parentTriplesMap = new Mock<ITriplesMapConfiguration>();
-            parentTriplesMap.Setup(tMap => tMap.Uri).Returns(new Uri("http://tests.example.com/OtherTriplesMap"));
+            parentTriplesMap.Setup(tMap => tMap.Node).Returns(_predicateObjectMap.R2RMLMappings.CreateUriNode(new Uri("http://tests.example.com/OtherTriplesMap")));
 
             // when
             _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);

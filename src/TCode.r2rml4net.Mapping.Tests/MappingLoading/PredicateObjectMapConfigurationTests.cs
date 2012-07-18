@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using TCode.r2rml4net.RDF;
 using VDS.RDF;
 using Moq;
 
@@ -10,6 +9,21 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class PredicateObjectMapConfigurationTests
     {
+        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private Mock<ITriplesMapConfiguration> _otherTriplesMap;
+        private Mock<IR2RMLConfiguration> _configuration;
+
+        [SetUp]
+        public void Setup()
+        {
+            _otherTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+            _configuration =new Mock<IR2RMLConfiguration>();
+
+            _configuration.Setup(config => config.TriplesMaps).Returns(new[] {_triplesMap.Object, _otherTriplesMap.Object});
+            _triplesMap.Setup(tm => tm.R2RMLConfiguration).Returns(_configuration.Object);
+        }
+
         [Test]
         public void CanBeInitializedWithPredicateMaps()
         {
@@ -23,9 +37,10 @@ ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
 ex:PredicateObjectMap 
     rr:predicateMap [ rr:template ""http://data.example.com/employee/{EMPNO}"" ] ;
     rr:predicateMap [ rr:template ""http://data.example.com/user/{EMPNO}"" ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
@@ -47,9 +62,10 @@ ex:PredicateObjectMap
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:predicate ex:Employee, ex:Worker .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
@@ -71,9 +87,10 @@ ex:PredicateObjectMap rr:predicate ex:Employee, ex:Worker .");
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:graph ex:Employee, ex:Worker .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
@@ -101,9 +118,11 @@ ex:PredicateObjectMap rr:objectMap
 ex:PredicateObjectMap rr:objectMap [
     rr:parentTriplesMap ex:TriplesMap2
 ] .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _otherTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
@@ -125,9 +144,10 @@ ex:PredicateObjectMap rr:objectMap [
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:object ex:Employee, ex:Worker .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
@@ -154,9 +174,11 @@ ex:PredicateObjectMap rr:objectMap
 
 ex:PredicateObjectMap rr:objectMap ex:refObjectMap .
 ex:refObjectMap rr:parentTriplesMap ex:TriplesMap2 .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _otherTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            var predicateObjectMap = new PredicateObjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // then
