@@ -23,7 +23,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapNode = _graph.CreateUriNode(new Uri("http://mapping.com/SomeMap"));
             _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
             _parentTriplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
-            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_parentTriplesMap.Object, _triplesMapNode, _graph)
+            Mock<IMapBase> parentMap = new Mock<IMapBase>();
+            parentMap.Setup(map => map.Node).Returns(_graph.CreateBlankNode());
+
+            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_parentTriplesMap.Object, parentMap.Object, _graph)
                                             {
                                                 CallBase = true
                                             };
@@ -71,9 +74,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode,
                 _termMapConfiguration.CreateMapPropertyNode(),
-                _termMapConfiguration.TermMapNode)));
+                _termMapConfiguration.Node)));
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
-                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
@@ -106,9 +109,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode,
                 _termMapConfiguration.CreateMapPropertyNode(),
-                _termMapConfiguration.TermMapNode)));
+                _termMapConfiguration.Node)));
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
-                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
@@ -139,9 +142,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode, 
                 _termMapConfiguration.CreateMapPropertyNode(),
-                _termMapConfiguration.TermMapNode)));
+                _termMapConfiguration.Node)));
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
-                _termMapConfiguration.TermMapNode,
+                _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
             Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermType.GetURI().ToString());
         }
@@ -174,7 +177,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CanHaveInverseExpression()
         {
             // given
-            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+            const string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
 
             // when
             _termMapConfiguration.SetInverseExpression(expression);
@@ -187,7 +190,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CannotHaveInverseExpressionWhenConstantValued()
         {
             // given
-            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+            const string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
 
             // when
             _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri"));
@@ -200,7 +203,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CannotConstantValueWhenInverseExpressionIsSet()
         {
             // given
-            string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
+            const string expression = "{DEPTNO} = SUBSTRING({DEPTID}, CHARACTER_LENGTH('Department')+1)";
 
             // when
             _termMapConfiguration.SetInverseExpression(expression);

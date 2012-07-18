@@ -23,14 +23,14 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// <see cref="INode"/> of the current term map
         /// </summary>
-        protected internal INode TermMapNode { get; private set; }
+        protected INode TermMapNode { get; private set; }
 
         /// <summary>
         /// </summary>
-        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
+        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings)
             : base(parentTriplesMap, r2RMLMappings)
         {
-            ParentMapNode = parentMapNode;
+            ParentMapNode = parentMap.Node;
             TermMapNode = R2RMLMappings.CreateBlankNode();
         }
 
@@ -236,6 +236,15 @@ namespace TCode.r2rml4net.Mapping
 
         #endregion
 
+        #region Implementation of IMapBase
+
+        public override INode Node
+        {
+            get { return TermMapNode; }
+        }
+
+        #endregion
+
         #region Overrides of BaseConfiguration
 
         /// <summary>
@@ -251,11 +260,6 @@ namespace TCode.r2rml4net.Mapping
 
             TermMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
-        }
-
-        protected internal override INode ConfigurationNode
-        {
-            get { return TermMapNode; }
         }
 
         #endregion

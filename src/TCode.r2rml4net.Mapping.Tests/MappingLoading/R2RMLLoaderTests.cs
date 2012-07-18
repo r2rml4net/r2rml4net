@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -50,8 +48,8 @@ _:blankTriplesMap a rr:TriplesMap .";
             Assert.AreEqual(2, mappings.TriplesMaps.Count());
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/StudentTriplesMap"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(0).ConfigurationNode).Uri);
-            Assert.AreEqual("blankTriplesMap", ((IBlankNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).ConfigurationNode).InternalID);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(0).Node).Uri);
+            Assert.AreEqual("blankTriplesMap", ((IBlankNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).Node).InternalID);
         }
 
         [Test]
@@ -70,19 +68,19 @@ _:blankTriplesMap a rr:TriplesMap .";
             Assert.AreEqual(5, mappings.TriplesMaps.Count());
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/StudentTriplesMap"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(0).ConfigurationNode).Uri);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(0).Node).Uri);
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/TriplesMap2"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).ConfigurationNode).Uri);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(1).Node).Uri);
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/TriplesMap1"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(2).ConfigurationNode).Uri);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(2).Node).Uri);
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/ManyToManyTriplesMap"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(3).ConfigurationNode).Uri);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(3).Node).Uri);
             Assert.AreEqual(
                 new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/SimplerManyToManyTriplesMap"),
-                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(4).ConfigurationNode).Uri);
+                ((IUriNode)mappings.TriplesMaps.Cast<TriplesMapConfiguration>().ElementAt(4).Node).Uri);
         }
     }
 }

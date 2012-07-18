@@ -66,7 +66,7 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
-        protected internal override INode ConfigurationNode
+        public override INode Node
         {
             get { return null; }
         }

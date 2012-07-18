@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
@@ -11,12 +12,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         RefObjectMapConfiguration _refObjectMap;
         private Mock<ITriplesMapConfiguration> _parentTriplesMap;
         private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
+        private Mock<IPredicateObjectMap> _predicateObjectMap;
 
         [SetUp]
         public void Setup()
         {
             _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
             _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _predicateObjectMap = new Mock<IPredicateObjectMap>();
         }
 
         [Test]
@@ -37,17 +40,18 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                            ];
                                        ];
                                    ].");
+            _predicateObjectMap.Setup(map => map.Node).Returns(graph.GetBlankNode("autos1"));
             _referencedTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, graph.GetBlankNode("autos1"), _referencedTriplesMap.Object, graph);
+            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, _predicateObjectMap.Object, _referencedTriplesMap.Object, graph);
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos2"));
 
             // then
             Assert.AreEqual(1, _refObjectMap.JoinConditions.Count());
             Assert.AreEqual("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
             Assert.AreEqual("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), _refObjectMap.ConfigurationNode);
+            Assert.AreEqual(graph.GetBlankNode("autos2"), _refObjectMap.Node);
         }
     }
 }

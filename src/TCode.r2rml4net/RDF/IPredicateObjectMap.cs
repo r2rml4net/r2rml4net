@@ -6,7 +6,7 @@ namespace TCode.r2rml4net.RDF
     /// Represents a predicate-object map
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-predicate-object-map</remarks>
-    public interface IPredicateObjectMap
+    public interface IPredicateObjectMap : IMapBase
     {
         /// <summary>
         /// Gets object maps associated with this <see cref="IPredicateObjectMap"/>

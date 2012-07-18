@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TCode.r2rml4net.RDF
 {
@@ -9,7 +6,7 @@ namespace TCode.r2rml4net.RDF
     /// Represents a RefObjectMap
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-referencing-object-map</remarks>
-    public interface IRefObjectMap
+    public interface IRefObjectMap : IMapBase
     {
         /// <summary>
         /// Optional join conditions associated with this <see cref="IRefObjectMap"/>

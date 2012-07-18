@@ -8,10 +8,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     public class GraphMapConfigurationTests
     {
         private Mock<ITriplesMapConfiguration> _triplesMap;
+        private Mock<IGraphMapParent> _graphMapParent;
 
         [SetUp]
         public void Setup()
         {
+            _graphMapParent = new Mock<IGraphMapParent>();
             _triplesMap = new Mock<ITriplesMapConfiguration>();
         }
 
@@ -29,16 +31,17 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                    ex:subject 
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
 	                                   rr:graphMap [ rr:template ""http://data.example.com/jobgraph/{JOB}"" ].");
-            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _graphMapParent.Setup(map => map.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:subject"), graph);
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", graphMap.Template);
             Assert.AreEqual("http://www.example.com/subject", ((IUriNode) graphMap.ParentMapNode).Uri.ToString());
-            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.Node);
         }
 
         [Test]
@@ -55,15 +58,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                    ex:subject 
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
 	                                   rr:graphMap [ rr:constant ex:graph ].");
-            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:subject"), graph);
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.Node);
         }
 
         [Test]
@@ -80,15 +84,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                    ex:subject 
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
 	                                   rr:graph ex:graph .");
-            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:subject"), graph);
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graphMap.R2RMLMappings.GetBlankNode("autos1"));
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.ConfigurationNode);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.Node);
         }
     }
 }

@@ -8,8 +8,8 @@ namespace TCode.r2rml4net.Mapping
 {
     internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, IObjectMap
     {
-        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode parentMapNode, IGraph r2RMLMappings)
-            : base(parentTriplesMap, parentMapNode, r2RMLMappings)
+        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
+            : base(parentTriplesMap, parentMap, r2RMLMappings)
         {
         }
 
