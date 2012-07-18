@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Moq;
 using NUnit.Framework;
 using VDS.RDF;
 
@@ -11,6 +10,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     public class RefObjectMapConfigurationTests
     {
         RefObjectMapConfiguration _refObjectMap;
+        private Mock<ITriplesMapConfiguration> _parentTriplesMap;
+        private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
 
         [SetUp]
         public void Setup()
@@ -18,7 +19,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode referencedTriplesMap = graph.CreateUriNode(new Uri("http://test.example.com/TriplesMap"));
             IUriNode predicateObjectMap = graph.CreateUriNode(new Uri("http://test.example.com/PredicateObjectMap"));
-            _refObjectMap = new RefObjectMapConfiguration(predicateObjectMap, referencedTriplesMap, graph);
+
+            _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _referencedTriplesMap.Setup(tm => tm.Node).Returns(referencedTriplesMap);
+
+            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, predicateObjectMap, _referencedTriplesMap.Object, graph);
         }
 
         [Test]

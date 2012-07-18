@@ -1,9 +1,11 @@
+using TCode.r2rml4net.RDF;
+
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Entrypoint to all of R2RML fluent configuration interfaces
     /// </summary>
-    public interface IR2RMLConfiguration
+    public interface IR2RMLConfiguration : IR2RML
     {
         /// <summary>
         /// Creates a <see cref="ITriplesMapConfiguration"/>, which will use a concrete table or view as datasource 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -10,13 +11,17 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     {
         private SubjectMapConfiguration _subjectMapConfiguration;
         private IUriNode _triplesMapNode;
+        private Mock<ITriplesMapConfiguration> _triplesMap;
 
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             _triplesMapNode = graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMapNode, graph);
+         
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+            _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _triplesMapNode, graph);
         }
 
         [Test]

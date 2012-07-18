@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
@@ -6,6 +7,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class PredicateMapConfigurationTests
     {
+        private Mock<ITriplesMapConfiguration> _triplesMap;
+
+        [SetUp]
+        public void Setup()
+        {
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+        }
+            
         [Test]
         public void CanBeInitializedWithExistingGraph()
         {
@@ -17,9 +26,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/employee/{EMPNO}"" ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
@@ -39,9 +49,10 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
@@ -60,9 +71,10 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:predicate ex:Value .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then

@@ -14,13 +14,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         private Mock<TermMapConfiguration> _termMapConfigurationMock;
         private TermMapConfiguration _termMapConfiguration;
         private IGraph _graph;
+        private Mock<ITriplesMapConfiguration> _parentTriplesMap;
 
         [SetUp]
         public void Setup()
         {
             _graph = new R2RMLConfiguration().R2RMLMappings;
             _triplesMapNode = _graph.CreateUriNode(new Uri("http://mapping.com/SomeMap"));
-            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_triplesMapNode, _graph)
+            _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
+            _parentTriplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
+            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_parentTriplesMap.Object, _triplesMapNode, _graph)
                                             {
                                                 CallBase = true
                                             };

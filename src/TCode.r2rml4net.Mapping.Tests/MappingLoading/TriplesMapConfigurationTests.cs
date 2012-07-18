@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -9,6 +10,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class TriplesMapConfigurationTests
     {
+        private Mock<IR2RMLConfiguration> _configuration;
+
+        [SetUp]
+        public void Setup()
+        {
+            _configuration = new Mock<IR2RMLConfiguration>();
+        }
+
         [Test]
         public void CanBeInitizalizedFromGraph()
         {
@@ -21,7 +30,7 @@ ex:triplesMap rr:subjectMap ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap"));
 
             // then
@@ -45,7 +54,7 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap"));
 
             // then
@@ -70,7 +79,7 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:subjectMap ex:subject1 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap")));

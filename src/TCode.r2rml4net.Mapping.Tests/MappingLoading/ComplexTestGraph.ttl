@@ -31,7 +31,7 @@ FROM DEPT;
 
 <TriplesMap2>
      a rr:TriplesMap;
-    rr:logicalTable <#DeptTableView>;
+    rr:logicalTable <DeptTableView>;
     rr:subjectMap [
         rr:template "http://data.example.com/department/{DEPTNO}";
         rr:class ex:Department;
@@ -66,7 +66,7 @@ FROM DEPT;
     rr:predicateObjectMap [
         rr:predicate ex:department;
         rr:objectMap [
-            rr:parentTriplesMap <#TriplesMap2>;
+            rr:parentTriplesMap <TriplesMap2>;
             rr:joinCondition [
                 rr:child "DEPTNO";
                 rr:parent "DEPTNO";

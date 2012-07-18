@@ -11,14 +11,16 @@ namespace TCode.r2rml4net.Mapping
     internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration, IRefObjectMap
     {
         INode _refObjectMapNode;
-        INode _predicateObjectMapNode;
-        INode _referencedTriplesMap;
+        readonly INode _predicateObjectMapNode;
+        readonly INode _referencedTriplesMapNode;
+        ITriplesMap _referencedTriplesMap;
 
-        internal RefObjectMapConfiguration(INode predicateObjectMapNode, INode referencedTriplesMap, IGraph mappings)
-            : base(mappings)
+        internal RefObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode predicateObjectMapNode, ITriplesMap referencedTriplesMap, IGraph mappings)
+            : base(parentTriplesMap, mappings)
         {
             _refObjectMapNode = mappings.CreateBlankNode();
             _predicateObjectMapNode = predicateObjectMapNode;
+            _referencedTriplesMapNode = referencedTriplesMap.Node;
             _referencedTriplesMap = referencedTriplesMap;
 
             AssertObjectMapSubgraph();
@@ -41,7 +43,7 @@ namespace TCode.r2rml4net.Mapping
                 throw new ArgumentNullException("refObjectMapNode");
 
             R2RMLMappings.Retract(_predicateObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Retract(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _referencedTriplesMap);
+            R2RMLMappings.Retract(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _referencedTriplesMapNode);
 
             _refObjectMapNode = refObjectMapNode;
             AssertObjectMapSubgraph();
@@ -92,7 +94,7 @@ WHERE {
         private void AssertObjectMapSubgraph()
         {
             R2RMLMappings.Assert(_predicateObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _referencedTriplesMap);
+            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _referencedTriplesMapNode);
         }
     }
 }

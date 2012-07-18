@@ -15,8 +15,8 @@ namespace TCode.r2rml4net.Mapping
         private readonly IList<PredicateMapConfiguration> _predicateMaps = new List<PredicateMapConfiguration>();
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
-        internal PredicateObjectMapConfiguration(INode triplesMapNode, IGraph r2RMLMappings)
-            : base(r2RMLMappings)
+        internal PredicateObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, INode triplesMapNode, IGraph r2RMLMappings)
+            : base(parentTriplesMap, r2RMLMappings)
         {
             _predicateObjectMapNode = R2RMLMappings.CreateBlankNode();
             R2RMLMappings.Assert(triplesMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicateObjectMapPropety), _predicateObjectMapNode);
@@ -26,28 +26,28 @@ namespace TCode.r2rml4net.Mapping
 
         public IObjectMapConfiguration CreateObjectMap()
         {
-            var objectMap = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            var objectMap = new ObjectMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, R2RMLMappings);
             _objectMaps.Add(objectMap);
             return objectMap;
         }
 
         public ITermMapConfiguration CreatePredicateMap()
         {
-            var propertyMap = new PredicateMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            var propertyMap = new PredicateMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, R2RMLMappings);
             _predicateMaps.Add(propertyMap);
             return propertyMap;
         }
 
         public IGraphMap CreateGraphMap()
         {
-            var graphMap = new GraphMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+            var graphMap = new GraphMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, R2RMLMappings);
             _graphMaps.Add(graphMap);
             return graphMap;
         }
 
-        public IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration triplesMap)
+        public IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration referencedTriplesMap)
         {
-            var refObjectMap = new RefObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings.CreateUriNode(triplesMap.Uri), R2RMLMappings);
+            var refObjectMap = new RefObjectMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, referencedTriplesMap, R2RMLMappings);
             _refObjectMaps.Add(refObjectMap);
             return refObjectMap;
         }
@@ -58,8 +58,8 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(node, graph), _graphMaps);
-            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrPredicateMapPropety, (node, graph) => new PredicateMapConfiguration(node, graph), _predicateMaps);
+            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrGraphMapPropety, (node, graph) => new GraphMapConfiguration(ParentTriplesMap, node, graph), _graphMaps);
+            CreateSubMaps(_predicateObjectMapNode, R2RMLUris.RrPredicateMapPropety, (node, graph) => new PredicateMapConfiguration(ParentTriplesMap, node, graph), _predicateMaps);
             CreateObjectMaps();
             CreateRefObjectMaps();
         }
@@ -76,7 +76,7 @@ namespace TCode.r2rml4net.Mapping
 
             foreach (var result in resultSet)
             {
-                var subConfiguration = new ObjectMapConfiguration(_predicateObjectMapNode, R2RMLMappings);
+                var subConfiguration = new ObjectMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, R2RMLMappings);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
                 _objectMaps.Add(subConfiguration);
             }
@@ -84,17 +84,28 @@ namespace TCode.r2rml4net.Mapping
 
         private void CreateRefObjectMaps()
         {
-            var query = new SparqlParameterizedString(
-                "SELECT ?objectMap ?triplesMap WHERE { @parentMap @objectMapProperty ?objectMap . ?objectMap @parentTriplesMap ?triplesMap }");
-            query.SetParameter("parentMap", _predicateObjectMapNode);
-            query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
-            query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
+            var query = new SparqlParameterizedString(@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
+SELECT ?objectMap ?triplesMap 
+WHERE 
+{ 
+    @childTriplesMap rr:predicateObjectMap @predicateObjectMap .
+    @predicateObjectMap rr:objectMap ?objectMap . 
+    ?objectMap rr:parentTriplesMap ?triplesMap .
+}");
+            query.SetParameter("childTriplesMap", ParentTriplesMap.Node);
+            query.SetParameter("predicateObjectMap", _predicateObjectMapNode);
+            query.SetParameter("predicateObjectMap", _predicateObjectMapNode);
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
 
             foreach (var result in resultSet)
             {
-                var subConfiguration = new RefObjectMapConfiguration(_predicateObjectMapNode, result.Value("triplesMap"),
-                                                                     R2RMLMappings);
+                ITriplesMap referencedTriplesMap =
+                    ParentTriplesMap.R2RMLConfiguration.TriplesMaps.SingleOrDefault(tMap => result.Value("triplesMap").Equals(tMap.Node));
+
+                if(referencedTriplesMap == null)
+                    throw new InvalidTriplesMapException(string.Format("Triples map {0} not found. It must be added before creating ref object map", result.Value("triplesMap")));
+
+                var subConfiguration = new RefObjectMapConfiguration(ParentTriplesMap, _predicateObjectMapNode, referencedTriplesMap, R2RMLMappings);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
                 _refObjectMaps.Add(subConfiguration);
             }

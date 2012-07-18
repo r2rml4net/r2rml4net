@@ -1,4 +1,5 @@
 ﻿using System;
+using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -9,13 +10,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     public class PredicateMapConfigurationTests
     {
         private PredicateMapConfiguration _predicateMap;
-
+        private Mock<ITriplesMapConfiguration> _triplesMapNode;
+       
         [SetUp]
         public void Setup()
         {
             IGraph graph = new R2RMLConfiguration().R2RMLMappings;
             IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            _predicateMap = new PredicateMapConfiguration(triplesMapNode, graph);
+
+            _triplesMapNode = new Mock<ITriplesMapConfiguration>();
+            _triplesMapNode.Setup(tm => tm.Node).Returns(triplesMapNode);
+
+            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, triplesMapNode, graph);
         }
 
         [Test]

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
-using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
@@ -9,6 +9,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class SubjectMapConfigurationTests
     {
+        private Mock<ITriplesMapConfiguration> _triplesMap;
+
+        [SetUp]
+        public void Setup()
+        {
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+        }
+
         [Test]
         public void CanInitizalieFromGraph()
         {
@@ -21,9 +29,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
   
                                    ex:subject 
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"".");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
 
             // then
@@ -46,9 +55,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
 	                                   rr:graphMap [ rr:template ""http://data.example.com/jobgraph/{JOB}"" ] ;
 	                                   rr:graphMap [ rr:constant <http://data.example.com/agraph/> ] .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
 
             // then
@@ -74,9 +84,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
 	                                   rr:graph <http://data.example.com/shortGraph/> ;
 	                                   rr:graph <http://data.example.com/agraph/> .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(graph.GetUriNode("ex:triplesMap"), graph);
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
 
             // then
@@ -97,9 +108,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 @prefix rr: <http://www.w3.org/ns/r2rml#>.
 
 ex:TriplesMap rr:subject ex:Value .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(graph.GetUriNode("ex:TriplesMap"), graph);
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:triplesMap"), graph);
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then

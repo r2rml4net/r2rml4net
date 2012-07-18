@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
@@ -6,6 +7,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     [TestFixture]
     public class ObjectMapConfigurationTests
     {
+        private Mock<ITriplesMapConfiguration> _triplesMap;
+
+        [SetUp]
+        public void Setup()
+        {
+            _triplesMap = new Mock<ITriplesMapConfiguration>();
+        }
+
         [Test]
         public void CanBeInitializedWithExistingGraph()
         {
@@ -18,9 +27,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}"" ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
@@ -41,9 +51,10 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
@@ -63,9 +74,10 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
 ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
   
 ex:PredicateObjectMap rr:object ex:someObject .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(graph.GetUriNode("ex:PredicateObjectMap"), graph);
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, graph.GetUriNode("ex:PredicateObjectMap"), graph);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
 
             // then
