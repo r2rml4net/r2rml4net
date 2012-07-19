@@ -1,0 +1,93 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<StudentTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Student"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/Student/ID={ID}";
+	  rr:class <http://example.com/Student>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#ID> ] ; 
+      rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#FirstName> ] ; 
+      rr:objectMap [ rr:column "FirstName"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#LastName> ] ; 
+      rr:objectMap [ rr:column "LastName"; ]
+    ]
+    .
+
+<SportTriplesMap> 
+	a rr:TriplesMap ;
+
+	rr:logicalTable [ rr:tableName "Sport"; ];
+
+	rr:subjectMap
+	[
+	  rr:template "http://example.com/Sport/ID={ID}";
+	  rr:class <http://example.com/Sport>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Sport#ID> ] ; 
+      rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Sport#Description> ] ; 
+      rr:objectMap [ rr:column "Description"; ]
+    ]
+	.
+
+<Student_SportTriplesMap> 
+	a rr:TriplesMap ;
+
+	rr:logicalTable [ rr:tableName "Student_Sport"; ];
+
+	rr:subjectMap
+	[
+	  rr:template "http://example.com/Student_Sport/ID_Student={ID_Student};ID_Sport={ID_Sport}";
+	  rr:class <http://example.com/Student_Sport>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ID_Sport> ] ; 
+      rr:objectMap [ rr:column "ID_Sport"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ID_Student> ] ; 
+      rr:objectMap [ rr:column "ID_Student"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Sport> ] ; 
+      rr:objectMap [ rr:template "http://example.com/Sport/ID={ID_Sport}"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Student> ] ; 
+      rr:objectMap [ rr:template "http://example.com/Student/ID={ID_Student}"; ]
+    ]
+	.

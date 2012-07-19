@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B2B367CA-B338-4176-B97B-FB9B5558C4B0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TCode.r2rml4net.Mapping.Tests</RootNamespace>
+    <AssemblyName>TCode.r2rml4net.Mapping.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="dotNetRDF, Version=0.7.0.2246, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\dotNetRDF.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit-gui-runner">
+      <HintPath>..\packages\NUnit.Runners.2.6.0.12051\tools\lib\nunit-gui-runner.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
+    <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\PredicateObjectMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
+    <Compile Include="MappingLoading\TriplesMapConfigurationTests.cs" />
+    <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
+    <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
+    <Compile Include="Mapping\ObjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\PredicateObjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\RefObjectMapConfigurationTests.cs" />
+    <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
+    <Compile Include="GraphTestsExtensions.cs" />
+    <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
+    <Compile Include="Mapping\TermMapConfigurationTests.cs" />
+    <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
+    <Compile Include="RelationalExampleMappings.cs" />
+    <Compile Include="UriConstants.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TCode.r2rml4net.Mapping\TCode.r2rml4net.Mapping.csproj">
+      <Project>{1C96F7F6-32B6-4FD3-A12F-5BEE2FD068D9}</Project>
+      <Name>TCode.r2rml4net.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj">
+      <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
+      <Name>TCode.r2rml4net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0001.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0002.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0003.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0006.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0008.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0009.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0010.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0011.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0014.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0015.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0016.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0017.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MappingLoading\ComplexTestGraph.ttl" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

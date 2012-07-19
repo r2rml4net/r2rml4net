@@ -1,0 +1,107 @@
+# Mapping a table without primary key with typed objects columns
+
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<StudentTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Student"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:termType rr:BlankNode;  
+	  rr:class <http://example.com/Student>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Int32> ] ; 
+      rr:objectMap [ rr:column "Int32"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Varchar> ] ; 
+      rr:objectMap [ rr:column "Varchar" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#NVarchar> ] ; 
+      rr:objectMap [ rr:column "NVarchar" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Float> ] ; 
+      rr:objectMap [ rr:column "Float"; rr:datatype xsd:double ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Double> ] ; 
+      rr:objectMap [ rr:column "Double"; rr:datatype xsd:double ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Decimal> ] ; 
+      rr:objectMap [ rr:column "Decimal"; rr:datatype xsd:decimal ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Money> ] ; 
+      rr:objectMap [ rr:column "Money"; rr:datatype xsd:decimal ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Date> ] ; 
+      rr:objectMap [ rr:column "Date"; rr:datatype xsd:date ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Time> ] ; 
+      rr:objectMap [ rr:column "Time"; rr:datatype xsd:time ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#DateTime> ] ; 
+      rr:objectMap [ rr:column "DateTime"; rr:datatype xsd:dateTime ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#DateTime2> ] ; 
+      rr:objectMap [ rr:column "DateTime2"; rr:datatype xsd:dateTime ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Boolean> ] ; 
+      rr:objectMap [ rr:column "Boolean"; rr:datatype xsd:boolean ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Binary> ] ; 
+      rr:objectMap [ rr:column "Binary"; rr:datatype xsd:hexBinary ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Int16> ] ; 
+      rr:objectMap [ rr:column "Int16"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Int64> ] ; 
+      rr:objectMap [ rr:column "Int64"; rr:datatype xsd:integer ]
+    ]
+    .

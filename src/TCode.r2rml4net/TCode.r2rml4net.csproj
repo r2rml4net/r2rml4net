@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TCode.r2rml4net</RootNamespace>
+    <AssemblyName>TCode.r2rml4net</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Debug\TCode.r2rml4net.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Release\TCode.r2rml4net.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DatabaseSchemaReader">
+      <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
+    </Reference>
+    <Reference Include="dotNetRDF, Version=0.7.0.2246, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\dotNetRDF.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IVistitable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDB\ColumnMetadata.cs" />
+    <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
+    <Compile Include="RDB\DatabaseSchemaReader\CoreSQL2008ColumTypeMapper.cs" />
+    <Compile Include="RDB\DatabaseSchemaReader\DatabaseSchemaAdapter.cs" />
+    <Compile Include="RDB\DatabaseSchemaReader\IColumnTypeMapper.cs" />
+    <Compile Include="RDB\IEffectiveSqlBuilder.cs" />
+    <Compile Include="RDB\R2rmlType.cs" />
+    <Compile Include="RDB\ForeignKeyMetadata.cs" />
+    <Compile Include="RDB\IDatabaseMetadata.cs" />
+    <Compile Include="RDB\IDatabaseMetadataVisitor.cs" />
+    <Compile Include="RDB\TableCollection.cs" />
+    <Compile Include="RDB\TableMetadata.cs" />
+    <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
+    <Compile Include="Mapping\IMapBase.cs" />
+    <Compile Include="Mapping\IGraphMap.cs" />
+    <Compile Include="InvalidTriplesMapException.cs" />
+    <Compile Include="Mapping\IObjectMap.cs" />
+    <Compile Include="Mapping\IPredicateMap.cs" />
+    <Compile Include="Mapping\IPredicateObjectMap.cs" />
+    <Compile Include="Mapping\IR2RML.cs" />
+    <Compile Include="Mapping\IRefObjectMap.cs" />
+    <Compile Include="Mapping\ISubjectMap.cs" />
+    <Compile Include="Mapping\ITermMap.cs" />
+    <Compile Include="Mapping\ITriplesMap.cs" />
+    <Compile Include="Mapping\JoinCondition.cs" />
+    <Compile Include="RDF\XsdDatatypes.cs" />
+    <Compile Include="TriplesGeneration\ITriplesGenerator.cs" />
+    <Compile Include="TriplesGeneration\W3CTriplesGeneratorBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
