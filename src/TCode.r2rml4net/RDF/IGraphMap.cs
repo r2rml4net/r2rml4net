@@ -11,6 +11,6 @@ namespace TCode.r2rml4net.RDF
         /// <summary>
         /// Get the GraphUri URI or null if no URI has been set
         /// </summary>
-        Uri GraphUri { get; }
+        Uri URI { get; }
     }
 }

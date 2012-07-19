@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Fluent configuration of subject map backed by a DotNetRDF graph (see <see cref="ISubjectMapConfiguration"/>)
     /// </summary>
-    internal class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion, ISubjectMap
+    internal class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion
     {
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
@@ -78,9 +78,9 @@ namespace TCode.r2rml4net.Mapping
         #region Implementation of ISubjectMap
 
         /// <summary>
-        /// <see cref="ISubjectMap.Subject"/>
+        /// <see cref="ISubjectMap.URI"/>
         /// </summary>
-        public Uri Subject
+        public Uri URI
         {
             get { return ConstantValue; }
         }

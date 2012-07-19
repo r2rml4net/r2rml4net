@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration for ref object maps described on http://www.w3.org/TR/r2rml/#dfn-referencing-object-map
     /// </summary>
-    public interface IRefObjectMapConfiguration
+    public interface IRefObjectMapConfiguration : IRefObjectMap
     {
         /// <summary>
         /// Adds a join condition, which will be used to join logical tables

@@ -59,7 +59,7 @@ ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // then
             Assert.AreEqual(graph.GetBlankNode("autos1"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
-            Assert.AreEqual(new Uri("http://www.example.com/subject"), triplesMap.SubjectMap.Subject);
+            Assert.AreEqual(new Uri("http://www.example.com/subject"), triplesMap.SubjectMap.URI);
             Assert.AreEqual(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
             Assert.AreEqual(3, triplesMap.PredicateObjectMaps.Count());
             Assert.AreEqual(graph.CreateUriNode("ex:predObj1"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(0).Node);

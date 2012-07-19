@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.TermType.IsIRI();
 
             // then
-            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.ToString());
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrIRI);
         }
 
@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.TermType.IsBlankNode();
 
             // then
-            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermTypeURI.ToString());
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 
@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void DefaultTermTypeIsIRI()
         {
-            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.URI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.ToString());
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _subjectMapConfiguration.Node,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _subjectMapConfiguration.Subject);
+            Assert.AreEqual(uri, _subjectMapConfiguration.URI);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void SubjectIsNullByDefault()
         {
-            Assert.IsNull(_subjectMapConfiguration.Subject);
+            Assert.IsNull(_subjectMapConfiguration.URI);
         }
 
         [Test]

@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Mapping
     /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 
     /// backed by a DotNetRDF graph (see <see cref="ITermMapConfiguration"/>)
     /// </summary>
-    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermMap, ITermType
+    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration
     {
         /// <summary>
         /// The parent node for the current term map
@@ -130,9 +130,9 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ITermType.URI"/>
+        /// <see cref="ITermMap.TermTypeURI"/>
         /// </summary>
-        public virtual Uri URI
+        public virtual Uri TermTypeURI
         {
             get
             {
@@ -203,14 +203,6 @@ namespace TCode.r2rml4net.Mapping
         protected internal Uri ConstantValue
         {
             get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)); }
-        }
-
-        ITermType ITermMap.TermType
-        {
-            get
-            {
-                return this;
-            }
         }
 
         /// <summary>

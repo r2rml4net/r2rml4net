@@ -1,9 +1,11 @@
+using TCode.r2rml4net.RDF;
+
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration of object maps
     /// </summary>
-    public interface IObjectMapConfiguration : ITermMapConfiguration
+    public interface IObjectMapConfiguration : ITermMapConfiguration, IObjectMap
     {
         /// <summary>
         /// Sets the object map as constant-valued

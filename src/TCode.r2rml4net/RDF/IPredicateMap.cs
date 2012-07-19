@@ -11,6 +11,6 @@ namespace TCode.r2rml4net.RDF
         /// <summary>
         /// Gets the predicate's URI or null if not set
         /// </summary>
-        Uri Predicate { get; }
+        Uri URI { get; }
     }
 }

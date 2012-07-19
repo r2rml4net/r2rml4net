@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IPredicateMap
 
-        public System.Uri Predicate
+        public System.Uri URI
         {
             get { return ConstantValue; }
         }

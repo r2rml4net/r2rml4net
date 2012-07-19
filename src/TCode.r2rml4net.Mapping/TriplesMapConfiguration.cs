@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Implementation of fluent configuration interface for <a href="http://www.w3.org/TR/r2rml/#triples-map">Triples Maps</a>
     /// </summary>
-    internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapConfiguration, ITriplesMapFromR2RMLViewConfiguration, ITriplesMap
+    internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
 

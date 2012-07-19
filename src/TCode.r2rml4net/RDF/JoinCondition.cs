@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TCode.r2rml4net.RDF
+﻿namespace TCode.r2rml4net.RDF
 {
     /// <summary>
     /// An optional join condition between triple maps
@@ -11,8 +6,8 @@ namespace TCode.r2rml4net.RDF
     /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-join-condition</remarks>
     public struct JoinCondition
     {
-        string _childColumn;
-        string _parentColumn;
+        readonly string _childColumn;
+        readonly string _parentColumn;
 
         /// <summary>
         /// Creates an instance of <see cref="JoinCondition"/>

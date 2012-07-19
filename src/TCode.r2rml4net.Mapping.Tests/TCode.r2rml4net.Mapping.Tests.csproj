@@ -86,7 +86,6 @@
     <Compile Include="Mapping\TermMapConfigurationTests.cs" />
     <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
     <Compile Include="RelationalExampleMappings.cs" />
-    <Compile Include="TestExtensions.cs" />
     <Compile Include="UriConstants.cs" />
   </ItemGroup>
   <ItemGroup>
