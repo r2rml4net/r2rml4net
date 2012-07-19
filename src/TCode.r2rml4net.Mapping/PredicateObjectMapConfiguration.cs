@@ -47,7 +47,7 @@ namespace TCode.r2rml4net.Mapping
 
         public IRefObjectMapConfiguration CreateRefObjectMap(ITriplesMapConfiguration referencedTriplesMap)
         {
-            var refObjectMap = new RefObjectMapConfiguration(ParentTriplesMap, this, referencedTriplesMap, R2RMLMappings);
+            var refObjectMap = new RefObjectMapConfiguration(this, ParentTriplesMap, referencedTriplesMap, R2RMLMappings);
             _refObjectMaps.Add(refObjectMap);
             return refObjectMap;
         }
@@ -105,7 +105,7 @@ WHERE
                 if(referencedTriplesMap == null)
                     throw new InvalidTriplesMapException(string.Format("Triples map {0} not found. It must be added before creating ref object map", result.Value("triplesMap")));
 
-                var subConfiguration = new RefObjectMapConfiguration(ParentTriplesMap, this, referencedTriplesMap, R2RMLMappings);
+                var subConfiguration = new RefObjectMapConfiguration(this, ParentTriplesMap, referencedTriplesMap, R2RMLMappings);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
                 _refObjectMaps.Add(subConfiguration);
             }

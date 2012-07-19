@@ -41,10 +41,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                        ];
                                    ].");
             _predicateObjectMap.Setup(map => map.Node).Returns(graph.GetBlankNode("autos1"));
+            _parentTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap"));
             _referencedTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            _refObjectMap = new RefObjectMapConfiguration(_parentTriplesMap.Object, _predicateObjectMap.Object, _referencedTriplesMap.Object, graph);
+            _refObjectMap = new RefObjectMapConfiguration(_predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph);
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos2"));
 
             // then
