@@ -68,6 +68,9 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        /// <summary>
+        /// Returns null
+        /// </summary>
         public override INode Node
         {
             get { return null; }
@@ -128,6 +131,9 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IEffectiveSqlBuilder"/>
+        /// </summary>
         public IEffectiveSqlBuilder EffectiveSqlBuilder
         {
             get { return _effectiveSqlBuilder; }

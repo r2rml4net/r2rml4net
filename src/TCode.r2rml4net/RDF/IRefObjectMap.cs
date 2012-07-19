@@ -13,7 +13,16 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         IEnumerable<JoinCondition> JoinConditions { get; }
 
+        /// <summary>
+        /// Returns effective sql query of the child triples map
+        /// </summary>
+        /// <remarks>http://www.w3.org/TR/r2rml/#foreign-key</remarks>
         string ChildEffectiveSqlQuery { get; }
+
+        /// <summary>
+        /// Returns effective sql query of the parent triples map
+        /// </summary>
+        /// <remarks>http://www.w3.org/TR/r2rml/#foreign-key</remarks>
         string ParentEffectiveSqlQuery { get; }
     }
 }

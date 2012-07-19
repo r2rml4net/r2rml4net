@@ -24,7 +24,9 @@ namespace TCode.r2rml4net.Mapping
         /// <remarks>Triples map can contain many property-object maps</remarks>
         /// </summary>
         IPredicateObjectMapConfiguration CreatePropertyObjectMap();
-
+        /// <summary>
+        /// The <see cref="IR2RMLConfiguration"/> containing this <see cref="ITriplesMapConfiguration"/>
+        /// </summary>
         IR2RMLConfiguration R2RMLConfiguration { get; }
     }
 }
