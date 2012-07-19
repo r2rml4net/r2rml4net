@@ -10,5 +10,6 @@ namespace TCode.r2rml4net.RDF
     {
         IEnumerable<IPredicateObjectMap> PredicateObjectMaps { get; }
         ISubjectMap SubjectMap { get; }
+        string EffectiveSqlQuery { get; }
     }
 }

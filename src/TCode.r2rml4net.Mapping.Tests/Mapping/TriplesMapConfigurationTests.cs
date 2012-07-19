@@ -246,5 +246,31 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsNotNull(predicateObjectMap);
             Assert.IsInstanceOf<PredicateObjectMapConfiguration>(predicateObjectMap);
         }
+
+        [Test]
+        public void ReturnsSqlQueryAsEffectiveSql()
+        {
+            // given
+            const string sqlQuery = "SELECT a, b FROM c as Table";
+
+            // when
+            _triplesMapConfiguration.SqlQuery = sqlQuery;
+
+            // then
+            Assert.AreEqual(sqlQuery, _triplesMapConfiguration.EffectiveSqlQuery);
+        }
+
+        [Test]
+        public void ReturnsCorrectEffectiveSqlForTable()
+        {
+            // given
+            const string tableName = "Student";
+
+            // when
+            _triplesMapConfiguration.TableName = tableName;
+
+            // then
+            Assert.AreEqual(string.Format("SELECT * FROM {0}", tableName), _triplesMapConfiguration.EffectiveSqlQuery);
+        }
     }
 }

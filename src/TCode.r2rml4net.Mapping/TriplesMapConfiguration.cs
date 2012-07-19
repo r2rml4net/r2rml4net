@@ -212,6 +212,22 @@ WHERE
             }
         }
 
+        public string EffectiveSqlQuery
+        {
+            get
+            {
+                if(TableName != null && SqlQuery != null)
+                {
+                    throw new InvalidTriplesMapException("Triples map cannot have both table name and sql query set");
+                }
+
+                if (TableName != null)
+                    return string.Format("SELECT * FROM {0}", TableName);
+
+                return SqlQuery;
+            }
+        }
+
         public override INode Node { get { return _triplesMapNode; } }
 
         /// <summary>
