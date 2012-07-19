@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TCode.r2rml4net.RDF;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query.Datasets;

@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 

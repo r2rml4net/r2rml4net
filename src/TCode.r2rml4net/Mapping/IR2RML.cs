@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TCode.r2rml4net.RDB;
 
-namespace TCode.r2rml4net.RDF
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Represents a R2RML mapping
