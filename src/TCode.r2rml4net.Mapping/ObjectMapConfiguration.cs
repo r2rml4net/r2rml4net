@@ -6,7 +6,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
-    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, IObjectMap
+    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration
     {
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
             : base(parentTriplesMap, parentMap, r2RMLMappings)
@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Overriden, because object maps can be of term type rr:Literal
         /// </summary>
-        public override Uri URI
+        public override Uri TermTypeURI
         {
             get
             {
@@ -144,7 +144,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IObjectMap
 
-        public Uri Object
+        public Uri URI
         {
             get { return ConstantValue; }
         }

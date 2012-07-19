@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void PredicateIsNullByDefault()
         {
-            Assert.IsNull(_predicateMap.Predicate);
+            Assert.IsNull(_predicateMap.URI);
         }
 
         [Test]

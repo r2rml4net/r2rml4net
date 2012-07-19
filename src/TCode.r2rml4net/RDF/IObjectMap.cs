@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.RDF
         /// Gets constant object URI or null if absent
         /// </summary>
         /// <exception cref="InvalidTriplesMapException"></exception>
-        Uri Object { get; }
+        Uri URI { get; }
         /// <summary>
         /// Gets constant object literal value or null if absent
         /// </summary>

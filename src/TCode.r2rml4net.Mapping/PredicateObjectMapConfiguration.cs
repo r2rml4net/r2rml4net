@@ -7,7 +7,7 @@ using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping
 {
-    class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration, IPredicateObjectMap
+    class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
         private INode _predicateObjectMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();

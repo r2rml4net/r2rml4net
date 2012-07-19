@@ -1,4 +1,6 @@
-﻿namespace TCode.r2rml4net.RDF
+﻿using System;
+
+namespace TCode.r2rml4net.RDF
 {
     /// <summary>
     /// Represents a term map
@@ -12,9 +14,11 @@
         /// <exception cref="InvalidTriplesMapException"></exception>
         string Template { get; }
         /// <summary>
-        /// Gets the term map's <see cref="ITermType"/>
+        /// Returns term type set with configuration
+        /// or a default value
         /// </summary>
-        ITermType TermType { get; }
+        /// <remarks>Default value is described on http://www.w3.org/TR/r2rml/#dfn-term-type</remarks>
+        Uri TermTypeURI { get; }
         /// <summary>
         /// Gets column or null if not set
         /// </summary>

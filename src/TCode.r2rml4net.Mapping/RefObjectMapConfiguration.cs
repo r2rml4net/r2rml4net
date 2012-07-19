@@ -7,7 +7,7 @@ using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping
 {
-    internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration, IRefObjectMap
+    internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration
     {
         INode _refObjectMapNode;
         readonly ITriplesMap _referencedTriplesMap;

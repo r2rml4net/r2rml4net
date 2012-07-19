@@ -46,7 +46,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _graphMap.Node,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _graphMap.GraphUri);
+            Assert.AreEqual(uri, _graphMap.URI);
         }
 
         [Test, ExpectedException(typeof (InvalidTriplesMapException))]
@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void GraphUriIsNullByDefault()
         {
-            Assert.IsNull(_graphMap.GraphUri);
+            Assert.IsNull(_graphMap.URI);
         }
 
         [Test]

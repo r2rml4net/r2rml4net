@@ -1,11 +1,12 @@
 ﻿using System;
+using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Interface for creating configuration of term maps as described on http://www.w3.org/TR/r2rml/#term-map
     /// </summary>
-    public interface ITermMapConfiguration
+    public interface ITermMapConfiguration : ITermMap
     {
         /// <summary>
         /// Allows setting the term type of the current term map

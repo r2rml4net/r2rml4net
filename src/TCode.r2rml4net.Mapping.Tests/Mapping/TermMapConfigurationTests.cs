@@ -79,7 +79,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
         }
 
@@ -114,7 +114,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(template, _termMapConfiguration.Template);
         }
 
@@ -146,7 +146,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
-            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.ToString());
         }
 
         [Test]

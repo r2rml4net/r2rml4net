@@ -86,7 +86,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _objectMap.Object);
+            Assert.AreEqual(uri, _objectMap.URI);
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrDataTypeProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RdfInteger)))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
@@ -137,7 +137,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageTagProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
@@ -183,7 +183,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IObjectMap map = _objectMap;
             Assert.IsNull(map.ColumnName);
             Assert.IsNull(map.Literal);
-            Assert.IsNull(map.Object);
+            Assert.IsNull(map.URI);
             Assert.IsNull(map.Template);
         }
 
@@ -194,7 +194,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.TermType.IsLiteral();
 
             // then
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermType.GetURI().ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
         }
 
         [Test]

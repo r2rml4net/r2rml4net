@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IGraphMap
 
-        public Uri GraphUri
+        public Uri URI
         {
             get { return ConstantValue; }
         }

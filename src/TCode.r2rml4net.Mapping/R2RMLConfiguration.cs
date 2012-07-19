@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF
     /// </summary>
-    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration, IR2RML
+    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration
     {
         internal static Uri DefaultBaseUri
         {
