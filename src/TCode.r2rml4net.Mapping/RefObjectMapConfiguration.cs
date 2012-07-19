@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using VDS.RDF;
-using TCode.r2rml4net.RDF;
 using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping

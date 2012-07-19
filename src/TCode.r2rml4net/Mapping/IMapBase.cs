@@ -1,6 +1,6 @@
 using VDS.RDF;
 
-namespace TCode.r2rml4net.RDF
+namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// A base interface for all maps which are represented by a node in RDF

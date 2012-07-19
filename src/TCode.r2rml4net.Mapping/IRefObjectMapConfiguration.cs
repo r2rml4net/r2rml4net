@@ -1,6 +1,4 @@
-﻿using TCode.r2rml4net.RDF;
-
-namespace TCode.r2rml4net.Mapping
+﻿namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration for ref object maps described on http://www.w3.org/TR/r2rml/#dfn-referencing-object-map

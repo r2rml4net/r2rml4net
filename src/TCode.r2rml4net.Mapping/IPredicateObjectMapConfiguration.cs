@@ -1,6 +1,4 @@
-﻿using TCode.r2rml4net.RDF;
-
-namespace TCode.r2rml4net.Mapping
+﻿namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
     /// Configuration for predicate-object maps described on http://www.w3.org/TR/r2rml/#predicate-object-map
