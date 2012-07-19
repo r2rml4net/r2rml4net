@@ -69,6 +69,9 @@ WHERE { ?map rr:subject ?value }";
 
         #region Implementation of IMapBase
 
+        /// <summary>
+        /// Gets the RDF node representing this map
+        /// </summary>
         public abstract INode Node { get; }
 
         #endregion
@@ -109,6 +112,8 @@ WHERE { ?map rr:subject ?value }";
             processor.ProcessCommandSet(updateParser.ParseFromString(ShortcutSubmapsReplaceSparql));
         }
 
+        /// <summary>
+        /// </summary>
         protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
             where TConfiguration : BaseConfiguration
         {
@@ -123,6 +128,9 @@ WHERE { ?map rr:subject ?value }";
             }
         }
 
+        /// <summary>
+        /// Gets the parent <see cref="ITriplesMapConfiguration"/> containing this map
+        /// </summary>
         protected internal virtual ITriplesMapConfiguration ParentTriplesMap
         {
             get { return _parentTriplesMap; }

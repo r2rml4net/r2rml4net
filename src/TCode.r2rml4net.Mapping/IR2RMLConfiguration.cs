@@ -1,4 +1,3 @@
-using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Mapping
@@ -21,7 +20,5 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <param name="sqlQuery">a valid SQL query</param>
         ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery);
-
-        IEffectiveSqlBuilder EffectiveSqlBuilder { get; set; }
     }
 }

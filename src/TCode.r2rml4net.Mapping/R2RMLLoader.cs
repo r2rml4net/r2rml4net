@@ -1,12 +1,17 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
+    /// <summary>
+    /// Class for loading existing R2RML mappings
+    /// </summary>
     public static class R2RMLLoader
     {
+        /// <summary>
+        /// Loads R2RML mappings from a string
+        /// </summary>
         public static IR2RML Load(string r2RMLGraph)
         {
             IGraph graph = new Graph();
@@ -15,9 +20,12 @@ namespace TCode.r2rml4net.Mapping
             return InitializeMappings(graph);
         }
 
+        /// <summary>
+        /// Loads R2RML mappings from a stream
+        /// </summary>
         public static IR2RML Load(Stream r2RMLGraph)
         {
-            using(var reader  =new StreamReader(r2RMLGraph))
+            using (var reader = new StreamReader(r2RMLGraph))
             {
                 return Load(reader.ReadToEnd());
             }

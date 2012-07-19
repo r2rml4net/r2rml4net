@@ -230,6 +230,9 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of IMapBase
 
+        /// <summary>
+        /// RDF node which represents this <see cref="ITermMap"/>
+        /// </summary>
         public override INode Node
         {
             get { return TermMapNode; }

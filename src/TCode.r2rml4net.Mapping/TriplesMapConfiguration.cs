@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Mapping
         #region Implementation of ITriplesMapConfiguration
 
         /// <summary>
-        /// <see cref="ITriplesMapConfiguration.TableName"/>
+        /// <see cref="ITriplesMap.TableName"/>
         /// </summary>
         public string TableName
         {
@@ -127,7 +127,7 @@ WHERE
         }
 
         /// <summary>
-        /// <see cref="ITriplesMapConfiguration.SqlQuery"/>
+        /// <see cref="ITriplesMap.SqlQuery"/>
         /// </summary>
         public string SqlQuery
         {
