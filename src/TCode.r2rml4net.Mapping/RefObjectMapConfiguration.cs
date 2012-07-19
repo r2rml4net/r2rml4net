@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using VDS.RDF;
 using TCode.r2rml4net.RDF;
@@ -83,21 +82,21 @@ WHERE {
             }
         }
 
-        public string EffectiveSQLQuery
+        public string ChildEffectiveSqlQuery
+        {
+            get { return _parentTriplesMap.EffectiveSqlQuery; }
+        }
+
+        public string ParentEffectiveSqlQuery
+        {
+            get { return _referencedTriplesMap.EffectiveSqlQuery; }
+        }
+
+        public string EffectiveSqlQuery
         {
             get
             {
-                if(JoinConditions.Any())
-                {
-                    var joinStatements =
-                        JoinConditions.Select(join => string.Format("child.{0}=parent.{1}", join.ChildColumn, join.ParentColumn));
-
-                    return string.Format(@"SELECT * FROM ({0}) AS child, 
-({1}) AS parent
-WHERE {2}", _parentTriplesMap.EffectiveSqlQuery, _referencedTriplesMap.EffectiveSqlQuery, string.Join("\nAND ", joinStatements));
-                }
-
-                return string.Format("SELECT * FROM ({0}) AS tmp", _parentTriplesMap.EffectiveSqlQuery);
+                return ParentTriplesMap.R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForRefObjectMap(this);
             }
         }
 

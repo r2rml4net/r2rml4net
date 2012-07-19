@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -56,63 +57,26 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         }
 
         [Test]
-        public void ReturnSimpleEffectiveSqlWhenNoJoinConditionsGiven()
+        public void UsesEffectiveSqlBuilder()
         {
             // given
-            _parentTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM A");
-            _referencedTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM B");
-
-            // then
-            Assert.AreEqual("SELECT * FROM (SELECT * FROM A) AS tmp", _refObjectMap.EffectiveSQLQuery);
-        }
-
-        [Test]
-        public void ReturnSimpleEffectiveSqlWithSingleJoinCondition()
-        {
-            // given
-            _parentTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM A");
-            _referencedTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM B");
+            Mock<IR2RMLConfiguration> r2RML = new Mock<IR2RMLConfiguration>();
+            Mock<IEffectiveSqlBuilder> sqlBuilder = new Mock<IEffectiveSqlBuilder>();
+            const string excpetedSql = "SELECT * FROM (SELECT * FROM A) AS tmp";
+            sqlBuilder.Setup(builder => builder.GetEffectiveQueryForRefObjectMap(It.IsAny<IRefObjectMap>()))
+                      .Returns(excpetedSql);
+            r2RML.Setup(config => config.EffectiveSqlBuilder).Returns(sqlBuilder.Object);
+            _parentTriplesMap.Setup(tm => tm.R2RMLConfiguration).Returns(r2RML.Object);
 
             // when
-            _refObjectMap.AddJoinCondition("colX", "colY");
+            string sql = _refObjectMap.EffectiveSqlQuery;
 
             // then
-            AssertContainsSequence(_refObjectMap.EffectiveSQLQuery,
-                                   "SELECT * FROM (SELECT * FROM A) AS child,",
-                                   "(SELECT * FROM B) AS parent",
-                                   "WHERE child.colX=parent.colY");
-        }
-
-        [Test]
-        public void ReturnSimpleEffectiveSqlWithMultipleJoinConditions()
-        {
-            // given
-            _parentTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM A");
-            _referencedTriplesMap.Setup(tm => tm.EffectiveSqlQuery).Returns("SELECT * FROM B");
-
-            // when
-            _refObjectMap.AddJoinCondition("colX", "colY");
-            _refObjectMap.AddJoinCondition("foo", "bar");
-            _refObjectMap.AddJoinCondition("dlihc", "tnerap");
-
-            // then
-            AssertContainsSequence(_refObjectMap.EffectiveSQLQuery,
-                                   "SELECT * FROM (SELECT * FROM A) AS child,",
-                                   "(SELECT * FROM B) AS parent");
-            Assert.IsTrue(_refObjectMap.EffectiveSQLQuery.Contains("child.colX=parent.colY"));
-            Assert.IsTrue(_refObjectMap.EffectiveSQLQuery.Contains("child.foo=parent.bar"));
-            Assert.IsTrue(_refObjectMap.EffectiveSQLQuery.Contains("child.dlihc=parent.tnerap"));
-        }
-
-        void AssertContainsSequence(string actualString, params string[] expectedValues)
-        {
-            int lastIndex = 0;
-            foreach (var seqElement in expectedValues)
-            {
-                int indexOfCurrent = actualString.IndexOf(seqElement, lastIndex, StringComparison.Ordinal);
-                Assert.AreNotEqual(-1, indexOfCurrent, string.Format("Sequence element\r\n\r\n{0}\r\n\r\nnot found in\r\n\r\n{1}", seqElement, actualString));
-                lastIndex = indexOfCurrent + seqElement.Length;
-            }
+            Assert.AreEqual(excpetedSql, sql);
+            sqlBuilder.Verify(builder => builder.GetEffectiveQueryForRefObjectMap(It.IsAny<IRefObjectMap>()),
+                              Times.Once());
+            r2RML.Verify(config => config.EffectiveSqlBuilder, Times.Once());
+            _parentTriplesMap.Verify(tm => tm.R2RMLConfiguration, Times.Once());
         }
     }
 }

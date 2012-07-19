@@ -12,5 +12,8 @@ namespace TCode.r2rml4net.RDF
         /// Optional join conditions associated with this <see cref="IRefObjectMap"/>
         /// </summary>
         IEnumerable<JoinCondition> JoinConditions { get; }
+
+        string ChildEffectiveSqlQuery { get; }
+        string ParentEffectiveSqlQuery { get; }
     }
 }

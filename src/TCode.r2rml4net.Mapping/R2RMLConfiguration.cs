@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -19,6 +20,7 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        IEffectiveSqlBuilder _effectiveSqlBuilder = new W3CEffectiveSqlBuilder();
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
         /// <summary>
@@ -124,6 +126,12 @@ namespace TCode.r2rml4net.Mapping
 
                 return _graphCopy;
             }
+        }
+
+        public IEffectiveSqlBuilder EffectiveSqlBuilder
+        {
+            get { return _effectiveSqlBuilder; }
+            set { _effectiveSqlBuilder = value; }
         }
 
         #region Implementation of IR2RML
