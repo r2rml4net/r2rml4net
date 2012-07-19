@@ -64,12 +64,14 @@
     <Compile Include="RDB\DatabaseSchemaReader\CoreSQL2008ColumTypeMapper.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\DatabaseSchemaAdapter.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\IColumnTypeMapper.cs" />
+    <Compile Include="RDB\IEffectiveSqlBuilder.cs" />
     <Compile Include="RDB\R2rmlType.cs" />
     <Compile Include="RDB\ForeignKeyMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadata.cs" />
     <Compile Include="RDB\IDatabaseMetadataVisitor.cs" />
     <Compile Include="RDB\TableCollection.cs" />
     <Compile Include="RDB\TableMetadata.cs" />
+    <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
     <Compile Include="RDF\IMapBase.cs" />
     <Compile Include="RDF\IGraphMap.cs" />
     <Compile Include="RDF\InvalidTriplesMapException.cs" />

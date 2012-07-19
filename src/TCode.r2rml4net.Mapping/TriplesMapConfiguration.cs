@@ -216,15 +216,7 @@ WHERE
         {
             get
             {
-                if(TableName != null && SqlQuery != null)
-                {
-                    throw new InvalidTriplesMapException("Triples map cannot have both table name and sql query set");
-                }
-
-                if (TableName != null)
-                    return string.Format("SELECT * FROM {0}", TableName);
-
-                return SqlQuery;
+                return R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForTriplesMap(this);
             }
         }
 

@@ -9,14 +9,6 @@ namespace TCode.r2rml4net.Mapping
     public interface ITriplesMapConfiguration : ITriplesMap
     {
         /// <summary>
-        /// Name of the table view which is source for triples as described on http://www.w3.org/TR/r2rml/#physical-tables
-        /// </summary>
-        string TableName { get; }
-        /// <summary>
-        /// Query, which will be used as datasource as described on http://www.w3.org/TR/r2rml/#r2rml-views
-        /// </summary>
-        string SqlQuery { get; }
-        /// <summary>
         /// <see cref="Uri"/> of the triples map represented by this instance
         /// </summary>
         Uri Uri { get; }

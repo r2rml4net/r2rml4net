@@ -76,6 +76,7 @@
     <Compile Include="Metadata\TableMetadataTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlQueryBuilder\W3cEffectiveSqlBuilderTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using System;
+using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
@@ -8,13 +10,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     public class TriplesMapConfigurationTests
     {
         TriplesMapConfiguration _triplesMapConfiguration;
+        private Mock<IR2RMLConfiguration> _r2RMLConfiguration;
 
         [SetUp]
         public void Setup()
         {
             // Initialize TriplesMapConfiguration with a default graph
             var r2RMLConfiguration = new R2RMLConfiguration();
-            _triplesMapConfiguration = new TriplesMapConfiguration(r2RMLConfiguration, r2RMLConfiguration.R2RMLMappings);
+            _r2RMLConfiguration = new Mock<IR2RMLConfiguration>();
+            _triplesMapConfiguration = new TriplesMapConfiguration(_r2RMLConfiguration.Object, r2RMLConfiguration.R2RMLMappings);
         }
 
         [Test]
@@ -248,29 +252,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         }
 
         [Test]
-        public void ReturnsSqlQueryAsEffectiveSql()
+        public void UsesEffectiveSqlBuilder()
         {
             // given
-            const string sqlQuery = "SELECT a, b FROM c as Table";
+            const string excpetedSql = "SELECT * FROM (SELECT * FROM A) AS tmp";
+            Mock<IEffectiveSqlBuilder> sqlBuilder = new Mock<IEffectiveSqlBuilder>();
+            sqlBuilder.Setup(builder => builder.GetEffectiveQueryForTriplesMap(It.IsAny<ITriplesMap>()))
+                      .Returns(excpetedSql);
+            _r2RMLConfiguration.Setup(config => config.EffectiveSqlBuilder).Returns(sqlBuilder.Object);
 
             // when
-            _triplesMapConfiguration.SqlQuery = sqlQuery;
+            string sql = _triplesMapConfiguration.EffectiveSqlQuery;
 
             // then
-            Assert.AreEqual(sqlQuery, _triplesMapConfiguration.EffectiveSqlQuery);
-        }
-
-        [Test]
-        public void ReturnsCorrectEffectiveSqlForTable()
-        {
-            // given
-            const string tableName = "Student";
-
-            // when
-            _triplesMapConfiguration.TableName = tableName;
-
-            // then
-            Assert.AreEqual(string.Format("SELECT * FROM {0}", tableName), _triplesMapConfiguration.EffectiveSqlQuery);
+            Assert.AreEqual(excpetedSql, sql);
         }
     }
 }
