@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
@@ -12,12 +14,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
     {
         private Mock<W3CTriplesGeneratorBase> _triplesGenerator;
         private Mock<IR2RML> _r2RML;
+        private Mock<DbConnection> _connection;
+        private Mock<ITriplesMapProcessor> _triplesMapProcessor;
 
         [SetUp]
         public void Setup()
         {
             _r2RML = new Mock<IR2RML>();
-            _triplesGenerator = new Mock<W3CTriplesGeneratorBase>
+            _connection = new Mock<DbConnection>();
+            _triplesMapProcessor = new Mock<ITriplesMapProcessor>();
+            _triplesGenerator = new Mock<W3CTriplesGeneratorBase>(_connection.Object, _triplesMapProcessor.Object)
                                     {
                                         CallBase = true
                                     };
@@ -31,18 +37,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             var triplesMaps = GenerateTriplesMaps(triplesMapsCount).ToList();
             _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-            _triplesGenerator.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>()));
+            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>())).Returns(new IGraph[0]);
 
             // when
             _triplesGenerator.Object.GenerateTriples(_r2RML.Object);
 
             // then
             _r2RML.Verify(rml => rml.TriplesMaps, Times.Once());
-            _triplesGenerator.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>()), Times.Exactly(triplesMapsCount));
+            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>()), Times.Exactly(triplesMapsCount));
             foreach (var triplesMap in triplesMaps)
             {
                 ITriplesMap map = triplesMap;
-                _triplesGenerator.Verify(rml => rml.ProcessTriplesMap(map), Times.Once());
+                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map), Times.Once());
             }
         }
 
