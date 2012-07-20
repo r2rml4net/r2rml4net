@@ -1,3 +1,4 @@
+using System.Data.Common;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
@@ -10,22 +11,37 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// <remarks>See http://www.w3.org/TR/r2rml/#generated-rdf</remarks>
     public abstract class W3CTriplesGeneratorBase : ITriplesGenerator
     {
+        public ITriplesMapProcessor TriplesMapProcessor { get; private set; }
+        private DbConnection _connection;
+
+        protected W3CTriplesGeneratorBase(DbConnection connection)
+            : this(connection, new TriplesMapProcessor())
+        {
+        }
+
+        protected W3CTriplesGeneratorBase(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
+        {
+            TriplesMapProcessor = triplesMapProcessor;
+            _connection = connection;
+        }
+
         #region Implementation of ITriplesGenerator
 
         public ITripleStore GenerateTriples(IR2RML r2RML)
         {
+            var store = new TripleStore();
+
             foreach (var triplesMap in r2RML.TriplesMaps)
             {
-                ProcessTriplesMap(triplesMap);
+                foreach (IGraph graph in TriplesMapProcessor.ProcessTriplesMap(triplesMap))
+                {
+                    store.Add(graph, true);
+                }
             }
 
-            return null;
+            return store;
         }
 
         #endregion
-
-        protected internal virtual void ProcessTriplesMap(ITriplesMap triplesMap)
-        {
-        }
     }
 }
