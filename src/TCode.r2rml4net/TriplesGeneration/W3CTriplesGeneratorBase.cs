@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using System.Data.Common;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
@@ -9,10 +11,10 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// It should generate triples for all rows in all triples maps from the input R2RML mappings
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#generated-rdf</remarks>
-    public abstract class W3CTriplesGeneratorBase : ITriplesGenerator
+    public abstract class W3CTriplesGeneratorBase : ITriplesGenerator, IDisposable
     {
         public ITriplesMapProcessor TriplesMapProcessor { get; private set; }
-        private DbConnection _connection;
+        private readonly DbConnection _connection;
 
         protected W3CTriplesGeneratorBase(DbConnection connection)
             : this(connection, new TriplesMapProcessor())
@@ -23,6 +25,9 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             TriplesMapProcessor = triplesMapProcessor;
             _connection = connection;
+
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
         }
 
         #region Implementation of ITriplesGenerator
@@ -33,13 +38,25 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             foreach (var triplesMap in r2RML.TriplesMaps)
             {
-                foreach (IGraph graph in TriplesMapProcessor.ProcessTriplesMap(triplesMap))
+                foreach (IGraph graph in TriplesMapProcessor.ProcessTriplesMap(triplesMap, _connection))
                 {
                     store.Add(graph, true);
                 }
             }
 
             return store;
+        }
+
+        #endregion
+
+        #region Implementation of IDisposable
+
+        public void Dispose()
+        {
+            if(_connection.State == ConnectionState.Open)
+                _connection.Close();
+
+            _connection.Dispose();
         }
 
         #endregion
