@@ -91,7 +91,7 @@
     <Compile Include="TriplesGeneration\ITriplesGenerator.cs" />
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
-    <Compile Include="TriplesGeneration\TriplesMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesGeneratorBase.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     {
         #region Implementation of IRDFTermGenerator
 
-        public INode GenerateTerm(ITermMap termMap, IDataRecord logicalRow)
+        public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : INode
         {
             throw new System.NotImplementedException();
         }
