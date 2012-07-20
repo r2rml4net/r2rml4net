@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Mapping
         public ISubjectMapConfiguration AddClass(Uri classIri)
         {
             // create SubjectMap - TriplesMap relation if no class has been added
-            if(ClassIris.Length == 0)
+            if(Classes.Length == 0)
                 CreateParentMapRelation();
 
             R2RMLMappings.Assert(
@@ -37,9 +37,9 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ISubjectMapConfiguration.ClassIris"/>
+        /// <see cref="ISubjectMapConfiguration.Classes"/>
         /// </summary>
-        public Uri[] ClassIris
+        public Uri[] Classes
         {
             get
             {
