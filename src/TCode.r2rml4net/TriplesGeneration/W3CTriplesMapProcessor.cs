@@ -14,6 +14,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IRdfHandler _storeWriter;
 
         public ITriplesGenerationLog Log { get; set; }
+        public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
 
         public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
         {
@@ -56,6 +57,11 @@ namespace TCode.r2rml4net.TriplesGeneration
                                     _storeWriter.CreateUriNode(classUri),
                                     graph.Uri));
                         }
+                    }
+
+                    foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
+                    {
+                        PredicateObjectMapProcessor.ProcessPredicateObjectMap(map, logicalTable);   
                     }
                 }
             }

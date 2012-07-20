@@ -87,6 +87,7 @@
     <Compile Include="Mapping\ITriplesMap.cs" />
     <Compile Include="Mapping\JoinCondition.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
+    <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
     <Compile Include="TriplesGeneration\ITriplesGenerator.cs" />
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />

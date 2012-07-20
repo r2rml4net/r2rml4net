@@ -19,6 +19,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<ITriplesGenerationLog> _log;
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<IRdfHandler> _rdfHandler;
+        private Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
 
         [SetUp]
         public void Setup()
@@ -28,9 +29,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection = new Mock<IDbConnection>();
             _termGenerator = new Mock<IRDFTermGenerator>();
             _rdfHandler = new Mock<IRdfHandler>();
+            _predicateObjectMapProcessor = new Mock<IPredicateObjectMapProcessor>();
             _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object, _rdfHandler.Object)
                                        {
-                                           Log = _log.Object
+                                           Log = _log.Object,
+                                           PredicateObjectMapProcessor = _predicateObjectMapProcessor.Object
                                        };
         }
 
@@ -85,13 +88,14 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [TestCase(0, 5)]
+        [TestCase(1, 0)]
         [TestCase(1, 5)]
         [TestCase(10, 5)]
         public void CreatesTermForEachGraphForEachLogicalRow(int rowsCount, int graphsCount)
         {
             // given
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
-            subjectMap.Setup(sm => sm.Graphs).Returns(MockGraphMaps(graphsCount));
+            subjectMap.Setup(sm => sm.Graphs).Returns(GenerateNMockMaps<IGraphMap>(graphsCount));
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
@@ -100,6 +104,29 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _termGenerator.Verify(tg => tg.GenerateTerm<IUriNode>(It.IsAny<IGraphMap>(), It.IsAny<IDataRecord>()), Times.Exactly(rowsCount * graphsCount));
+        }
+
+        [TestCase(0, 1)]
+        [TestCase(1, 0)]
+        [TestCase(1, 5)]
+        [TestCase(10, 5)]
+        public void ProcessesEachPredicateObjectMap(int mapsCount, int rowsCount)
+        {
+            // given
+            Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
+            _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
+            _triplesMap.Setup(tm => tm.PredicateObjectMaps).Returns(GenerateNMockMaps<IPredicateObjectMap>(mapsCount));
+            _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
+
+            // when
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+
+            // then
+            _predicateObjectMapProcessor.Verify(
+                proc => proc.ProcessPredicateObjectMap(
+                    It.IsAny<IPredicateObjectMap>(),
+                    It.IsAny<IDataRecord>()), 
+                Times.Exactly(mapsCount * rowsCount));
         }
 
         private static IDbCommand CreateCommandWithNRowsResult(int rowsCount)
@@ -114,11 +141,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             return command.Object;
         }
 
-        private static IEnumerable<IGraphMap> MockGraphMaps(int count)
+        private static IEnumerable<TMap> GenerateNMockMaps<TMap>(int count) where TMap : class, IMapBase
         {
             for (int i = 0; i < count; i++)
             {
-                yield return new Mock<IGraphMap>().Object;
+                yield return new Mock<TMap>().Object;
             }
         }
     }
