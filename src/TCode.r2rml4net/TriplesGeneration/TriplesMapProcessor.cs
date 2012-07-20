@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
@@ -36,9 +38,12 @@ namespace TCode.r2rml4net.TriplesGeneration
             else
             {
                 IDataReader logicalTable = FetchLogicalRows(connection, triplesMap.EffectiveSqlQuery);
+                IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                 while(logicalTable.Read())
                 {
-                    _termGenerator.GenerateTerm(triplesMap.SubjectMap, logicalTable);
+                    var subject = _termGenerator.GenerateTerm(triplesMap.SubjectMap, logicalTable);
+                    var graphs = (from graph in triplesMap.SubjectMap.Graphs
+                                 select _termGenerator.GenerateTerm(graph, logicalTable)).ToArray();
                 }
             }
 
