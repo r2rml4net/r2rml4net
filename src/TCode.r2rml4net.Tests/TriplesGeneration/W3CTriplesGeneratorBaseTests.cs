@@ -37,18 +37,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             var triplesMaps = GenerateTriplesMaps(triplesMapsCount).ToList();
             _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>())).Returns(new IGraph[0]);
+            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>())).Returns(new IGraph[0]);
 
             // when
             _triplesGenerator.Object.GenerateTriples(_r2RML.Object);
 
             // then
             _r2RML.Verify(rml => rml.TriplesMaps, Times.Once());
-            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>()), Times.Exactly(triplesMapsCount));
+            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>()), Times.Exactly(triplesMapsCount));
             foreach (var triplesMap in triplesMaps)
             {
                 ITriplesMap map = triplesMap;
-                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map), Times.Once());
+                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>()), Times.Once());
             }
         }
 
