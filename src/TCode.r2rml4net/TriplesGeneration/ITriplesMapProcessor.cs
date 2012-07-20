@@ -7,6 +7,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     public interface ITriplesMapProcessor
     {
-        IEnumerable<IGraph> ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection);
+        void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection);
     }
 }

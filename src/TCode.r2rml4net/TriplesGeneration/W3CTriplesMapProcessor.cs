@@ -8,28 +8,28 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
 {
-    internal class TriplesMapProcessor : ITriplesMapProcessor
+    internal class W3CTriplesMapProcessor : ITriplesMapProcessor
     {
         private readonly IRDFTermGenerator _termGenerator;
-        private readonly ITripleStore _generatedDataset;
+        private readonly IRdfHandler _storeWriter;
 
         public ITriplesGenerationLog Log { get; set; }
 
-        public TriplesMapProcessor(IRDFTermGenerator termGenerator)
+        public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
         {
             Log = NullLog.Instance;
-            _generatedDataset = new TripleStore();
             _termGenerator = termGenerator;
+            _storeWriter = storeWriter;
         }
 
-        public TriplesMapProcessor()
-            : this(new RDFTermGenerator())
+        public W3CTriplesMapProcessor(IRdfHandler storeWriter)
+            : this(new RDFTermGenerator(), storeWriter)
         {
         }
 
         #region Implementation of ITriplesMapProcessor
 
-        public IEnumerable<IGraph> ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection)
+        public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection)
         {
             if (triplesMap.SubjectMap == null)
             {
@@ -41,13 +41,24 @@ namespace TCode.r2rml4net.TriplesGeneration
                 IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                 while(logicalTable.Read())
                 {
-                    var subject = _termGenerator.GenerateTerm(triplesMap.SubjectMap, logicalTable);
+                    var subject = _termGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
                     var graphs = (from graph in triplesMap.SubjectMap.Graphs
-                                 select _termGenerator.GenerateTerm(graph, logicalTable)).ToArray();
+                                  select _termGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
+
+                    foreach (var classUri in classes)
+                    {
+                        foreach (var graph in graphs)
+                        {
+                            _storeWriter.HandleTriple(
+                                new Triple(
+                                    subject,
+                                    _storeWriter.CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")),
+                                    _storeWriter.CreateUriNode(classUri),
+                                    graph.Uri));
+                        }
+                    }
                 }
             }
-
-            return _generatedDataset.Graphs;
         }
 
         #endregion

@@ -6,6 +6,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     public interface IRDFTermGenerator
     {
-        INode GenerateTerm(ITermMap termMap, IDataRecord logicalRow);
+        TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : INode;
     }
 }

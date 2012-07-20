@@ -6,17 +6,19 @@ using NUnit.Framework;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     [TestFixture]
-    public class TriplesMapProcessorTests
+    public class W3CTriplesMapProcessorTests
     {
-        private TriplesMapProcessor _triplesMapProcessor;
+        private W3CTriplesMapProcessor _triplesMapProcessor;
         private Mock<ITriplesMap> _triplesMap;
         private Mock<IDbConnection> _connection;
         private Mock<ITriplesGenerationLog> _log;
         private Mock<IRDFTermGenerator> _termGenerator;
+        private Mock<IRdfHandler> _rdfHandler;
 
         [SetUp]
         public void Setup()
@@ -25,7 +27,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMap = new Mock<ITriplesMap>();
             _connection = new Mock<IDbConnection>();
             _termGenerator = new Mock<IRDFTermGenerator>();
-            _triplesMapProcessor = new TriplesMapProcessor(_termGenerator.Object)
+            _rdfHandler = new Mock<IRdfHandler>();
+            _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object, _rdfHandler.Object)
                                        {
                                            Log = _log.Object
                                        };
@@ -60,7 +63,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
 
             // then
-            _termGenerator.Verify(tg => tg.GenerateTerm(subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));
+            _termGenerator.Verify(tg => tg.GenerateTerm<INode>(subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));
         }
 
         [TestCase(0)]
@@ -96,7 +99,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
 
             // then
-            _termGenerator.Verify(tg => tg.GenerateTerm(It.IsAny<IGraphMap>(), It.IsAny<IDataRecord>()), Times.Exactly(rowsCount * graphsCount));
+            _termGenerator.Verify(tg => tg.GenerateTerm<IUriNode>(It.IsAny<IGraphMap>(), It.IsAny<IDataRecord>()), Times.Exactly(rowsCount * graphsCount));
         }
 
         private static IDbCommand CreateCommandWithNRowsResult(int rowsCount)
