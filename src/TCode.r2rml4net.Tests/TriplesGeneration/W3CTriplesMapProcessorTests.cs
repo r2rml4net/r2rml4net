@@ -11,7 +11,7 @@ using VDS.RDF;
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     [TestFixture]
-    public class W3CTriplesMapProcessorTests
+    public class W3CTriplesMapProcessorTests : TriplesGenerationTestsBase
     {
         private W3CTriplesMapProcessor _triplesMapProcessor;
         private Mock<ITriplesMap> _triplesMap;
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         {
             // given
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
-            subjectMap.Setup(sm => sm.Graphs).Returns(GenerateNMockMaps<IGraphMap>(graphsCount));
+            subjectMap.Setup(sm => sm.Graphs).Returns(GenerateNMocks<IGraphMap>(graphsCount));
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
@@ -115,7 +115,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
-            _triplesMap.Setup(tm => tm.PredicateObjectMaps).Returns(GenerateNMockMaps<IPredicateObjectMap>(mapsCount));
+            _triplesMap.Setup(tm => tm.PredicateObjectMaps).Returns(GenerateNMocks<IPredicateObjectMap>(mapsCount));
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
             // when
@@ -123,9 +123,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _predicateObjectMapProcessor.Verify(
-                proc => proc.ProcessPredicateObjectMap(
-                    It.IsAny<IPredicateObjectMap>(),
-                    It.IsAny<IDataRecord>()), 
+                proc => proc.ProcessPredicateObjectMap(It.IsAny<INode>(), It.IsAny<IPredicateObjectMap>(), It.IsAny<IEnumerable<IUriNode>>(), It.IsAny<IDataRecord>()), 
                 Times.Exactly(mapsCount * rowsCount));
         }
 
@@ -139,14 +137,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             reader.Setup(rdr => rdr.Read()).Returns(() => rowsReturned++ < rowsCount);
 
             return command.Object;
-        }
-
-        private static IEnumerable<TMap> GenerateNMockMaps<TMap>(int count) where TMap : class, IMapBase
-        {
-            for (int i = 0; i < count; i++)
-            {
-                yield return new Mock<TMap>().Object;
-            }
         }
     }
 }
