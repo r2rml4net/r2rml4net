@@ -2,6 +2,6 @@
 {
     public interface IPredicateObjectMapProcessor
     {
-        void ProcessPredicateObjectMap(Mapping.IPredicateObjectMap predicateObjectMap, System.Data.IDataRecord connection);
+        void ProcessPredicateObjectMap(Mapping.IPredicateObjectMap predicateObjectMap, System.Data.IDataRecord logicalRow);
     }
 }
