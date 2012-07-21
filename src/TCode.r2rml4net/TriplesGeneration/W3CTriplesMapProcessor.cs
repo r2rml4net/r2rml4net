@@ -23,11 +23,6 @@ namespace TCode.r2rml4net.TriplesGeneration
             _storeWriter = storeWriter;
         }
 
-        public W3CTriplesMapProcessor(IRdfHandler storeWriter)
-            : this(new RDFTermGenerator(), storeWriter)
-        {
-        }
-
         #region Implementation of ITriplesMapProcessor
 
         public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection)

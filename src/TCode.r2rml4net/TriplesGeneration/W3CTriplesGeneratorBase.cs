@@ -19,19 +19,37 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public ITriplesMapProcessor TriplesMapProcessor { get; private set; }
 
+        #region Constructors
+
         protected W3CTriplesGeneratorBase(DbConnection connection)
-            : this(connection, new W3CTriplesMapProcessor(new StoreHandler(new TripleStore())))
+            : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), new StoreHandler(new TripleStore())))
         {
         }
 
         protected W3CTriplesGeneratorBase(DbConnection connection, ITripleStore tripleStore)
-            : this(connection, new W3CTriplesMapProcessor(new StoreHandler(tripleStore)))
+            : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), new StoreHandler(tripleStore)))
         {
             _tripleStore = tripleStore;
         }
 
         protected W3CTriplesGeneratorBase(DbConnection connection, IRdfHandler storeWriter)
-            : this(connection, new W3CTriplesMapProcessor(storeWriter))
+            : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), storeWriter))
+        {
+        }
+
+        protected W3CTriplesGeneratorBase(DbConnection connection, IRDFTermGenerator rdfTermGenerator)
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, new StoreHandler(new TripleStore())))
+        {
+        }
+
+        protected W3CTriplesGeneratorBase(DbConnection connection, ITripleStore tripleStore, IRDFTermGenerator rdfTermGenerator)
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, new StoreHandler(tripleStore)))
+        {
+            _tripleStore = tripleStore;
+        }
+
+        protected W3CTriplesGeneratorBase(DbConnection connection, IRdfHandler storeWriter, IRDFTermGenerator rdfTermGenerator)
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, storeWriter))
         {
         }
 
@@ -42,7 +60,9 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             if (connection.State != ConnectionState.Open)
                 connection.Open();
-        }
+        } 
+
+        #endregion
 
         #region Implementation of ITriplesGenerator
 
