@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// It should generate triples for all rows in all triples maps from the input R2RML mappings
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#generated-rdf</remarks>
-    public abstract class W3CTriplesGeneratorBase : ITriplesGenerator, IDisposable
+    public abstract class W3CR2RMLProcessorBase : IR2RMLProcessor, IDisposable
     {
         private readonly ITripleStore _tripleStore;
         private readonly DbConnection _connection;
@@ -21,39 +21,39 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Constructors
 
-        protected W3CTriplesGeneratorBase(DbConnection connection)
+        protected W3CR2RMLProcessorBase(DbConnection connection)
             : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), new StoreHandler(new TripleStore())))
         {
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, ITripleStore tripleStore)
+        protected W3CR2RMLProcessorBase(DbConnection connection, ITripleStore tripleStore)
             : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), new StoreHandler(tripleStore)))
         {
             _tripleStore = tripleStore;
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, IRdfHandler storeWriter)
+        protected W3CR2RMLProcessorBase(DbConnection connection, IRdfHandler storeWriter)
             : this(connection, new W3CTriplesMapProcessor(new RDFTermGenerator(), storeWriter))
         {
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, IRDFTermGenerator rdfTermGenerator)
+        protected W3CR2RMLProcessorBase(DbConnection connection, IRDFTermGenerator rdfTermGenerator)
             : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, new StoreHandler(new TripleStore())))
         {
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, ITripleStore tripleStore, IRDFTermGenerator rdfTermGenerator)
+        protected W3CR2RMLProcessorBase(DbConnection connection, ITripleStore tripleStore, IRDFTermGenerator rdfTermGenerator)
             : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, new StoreHandler(tripleStore)))
         {
             _tripleStore = tripleStore;
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, IRdfHandler storeWriter, IRDFTermGenerator rdfTermGenerator)
+        protected W3CR2RMLProcessorBase(DbConnection connection, IRdfHandler storeWriter, IRDFTermGenerator rdfTermGenerator)
             : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, storeWriter))
         {
         }
 
-        protected W3CTriplesGeneratorBase(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
+        protected W3CR2RMLProcessorBase(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
             TriplesMapProcessor = triplesMapProcessor;
             _connection = connection;
@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #endregion
 
-        #region Implementation of ITriplesGenerator
+        #region Implementation of IR2RMLProcessor
 
         public ITripleStore GenerateTriples(IR2RML r2RML)
         {
