@@ -92,6 +92,7 @@
     <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
+    <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CR2RMLProcessorBase.cs" />
   </ItemGroup>
