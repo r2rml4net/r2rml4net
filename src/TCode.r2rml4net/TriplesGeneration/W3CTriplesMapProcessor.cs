@@ -56,7 +56,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                     foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                     {
-                        PredicateObjectMapProcessor.ProcessPredicateObjectMap(map, logicalTable);   
+                        PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);   
                     }
                 }
             }
