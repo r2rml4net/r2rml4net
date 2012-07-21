@@ -10,9 +10,9 @@ using VDS.RDF;
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     [TestFixture]
-    public class W3CTriplesGeneratorBaseTests
+    public class W3CR2RMLProcessorBaseTests
     {
-        private Mock<W3CTriplesGeneratorBase> _triplesGenerator;
+        private Mock<W3CR2RMLProcessorBase> _triplesGenerator;
         private Mock<IR2RML> _r2RML;
         private Mock<DbConnection> _connection;
         private Mock<ITriplesMapProcessor> _triplesMapProcessor;
@@ -23,7 +23,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _r2RML = new Mock<IR2RML>();
             _connection = new Mock<DbConnection>();
             _triplesMapProcessor = new Mock<ITriplesMapProcessor>();
-            _triplesGenerator = new Mock<W3CTriplesGeneratorBase>(_connection.Object, _triplesMapProcessor.Object)
+            _triplesGenerator = new Mock<W3CR2RMLProcessorBase>(_connection.Object, _triplesMapProcessor.Object)
                                     {
                                         CallBase = true
                                     };

@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface for generating triples from R2RML mappings
     /// </summary>
-    public interface ITriplesGenerator
+    public interface IR2RMLProcessor
     {
         /// <summary>
         /// Generates triples from <paramref name="r2RML"/> mappings

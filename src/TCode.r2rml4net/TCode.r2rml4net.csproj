@@ -89,11 +89,11 @@
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
-    <Compile Include="TriplesGeneration\ITriplesGenerator.cs" />
+    <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
-    <Compile Include="TriplesGeneration\W3CTriplesGeneratorBase.cs" />
+    <Compile Include="TriplesGeneration\W3CR2RMLProcessorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

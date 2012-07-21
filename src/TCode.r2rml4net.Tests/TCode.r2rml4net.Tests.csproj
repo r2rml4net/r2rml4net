@@ -78,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlQueryBuilder\W3cEffectiveSqlBuilderTests.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessorTests.cs" />
-    <Compile Include="TriplesGeneration\W3CTriplesGeneratorBaseTests.cs" />
+    <Compile Include="TriplesGeneration\W3CR2RMLProcessorBaseTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
   </ItemGroup>
   <ItemGroup>
