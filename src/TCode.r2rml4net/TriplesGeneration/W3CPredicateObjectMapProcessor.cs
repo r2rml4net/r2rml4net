@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -6,15 +7,14 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
 {
-    class W3CPredicateObjectMapProcessor : IPredicateObjectMapProcessor
+    class W3CPredicateObjectMapProcessor : MapProcessorBase, IPredicateObjectMapProcessor
     {
         private readonly IRDFTermGenerator _termGenerator;
-        private readonly IRdfHandler _rdfHandler;
 
         public W3CPredicateObjectMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
+            : base(rdfHandler)
         {
             _termGenerator = termGenerator;
-            _rdfHandler = rdfHandler;
         }
 
         #region Implementation of IPredicateObjectMapProcessor
@@ -25,29 +25,16 @@ namespace TCode.r2rml4net.TriplesGeneration
                               select _termGenerator.GenerateTerm<IUriNode>(predicateMap, logicalRow)).ToArray();
             var objects = (from objectMap in predicateObjectMap.ObjectMaps
                            select _termGenerator.GenerateTerm<INode>(objectMap, logicalRow)).ToArray();
-            var graphs = (from graphMap in predicateObjectMap.GraphMaps
-                           select _termGenerator.GenerateTerm<IUriNode>(graphMap, logicalRow)).ToArray();
+            IEnumerable<IUriNode> graphs = (from graphMap in predicateObjectMap.GraphMaps
+                                            select _termGenerator.GenerateTerm<IUriNode>(graphMap, logicalRow)).ToList();
             var subjectGraphsLocal = subjectGraphs.ToArray();
 
-            foreach (IUriNode predicate in predicates)
+            if (!graphs.Any())
             {
-                foreach (INode @object in objects)
-                {
-                    if (!graphs.Any())
-                    {
-                        var triple = new Triple(subject, predicate, @object);
-                        _rdfHandler.HandleTriple(triple);
-                    }
-                    else
-                    {
-                        foreach (IUriNode graph in graphs.Union(subjectGraphsLocal))
-                        {
-                            var triple = new Triple(subject, predicate, @object, graph.Uri);
-                            _rdfHandler.HandleTriple(triple);
-                        }
-                    }
-                }
+                graphs = new[] {CreateUriNode(new Uri(RrDefaultgraph))};
             }
+
+            AddTriplesToDataSet(subject, predicates, objects, graphs.Union(subjectGraphsLocal).ToList());
         }
 
         #endregion
