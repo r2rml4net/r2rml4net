@@ -26,12 +26,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         public void Setup()
         {
             _predicateObjectMap = new Mock<IPredicateObjectMap>();
-            _logicalRow= new Mock<IDataRecord>();
+            _logicalRow = new Mock<IDataRecord>();
             _termGenerator = new Mock<IRDFTermGenerator>();
             _storeWriter = new Mock<IRdfHandler>();
             _subjectGraphs = new IUriNode[0];
             _subject = new Mock<IUriNode>().Object;
+            _storeWriter.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockdUriNode(uri));
             _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object, _storeWriter.Object);
+        }
+
+        private IUriNode CreateMockdUriNode(Uri uri)
+        {
+            var uriNode = new Mock<IUriNode>();
+            uriNode.Setup(n => n.Uri).Returns(uri);
+            return uriNode.Object;
         }
 
         [TestCase(0)]
@@ -119,7 +127,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _storeWriter.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)),
-                                Times.Exactly(predicatesCount*objectsCount));
+                                Times.Exactly(predicatesCount * objectsCount));
         }
 
         [TestCase(0, 0)]
@@ -155,7 +163,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _storeWriter.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri != null)),
-                                Times.Exactly(21*(subjectGrapsCount + graphsCount)));
+                                Times.Exactly(21 * (subjectGrapsCount + graphsCount)));
         }
     }
 }
