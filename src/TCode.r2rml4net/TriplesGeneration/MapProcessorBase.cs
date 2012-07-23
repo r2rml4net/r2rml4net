@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -16,11 +17,15 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         protected void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IList<INode> objects, IList<IUriNode> graphs)
         {
+            var graphsLocal = graphs;
+            if (!graphsLocal.Any())
+                graphsLocal = new[] {CreateUriNode(new Uri(RrDefaultgraph))};
+
             foreach (IUriNode predicate in predicates)
             {
                 foreach (INode @object in objects)
                 {
-                    foreach (IUriNode graph in graphs)
+                    foreach (IUriNode graph in graphsLocal)
                     {
                         if (new Uri(RrDefaultgraph).Equals(graph.Uri))
                         {
