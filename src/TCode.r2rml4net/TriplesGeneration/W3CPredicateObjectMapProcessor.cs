@@ -25,14 +25,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                               select _termGenerator.GenerateTerm<IUriNode>(predicateMap, logicalRow)).ToArray();
             var objects = (from objectMap in predicateObjectMap.ObjectMaps
                            select _termGenerator.GenerateTerm<INode>(objectMap, logicalRow)).ToArray();
-            IEnumerable<IUriNode> graphs = (from graphMap in predicateObjectMap.GraphMaps
-                                            select _termGenerator.GenerateTerm<IUriNode>(graphMap, logicalRow)).ToList();
+            var graphs = (from graphMap in predicateObjectMap.GraphMaps
+                          select _termGenerator.GenerateTerm<IUriNode>(graphMap, logicalRow)).ToArray();
             var subjectGraphsLocal = subjectGraphs.ToArray();
-
-            if (!graphs.Any())
-            {
-                graphs = new[] {CreateUriNode(new Uri(RrDefaultgraph))};
-            }
 
             AddTriplesToDataSet(subject, predicates, objects, graphs.Union(subjectGraphsLocal).ToList());
         }
