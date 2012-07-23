@@ -20,6 +20,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<IRdfHandler> _rdfHandler;
         private Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
+        private Mock<IRefObjectMapProcessor> _refObjectMapProcessor;
 
         [SetUp]
         public void Setup()
@@ -30,10 +31,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termGenerator = new Mock<IRDFTermGenerator>();
             _rdfHandler = new Mock<IRdfHandler>();
             _predicateObjectMapProcessor = new Mock<IPredicateObjectMapProcessor>();
+            _refObjectMapProcessor = new Mock<IRefObjectMapProcessor>();
             _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object, _rdfHandler.Object)
                                        {
                                            Log = _log.Object,
-                                           PredicateObjectMapProcessor = _predicateObjectMapProcessor.Object
+                                           PredicateObjectMapProcessor = _predicateObjectMapProcessor.Object,
+                                           RefObjectMapProcessor = _refObjectMapProcessor.Object
                                        };
         }
 
@@ -125,6 +128,32 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predicateObjectMapProcessor.Verify(
                 proc => proc.ProcessPredicateObjectMap(It.IsAny<INode>(), It.IsAny<IPredicateObjectMap>(), It.IsAny<IEnumerable<IUriNode>>(), It.IsAny<IDataRecord>()), 
                 Times.Exactly(mapsCount * rowsCount));
+        }
+
+        [TestCase(0)]
+        [TestCase(2)]
+        [TestCase(17)]
+        public void ProcessesEachRefObjectMapFromPredicateObjectMap(int refObjectMapsCount)
+        {
+            // given
+            Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
+            Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
+            _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
+            _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(1));
+            _triplesMap.Setup(map => map.PredicateObjectMaps).Returns(new[] {predicateObjectMap.Object});
+            predicateObjectMap.Setup(map => map.RefObjectMaps).Returns(() => GenerateNMocks<IRefObjectMap>(refObjectMapsCount));
+
+            // when
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+
+            // then
+            _refObjectMapProcessor.Verify(proc => 
+                proc.ProcessRefObjectMap(
+                    It.IsAny<IRefObjectMap>(),
+                    _connection.Object,
+                    subjectMap.Object,
+                    It.IsAny<IEnumerable<IGraphMap>>()), 
+                Times.Exactly(refObjectMapsCount));
         }
 
         private static IDbCommand CreateCommandWithNRowsResult(int rowsCount)

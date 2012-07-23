@@ -14,6 +14,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public ITriplesGenerationLog Log { get; set; }
         public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
+        public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
         public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
             : base(storeWriter)
@@ -50,6 +51,11 @@ namespace TCode.r2rml4net.TriplesGeneration
                     foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                     {
                         PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);
+
+                        foreach (IRefObjectMap refObjectMap in map.RefObjectMaps)
+                        {
+                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, triplesMap.SubjectMap, map.GraphMaps);
+                        }
                     }
                 }
             }
