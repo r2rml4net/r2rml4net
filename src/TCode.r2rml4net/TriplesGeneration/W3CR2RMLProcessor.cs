@@ -85,6 +85,11 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which processes triples maps with the supplied implementatioon of <see cref="ITriplesMapProcessor"/>
+        /// </summary>
+        /// <param name="connection">connection to datasource</param>
+        /// <param name="triplesMapProcessor"></param>
         protected internal W3CR2RMLProcessor(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
             _triplesMapProcessor = triplesMapProcessor;
@@ -98,6 +103,10 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IR2RMLProcessor
 
+        /// <summary>
+        /// Processes the R2RML mappings and generates RDF triples from source (relational) data
+        /// </summary>
+        /// <param name="r2RML">R2RML mappings</param>
         public void GenerateTriples(IR2RML r2RML)
         {
             foreach (var triplesMap in r2RML.TriplesMaps)
@@ -110,6 +119,9 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IDisposable
 
+        /// <summary>
+        /// Disposes of the connection
+        /// </summary>
         public void Dispose()
         {
             if(_connection.State == ConnectionState.Open)
