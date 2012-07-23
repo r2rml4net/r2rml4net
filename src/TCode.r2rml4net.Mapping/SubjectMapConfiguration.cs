@@ -37,7 +37,7 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ISubjectMapConfiguration.Classes"/>
+        /// <see cref="ISubjectMap.Classes"/>
         /// </summary>
         public Uri[] Classes
         {
