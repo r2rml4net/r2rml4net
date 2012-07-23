@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Moq;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
@@ -18,6 +19,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 }
                 yield return mock.Object;
             }
+        }
+
+        protected IUriNode CreateMockdUriNode(Uri uri)
+        {
+            var uriNode = new Mock<IUriNode>();
+            uriNode.Setup(n => n.Uri).Returns(uri);
+            return uriNode.Object;
         }
     }
 }

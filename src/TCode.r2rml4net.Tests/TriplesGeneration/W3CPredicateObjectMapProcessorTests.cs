@@ -35,13 +35,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object, _storeWriter.Object);
         }
 
-        private IUriNode CreateMockdUriNode(Uri uri)
-        {
-            var uriNode = new Mock<IUriNode>();
-            uriNode.Setup(n => n.Uri).Returns(uri);
-            return uriNode.Object;
-        }
-
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(10)]

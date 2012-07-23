@@ -5,7 +5,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
 {
-    internal abstract class MapProcessorBase
+    public abstract class MapProcessorBase
     {
         protected const string RrDefaultgraph = "http://www.w3.org/ns/r2rml#defaultGraph";
         private readonly IRdfHandler _rdfHandler;
@@ -15,15 +15,17 @@ namespace TCode.r2rml4net.TriplesGeneration
             _rdfHandler = rdfHandler;
         }
 
-        protected void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IList<INode> objects, IList<IUriNode> graphs)
+        protected internal void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IEnumerable<INode> objects, IEnumerable<IUriNode> graphs)
         {
-            var graphsLocal = graphs;
+            var objectsLocal = objects.ToList();
+
+            IEnumerable<IUriNode> graphsLocal = graphs.ToList();
             if (!graphsLocal.Any())
                 graphsLocal = new[] {CreateUriNode(new Uri(RrDefaultgraph))};
 
             foreach (IUriNode predicate in predicates)
             {
-                foreach (INode @object in objects)
+                foreach (INode @object in objectsLocal)
                 {
                     foreach (IUriNode graph in graphsLocal)
                     {
