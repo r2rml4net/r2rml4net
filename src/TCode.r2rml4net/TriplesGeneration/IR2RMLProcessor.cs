@@ -1,4 +1,6 @@
-﻿namespace TCode.r2rml4net.TriplesGeneration
+﻿using TCode.r2rml4net.Mapping;
+
+namespace TCode.r2rml4net.TriplesGeneration
 {
     /// <summary>
     /// Interface for generating triples from R2RML mappings
@@ -8,6 +10,6 @@
         /// <summary>
         /// Generates triples from <paramref name="r2RML"/> mappings
         /// </summary>
-        VDS.RDF.ITripleStore GenerateTriples(Mapping.IR2RML r2RML);
+        void GenerateTriples(IR2RML r2RML);
     }
 }

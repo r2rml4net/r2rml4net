@@ -5,14 +5,13 @@ using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
-using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     [TestFixture]
-    public class W3CR2RMLProcessorBaseTests
+    public class W3CR2RMLProcessorTests
     {
-        private Mock<W3CR2RMLProcessorBase> _triplesGenerator;
+        private W3CR2RMLProcessor _triplesGenerator;
         private Mock<IR2RML> _r2RML;
         private Mock<DbConnection> _connection;
         private Mock<ITriplesMapProcessor> _triplesMapProcessor;
@@ -23,10 +22,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _r2RML = new Mock<IR2RML>();
             _connection = new Mock<DbConnection>();
             _triplesMapProcessor = new Mock<ITriplesMapProcessor>();
-            _triplesGenerator = new Mock<W3CR2RMLProcessorBase>(_connection.Object, _triplesMapProcessor.Object)
-                                    {
-                                        CallBase = true
-                                    };
+            _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object);
         }
 
         [TestCase(0)]
@@ -40,7 +36,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>()));
 
             // when
-            _triplesGenerator.Object.GenerateTriples(_r2RML.Object);
+            _triplesGenerator.GenerateTriples(_r2RML.Object);
 
             // then
             _r2RML.Verify(rml => rml.TriplesMaps, Times.Once());

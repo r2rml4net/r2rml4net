@@ -81,7 +81,7 @@
     <Compile Include="TriplesGeneration\TriplesGenerationTestsBase.cs" />
     <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessorTests.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessorTests.cs" />
-    <Compile Include="TriplesGeneration\W3CR2RMLProcessorBaseTests.cs" />
+    <Compile Include="TriplesGeneration\W3CR2RMLProcessorTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
   </ItemGroup>
   <ItemGroup>
