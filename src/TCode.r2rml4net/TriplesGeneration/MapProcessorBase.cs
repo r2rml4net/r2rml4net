@@ -40,28 +40,34 @@ namespace TCode.r2rml4net.TriplesGeneration
         protected internal void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IEnumerable<INode> objects, IEnumerable<IUriNode> graphs)
         {
             var objectsLocal = objects.ToList();
-
-            IEnumerable<IUriNode> graphsLocal = graphs.ToList();
-            if (!graphsLocal.Any())
-                graphsLocal = new[] {CreateUriNode(new Uri(RrDefaultgraph))};
+            var graphsLocal = graphs.ToArray();
 
             foreach (IUriNode predicate in predicates)
             {
                 foreach (INode @object in objectsLocal)
                 {
-                    foreach (IUriNode graph in graphsLocal)
-                    {
-                        if (new Uri(RrDefaultgraph).Equals(graph.Uri))
-                        {
-                            var triple = new Triple(subject, predicate, @object);
-                            _rdfHandler.HandleTriple(triple);
-                        }
-                        else
-                        {
-                            var triple = new Triple(subject, predicate, @object, graph.Uri);
-                            _rdfHandler.HandleTriple(triple);
-                        }
-                    }
+                    AddTriplesToDataSet(subject, predicate, @object, graphsLocal);
+                }
+            }
+        }
+
+        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode @object, IEnumerable<IUriNode> graphs)
+        {
+            IEnumerable<IUriNode> graphsLocal = graphs.ToList();
+            if (!graphsLocal.Any())
+                graphsLocal = new[] { CreateUriNode(new Uri(RrDefaultgraph)) };
+
+            foreach (IUriNode graph in graphsLocal)
+            {
+                if (new Uri(RrDefaultgraph).Equals(graph.Uri))
+                {
+                    var triple = new Triple(subject, predicate, @object);
+                    _rdfHandler.HandleTriple(triple);
+                }
+                else
+                {
+                    var triple = new Triple(subject, predicate, @object, graph.Uri);
+                    _rdfHandler.HandleTriple(triple);
                 }
             }
         }

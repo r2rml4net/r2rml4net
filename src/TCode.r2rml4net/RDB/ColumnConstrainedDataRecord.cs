@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.RDB
         {
             var ordinalOfUnderlyingRecord = _dataRecord.GetOrdinal(name);
 
-            switch (_limitType)
+            switch (LimitType)
             {
                 case ColumnLimitType.FirstNColumns:
                     if(ordinalOfUnderlyingRecord < _columnLimit)
@@ -163,7 +163,7 @@ namespace TCode.r2rml4net.RDB
         {
             get
             {
-                switch (_limitType)
+                switch (LimitType)
                 {
                     case ColumnLimitType.FirstNColumns:
                         return Math.Min(_dataRecord.FieldCount, _columnLimit);
@@ -185,6 +185,11 @@ namespace TCode.r2rml4net.RDB
 
         #endregion
 
+        internal ColumnLimitType LimitType
+        {
+            get { return _limitType; }
+        }
+
         internal T CheckFieldCountAndCallBase<T>(int i, Func<int, T> functionToCall)
         {
             if (i < 0 || i > FieldCount)
@@ -195,7 +200,7 @@ namespace TCode.r2rml4net.RDB
 
         private int TranslateIndex(int i)
         {
-            switch (_limitType)
+            switch (LimitType)
             {
                 case ColumnLimitType.FirstNColumns:
                     return i;

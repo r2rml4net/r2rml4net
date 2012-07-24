@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 
@@ -16,6 +17,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IRefObjectMap> _refObjMap;
         private Mock<IDbConnection> _connection;
         private Mock<IRDFTermGenerator> _termGenerator;
+        private Mock<IPredicateObjectMap> _predObjectMap;
 
         [SetUp]
         public void Setup()
@@ -25,8 +27,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjMap = new Mock<IRefObjectMap>();
             _rdfHandler = new Mock<IRdfHandler>();
             _subjectMap = new Mock<ISubjectMap>();
+            _predObjectMap = new Mock<IPredicateObjectMap>();
 
             _refObjMap.Setup(map => map.SubjectMap).Returns(_subjectMap.Object);
+            _refObjMap.Setup(map => map.PredicateObjectMap).Returns(_predObjectMap.Object);
 
             _processor = new W3CRefObjectMapProcessor(_termGenerator.Object, _rdfHandler.Object);
         }
@@ -44,7 +48,9 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, new IGraphMap[0], 2);
 
             // then
-            _termGenerator.Verify(gen=>gen.GenerateTerm<INode>(_subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));
+            _termGenerator.Verify(
+                gen => gen.GenerateTerm<INode>(_subjectMap.Object, It.Is<ColumnConstrainedDataRecord>(rec => rec.LimitType == ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns)),
+                Times.Exactly(rowsCount));
         }
     }
 }
