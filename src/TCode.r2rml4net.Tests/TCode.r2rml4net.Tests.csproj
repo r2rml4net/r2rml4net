@@ -76,7 +76,14 @@
     <Compile Include="Metadata\TableMetadataTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDB\ColumnConstrainedDataRecordTests.cs" />
     <Compile Include="SqlQueryBuilder\W3cEffectiveSqlBuilderTests.cs" />
+    <Compile Include="TriplesGeneration\MapProcessorBaseTests.cs" />
+    <Compile Include="TriplesGeneration\TriplesGenerationTestsBase.cs" />
+    <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessorTests.cs" />
+    <Compile Include="TriplesGeneration\W3CRefObjectMapProcessorTests.cs" />
+    <Compile Include="TriplesGeneration\W3CTriplesMapProcessorTests.cs" />
+    <Compile Include="TriplesGeneration\W3CR2RMLProcessorTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
   </ItemGroup>
   <ItemGroup>
