@@ -63,11 +63,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
-            Assert.AreEqual(2, subjectMap.Graphs.Count());
-            Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", subjectMap.Graphs.ElementAt(0).Template);
-            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.Graphs.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.Graphs.Cast<GraphMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.Graphs.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            Assert.AreEqual(2, subjectMap.GraphMaps.Count());
+            Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", subjectMap.GraphMaps.ElementAt(0).Template);
+            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]
@@ -92,11 +92,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
-            Assert.AreEqual(2, subjectMap.Graphs.Count());
-            Assert.AreEqual(new Uri("http://data.example.com/shortGraph/"), subjectMap.Graphs.ElementAt(0).URI);
-            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.Graphs.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.Graphs.Cast<GraphMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.Graphs.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            Assert.AreEqual(2, subjectMap.GraphMaps.Count());
+            Assert.AreEqual(new Uri("http://data.example.com/shortGraph/"), subjectMap.GraphMaps.ElementAt(0).URI);
+            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
+            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]

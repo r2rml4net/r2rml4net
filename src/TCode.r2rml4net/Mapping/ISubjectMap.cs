@@ -16,6 +16,6 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Gets the graph maps associated with this <see cref="ISubjectMap"/>
         /// </summary>
-        IEnumerable<IGraphMap> Graphs { get; }
+        IEnumerable<IGraphMap> GraphMaps { get; }
     }
 }

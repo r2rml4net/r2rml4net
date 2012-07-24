@@ -84,18 +84,6 @@
     <Compile Include="RDB\TableCollection.cs" />
     <Compile Include="RDB\TableMetadata.cs" />
     <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
-    <Compile Include="RDF\IMapBase.cs" />
-    <Compile Include="RDF\IGraphMap.cs" />
-    <Compile Include="RDF\InvalidTriplesMapException.cs" />
-    <Compile Include="RDF\IObjectMap.cs" />
-    <Compile Include="RDF\IPredicateMap.cs" />
-    <Compile Include="RDF\IPredicateObjectMap.cs" />
-    <Compile Include="RDF\IR2RML.cs" />
-    <Compile Include="RDF\IRefObjectMap.cs" />
-    <Compile Include="RDF\ISubjectMap.cs" />
-    <Compile Include="RDF\ITermMap.cs" />
-    <Compile Include="RDF\ITriplesMap.cs" />
-    <Compile Include="RDF\JoinCondition.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
   </ItemGroup>
   <ItemGroup>

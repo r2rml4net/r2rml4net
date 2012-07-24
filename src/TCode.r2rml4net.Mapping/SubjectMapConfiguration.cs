@@ -84,7 +84,7 @@ namespace TCode.r2rml4net.Mapping
             get { return ConstantValue; }
         }
 
-        public IEnumerable<IGraphMap> Graphs
+        public IEnumerable<IGraphMap> GraphMaps
         {
             get { return _graphMaps; }
         }
