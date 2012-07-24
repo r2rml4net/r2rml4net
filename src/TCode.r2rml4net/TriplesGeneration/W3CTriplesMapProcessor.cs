@@ -35,7 +35,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 while (logicalTable.Read())
                 {
                     var subject = TermGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
-                    var graphs = (from graph in triplesMap.SubjectMap.Graphs
+                    var graphs = (from graph in triplesMap.SubjectMap.GraphMaps
                                   select TermGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
 
                     AddTriplesToDataSet(
