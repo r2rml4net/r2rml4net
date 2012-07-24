@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TCode.r2rml4net.Mapping;
@@ -20,7 +19,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IRefObjectMapProcessor
 
-        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps, int childColumnsCount)
+        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount)
         {
             var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery);
 

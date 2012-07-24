@@ -154,8 +154,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
                     It.IsAny<IRefObjectMap>(),
-                    _connection.Object,
-                    It.IsAny<IEnumerable<IGraphMap>>(), 5),
+                    _connection.Object, 5),
                 Times.Exactly(refObjectMapsCount));
         }
 
@@ -178,8 +177,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
                     It.IsAny<IRefObjectMap>(),
-                    _connection.Object,
-                    It.IsAny<IEnumerable<IGraphMap>>(), 5),
+                    _connection.Object, 5),
                 Times.Never());
         }
     }
