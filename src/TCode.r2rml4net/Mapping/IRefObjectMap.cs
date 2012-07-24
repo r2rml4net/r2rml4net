@@ -25,8 +25,8 @@ namespace TCode.r2rml4net.Mapping
         /// <remarks>http://www.w3.org/TR/r2rml/#foreign-key</remarks>
         string ParentEffectiveSqlQuery { get; }
 
-        /// <summary>
         string EffectiveSqlQuery { get; }
+        /// <summary>
         /// Returns the referenced triples map's subject
         /// </summary>
         ISubjectMap SubjectMap { get; }
