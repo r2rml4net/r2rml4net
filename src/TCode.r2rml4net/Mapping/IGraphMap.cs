@@ -6,11 +6,7 @@ namespace TCode.r2rml4net.Mapping
     /// Represents a graph map 
     /// </summary>
     /// <remarks>See more at http://www.w3.org/TR/r2rml/#dfn-graph-map</remarks>
-    public interface IGraphMap : ITermMap
+    public interface IGraphMap : ITermMap, IUriValuedTermMap
     {
-        /// <summary>
-        /// Get the GraphUri URI or null if no URI has been set
-        /// </summary>
-        Uri URI { get; }
     }
 }

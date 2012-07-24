@@ -15,6 +15,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <remarks>see http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term</remarks>
         /// <returns>an RDF term (<see cref="INode"/>)</returns>
-        TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : INode;
+        TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : class, INode;
     }
 }

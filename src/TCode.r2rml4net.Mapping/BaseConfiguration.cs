@@ -73,6 +73,11 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         public abstract INode Node { get; }
 
+        public Uri BaseURI
+        {
+            get { return R2RMLMappings.BaseUri; }
+        }
+
         #endregion
 
         private void EnsurePrefixes()

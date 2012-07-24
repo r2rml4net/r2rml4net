@@ -79,6 +79,7 @@
     <Compile Include="RDB\ColumnConstrainedDataRecordTests.cs" />
     <Compile Include="SqlQueryBuilder\W3cEffectiveSqlBuilderTests.cs" />
     <Compile Include="TriplesGeneration\MapProcessorBaseTests.cs" />
+    <Compile Include="TriplesGeneration\RDFTermGeneratorTests.cs" />
     <Compile Include="TriplesGeneration\TriplesGenerationTestsBase.cs" />
     <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessorTests.cs" />
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessorTests.cs" />
