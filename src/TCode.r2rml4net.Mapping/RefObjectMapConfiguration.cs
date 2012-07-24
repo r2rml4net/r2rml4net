@@ -91,6 +91,11 @@ WHERE {
             get { return _parentTriplesMap.EffectiveSqlQuery; }
         }
 
+        public ISubjectMap SubjectMap
+        {
+            get { return _parentTriplesMap.SubjectMap; }
+        }
+
         public string EffectiveSqlQuery
         {
             get
