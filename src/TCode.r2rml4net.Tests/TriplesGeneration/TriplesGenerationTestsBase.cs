@@ -29,11 +29,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             return uriNode.Object;
         }
 
-        protected static IDbCommand CreateCommandWithNRowsResult(int rowsCount)
+        protected static IDbCommand CreateCommandWithNRowsResult(int rowsCount, int fieldCount = 5)
         {
             int rowsReturned = 0;
             Mock<IDbCommand> command = new Mock<IDbCommand>();
             Mock<IDataReader> reader = new Mock<IDataReader>();
+            reader.Setup(r => r.FieldCount).Returns(fieldCount);
             command.Setup(cmd => cmd.ExecuteReader()).Returns(reader.Object);
 
             reader.Setup(rdr => rdr.Read()).Returns(() => rowsReturned++ < rowsCount);

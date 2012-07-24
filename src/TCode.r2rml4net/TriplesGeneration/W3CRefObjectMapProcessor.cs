@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDB;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -18,7 +19,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IRefObjectMapProcessor
 
-        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps)
+        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps, int childColumnsCount)
         {
             var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery);
 
@@ -29,5 +30,10 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         #endregion
+
+        internal IDataRecord WrapDataRecord(IDataRecord dataRecord, int columnLimit, ColumnConstrainedDataRecord.ColumnLimitType limitType)
+        {
+            return new ColumnConstrainedDataRecord(dataRecord, columnLimit, limitType);
+        }
     }
 }
