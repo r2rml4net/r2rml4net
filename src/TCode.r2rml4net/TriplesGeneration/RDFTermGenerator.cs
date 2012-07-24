@@ -111,7 +111,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (uriValuedTermMap != null)
             {
                 if (uriValuedTermMap.URI == null)
-                    throw new InvalidTriplesMapException(string.Format("Cannot create RDF term for IRI-valued term map {0}. IRI was set.*", termMap.Node));
+                    throw new InvalidTermException(string.Format("Cannot create RDF term for IRI-valued term map {0}. IRI was set.*", termMap.Node));
 
                 return _nodeFactory.CreateUriNode(uriValuedTermMap.URI);
             }
@@ -119,12 +119,15 @@ namespace TCode.r2rml4net.TriplesGeneration
             var objectMap = termMap as IObjectMap;
             if (objectMap != null)
             {
+                if (objectMap.URI != null && objectMap.Literal != null)
+                    throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Object map's value must be either IRI or literal.", objectMap.Node));
+                
                 if (objectMap.URI != null)
                     return _nodeFactory.CreateUriNode(objectMap.URI);
                 if (objectMap.Literal != null)
                     return _nodeFactory.CreateLiteralNode(objectMap.Literal);
 
-                throw new InvalidTriplesMapException(string.Format("Cannot create RDF term for constant-valued term map {0}. Neither IRI nor literal was set.", objectMap.Node));
+                throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Neither IRI nor literal was set.", objectMap.Node));
             }
 
             return null;
