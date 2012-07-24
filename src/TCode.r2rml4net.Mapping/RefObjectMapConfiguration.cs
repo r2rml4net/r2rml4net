@@ -96,6 +96,11 @@ WHERE {
             get { return _parentTriplesMap.SubjectMap; }
         }
 
+        public IPredicateObjectMap PredicateObjectMap
+        {
+            get { return _predicateObjectMap; }
+        }
+
         public string EffectiveSqlQuery
         {
             get

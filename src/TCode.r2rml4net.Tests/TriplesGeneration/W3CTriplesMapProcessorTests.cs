@@ -62,7 +62,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         {
             // given
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
-            subjectMap.Setup(sm => sm.Graphs).Returns(new IGraphMap[0]);
+            subjectMap.Setup(sm => sm.GraphMaps).Returns(new IGraphMap[0]);
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
@@ -99,7 +99,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         {
             // given
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
-            subjectMap.Setup(sm => sm.Graphs).Returns(GenerateNMocks<IGraphMap>(graphsCount));
+            subjectMap.Setup(sm => sm.GraphMaps).Returns(GenerateNMocks<IGraphMap>(graphsCount));
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 

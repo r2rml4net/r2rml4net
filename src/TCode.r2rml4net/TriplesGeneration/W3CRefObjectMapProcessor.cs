@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
@@ -23,9 +24,24 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery);
 
-            while(dataReader.Read())
+            while (dataReader.Read())
             {
-                var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, dataReader);
+                var childRow = WrapDataRecord(dataReader, childColumnsCount, ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
+                var parentRow = WrapDataRecord(dataReader, childColumnsCount, ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
+
+                var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, childRow);
+                var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
+                                 select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
+                var @object = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, parentRow);
+                var subjectGraphs = (from graphMap in refObjectMap.SubjectMap.GraphMaps
+                                     select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
+                var predObjectGraphs = (from graphMap in refObjectMap.PredicateObjectMap.GraphMaps
+                                        select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
+
+                foreach (IUriNode predicate in predicates)
+                {
+                    AddTriplesToDataSet(subject, predicate, @object, subjectGraphs.Union(predObjectGraphs));
+                }
             }
         }
 
