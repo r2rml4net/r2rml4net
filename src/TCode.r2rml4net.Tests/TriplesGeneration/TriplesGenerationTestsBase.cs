@@ -22,7 +22,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
         }
 
-        protected IUriNode CreateMockdUriNode(Uri uri)
+        protected IUriNode CreateMockedUriNode(Uri uri)
         {
             var uriNode = new Mock<IUriNode>();
             uriNode.Setup(n => n.Uri).Returns(uri);

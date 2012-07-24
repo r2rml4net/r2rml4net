@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _storeWriter = new Mock<IRdfHandler>();
             _subjectGraphs = new IUriNode[0];
             _subject = new Mock<IUriNode>().Object;
-            _storeWriter.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockdUriNode(uri));
+            _storeWriter.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
             _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object, _storeWriter.Object);
         }
 
