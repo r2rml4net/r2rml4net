@@ -306,7 +306,7 @@ WHERE
             _subjectMapConfiguration = subjectMaps.SingleOrDefault();
         }
 
-        protected internal override ITriplesMapConfiguration ParentTriplesMap
+        protected internal override ITriplesMapConfiguration TriplesMap
         {
             get { return this; }
         }
