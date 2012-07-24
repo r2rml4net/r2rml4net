@@ -57,7 +57,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidTriplesMapException.cs" />
     <Compile Include="IVistitable.cs" />
+    <Compile Include="Mapping\IGraphMap.cs" />
+    <Compile Include="Mapping\IMapBase.cs" />
+    <Compile Include="Mapping\IObjectMap.cs" />
+    <Compile Include="Mapping\IPredicateMap.cs" />
+    <Compile Include="Mapping\IPredicateObjectMap.cs" />
+    <Compile Include="Mapping\IR2RML.cs" />
+    <Compile Include="Mapping\IRefObjectMap.cs" />
+    <Compile Include="Mapping\ISubjectMap.cs" />
+    <Compile Include="Mapping\ITermMap.cs" />
+    <Compile Include="Mapping\ITriplesMap.cs" />
+    <Compile Include="Mapping\JoinCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
