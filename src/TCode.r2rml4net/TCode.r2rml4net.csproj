@@ -57,9 +57,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidTermException.cs" />
     <Compile Include="IVistitable.cs" />
     <Compile Include="Log\ITriplesGenerationLog.cs" />
     <Compile Include="Log\NullLog.cs" />
+    <Compile Include="Mapping\IGraphMap.cs" />
+    <Compile Include="Mapping\ILiteralTermMap.cs" />
+    <Compile Include="Mapping\IPredicateMap.cs" />
+    <Compile Include="Mapping\ITermType.cs" />
+    <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
@@ -75,10 +81,8 @@
     <Compile Include="RDB\TableMetadata.cs" />
     <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
     <Compile Include="Mapping\IMapBase.cs" />
-    <Compile Include="Mapping\IGraphMap.cs" />
     <Compile Include="InvalidTriplesMapException.cs" />
     <Compile Include="Mapping\IObjectMap.cs" />
-    <Compile Include="Mapping\IPredicateMap.cs" />
     <Compile Include="Mapping\IPredicateObjectMap.cs" />
     <Compile Include="Mapping\IR2RML.cs" />
     <Compile Include="Mapping\IRefObjectMap.cs" />
@@ -86,8 +90,10 @@
     <Compile Include="Mapping\ITermMap.cs" />
     <Compile Include="Mapping\ITriplesMap.cs" />
     <Compile Include="Mapping\JoinCondition.cs" />
+    <Compile Include="RDF\R2RMLUris.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
+    <Compile Include="TriplesGeneration\INaturalLexicalFormProvider.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
     <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
@@ -95,6 +101,7 @@
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\MapProcessorBase.cs" />
     <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
+    <Compile Include="TriplesGeneration\W3CLexicalFormProvider.cs" />
     <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />

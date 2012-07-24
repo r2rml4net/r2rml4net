@@ -8,7 +8,7 @@ namespace TCode.r2rml4net.Mapping
     /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 
     /// backed by a DotNetRDF graph (see <see cref="ITermMapConfiguration"/>)
     /// </summary>
-    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration
+    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermType
     {
         /// <summary>
         /// The parent node for the current term map
@@ -225,6 +225,26 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        bool ITermMap.IsConstantValued
+        {
+            get { return ConstantValue != null; }
+        }
+
+        bool ITermMap.IsColumnValued
+        {
+            get { return ColumnName != null; }
+        }
+
+        bool ITermMap.IsTemplateValued
+        {
+            get { return Template != null; }
+        }
+
+        ITermType ITermMap.TermType
+        {
+            get { return this; }
+        }
+
         #endregion
 
         #region Implementation of IMapBase
@@ -254,6 +274,25 @@ namespace TCode.r2rml4net.Mapping
 
             TermMapNode = currentNode;
             base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
+        }
+
+        #endregion
+
+        #region Implementation of ITermType
+
+        public bool IsURI
+        {
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Equals(TermTypeURI); }
+        }
+
+        bool ITermType.IsBlankNode
+        {
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Equals(TermTypeURI); }
+        }
+
+        bool ITermType.IsLiteral
+        {
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Equals(TermTypeURI); }
         }
 
         #endregion
