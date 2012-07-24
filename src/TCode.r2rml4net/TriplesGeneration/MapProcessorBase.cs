@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using VDS.RDF;
 
@@ -15,14 +16,21 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         protected const string RrDefaultgraph = "http://www.w3.org/ns/r2rml#defaultGraph";
         private readonly IRdfHandler _rdfHandler;
+        private readonly IRDFTermGenerator _termGenerator;
 
         /// <summary>
         /// Creates an instance
         /// </summary>
         /// <param name="rdfHandler">handler for generated triples</param>
-        protected MapProcessorBase(IRdfHandler rdfHandler)
+        protected MapProcessorBase(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
         {
             _rdfHandler = rdfHandler;
+            _termGenerator = termGenerator;
+        }
+
+        protected IRDFTermGenerator TermGenerator
+        {
+            get { return _termGenerator; }
         }
 
         /// <summary>
@@ -64,6 +72,14 @@ namespace TCode.r2rml4net.TriplesGeneration
         protected IUriNode CreateUriNode(Uri uri)
         {
             return _rdfHandler.CreateUriNode(uri);
+        }
+
+        protected static IDataReader FetchLogicalRows(IDbConnection connection, string effectiveSqlQuery)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = effectiveSqlQuery;
+            command.CommandType = CommandType.Text;
+            return command.ExecuteReader();
         }
     }
 }

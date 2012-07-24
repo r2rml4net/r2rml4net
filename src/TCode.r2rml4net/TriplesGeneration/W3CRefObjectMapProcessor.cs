@@ -11,8 +11,8 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// <remarks>see http://www.w3.org/TR/r2rml/#generated-triples</remarks>
     class W3CRefObjectMapProcessor : MapProcessorBase, IRefObjectMapProcessor
     {
-        public W3CRefObjectMapProcessor(IRdfHandler rdfHandler)
-            : base(rdfHandler)
+        public W3CRefObjectMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
+            : base(termGenerator, rdfHandler)
         {
         }
 
@@ -20,7 +20,12 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps)
         {
-            throw new System.NotImplementedException();
+            var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery);
+
+            while(dataReader.Read())
+            {
+                var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, dataReader);
+            }
         }
 
         #endregion

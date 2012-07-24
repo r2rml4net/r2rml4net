@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq.Expressions;
 using Moq;
 using VDS.RDF;
@@ -26,6 +27,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var uriNode = new Mock<IUriNode>();
             uriNode.Setup(n => n.Uri).Returns(uri);
             return uriNode.Object;
+        }
+
+        protected static IDbCommand CreateCommandWithNRowsResult(int rowsCount)
+        {
+            int rowsReturned = 0;
+            Mock<IDbCommand> command = new Mock<IDbCommand>();
+            Mock<IDataReader> reader = new Mock<IDataReader>();
+            command.Setup(cmd => cmd.ExecuteReader()).Returns(reader.Object);
+
+            reader.Setup(rdr => rdr.Read()).Returns(() => rowsReturned++ < rowsCount);
+
+            return command.Object;
         }
     }
 }
