@@ -151,9 +151,32 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 proc.ProcessRefObjectMap(
                     It.IsAny<IRefObjectMap>(),
                     _connection.Object,
-                    subjectMap.Object,
                     It.IsAny<IEnumerable<IGraphMap>>()), 
                 Times.Exactly(refObjectMapsCount));
+        }
+
+        [Test]
+        public void SkipProcessingRefObjectMapIfSubjectMapIsAbsent()
+        {
+            // given
+            Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
+            Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
+            Mock<IRefObjectMap> refObjectMap = new Mock<IRefObjectMap>();
+            _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
+            _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(1));
+            _triplesMap.Setup(map => map.PredicateObjectMaps).Returns(new[] { predicateObjectMap.Object });
+            predicateObjectMap.Setup(map => map.RefObjectMaps).Returns(() => new[] { refObjectMap.Object });
+
+            // when
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+
+            // then
+            _refObjectMapProcessor.Verify(proc => 
+                proc.ProcessRefObjectMap(
+                    It.IsAny<IRefObjectMap>(),
+                    _connection.Object,
+                    It.IsAny<IEnumerable<IGraphMap>>()), 
+                Times.Never());
         }
 
         private static IDbCommand CreateCommandWithNRowsResult(int rowsCount)

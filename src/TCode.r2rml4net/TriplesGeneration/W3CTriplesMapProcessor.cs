@@ -42,8 +42,8 @@ namespace TCode.r2rml4net.TriplesGeneration
                                   select _termGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
 
                     AddTriplesToDataSet(
-                        subject, 
-                        new[]{CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))},
+                        subject,
+                        new[] { CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
                         classes.Select(CreateUriNode).Cast<INode>().ToList(),
                         graphs
                         );
@@ -52,9 +52,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                     {
                         PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);
 
-                        foreach (IRefObjectMap refObjectMap in map.RefObjectMaps)
+                        foreach (IRefObjectMap refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
                         {
-                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, triplesMap.SubjectMap, map.GraphMaps);
+                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, map.GraphMaps);
                         }
                     }
                 }
