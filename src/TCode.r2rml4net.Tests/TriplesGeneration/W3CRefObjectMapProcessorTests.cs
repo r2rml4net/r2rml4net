@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predObjectMap = new Mock<IPredicateObjectMap>();
 
             _rdfHandler.Setup(handler => handler.CreateUriNode(It.IsAny<Uri>()))
-                       .Returns((Uri u) => CreateMockdUriNode(u));
+                       .Returns((Uri u) => CreateMockedUriNode(u));
 
             _refObjMap.Setup(map => map.SubjectMap).Returns(_subjectMap.Object);
             _refObjMap.Setup(map => map.PredicateObjectMap).Returns(_predObjectMap.Object);
@@ -167,9 +167,9 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predObjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(predObjectGraphsCount));
             _subjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(subjectGraphsCount));
             _termGenerator.Setup(gen => gen.GenerateTerm<INode>(It.IsAny<ITermMap>(), It.IsAny<IDataRecord>()))
-                          .Returns(() => CreateMockdUriNode(new Uri("http://www.exampl.com/node")));
+                          .Returns(() => CreateMockedUriNode(new Uri("http://www.exampl.com/node")));
             _termGenerator.Setup(gen => gen.GenerateTerm<IUriNode>(It.IsAny<ITermMap>(), It.IsAny<IDataRecord>()))
-                          .Returns(() => CreateMockdUriNode(new Uri("http://www.exampl.com/node")));
+                          .Returns(() => CreateMockedUriNode(new Uri("http://www.exampl.com/node")));
 
             // when
             _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);

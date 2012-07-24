@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termGenerator = new Mock<IRDFTermGenerator>();
 
             _rdfHandler = new Mock<IRdfHandler>();
-            _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockdUriNode(uri));
+            _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
 
             _processor = new Mock<MapProcessorBase>(_termGenerator.Object, _rdfHandler.Object)
                              {
@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _graphs = new[]
                           {
-                              CreateMockdUriNode(new Uri("http://www.w3.org/ns/r2rml#defaultGraph"))
+                              CreateMockedUriNode(new Uri("http://www.w3.org/ns/r2rml#defaultGraph"))
                           };
 
             // when
@@ -69,8 +69,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _graphs = new[]
                           {
-                              CreateMockdUriNode(new Uri("http://www.w3.org/ns/r2rml#defaultGraph")),
-                              CreateMockdUriNode(new Uri("http://www.example.com/someGraph"))
+                              CreateMockedUriNode(new Uri("http://www.w3.org/ns/r2rml#defaultGraph")),
+                              CreateMockedUriNode(new Uri("http://www.example.com/someGraph"))
                           };
 
             // when
