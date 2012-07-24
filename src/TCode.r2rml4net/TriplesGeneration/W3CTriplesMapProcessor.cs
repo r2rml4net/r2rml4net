@@ -10,17 +10,14 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     internal class W3CTriplesMapProcessor : MapProcessorBase, ITriplesMapProcessor
     {
-        private readonly IRDFTermGenerator _termGenerator;
-
         public ITriplesGenerationLog Log { get; set; }
         public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
         public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
         public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
-            : base(storeWriter)
+            : base(termGenerator, storeWriter)
         {
             Log = NullLog.Instance;
-            _termGenerator = termGenerator;
         }
 
         #region Implementation of ITriplesMapProcessor
@@ -37,9 +34,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                 IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                 while (logicalTable.Read())
                 {
-                    var subject = _termGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
+                    var subject = TermGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
                     var graphs = (from graph in triplesMap.SubjectMap.Graphs
-                                  select _termGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
+                                  select TermGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
 
                     AddTriplesToDataSet(
                         subject,
@@ -62,13 +59,5 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         #endregion
-
-        private static IDataReader FetchLogicalRows(IDbConnection connection, string effectiveSqlQuery)
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = effectiveSqlQuery;
-            command.CommandType = CommandType.Text;
-            return command.ExecuteReader();
-        }
     }
 }
