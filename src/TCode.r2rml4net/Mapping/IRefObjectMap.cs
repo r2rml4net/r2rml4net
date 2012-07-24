@@ -24,5 +24,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <remarks>http://www.w3.org/TR/r2rml/#foreign-key</remarks>
         string ParentEffectiveSqlQuery { get; }
+
+        string EffectiveSqlQuery { get; }
     }
 }
