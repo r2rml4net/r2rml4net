@@ -13,7 +13,7 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class BaseConfiguration : IMapBase
     {
-        private readonly ITriplesMapConfiguration _parentTriplesMap;
+        private readonly ITriplesMapConfiguration _triplesMap;
 
         private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 DELETE { ?map rr:graph ?value . }
@@ -63,7 +63,7 @@ WHERE { ?map rr:subject ?value }";
         protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph)
             : this(existingMappingsGraph)
         {
-            _parentTriplesMap = triplesMap;
+            _triplesMap = triplesMap;
         }
 
         #region Implementation of IMapBase
@@ -130,9 +130,9 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Gets the parent <see cref="ITriplesMapConfiguration"/> containing this map
         /// </summary>
-        protected internal virtual ITriplesMapConfiguration ParentTriplesMap
+        protected internal virtual ITriplesMapConfiguration TriplesMap
         {
-            get { return _parentTriplesMap; }
+            get { return _triplesMap; }
         }
     }
 }
