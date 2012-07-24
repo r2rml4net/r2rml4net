@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(c => c.CreateCommand()).Returns(() => CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, new IGraphMap[0]);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, new IGraphMap[0], 2);
 
             // then
             _termGenerator.Verify(gen=>gen.GenerateTerm<INode>(_subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));

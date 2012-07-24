@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                         foreach (IRefObjectMap refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
                         {
-                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, map.GraphMaps);
+                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, map.GraphMaps, logicalTable.FieldCount);
                         }
                     }
                 }

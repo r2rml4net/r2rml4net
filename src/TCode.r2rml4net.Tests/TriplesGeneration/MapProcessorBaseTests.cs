@@ -16,6 +16,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private IEnumerable<IUriNode> _predicates;
         private IEnumerable<IUriNode> _graphs;
         private IEnumerable<INode> _objects;
+        private Mock<IRDFTermGenerator> _termGenerator;
 
         [SetUp]
         public void Setup()
@@ -25,10 +26,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objects = new[] { new Mock<INode>().Object };
             _graphs = new IUriNode[0];
 
+            _termGenerator = new Mock<IRDFTermGenerator>();
+
             _rdfHandler = new Mock<IRdfHandler>();
             _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockdUriNode(uri));
 
-            _processor = new Mock<MapProcessorBase>(_rdfHandler.Object)
+            _processor = new Mock<MapProcessorBase>(_termGenerator.Object, _rdfHandler.Object)
                              {
                                  CallBase = true
                              };

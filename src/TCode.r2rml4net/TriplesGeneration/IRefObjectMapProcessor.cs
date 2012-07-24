@@ -6,6 +6,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     public interface IRefObjectMapProcessor
     {
-        void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps);
+        void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, IEnumerable<IGraphMap> predicateObjectMapGraphMaps, int childColumnsCount);
     }
 }
