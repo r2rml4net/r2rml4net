@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Mapping
 
         public IGraphMap CreateGraphMap()
         {
-            var graphMap = new GraphMapConfiguration(ParentTriplesMap, this, R2RMLMappings);
+            var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings);
             _graphMaps.Add(graphMap);
             return graphMap;
         }
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(R2RMLUris.RrGraphMapPropety, graph => new GraphMapConfiguration(ParentTriplesMap, this, graph), _graphMaps);
+            CreateSubMaps(R2RMLUris.RrGraphMapPropety, graph => new GraphMapConfiguration(TriplesMap, this, graph), _graphMaps);
         }
 
         #endregion

@@ -8,17 +8,17 @@ namespace TCode.r2rml4net.Mapping
     internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration
     {
         INode _refObjectMapNode;
-        readonly ITriplesMap _referencedTriplesMap;
+        readonly ITriplesMap _parentTriplesMap;
         private readonly IPredicateObjectMap _predicateObjectMap;
-        readonly ITriplesMapConfiguration _parentTriplesMap;
+        readonly ITriplesMapConfiguration _childTriplesMap;
 
-        internal RefObjectMapConfiguration(IPredicateObjectMap predicateObjectMap, ITriplesMapConfiguration parentTriplesMap, ITriplesMap referencedTriplesMap, IGraph mappings)
-             : base(parentTriplesMap, mappings)
+        internal RefObjectMapConfiguration(IPredicateObjectMap predicateObjectMap, ITriplesMapConfiguration childTriplesMap, ITriplesMap parentTriplesMap, IGraph mappings)
+             : base(childTriplesMap, mappings)
         {
             _refObjectMapNode = mappings.CreateBlankNode();
             _predicateObjectMap = predicateObjectMap;
+            _childTriplesMap = childTriplesMap;
             _parentTriplesMap = parentTriplesMap;
-            _referencedTriplesMap = referencedTriplesMap;
 
             AssertObjectMapSubgraph();
         }
@@ -35,7 +35,7 @@ namespace TCode.r2rml4net.Mapping
                 throw new ArgumentNullException("refObjectMapNode");
 
             R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Retract(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _parentTriplesMap.Node);
+            R2RMLMappings.Retract(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
 
             _refObjectMapNode = refObjectMapNode;
             AssertObjectMapSubgraph();
@@ -83,19 +83,19 @@ WHERE {
 
         public string ChildEffectiveSqlQuery
         {
-            get { return _parentTriplesMap.EffectiveSqlQuery; }
+            get { return _childTriplesMap.EffectiveSqlQuery; }
         }
 
         public string ParentEffectiveSqlQuery
         {
-            get { return _referencedTriplesMap.EffectiveSqlQuery; }
+            get { return _parentTriplesMap.EffectiveSqlQuery; }
         }
 
         public string EffectiveSqlQuery
         {
             get
             {
-                return ParentTriplesMap.R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForRefObjectMap(this);
+                return TriplesMap.R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForRefObjectMap(this);
             }
         }
 
@@ -113,7 +113,7 @@ WHERE {
         private void AssertObjectMapSubgraph()
         {
             R2RMLMappings.Assert(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _parentTriplesMap.Node);
+            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
         }
     }
 }
