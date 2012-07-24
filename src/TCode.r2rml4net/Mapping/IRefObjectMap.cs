@@ -26,6 +26,7 @@ namespace TCode.r2rml4net.Mapping
         string ParentEffectiveSqlQuery { get; }
 
         /// <summary>
+        string EffectiveSqlQuery { get; }
         /// Returns the referenced triples map's subject
         /// </summary>
         ISubjectMap SubjectMap { get; }
