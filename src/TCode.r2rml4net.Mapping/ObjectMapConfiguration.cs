@@ -21,7 +21,7 @@ namespace TCode.r2rml4net.Mapping
 
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateLiteralNode(literal));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateLiteralNode(literal));
 
             return this;
         }
@@ -73,16 +73,16 @@ namespace TCode.r2rml4net.Mapping
             get
             {
                 var columnPropertyNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty);
-                var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, columnPropertyNode).ToArray();
+                var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, columnPropertyNode).ToArray();
 
                 if (columnTriples.Any())
                     return true;
 
                 var languageTagNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety);
-                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, languageTagNode).ToArray();
+                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, languageTagNode).ToArray();
 
                 var datatypeNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety);
-                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, datatypeNode).ToArray();
+                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, datatypeNode).ToArray();
 
                 if (languageTagTriples.Any() && datatypeTriples.Any())
                     throw new InvalidTriplesMapException("Object map cannot have both a rr:languageTag and rr:datatype properties set");
@@ -96,7 +96,7 @@ namespace TCode.r2rml4net.Mapping
             AssertTermTypeNotSet();
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral));
             return this;
         }
 
@@ -113,14 +113,14 @@ namespace TCode.r2rml4net.Mapping
         {
             EnsureOnlyLanguageTagOrDatatype();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
 
         public void HasLanguageTag(string languagTag)
         {
             EnsureOnlyLanguageTagOrDatatype();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
         }
 
         public void HasLanguageTag(CultureInfo cultureInfo)
@@ -130,8 +130,8 @@ namespace TCode.r2rml4net.Mapping
 
         private void EnsureOnlyLanguageTagOrDatatype()
         {
-            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
 
             if (datatypeTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a datatype");

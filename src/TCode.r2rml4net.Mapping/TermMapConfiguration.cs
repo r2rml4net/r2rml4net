@@ -19,10 +19,6 @@ namespace TCode.r2rml4net.Mapping
         /// or subject map (for graph maps)
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
-        /// <summary>
-        /// <see cref="INode"/> of the current term map
-        /// </summary>
-        protected INode TermMapNode { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -30,7 +26,7 @@ namespace TCode.r2rml4net.Mapping
             : base(parentTriplesMap, r2RMLMappings)
         {
             ParentMapNode = parentMap.Node;
-            TermMapNode = R2RMLMappings.CreateBlankNode();
+            Node = R2RMLMappings.CreateBlankNode();
         }
 
         #region Implementation of ITermMapConfiguration
@@ -56,7 +52,7 @@ namespace TCode.r2rml4net.Mapping
 
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
 
             return this;
         }
@@ -67,12 +63,12 @@ namespace TCode.r2rml4net.Mapping
         public ITermTypeConfiguration IsTemplateValued(string template)
         {
             IUriNode templateProperty = R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty);
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, templateProperty).Any())
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(Node, templateProperty).Any())
                 throw new InvalidTriplesMapException("Term map can have at most one template");
 
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, templateProperty, R2RMLMappings.CreateLiteralNode(template));
+            R2RMLMappings.Assert(Node, templateProperty, R2RMLMappings.CreateLiteralNode(template));
             return this;
         }
 
@@ -85,7 +81,7 @@ namespace TCode.r2rml4net.Mapping
                 throw new InvalidTriplesMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
 
             R2RMLMappings.Assert(
-                TermMapNode, 
+                Node, 
                 R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty), 
                 R2RMLMappings.CreateLiteralNode(stringTemplate));
 
@@ -104,7 +100,7 @@ namespace TCode.r2rml4net.Mapping
             AssertTermTypeNotSet();
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode));
             return this;
         }
 
@@ -116,7 +112,7 @@ namespace TCode.r2rml4net.Mapping
             AssertTermTypeNotSet();
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI));
             return this;
         }
 
@@ -146,7 +142,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                var termTypeNodes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode,
+                var termTypeNodes = R2RMLMappings.GetTriplesWithSubjectPredicate(Node,
                                                                                  R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty)).ToArray();
 
                 if (termTypeNodes.Length > 1)
@@ -211,7 +207,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get 
             {
-                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty)).ToArray();
+                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty)).ToArray();
 
                 if (!expressionTriples.Any())
                     return null;
@@ -247,33 +243,6 @@ namespace TCode.r2rml4net.Mapping
 
         #endregion
 
-        #region Implementation of IMapBase
-
-        /// <summary>
-        /// RDF node which represents this <see cref="ITermMap"/>
-        /// </summary>
-        public override INode Node
-        {
-            get { return TermMapNode; }
-        }
-
-        #endregion
-
-        #region Overrides of BaseConfiguration
-
-        /// <summary>
-        /// Initializes the current term map and removes shortcup properties
-        /// </summary>
-        /// <param name="currentNode">node is required fo term maps</param>
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
-        {
-            // todo: move code to BaseConfiguration ?
-
-            if(currentNode == null)
-                throw new ArgumentNullException("currentNode");
-
-            TermMapNode = currentNode;
-            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 
         #endregion
@@ -293,10 +262,6 @@ namespace TCode.r2rml4net.Mapping
         bool ITermType.IsLiteral
         {
             get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Equals(TermTypeURI); }
-        }
-
-        #endregion
-
         /// <summary>
         /// Returns a term map property
         /// </summary>
@@ -310,13 +275,13 @@ namespace TCode.r2rml4net.Mapping
         protected internal abstract IUriNode CreateShortcutPropertyNode();
 
         /// <summary>
-        /// Ensures that <see cref="ParentMapNode"/> and this <see cref="TermMapNode"/> are 
+        /// Ensures that <see cref="ParentMapNode"/> and this <see cref="BaseConfiguration.Node"/> are 
         /// connected with the appropriate property
         /// </summary>
         /// <remarks>The two nodes will be connected by return value of <see cref="CreateMapPropertyNode"/> method</remarks>
         protected void EnsureRelationWithParentMap()
         {
-            var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), TermMapNode));
+            var containsMapPropertyTriple = R2RMLMappings.ContainsTriple(new Triple(ParentMapNode, CreateMapPropertyNode(), Node));
 
             if (!containsMapPropertyTriple)
             {
@@ -329,7 +294,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         protected void CreateParentMapRelation()
         {
-            R2RMLMappings.Assert(ParentMapNode, CreateMapPropertyNode(), TermMapNode);
+            R2RMLMappings.Assert(ParentMapNode, CreateMapPropertyNode(), Node);
         }
 
         /// <summary>
@@ -342,16 +307,16 @@ namespace TCode.r2rml4net.Mapping
 
             EnsureRelationWithParentMap();
 
-            R2RMLMappings.Assert(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
 
         /// <summary>
-        /// Gets a single literal object value for <see cref="TermMapNode"/> ans <paramref name="predicate"/> predicate
+        /// Gets a single literal object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
         /// </summary>
         /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a literal</exception>
         protected string GetSingleLiteralValueForPredicate(IUriNode predicate)
         {
-            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();
+            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
             if (triplesForPredicate.Length == 1)
                 if (triplesForPredicate[0].Object is ILiteralNode)
@@ -369,12 +334,12 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// Gets a single URI object value for <see cref="TermMapNode"/> ans <paramref name="predicate"/> predicate
+        /// Gets a single URI object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
         /// </summary>
         /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a URI</exception>
         protected Uri GetSingleUriValueForPredicate(IUriNode predicate)
         {
-            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, predicate).ToArray();
+            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
             if (triplesForPredicate.Length == 1)
                 if (triplesForPredicate[0].Object is IUriNode)

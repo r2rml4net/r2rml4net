@@ -18,7 +18,6 @@ namespace TCode.r2rml4net.Mapping
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
-        private INode _triplesMapNode;
 
         internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings)
             : base(r2RMLMappings)
@@ -101,7 +100,7 @@ WHERE
 
         private void AssertTableNameTriples(string tablename)
         {
-            _triplesMapNode = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
+            Node = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -114,7 +113,7 @@ WHERE
 
         private void AssertSqlQueryTriples(string sqlQuery)
         {
-            _triplesMapNode = R2RMLMappings.CreateBlankNode();
+            Node = R2RMLMappings.CreateBlankNode();
 
             IBlankNode tableDefinition;
             AssertTriplesMapsTriples(out tableDefinition);
@@ -219,8 +218,6 @@ WHERE
             }
         }
 
-        public override INode Node { get { return _triplesMapNode; } }
-
         /// <summary>
         /// <see cref="ITriplesMapConfiguration.CreatePropertyObjectMap"/>
         /// </summary>
@@ -284,15 +281,6 @@ WHERE
         #endregion
 
         #region Overrides of BaseConfiguration
-
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
-        {
-            if(currentNode == null)
-                throw new ArgumentNullException("currentNode");
-
-            _triplesMapNode = currentNode;
-            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
-        }
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {

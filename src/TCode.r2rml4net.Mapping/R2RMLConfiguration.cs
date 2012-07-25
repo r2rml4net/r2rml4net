@@ -67,12 +67,12 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
-        /// <summary>
-        /// Returns null
-        /// </summary>
-        public override INode Node
+        protected override bool UsesNode
         {
-            get { return null; }
+            get
+            {
+                return false;
+            }
         }
 
         #endregion
