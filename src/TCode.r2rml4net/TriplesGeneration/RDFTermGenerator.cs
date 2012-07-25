@@ -85,9 +85,8 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return null;
             }
 
-            if (termMap.TermType.IsURI)
+            if (!string.IsNullOrWhiteSpace(value) && termMap.TermType.IsURI)
                 value = Uri.EscapeUriString(value);
-            
 
             return GenerateTermForValue(termMap, value);
         }
