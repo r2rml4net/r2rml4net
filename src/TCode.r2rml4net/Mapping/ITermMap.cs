@@ -30,5 +30,11 @@ namespace TCode.r2rml4net.Mapping
         /// <exception cref="InvalidTriplesMapException"></exception>
         /// <remarks>See http://www.w3.org/TR/r2rml/#inverse</remarks>
         string InverseExpression { get; }
+
+        bool IsConstantValued { get; }
+        bool IsColumnValued { get; }
+        bool IsTemplateValued { get; }
+
+        ITermType TermType { get; }
     }
 }
