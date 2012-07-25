@@ -64,6 +64,32 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
+        public void DoesNotAssertAnyTriplesIfAnyTermIsNull()
+        {
+            // given
+            _rdfHandler = new Mock<IRdfHandler>(MockBehavior.Strict);
+
+            // when
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0]);
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null });
+
+            // then
+            _rdfHandler.VerifyAll();
+        }
+
+        [Test]
         public void CanHaveSpecialDefaultGraphMixedWithRealGraphs()
         {
             // given
