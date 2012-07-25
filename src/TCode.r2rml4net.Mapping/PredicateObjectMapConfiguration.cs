@@ -8,7 +8,6 @@ namespace TCode.r2rml4net.Mapping
 {
     class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
-        private INode _predicateObjectMapNode;
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
         private readonly IList<RefObjectMapConfiguration> _refObjectMaps = new List<RefObjectMapConfiguration>();
         private readonly IList<PredicateMapConfiguration> _predicateMaps = new List<PredicateMapConfiguration>();
@@ -17,8 +16,8 @@ namespace TCode.r2rml4net.Mapping
         internal PredicateObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraph r2RMLMappings)
             : base(parentTriplesMap, r2RMLMappings)
         {
-            _predicateObjectMapNode = R2RMLMappings.CreateBlankNode();
-            R2RMLMappings.Assert(parentTriplesMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicateObjectMapPropety), _predicateObjectMapNode);
+            Node = R2RMLMappings.CreateBlankNode();
+            R2RMLMappings.Assert(parentTriplesMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicateObjectMapPropety), Node);
         }
 
         #region Implementation of IPredicateObjectMapConfiguration
@@ -68,7 +67,7 @@ namespace TCode.r2rml4net.Mapping
             var query =
                 new SparqlParameterizedString(
                     "SELECT ?objectMap WHERE { @parentMap @objectMapProperty ?objectMap FILTER NOT EXISTS { ?objectMap @parentTriplesMap ?triplesMap } }");
-            query.SetParameter("parentMap", _predicateObjectMapNode);
+            query.SetParameter("parentMap", Node);
             query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
             query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
@@ -92,8 +91,8 @@ WHERE
     ?objectMap rr:parentTriplesMap ?triplesMap .
 }");
             query.SetParameter("childTriplesMap", TriplesMap.Node);
-            query.SetParameter("predicateObjectMap", _predicateObjectMapNode);
-            query.SetParameter("predicateObjectMap", _predicateObjectMapNode);
+            query.SetParameter("predicateObjectMap", Node);
+            query.SetParameter("predicateObjectMap", Node);
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
 
             foreach (var result in resultSet)
@@ -108,16 +107,6 @@ WHERE
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
                 _refObjectMaps.Add(subConfiguration);
             }
-        }
-
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
-        {
-            if (currentNode == null)
-                throw new ArgumentNullException("currentNode");
-
-            _predicateObjectMapNode = currentNode;
-
-            base.RecursiveInitializeSubMapsFromCurrentGraph(currentNode);
         }
 
         #endregion
@@ -142,15 +131,6 @@ WHERE
         public IEnumerable<IGraphMap> GraphMaps
         {
             get { return _graphMaps; }
-        }
-
-        #endregion
-
-        #region Implementation of IMapBase
-
-        public override INode Node
-        {
-            get { return _predicateObjectMapNode; }
         }
 
         #endregion
