@@ -452,5 +452,68 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         #endregion
 
         #endregion
+
+        #region Test template-valued term map
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  ")]
+        public void ThrowsIsTemplateIsNotSet(string template)
+        {
+            // given
+            _termMap = new Mock<ITermMap>();
+            _termMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _termMap.Setup(map => map.Template).Returns(template);
+
+            // when
+            Assert.Throws<InvalidTemplateException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
+
+            // then
+            _termMap.VerifyAll();
+        }
+
+        [Test]
+        public void NullValueReturnsNullNodeForTemplateTermMap()
+        {
+            // given
+            _termMap = new Mock<ITermMap>();
+            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(true).Verifiable();
+            _termMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}");
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNull(node);
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
+        }
+
+        [Test]
+        public void AnyNullValueReturnsNullNodeForTemplateTermMap()
+        {
+            // given
+            _termMap = new Mock<ITermMap>();
+            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(1).Verifiable();
+            _logicalRow.Setup(rec => rec.GetOrdinal("name")).Returns(2).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(1)).Returns(false).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(2)).Returns(true).Verifiable();
+            _termMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNull(node);
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
+        }
+
+        #endregion
     }
 }
