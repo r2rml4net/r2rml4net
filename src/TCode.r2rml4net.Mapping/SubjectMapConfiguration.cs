@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Mapping
                 CreateParentMapRelation();
 
             R2RMLMappings.Assert(
-                TermMapNode,
+                ((BaseConfiguration) this).Node,
                 R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty),
                 R2RMLMappings.CreateUriNode(classIri));
 
@@ -43,7 +43,7 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(TermMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
+                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(((BaseConfiguration) this).Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }

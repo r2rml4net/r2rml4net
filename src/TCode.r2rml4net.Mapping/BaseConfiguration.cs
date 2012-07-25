@@ -13,6 +13,7 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class BaseConfiguration : IMapBase
     {
+        private INode _node;
         private readonly ITriplesMapConfiguration _triplesMap;
 
         private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
@@ -71,7 +72,18 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Gets the RDF node representing this map
         /// </summary>
-        public abstract INode Node { get; }
+        public INode Node
+        {
+            get
+            {
+                return _node;
+            }
+            protected set
+            {
+                if (UsesNode)
+                    _node = value;
+            }
+        }
 
         #endregion
 
@@ -87,8 +99,14 @@ WHERE { ?map rr:subject ?value }";
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
         protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
         {
+            if (UsesNode && currentNode == null)
+                throw new ArgumentNullException("currentNode");
+
+            Node = currentNode;
             InitializeSubMapsFromCurrentGraph();
         }
+
+        protected virtual bool UsesNode { get { return true; } }
 
         /// <summary>
         /// Implemented in child classes should create submaps and for each of the run the <see cref="BaseConfiguration.RecursiveInitializeSubMapsFromCurrentGraph"/> method

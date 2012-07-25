@@ -7,7 +7,6 @@ namespace TCode.r2rml4net.Mapping
 {
     internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration
     {
-        INode _refObjectMapNode;
         readonly ITriplesMap _parentTriplesMap;
         private readonly IPredicateObjectMap _predicateObjectMap;
         readonly ITriplesMapConfiguration _childTriplesMap;
@@ -15,7 +14,7 @@ namespace TCode.r2rml4net.Mapping
         internal RefObjectMapConfiguration(IPredicateObjectMap predicateObjectMap, ITriplesMapConfiguration childTriplesMap, ITriplesMap parentTriplesMap, IGraph mappings)
              : base(childTriplesMap, mappings)
         {
-            _refObjectMapNode = mappings.CreateBlankNode();
+            Node = mappings.CreateBlankNode();
             _predicateObjectMap = predicateObjectMap;
             _childTriplesMap = childTriplesMap;
             _parentTriplesMap = parentTriplesMap;
@@ -34,10 +33,10 @@ namespace TCode.r2rml4net.Mapping
             if (refObjectMapNode == null)
                 throw new ArgumentNullException("refObjectMapNode");
 
-            R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Retract(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
+            R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
+            R2RMLMappings.Retract(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
 
-            _refObjectMapNode = refObjectMapNode;
+            Node = refObjectMapNode;
             AssertObjectMapSubgraph();
 
             base.RecursiveInitializeSubMapsFromCurrentGraph(refObjectMapNode);
@@ -51,7 +50,7 @@ namespace TCode.r2rml4net.Mapping
         {
             IBlankNode joinConditionNode = R2RMLMappings.CreateBlankNode();
 
-            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrJoinCondition), joinConditionNode);
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrJoinCondition), joinConditionNode);
             R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrChild), R2RMLMappings.CreateLiteralNode(childColumn));
             R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParent), R2RMLMappings.CreateLiteralNode(parentColumn));
         } 
@@ -71,7 +70,7 @@ WHERE {
     @refObjectMap rr:joinCondition ?join .
     ?join rr:child ?child; rr:parent ?parent .
 }");
-                sparql.SetParameter("refObjectMap", _refObjectMapNode);
+                sparql.SetParameter("refObjectMap", Node);
                 SparqlResultSet result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparql);
 
                 foreach (var bindings in result)
@@ -101,19 +100,10 @@ WHERE {
 
         #endregion
 
-        #region Implementation of IMapBase
-
-        public override INode Node
-        {
-            get { return _refObjectMapNode; }
-        }
-
-        #endregion
-
         private void AssertObjectMapSubgraph()
         {
-            R2RMLMappings.Assert(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), _refObjectMapNode);
-            R2RMLMappings.Assert(_refObjectMapNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
+            R2RMLMappings.Assert(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
         }
     }
 }
