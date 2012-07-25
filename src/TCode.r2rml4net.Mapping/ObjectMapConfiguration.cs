@@ -163,5 +163,57 @@ namespace TCode.r2rml4net.Mapping
         }
 
         #endregion
+
+        #region Implementation of ILiteralTermMap
+
+        public Uri DataTypeURI
+        {
+            get
+            {
+                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+
+                var datatypeTriple = datatypeTriples.SingleOrDefault();
+                if (datatypeTriple != null)
+                {
+                    if (languageTagTriples.Any())
+                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+
+                    IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
+                    if(dataTypeUriNode==null)
+                        throw new InvalidTriplesMapException("Object map has datatype set but it is not a URI");
+
+                    return dataTypeUriNode.Uri;
+                }
+
+                return null;
+            }
+        }
+
+        public string LanguageTag
+        {
+            get
+            {
+                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+
+                var languagTagTriple = languageTagTriples.SingleOrDefault();
+                if (languagTagTriple != null)
+                {
+                    if (datatypeTriples.Any())
+                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+
+                    ILiteralNode languageTagNode = languagTagTriple.Object as ILiteralNode;
+                    if (languageTagNode == null)
+                        throw new InvalidTriplesMapException("Object map has literal set but it is not a literal");
+
+                    return languageTagNode.Value;
+                }
+
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
