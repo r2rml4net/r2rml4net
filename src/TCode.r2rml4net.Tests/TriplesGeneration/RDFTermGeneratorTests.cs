@@ -2,6 +2,7 @@
 using System.Data;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
@@ -20,10 +21,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
+        private Mock<IRDFTermGenerationLog> _log;
 
         [SetUp]
         public void Setup()
         {
+            _log = new Mock<IRDFTermGenerationLog>();
             _objectMap = new Mock<IObjectMap>();
             _termMap = new Mock<ITermMap>();
             _termType = new Mock<ITermType>();
@@ -34,7 +37,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             _termGenerator = new RDFTermGenerator
                                  {
-                                     LexicalFormProvider = _lexicalFormProvider.Object
+                                     LexicalFormProvider = _lexicalFormProvider.Object,
+                                     Log = _log.Object
                                  };
         }
 
@@ -54,6 +58,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(uri, node.Uri);
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -70,6 +75,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(uri, node.Uri);
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -86,6 +92,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(uri, node.Uri);
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -102,6 +109,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(uri, node.Uri);
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -111,8 +119,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var termMap = new Mock<IUriValuedTermMap>();
             termMap.Setup(sm => sm.IsConstantValued).Returns(true);
 
-            // then
+            // when
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<IUriNode>(termMap.Object, _logicalRow.Object));
+
+            // then
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
         }
 
         [Test]
@@ -129,6 +142,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(literal, node.Value);
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -153,8 +167,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap = new Mock<IObjectMap>();
             _objectMap.Setup(sm => sm.IsConstantValued).Returns(true);
 
-            // then
+            // when
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object));
+
+            // then
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
         }
 
         #endregion
@@ -179,6 +198,27 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             Assert.IsNull(node);
             _logicalRow.VerifyAll();
+            _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
+        }
+
+        [Test]
+        public void ColumnNotFoundReturnsNullNodeAndLogsError()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName))
+                       .Throws<IndexOutOfRangeException>()
+                       .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true);
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName);
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNull(node);
+            _logicalRow.VerifyAll();
+            _log.Verify(log => log.LogColumnNotFound(_termMap.Object, ColumnName));
+            _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
         #region IRI term type
@@ -207,6 +247,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -235,6 +276,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -287,6 +329,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         #endregion
@@ -317,6 +360,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -346,6 +390,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]
@@ -374,6 +419,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
+            _log.Verify(log => log.LogTermGenerated(node));
         }
 
         [Test]

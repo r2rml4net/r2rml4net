@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Text.RegularExpressions;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
@@ -14,6 +15,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\"a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
         readonly INodeFactory _nodeFactory = new NodeFactory();
         private INaturalLexicalFormProvider _lexicalFormProvider = new W3CLexicalFormProvider();
+        private IRDFTermGenerationLog _log = NullLog.Instance;
 
         public INaturalLexicalFormProvider LexicalFormProvider
         {
@@ -21,32 +23,52 @@ namespace TCode.r2rml4net.TriplesGeneration
             set { _lexicalFormProvider = value; }
         }
 
+        public IRDFTermGenerationLog Log
+        {
+            get { return _log; }
+            set { _log = value; }
+        }
+
         #region Implementation of IRDFTermGenerator
 
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
             where TNodeType : class, INode
         {
+            INode node = null;
+
             if (termMap.IsConstantValued)
             {
-                return (TNodeType)CreateConstantValue(termMap);
+                node = CreateConstantValue(termMap);
             }
             if (termMap.IsColumnValued)
             {
-                return (TNodeType)CreateNodeFromColumn(termMap, logicalRow);
+                node = CreateNodeFromColumn(termMap, logicalRow);
             }
             if (termMap.IsTemplateValued)
             {
-                return (TNodeType)CreateNodeFromTemplate(termMap, logicalRow);
+                node = CreateNodeFromTemplate(termMap, logicalRow);
             }
 
-            return null;
+            if (node == null)
+                Log.LogNullTermGenerated(termMap);
+            else Log.LogTermGenerated(node);
+
+            return (TNodeType)node;
         }
 
         #endregion
 
         private INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
         {
-            string value = ReplaceColumnReferences(termMap.Template, logicalRow);
+            string value;
+            try
+            {
+                value = ReplaceColumnReferences(termMap.Template, logicalRow);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
             return GenerateTermForValue(termMap, value);
         }
 
@@ -64,7 +86,16 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
         {
-            int columnIndex = logicalRow.GetOrdinal(termMap.ColumnName);
+            int columnIndex;
+            try
+            {
+                columnIndex = logicalRow.GetOrdinal(termMap.ColumnName);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Log.LogColumnNotFound(termMap, termMap.ColumnName);
+                return null;
+            }
             if (logicalRow.IsDBNull(columnIndex))
                 return null;
 

@@ -1,8 +1,9 @@
 using TCode.r2rml4net.Mapping;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
-    class NullLog : ITriplesGenerationLog
+    class NullLog : ITriplesGenerationLog, IRDFTermGenerationLog
     {
         static readonly object ClassLock = new object();
         private static NullLog _instance;
@@ -11,7 +12,7 @@ namespace TCode.r2rml4net.Log
         {
         }
 
-        internal static ITriplesGenerationLog Instance
+        internal static NullLog Instance
         {
             get
             {
@@ -33,6 +34,22 @@ namespace TCode.r2rml4net.Log
         #region Implementation of ITriplesGenerationLog
 
         public void LogMissingSubject(ITriplesMap triplesMap)
+        {
+        }
+
+        #endregion
+
+        #region Implementation of IRDFTermGenerationLog
+
+        public void LogColumnNotFound(ITermMap termMap, string columnName)
+        {
+        }
+
+        public void LogTermGenerated(INode node)
+        {
+        }
+
+        public void LogNullTermGenerated(ITermMap termMap)
         {
         }
 
