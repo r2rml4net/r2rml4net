@@ -11,7 +11,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     class RDFTermGenerator : IRDFTermGenerator
     {
-        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\}\{]+)(?<-N>\})(?(N)(?!))");
+        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\"a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
         readonly INodeFactory _nodeFactory = new NodeFactory();
         private INaturalLexicalFormProvider _lexicalFormProvider = new W3CLexicalFormProvider();
 
