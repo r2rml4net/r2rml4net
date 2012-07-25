@@ -15,7 +15,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private RDFTermGenerator _termGenerator;
         private Mock<ISubjectMap> _subjectMap;
         private Mock<IPredicateMap> _predicateMap;
-        private Mock<INaturalLexicalFormProvider> _lexicalFormProvider;
+        private Mock<ILexicalFormProvider> _lexicalFormProvider;
         private Mock<IDataRecord> _logicalRow;
         private Mock<ITermMap> _termMap;
         private Mock<ITermType> _termType;
@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termType = new Mock<ITermType>();
             _subjectMap = new Mock<ISubjectMap>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
-            _lexicalFormProvider = new Mock<INaturalLexicalFormProvider>();
+            _lexicalFormProvider = new Mock<ILexicalFormProvider>();
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
@@ -230,7 +230,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             const string expected = "http://www.example.com/value";
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns(expected)
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -258,7 +258,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -285,7 +285,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("\\value")
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -312,7 +312,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -342,7 +342,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -370,7 +370,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             const string expectedDatatype = "http://www.example.com/types/inch";
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -399,7 +399,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -428,7 +428,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, _logicalRow.Object))
                                 .Returns("value")
                                 .Verifiable();
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
@@ -525,8 +525,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
             _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
             _termType.Setup(tt => tt.IsLiteral).Returns(true).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
@@ -552,8 +552,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(map => map.Template).Returns("person_{id}_{name}");
             _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
             _termType.Setup(tt => tt.IsBlankNode).Returns(true).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Pluskiewicz").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(2, _logicalRow.Object)).Returns("Pluskiewicz").Verifiable();
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
@@ -578,8 +578,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
             _termType.Setup(tt => tt.IsURI).Returns(true).Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
