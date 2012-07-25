@@ -3,6 +3,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -15,10 +16,10 @@ namespace TCode.r2rml4net.TriplesGeneration
         static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
-        private INaturalLexicalFormProvider _lexicalFormProvider = new W3CLexicalFormProvider();
+        private ILexicalFormProvider _lexicalFormProvider = new XSDLexicalFormProvider();
         private IRDFTermGenerationLog _log = NullLog.Instance;
 
-        public INaturalLexicalFormProvider LexicalFormProvider
+        public ILexicalFormProvider LexicalFormProvider
         {
             get { return _lexicalFormProvider; }
             set { _lexicalFormProvider = value; }
@@ -111,7 +112,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (logicalRow.IsDBNull(columnIndex))
                 throw new ArgumentNullException();
 
-            return LexicalFormProvider.GetNaturalLexicalForm(columnIndex,
+            return LexicalFormProvider.GetLexicalForm(columnIndex,
                                                              logicalRow);
         }
 
@@ -130,7 +131,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (logicalRow.IsDBNull(columnIndex))
                 return null;
 
-            string value = LexicalFormProvider.GetNaturalLexicalForm(columnIndex, logicalRow);
+            string value = LexicalFormProvider.GetLexicalForm(columnIndex, logicalRow);
 
             return GenerateTermForValue(termMap, value);
         }
