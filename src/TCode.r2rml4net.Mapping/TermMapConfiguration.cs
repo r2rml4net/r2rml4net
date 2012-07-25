@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.IsConstantValued"/>
+        /// <see cref="ITermMapConfiguration.IsConstantValued(Uri)"/>
         /// </summary>
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.IsTemplateValued"/>
+        /// <see cref="ITermMapConfiguration.IsTemplateValued(string)"/>
         /// </summary>
         public ITermTypeConfiguration IsTemplateValued(string template)
         {
@@ -243,10 +243,6 @@ namespace TCode.r2rml4net.Mapping
 
         #endregion
 
-        }
-
-        #endregion
-
         #region Implementation of ITermType
 
         public bool IsURI
@@ -262,6 +258,10 @@ namespace TCode.r2rml4net.Mapping
         bool ITermType.IsLiteral
         {
             get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Equals(TermTypeURI); }
+        }
+
+        #endregion
+
         /// <summary>
         /// Returns a term map property
         /// </summary>
@@ -355,5 +355,6 @@ namespace TCode.r2rml4net.Mapping
                               string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
                               predicate.Uri));
         }
+
     }
 }
