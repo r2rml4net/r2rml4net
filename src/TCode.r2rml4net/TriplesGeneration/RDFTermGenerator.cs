@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     class RDFTermGenerator : IRDFTermGenerator
     {
-        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\"a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
+        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
         readonly INodeFactory _nodeFactory = new NodeFactory();
         private INaturalLexicalFormProvider _lexicalFormProvider = new W3CLexicalFormProvider();
         private IRDFTermGenerationLog _log = NullLog.Instance;
@@ -60,6 +60,9 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
         {
+            if(string.IsNullOrWhiteSpace(termMap.Template))
+                throw new InvalidTemplateException(termMap);
+
             string value;
             try
             {
@@ -74,12 +77,24 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
         {
-            return TemplateReplaceRegex.Replace(template, match => ReplaceColumnReference(match, logicalRow));
+            try
+            {
+                return TemplateReplaceRegex.Replace(template, match => ReplaceColumnReference(match, logicalRow));
+            }
+            catch (ArgumentNullException)
+            {
+                return null;
+            }
         }
 
         private string ReplaceColumnReference(Match match, IDataRecord logicalRow)
         {
-            int columnIndex = logicalRow.GetOrdinal(match.Captures[0].Value);
+            var columnName = match.Captures[0].Value.TrimStart('{').TrimEnd('}');
+            int columnIndex = logicalRow.GetOrdinal(columnName);
+
+            if (logicalRow.IsDBNull(columnIndex))
+                throw new ArgumentNullException();
+
             return LexicalFormProvider.GetNaturalLexicalForm(columnIndex,
                                                              logicalRow);
         }
@@ -106,6 +121,9 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private INode GenerateTermForValue(ITermMap termMap, string value)
         {
+            if (value == null)
+                return null;
+
             if (termMap.TermType.IsURI)
             {
                 if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
