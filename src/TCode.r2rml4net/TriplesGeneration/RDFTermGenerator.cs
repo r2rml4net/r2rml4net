@@ -28,11 +28,11 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             if (termMap.IsConstantValued)
             {
-                return (TNodeType) CreateConstantValue(termMap);
+                return (TNodeType)CreateConstantValue(termMap);
             }
             if (termMap.IsColumnValued)
             {
-                return (TNodeType) CreateNodeFromColumn(termMap, logicalRow);
+                return (TNodeType)CreateNodeFromColumn(termMap, logicalRow);
             }
             if (termMap.IsTemplateValued)
             {
@@ -94,6 +94,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 ILiteralTermMap literalTermMap = (ILiteralTermMap)termMap;
 
+                if (literalTermMap.LanguageTag != null && literalTermMap.DataTypeURI != null)
+                    throw new InvalidTermException(termMap);
+
                 if (literalTermMap.LanguageTag != null)
                     return _nodeFactory.CreateLiteralNode(value, literalTermMap.LanguageTag);
                 if (literalTermMap.DataTypeURI != null)
@@ -121,7 +124,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 if (objectMap.URI != null && objectMap.Literal != null)
                     throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Object map's value must be either IRI or literal.", objectMap.Node));
-                
+
                 if (objectMap.URI != null)
                     return _nodeFactory.CreateUriNode(objectMap.URI);
                 if (objectMap.Literal != null)

@@ -6,7 +6,7 @@ namespace TCode.r2rml4net.Mapping
     /// Represents an object map
     /// </summary>
     /// <remarks>Read more on http://www.w3.org/TR/r2rml/#dfn-object-map</remarks>
-    public interface IObjectMap : ITermMap
+    public interface IObjectMap : ITermMap, ILiteralTermMap
     {
         /// <summary>
         /// Gets constant object URI or null if absent

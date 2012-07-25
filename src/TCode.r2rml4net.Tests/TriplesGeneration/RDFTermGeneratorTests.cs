@@ -24,6 +24,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [SetUp]
         public void Setup()
         {
+            _objectMap = new Mock<IObjectMap>();
             _termMap = new Mock<ITermMap>();
             _termType = new Mock<ITermType>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
@@ -158,7 +159,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #endregion
 
-        #region Test IRI column-valued term maps
+        #region Test column-valued term maps
 
         private const string ColumnName = "Column";
         private const int ColumnIndex = 3;
@@ -179,6 +180,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.IsNull(node);
             _logicalRow.VerifyAll();
         }
+
+        #region IRI term type
 
         [Test]
         public void AbsoluteUriValueCreatesUriNode()
@@ -256,6 +259,151 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.VerifyAll();
             _termType.VerifyAll();
         }
+
+        #endregion
+
+        #region BlankNode term type
+
+        [Test]
+        public void ReturnsBlankNodeWithCustomIdentifier()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termType.Setup(type => type.IsBlankNode).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IBlankNode);
+            Assert.AreEqual("value", (node as IBlankNode).InternalID);
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        #endregion
+
+        #region Literal term type
+
+        [Test]
+        public void GeneratesLiteralWithoutDatatypeOrLanguageTag()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
+            _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is ILiteralNode);
+            Assert.AreEqual("value", (node as ILiteralNode).Value);
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void GeneratesLiteralWithDatatype()
+        {
+            // given
+            const string expectedDatatype = "http://www.example.com/types/inch";
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
+            _objectMap.Setup(map => map.DataTypeURI).Returns(new Uri(expectedDatatype)).Verifiable();
+            _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is ILiteralNode);
+            Assert.AreEqual("value", (node as ILiteralNode).Value);
+            Assert.AreEqual(expectedDatatype, (node as ILiteralNode).DataType.ToString());
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void GeneratesLiteralWithLanguageTag()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
+            _objectMap.Setup(map => map.LanguageTag).Returns("pl").Verifiable();
+            _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is ILiteralNode);
+            Assert.AreEqual("value", (node as ILiteralNode).Value);
+            Assert.AreEqual("pl", (node as ILiteralNode).Language);
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void CannotGenerateLiteralWithBothLanguageTagAndDatatype()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
+            _objectMap.Setup(map => map.LanguageTag).Returns("pl").Verifiable();
+            _objectMap.Setup(map => map.DataTypeURI)
+                      .Returns(new Uri("http://www.example.com/types/inch"))
+                      .Verifiable();
+            _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
+
+            // when
+            Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object));
+
+            // then
+            _logicalRow.VerifyAll();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        #endregion
 
         #endregion
     }
