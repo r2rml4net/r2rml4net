@@ -16,14 +16,21 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IPredicateMap> _predicateMap;
         private Mock<INaturalLexicalFormProvider> _lexicalFormProvider;
         private Mock<IDataRecord> _logicalRow;
+        private Mock<ITermMap> _termMap;
+        private Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
 
         [SetUp]
         public void Setup()
         {
+            _termMap = new Mock<ITermMap>();
+            _termType = new Mock<ITermType>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
             _lexicalFormProvider = new Mock<INaturalLexicalFormProvider>();
+
+            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
+
             _termGenerator = new RDFTermGenerator
                                  {
                                      LexicalFormProvider = _lexicalFormProvider.Object
@@ -147,6 +154,107 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object));
+        }
+
+        #endregion
+
+        #region Test IRI column-valued term maps
+
+        private const string ColumnName = "Column";
+        private const int ColumnIndex = 3;
+
+        [Test]
+        public void NullValueReturnsNullNode()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(true).Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true);
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName);
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNull(node);
+            _logicalRow.VerifyAll();
+        }
+
+        [Test]
+        public void AbsoluteUriValueCreatesUriNode()
+        {
+            // given
+            const string expected = "http://www.example.com/value";
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns(expected)
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IUriNode);
+            Assert.AreEqual(expected, (node as IUriNode).Uri.ToString());
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void RelativeUriValueCreatesUriNode()
+        {
+            const string expected = "http://www.example.com/value";
+
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("value")
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IUriNode);
+            Assert.AreEqual(expected, (node as IUriNode).Uri.ToString());
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void InvalidUriValueThrowsException()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(ColumnIndex, _logicalRow.Object))
+                                .Returns("\\value")
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
+
+            // then
+            _logicalRow.VerifyAll();
+            _termMap.VerifyAll();
+            _termType.VerifyAll();
         }
 
         #endregion
