@@ -57,19 +57,35 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (!graphsLocal.Any())
                 graphsLocal = new[] { CreateUriNode(new Uri(RrDefaultgraph)) };
 
-            foreach (IUriNode graph in graphsLocal)
+            foreach (IUriNode graph in graphsLocal.Where(g => g != null))
             {
                 if (new Uri(RrDefaultgraph).Equals(graph.Uri))
                 {
-                    var triple = new Triple(subject, predicate, @object);
-                    _rdfHandler.HandleTriple(triple);
+                    AddTripleToDataSet(subject, predicate, @object);
                 }
                 else
                 {
-                    var triple = new Triple(subject, predicate, @object, graph.Uri);
-                    _rdfHandler.HandleTriple(triple);
+                    AddTripleToDataSet(subject, predicate, @object, graph);
                 }
             }
+        }
+
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object)
+        {
+            if (subject == null || predicate == null || @object == null)
+                return;
+
+            var triple = new Triple(subject, predicate, @object);
+            _rdfHandler.HandleTriple(triple);
+        }
+
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IUriNode graph)
+        {
+            if (subject == null || predicate == null || @object == null || graph == null)
+                return;
+
+            var triple = new Triple(subject, predicate, @object, graph.Uri);
+            _rdfHandler.HandleTriple(triple);
         }
 
         /// <summary>
