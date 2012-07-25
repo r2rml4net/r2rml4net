@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="InvalidTermException.cs" />
     <Compile Include="IVistitable.cs" />
+    <Compile Include="Log\IRDFTermGenerationLog.cs" />
     <Compile Include="Log\ITriplesGenerationLog.cs" />
     <Compile Include="Log\NullLog.cs" />
     <Compile Include="Mapping\IGraphMap.cs" />
