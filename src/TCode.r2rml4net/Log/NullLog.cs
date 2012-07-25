@@ -53,6 +53,10 @@ namespace TCode.r2rml4net.Log
         {
         }
 
+        public void LogInvalidBlankNode(ITermMap termMap, string blankNodeIdentifier)
+        {
+        }
+
         #endregion
     }
 }

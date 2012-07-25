@@ -30,6 +30,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap = new Mock<IObjectMap>();
             _termMap = new Mock<ITermMap>();
             _termType = new Mock<ITermType>();
+            _subjectMap = new Mock<ISubjectMap>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
             _lexicalFormProvider = new Mock<INaturalLexicalFormProvider>();
 
@@ -48,7 +49,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         public void SubjectMapsConstantIsAnIri()
         {
             // given
-            _subjectMap = new Mock<ISubjectMap>();
             _subjectMap.Setup(sm => sm.IsConstantValued).Returns(true);
             var uri = new Uri("http://www.example.com/const");
             _subjectMap.Setup(sm => sm.URI).Returns(uri);
@@ -514,6 +514,123 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
+        [Test]
+        public void ReplacesColumnNameWithValuesForLiteralTemplatedTermMap()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(1).Verifiable();
+            _logicalRow.Setup(rec => rec.GetOrdinal("name")).Returns(2).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(It.IsAny<int>())).Returns(false).Verifiable();
+            _objectMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _objectMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(tt => tt.IsLiteral).Returns(true).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is ILiteralNode);
+            Assert.AreEqual("http://www.example.com/person/5/Tomasz Pluskiewicz", (node as ILiteralNode).Value);
+            _logicalRow.VerifyAll();
+            _logicalRow.Verify();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void ReplacesColumnNamesWithValuesForBlankNodeTemplatedTermMap()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(1).Verifiable();
+            _logicalRow.Setup(rec => rec.GetOrdinal("name")).Returns(2).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(It.IsAny<int>())).Returns(false).Verifiable();
+            _objectMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _objectMap.Setup(map => map.Template).Returns("person_{id}_{name}");
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(tt => tt.IsBlankNode).Returns(true).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Pluskiewicz").Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IBlankNode);
+            Assert.AreEqual("person_5_Pluskiewicz", (node as IBlankNode).InternalID);
+            _logicalRow.VerifyAll();
+            _logicalRow.Verify();
+            _objectMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
+        [Test]
+        public void ReplacesAndEscapesColumnNameWithValuesForIRITemplatedTermMap()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(1).Verifiable();
+            _logicalRow.Setup(rec => rec.GetOrdinal("name")).Returns(2).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(It.IsAny<int>())).Returns(false).Verifiable();
+            _termMap.Setup(map => map.IsTemplateValued).Returns(true);
+            _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
+            _termType.Setup(tt => tt.IsURI).Returns(true).Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(1, _logicalRow.Object)).Returns("5").Verifiable();
+            _lexicalFormProvider.Setup(lex => lex.GetNaturalLexicalForm(2, _logicalRow.Object)).Returns("Tomasz Pluskiewicz").Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IUriNode);
+            Assert.AreEqual(new Uri("http://www.example.com/person/5/Tomasz%20Pluskiewicz"), (node as IUriNode).Uri);
+            _logicalRow.VerifyAll();
+            _logicalRow.Verify();
+            _termMap.VerifyAll();
+            _termType.VerifyAll();
+        }
+
         #endregion
+
+        [TestCase("0number_first")]
+        [TestCase("has spaces")]
+        [TestCase("-non_letter_first")]
+        public void LogsPotentiallyInvalidBlankNodeIds(string identifier)
+        {
+            // given
+            _termMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+
+            // when
+            _termGenerator.GenerateTermForValue(_termMap.Object, identifier);
+
+            // then
+            _log.Verify(log => log.LogInvalidBlankNode(_termMap.Object, identifier));
+        }
+
+        [Test]
+        public void ReturnsAutomaticBlankNodeWhenNoTermTypeSetAndSubjectMap()
+        {
+            // given
+            Mock<INodeFactory> nodeFactory = new Mock<INodeFactory>();
+            nodeFactory.Setup(factory => factory.CreateBlankNode())
+                       .Returns(new NodeFactory().CreateBlankNode())
+                       .Verifiable();
+            _termGenerator.NodeFactory = nodeFactory.Object;
+            _termType.Setup(type => type.IsBlankNode).Returns(true);
+            _subjectMap.Setup(map => map.TermType).Returns(_termType.Object);
+
+            // when
+            var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            nodeFactory.VerifyAll();
+            _termType.VerifyAll();
+            _subjectMap.VerifyAll();
+        }
     }
 }

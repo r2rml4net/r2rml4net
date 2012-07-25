@@ -12,8 +12,9 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     class RDFTermGenerator : IRDFTermGenerator
     {
+        static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
-        readonly INodeFactory _nodeFactory = new NodeFactory();
+        private INodeFactory _nodeFactory = new NodeFactory();
         private INaturalLexicalFormProvider _lexicalFormProvider = new W3CLexicalFormProvider();
         private IRDFTermGenerationLog _log = NullLog.Instance;
 
@@ -29,6 +30,12 @@ namespace TCode.r2rml4net.TriplesGeneration
             set { _log = value; }
         }
 
+        public INodeFactory NodeFactory
+        {
+            get { return _nodeFactory; }
+            set { _nodeFactory = value; }
+        }
+
         #region Implementation of IRDFTermGenerator
 
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
@@ -40,13 +47,18 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 node = CreateConstantValue(termMap);
             }
-            if (termMap.IsColumnValued)
+            else if (termMap.IsColumnValued)
             {
                 node = CreateNodeFromColumn(termMap, logicalRow);
             }
-            if (termMap.IsTemplateValued)
+            else if (termMap.IsTemplateValued)
             {
                 node = CreateNodeFromTemplate(termMap, logicalRow);
+            }
+            // an exception of blank node subject maps (direct mapping)
+            else if(termMap is ISubjectMap && termMap.TermType.IsBlankNode)
+            {
+                node = NodeFactory.CreateBlankNode();
             }
 
             if (node == null)
@@ -72,6 +84,11 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 return null;
             }
+
+            if (termMap.TermType.IsURI)
+                value = Uri.EscapeUriString(value);
+            
+
             return GenerateTermForValue(termMap, value);
         }
 
@@ -119,25 +136,28 @@ namespace TCode.r2rml4net.TriplesGeneration
             return GenerateTermForValue(termMap, value);
         }
 
-        private INode GenerateTermForValue(ITermMap termMap, string value)
+        internal INode GenerateTermForValue(ITermMap termMap, string value)
         {
-            if (value == null)
+            if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             if (termMap.TermType.IsURI)
             {
                 if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
-                    return _nodeFactory.CreateUriNode(new Uri(value));
+                    return NodeFactory.CreateUriNode(new Uri(value));
 
                 value = termMap.BaseURI + value;
                 if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
-                    return _nodeFactory.CreateUriNode(new Uri(value));
+                    return NodeFactory.CreateUriNode(new Uri(value));
 
                 throw new InvalidTermException(termMap, value);
             }
             if (termMap.TermType.IsBlankNode)
             {
-                return _nodeFactory.CreateBlankNode(value);
+                if (!ValidBlankNodeRegex.IsMatch(value))
+                    Log.LogInvalidBlankNode(termMap, value);
+
+                return NodeFactory.CreateBlankNode(value);
             }
             if (termMap.TermType.IsLiteral)
             {
@@ -147,11 +167,11 @@ namespace TCode.r2rml4net.TriplesGeneration
                     throw new InvalidTermException(termMap);
 
                 if (literalTermMap.LanguageTag != null)
-                    return _nodeFactory.CreateLiteralNode(value, literalTermMap.LanguageTag);
+                    return NodeFactory.CreateLiteralNode(value, literalTermMap.LanguageTag);
                 if (literalTermMap.DataTypeURI != null)
-                    return _nodeFactory.CreateLiteralNode(value, literalTermMap.DataTypeURI);
+                    return NodeFactory.CreateLiteralNode(value, literalTermMap.DataTypeURI);
 
-                return _nodeFactory.CreateLiteralNode(value);
+                return NodeFactory.CreateLiteralNode(value);
             }
 
             throw new InvalidTermException(termMap);
@@ -165,7 +185,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 if (uriValuedTermMap.URI == null)
                     throw new InvalidTermException(string.Format("Cannot create RDF term for IRI-valued term map {0}. IRI was set.*", termMap.Node));
 
-                return _nodeFactory.CreateUriNode(uriValuedTermMap.URI);
+                return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
             }
 
             var objectMap = termMap as IObjectMap;
@@ -175,9 +195,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                     throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Object map's value must be either IRI or literal.", objectMap.Node));
 
                 if (objectMap.URI != null)
-                    return _nodeFactory.CreateUriNode(objectMap.URI);
+                    return NodeFactory.CreateUriNode(objectMap.URI);
                 if (objectMap.Literal != null)
-                    return _nodeFactory.CreateLiteralNode(objectMap.Literal);
+                    return NodeFactory.CreateLiteralNode(objectMap.Literal);
 
                 throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Neither IRI nor literal was set.", objectMap.Node));
             }
