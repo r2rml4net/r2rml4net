@@ -15,5 +15,6 @@ namespace TCode.r2rml4net.Log
 
         void LogTermGenerated(INode node);
         void LogNullTermGenerated(ITermMap termMap);
+        void LogInvalidBlankNode(ITermMap termMap, string blankNodeIdentifier);
     }
 }
