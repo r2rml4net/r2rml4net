@@ -98,10 +98,12 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         protected static IDataReader FetchLogicalRows(IDbConnection connection, string effectiveSqlQuery)
         {
-            var command = connection.CreateCommand();
-            command.CommandText = effectiveSqlQuery;
-            command.CommandType = CommandType.Text;
-            return command.ExecuteReader();
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = effectiveSqlQuery;
+                command.CommandType = CommandType.Text;
+                return command.ExecuteReader();
+            }
         }
     }
 }
