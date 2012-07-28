@@ -149,6 +149,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
             Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.ToString());
+            Assert.IsTrue((_termMapConfiguration as ITermType).IsBlankNode);
+            Assert.IsFalse((_termMapConfiguration as ITermType).IsURI);
+            Assert.IsFalse((_termMapConfiguration as ITermType).IsLiteral);
         }
 
         [Test]
@@ -212,6 +215,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
+        }
+
+        [Test]
+        public void TermTypeIsIriByDefault()
+        {
+            ITermType type = _termMapConfiguration;
+            Assert.IsTrue(type.IsURI);
+            Assert.IsFalse(type.IsLiteral);
+            Assert.IsFalse(type.IsBlankNode);
         }
     }
 }
