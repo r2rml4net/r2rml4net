@@ -21,25 +21,28 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount)
         {
-            var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery);
-
-            while (dataReader.Read())
+            using (var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery))
             {
-                var childRow = WrapDataRecord(dataReader, childColumnsCount, ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
-                var parentRow = WrapDataRecord(dataReader, childColumnsCount, ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
-
-                var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, childRow);
-                var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
-                                 select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
-                var @object = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, parentRow);
-                var subjectGraphs = (from graphMap in refObjectMap.SubjectMap.GraphMaps
-                                     select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
-                var predObjectGraphs = (from graphMap in refObjectMap.PredicateObjectMap.GraphMaps
-                                        select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
-
-                foreach (IUriNode predicate in predicates)
+                while (dataReader.Read())
                 {
-                    AddTriplesToDataSet(subject, predicate, @object, subjectGraphs.Union(predObjectGraphs));
+                    var childRow = WrapDataRecord(dataReader, childColumnsCount,
+                                                  ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
+                    var parentRow = WrapDataRecord(dataReader, childColumnsCount,
+                                                   ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
+
+                    var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, childRow);
+                    var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
+                                     select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
+                    var @object = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, parentRow);
+                    var subjectGraphs = (from graphMap in refObjectMap.SubjectMap.GraphMaps
+                                         select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
+                    var predObjectGraphs = (from graphMap in refObjectMap.PredicateObjectMap.GraphMaps
+                                            select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
+
+                    foreach (IUriNode predicate in predicates)
+                    {
+                        AddTriplesToDataSet(subject, predicate, @object, subjectGraphs.Union(predObjectGraphs));
+                    }
                 }
             }
         }
