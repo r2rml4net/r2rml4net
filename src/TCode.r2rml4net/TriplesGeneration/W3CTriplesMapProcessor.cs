@@ -30,28 +30,33 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
             else
             {
-                IDataReader logicalTable = FetchLogicalRows(connection, triplesMap.EffectiveSqlQuery);
-                IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
-                while (logicalTable.Read())
+                using (IDataReader logicalTable = FetchLogicalRows(connection, triplesMap.EffectiveSqlQuery))
                 {
-                    var subject = TermGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
-                    var graphs = (from graph in triplesMap.SubjectMap.GraphMaps
-                                  select TermGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
-
-                    AddTriplesToDataSet(
-                        subject,
-                        new[] { CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
-                        classes.Select(CreateUriNode).Cast<INode>().ToList(),
-                        graphs
-                        );
-
-                    foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
+                    IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
+                    while (logicalTable.Read())
                     {
-                        PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);
+                        var subject = TermGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
+                        var graphs = (from graph in triplesMap.SubjectMap.GraphMaps
+                                      select TermGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
 
-                        foreach (IRefObjectMap refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
+                        AddTriplesToDataSet(
+                            subject,
+                            new[] {CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))},
+                            classes.Select(CreateUriNode).Cast<INode>().ToList(),
+                            graphs
+                            );
+
+                        foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                         {
-                            RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection, logicalTable.FieldCount);
+                            PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);
+
+                            foreach (
+                                IRefObjectMap refObjectMap in
+                                    map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
+                            {
+                                RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection,
+                                                                          logicalTable.FieldCount);
+                            }
                         }
                     }
                 }
