@@ -86,6 +86,7 @@
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessorTests.cs" />
     <Compile Include="TriplesGeneration\W3CR2RMLProcessorTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
+    <Compile Include="RDB\DatabaseIdentifiersHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

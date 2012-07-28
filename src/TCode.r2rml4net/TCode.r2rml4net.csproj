@@ -69,6 +69,7 @@
     <Compile Include="Mapping\ITermType.cs" />
     <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDB\DatabaseIdentifiersHelper.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\CoreSQL2008ColumTypeMapper.cs" />
