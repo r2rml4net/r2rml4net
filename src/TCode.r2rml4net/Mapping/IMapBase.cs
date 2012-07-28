@@ -1,3 +1,4 @@
+using System;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
@@ -11,5 +12,7 @@ namespace TCode.r2rml4net.Mapping
         /// The node representing this <see cref="IMapBase"/>
         /// </summary>
         INode Node { get; }
+
+        Uri BaseURI { get; }
     }
 }

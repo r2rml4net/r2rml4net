@@ -58,6 +58,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual(uri, _termMapConfiguration.ConstantValue);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsConstantValued);
         }
 
         [Test]
@@ -80,6 +81,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsColumnValued);
         }
 
         [Test]
@@ -115,6 +117,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(template, _termMapConfiguration.Template);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsTemplateValued);
         }
 
         [Test]

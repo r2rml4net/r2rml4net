@@ -43,10 +43,12 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Generates default R2RML mappings based on database metadata
         /// </summary>
-        public void GenerateMappings()
+        public IR2RML GenerateMappings()
         {
             if (_databaseMetadataProvider.Tables != null)
                 _databaseMetadataProvider.Tables.Accept(this);
+
+            return _r2RMLConfiguration;
         }
 
         #region Implementation of IDatabaseMetadataVisitor
