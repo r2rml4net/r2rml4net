@@ -3,6 +3,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -56,11 +57,6 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 node = CreateNodeFromTemplate(termMap, logicalRow);
             }
-            // an exception of blank node subject maps (direct mapping)
-            else if(termMap is ISubjectMap && termMap.TermType.IsBlankNode)
-            {
-                node = NodeFactory.CreateBlankNode();
-            }
 
             if (node == null)
                 Log.LogNullTermGenerated(termMap);
@@ -107,13 +103,14 @@ namespace TCode.r2rml4net.TriplesGeneration
         private string ReplaceColumnReference(Match match, IDataRecord logicalRow)
         {
             var columnName = match.Captures[0].Value.TrimStart('{').TrimEnd('}');
+            columnName = DatabaseIdentifiersHelper.GetColumnNameUnquoted(columnName);
             int columnIndex = logicalRow.GetOrdinal(columnName);
 
             if (logicalRow.IsDBNull(columnIndex))
                 throw new ArgumentNullException();
 
             return LexicalFormProvider.GetLexicalForm(columnIndex,
-                                                             logicalRow);
+                                                      logicalRow);
         }
 
         private INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)

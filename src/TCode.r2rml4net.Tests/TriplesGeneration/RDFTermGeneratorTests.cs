@@ -610,27 +610,5 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             _log.Verify(log => log.LogInvalidBlankNode(_termMap.Object, identifier));
         }
-
-        [Test]
-        public void ReturnsAutomaticBlankNodeWhenNoTermTypeSetAndSubjectMap()
-        {
-            // given
-            Mock<INodeFactory> nodeFactory = new Mock<INodeFactory>();
-            nodeFactory.Setup(factory => factory.CreateBlankNode())
-                       .Returns(new NodeFactory().CreateBlankNode())
-                       .Verifiable();
-            _termGenerator.NodeFactory = nodeFactory.Object;
-            _termType.Setup(type => type.IsBlankNode).Returns(true);
-            _subjectMap.Setup(map => map.TermType).Returns(_termType.Object);
-
-            // when
-            var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
-
-            // then
-            Assert.IsNotNull(node);
-            nodeFactory.VerifyAll();
-            _termType.VerifyAll();
-            _subjectMap.VerifyAll();
-        }
     }
 }
