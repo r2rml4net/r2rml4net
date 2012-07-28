@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlQueryBuilder\W3cEffectiveSqlBuilderTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
+    <Compile Include="RDB\DatabaseIdentifiersHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
