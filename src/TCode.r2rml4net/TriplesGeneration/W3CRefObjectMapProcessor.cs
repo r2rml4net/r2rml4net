@@ -21,7 +21,11 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount, IRdfHandler rdfHandler)
         {
-            using (var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery))
+            IDataReader dataReader;
+            if (!FetchLogicalRows(dbConnection, refObjectMap, out dataReader))
+                return;
+            
+            using (dataReader)
             {
                 while (dataReader.Read())
                 {

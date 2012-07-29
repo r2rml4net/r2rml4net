@@ -11,5 +11,7 @@ namespace TCode.r2rml4net.Log
         /// Logs an error of missing <see cref="ITriplesMap"/>'s <see cref="ITriplesMap.SubjectMap"/>
         /// </summary>
         void LogMissingSubject(ITriplesMap triplesMap);
+
+        void LogQueryExecutionError(IQueryMap map, string errorMessage);
     }
 }

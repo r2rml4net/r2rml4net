@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using TCode.r2rml4net.Log;
+using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -29,6 +31,8 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             get { return _termGenerator; }
         }
+
+        public ITriplesGenerationLog Log { get; set; }
 
         /// <summary>
         /// Adds zero or more triples to the output dataset
@@ -85,14 +89,31 @@ namespace TCode.r2rml4net.TriplesGeneration
             rdfHandler.HandleTriple(triple);
         }
 
-        protected static IDataReader FetchLogicalRows(IDbConnection connection, string effectiveSqlQuery)
+        protected internal bool FetchLogicalRows(IDbConnection connection, IQueryMap map, out IDataReader dataReader)
         {
+            dataReader = null;
+
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = effectiveSqlQuery;
+                command.CommandText = map.EffectiveSqlQuery;
                 command.CommandType = CommandType.Text;
-                return command.ExecuteReader();
+                try
+                {
+                    dataReader = command.ExecuteReader();
+                }
+                catch (Exception e)
+                {
+                    LogSqlExecuteError(map, e.Message);
+                    return false;
+                }
             }
+
+            return true;
+        }
+
+        private void LogSqlExecuteError(IQueryMap map, string message)
+        {
+            Log.LogQueryExecutionError(map, message);
         }
     }
 }
