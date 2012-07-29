@@ -13,5 +13,6 @@ namespace TCode.r2rml4net.Log
         void LogMissingSubject(ITriplesMap triplesMap);
 
         void LogQueryExecutionError(IQueryMap map, string errorMessage);
+        void LogInvalidTermMap(ITermMap termMap, string message);
     }
 }

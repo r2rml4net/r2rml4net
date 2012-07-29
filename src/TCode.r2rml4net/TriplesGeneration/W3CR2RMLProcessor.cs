@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
@@ -16,6 +17,8 @@ namespace TCode.r2rml4net.TriplesGeneration
     {
         private readonly DbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
+
+        public ITriplesGenerationLog Log { get; set; }
 
         #region Constructors
 
@@ -67,7 +70,14 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             foreach (var triplesMap in r2RML.TriplesMaps)
             {
-                _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, rdfHandler);
+                try
+                {
+                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, rdfHandler);
+                }
+                catch (InvalidTermException e)
+                {
+                    Log.LogInvalidTermMap(e.TermMap, e.Message);
+                }
             }
 
             rdfHandler.EndRdf(true);

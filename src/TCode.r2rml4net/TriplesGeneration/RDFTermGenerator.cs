@@ -154,7 +154,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
                     return NodeFactory.CreateUriNode(new Uri(value));
 
-                throw new InvalidTermException(termMap, value);
+                throw new InvalidTermException(termMap, string.Format("Value {0} is invalid", value));
             }
             if (termMap.TermType.IsBlankNode)
             {
@@ -168,7 +168,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 ILiteralTermMap literalTermMap = (ILiteralTermMap)termMap;
 
                 if (literalTermMap.LanguageTag != null && literalTermMap.DataTypeURI != null)
-                    throw new InvalidTermException(termMap);
+                    throw new InvalidTermException(termMap, "Literal term map cannot have both language tag and datatype set");
 
                 if (literalTermMap.LanguageTag != null)
                     return NodeFactory.CreateLiteralNode(value, literalTermMap.LanguageTag);
@@ -178,7 +178,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return NodeFactory.CreateLiteralNode(value);
             }
 
-            throw new InvalidTermException(termMap);
+            throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-vbalued");
         }
 
         private INode CreateConstantValue(ITermMap termMap)
@@ -187,7 +187,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (uriValuedTermMap != null)
             {
                 if (uriValuedTermMap.URI == null)
-                    throw new InvalidTermException(string.Format("Cannot create RDF term for IRI-valued term map {0}. IRI was set.*", termMap.Node));
+                    throw new InvalidTermException(termMap, "IRI-valued term map must have IRI set");
 
                 return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
             }
@@ -196,14 +196,14 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (objectMap != null)
             {
                 if (objectMap.URI != null && objectMap.Literal != null)
-                    throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Object map's value must be either IRI or literal.", objectMap.Node));
+                    throw new InvalidTermException(termMap, "Object map's value cannot be both IRI and literal.");
 
                 if (objectMap.URI != null)
                     return NodeFactory.CreateUriNode(objectMap.URI);
                 if (objectMap.Literal != null)
                     return NodeFactory.CreateLiteralNode(objectMap.Literal);
 
-                throw new InvalidTermException(string.Format("Cannot create RDF term for constant-valued term map {0}. Neither IRI nor literal was set.", objectMap.Node));
+                throw new InvalidTermException(termMap, "Neither IRI nor literal was set");
             }
 
             return null;

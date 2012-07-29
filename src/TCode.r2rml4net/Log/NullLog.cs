@@ -41,6 +41,10 @@ namespace TCode.r2rml4net.Log
         {
         }
 
+        public void LogInvalidTermMap(ITermMap termMap, string message)
+        {
+        }
+
         #endregion
 
         #region Implementation of IRDFTermGenerationLog
