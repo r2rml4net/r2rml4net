@@ -15,8 +15,23 @@ namespace TCode.r2rml4net.TriplesGeneration
         public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
         public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
+            : this(
+                termGenerator,
+                storeWriter,
+                new W3CPredicateObjectMapProcessor(termGenerator, storeWriter),
+                new W3CRefObjectMapProcessor(termGenerator, storeWriter))
+        {
+        }
+
+        public W3CTriplesMapProcessor(
+            IRDFTermGenerator termGenerator,
+            IRdfHandler storeWriter,
+            IPredicateObjectMapProcessor predicateObjectMapProcessor,
+            IRefObjectMapProcessor refObjectMapProcessor)
             : base(termGenerator, storeWriter)
         {
+            PredicateObjectMapProcessor = predicateObjectMapProcessor;
+            RefObjectMapProcessor = refObjectMapProcessor;
             Log = NullLog.Instance;
         }
 
@@ -41,7 +56,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                         AddTriplesToDataSet(
                             subject,
-                            new[] {CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))},
+                            new[] { CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
                             classes.Select(CreateUriNode).Cast<INode>().ToList(),
                             graphs
                             );
