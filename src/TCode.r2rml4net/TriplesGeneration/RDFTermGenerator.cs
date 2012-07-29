@@ -3,7 +3,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
-using TCode.r2rml4net.RDB;
+using TCode.r2rml4net.RDB.ADO.NET;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -45,17 +45,19 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             INode node = null;
 
+            var logicalRowWrapped = new UnquotedColumnDataRecordWrapper(logicalRow);
+
             if (termMap.IsConstantValued)
             {
                 node = CreateConstantValue(termMap);
             }
             else if (termMap.IsColumnValued)
             {
-                node = CreateNodeFromColumn(termMap, logicalRow);
+                node = CreateNodeFromColumn(termMap, logicalRowWrapped);
             }
             else if (termMap.IsTemplateValued)
             {
-                node = CreateNodeFromTemplate(termMap, logicalRow);
+                node = CreateNodeFromTemplate(termMap, logicalRowWrapped);
             }
 
             if (node == null)
@@ -103,7 +105,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         private string ReplaceColumnReference(Match match, IDataRecord logicalRow)
         {
             var columnName = match.Captures[0].Value.TrimStart('{').TrimEnd('}');
-            columnName = DatabaseIdentifiersHelper.GetColumnNameUnquoted(columnName);
             int columnIndex = logicalRow.GetOrdinal(columnName);
 
             if (logicalRow.IsDBNull(columnIndex))
