@@ -165,6 +165,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
             if (termMap.TermType.IsLiteral)
             {
+                if(!(termMap is ILiteralTermMap))
+                    throw new InvalidTermException(termMap, "Term map cannot be of term type literal");
+
                 ILiteralTermMap literalTermMap = (ILiteralTermMap)termMap;
 
                 if (literalTermMap.LanguageTag != null && literalTermMap.DataTypeURI != null)
