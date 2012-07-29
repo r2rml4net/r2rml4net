@@ -108,7 +108,10 @@ namespace TCode.r2rml4net.TriplesGeneration
             int columnIndex = logicalRow.GetOrdinal(columnName);
 
             if (logicalRow.IsDBNull(columnIndex))
+            {
+                Log.LogNullValueForColumn(columnName);
                 throw new ArgumentNullException();
+            }
 
             return LexicalFormProvider.GetLexicalForm(columnIndex,
                                                       logicalRow);
@@ -127,7 +130,10 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return null;
             }
             if (logicalRow.IsDBNull(columnIndex))
+            {
+                Log.LogNullValueForColumn(termMap.ColumnName);
                 return null;
+            }
 
             string value = LexicalFormProvider.GetLexicalForm(columnIndex, logicalRow);
 
@@ -136,7 +142,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         internal INode GenerateTermForValue(ITermMap termMap, string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (value == null)
                 return null;
 
             if (termMap.TermType.IsURI)
