@@ -57,6 +57,10 @@ namespace TCode.r2rml4net.Log
         {
         }
 
+        public void LogNullValueForColumn(string columnName)
+        {
+        }
+
         #endregion
     }
 }
