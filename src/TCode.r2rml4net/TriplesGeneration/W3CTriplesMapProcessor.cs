@@ -14,21 +14,19 @@ namespace TCode.r2rml4net.TriplesGeneration
         public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
         public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
-        public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler storeWriter)
+        public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator)
             : this(
                 termGenerator,
-                storeWriter,
-                new W3CPredicateObjectMapProcessor(termGenerator, storeWriter),
-                new W3CRefObjectMapProcessor(termGenerator, storeWriter))
+                new W3CPredicateObjectMapProcessor(termGenerator),
+                new W3CRefObjectMapProcessor(termGenerator))
         {
         }
 
         public W3CTriplesMapProcessor(
             IRDFTermGenerator termGenerator,
-            IRdfHandler storeWriter,
             IPredicateObjectMapProcessor predicateObjectMapProcessor,
             IRefObjectMapProcessor refObjectMapProcessor)
-            : base(termGenerator, storeWriter)
+            : base(termGenerator)
         {
             PredicateObjectMapProcessor = predicateObjectMapProcessor;
             RefObjectMapProcessor = refObjectMapProcessor;
@@ -37,7 +35,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of ITriplesMapProcessor
 
-        public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection)
+        public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler)
         {
             if (triplesMap.SubjectMap == null)
             {
@@ -56,21 +54,22 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                         AddTriplesToDataSet(
                             subject,
-                            new[] { CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
-                            classes.Select(CreateUriNode).Cast<INode>().ToList(),
-                            graphs
+                            new[] { rdfHandler.CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
+                            classes.Select(rdfHandler.CreateUriNode).Cast<INode>().ToList(),
+                            graphs,
+                            rdfHandler
                             );
 
                         foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                         {
-                            PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable);
+                            PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable, rdfHandler);
 
                             foreach (
                                 IRefObjectMap refObjectMap in
                                     map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
                             {
                                 RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection,
-                                                                          logicalTable.FieldCount);
+                                                                          logicalTable.FieldCount, rdfHandler);
                             }
                         }
                     }

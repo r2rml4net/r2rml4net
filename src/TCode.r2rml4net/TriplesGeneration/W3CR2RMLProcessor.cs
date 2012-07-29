@@ -30,58 +30,13 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which adds the generated triples to the supplied dataset
-        /// and uses default RDF term generation and map processing algorithms
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="tripleStore">output dataset</param>
-        public W3CR2RMLProcessor(DbConnection connection, ITripleStore tripleStore)
-            : this(connection, new StoreHandler(tripleStore), new RDFTermGenerator())
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
-        /// and uses default RDF term generation and map processing algorithms
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="storeWriter">handler for generated triples</param>
-        public W3CR2RMLProcessor(DbConnection connection, IRdfHandler storeWriter)
-            : this(connection, storeWriter, new RDFTermGenerator())
-        {
-        }
-
-        /// <summary>
         /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
         /// and uses default map processing algorithm
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
         public W3CR2RMLProcessor(DbConnection connection, IRDFTermGenerator rdfTermGenerator)
-            : this(connection, new TripleStore(), rdfTermGenerator)
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which adds the generated triples to the supplied dataset
-        /// and uses default map processing algorithm
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="tripleStore">output dataset</param>
-        /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
-        public W3CR2RMLProcessor(DbConnection connection, ITripleStore tripleStore, IRDFTermGenerator rdfTermGenerator)
-            : this(connection, new StoreHandler(tripleStore), rdfTermGenerator)
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="storeWriter">handler for generated triples</param>
-        /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
-        public W3CR2RMLProcessor(DbConnection connection, IRdfHandler storeWriter, IRDFTermGenerator rdfTermGenerator)
-            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator, storeWriter))
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator))
         {
         }
 
@@ -104,15 +59,37 @@ namespace TCode.r2rml4net.TriplesGeneration
         #region Implementation of IR2RMLProcessor
 
         /// <summary>
-        /// Processes the R2RML mappings and generates RDF triples from source (relational) data
+        /// Generates triples from <paramref name="r2RML"/> mappings and processes them with the given <see cref="IRdfHandler"/>
         /// </summary>
-        /// <param name="r2RML">R2RML mappings</param>
-        public void GenerateTriples(IR2RML r2RML)
+        public void GenerateTriples(IR2RML r2RML, IRdfHandler rdfHandler)
         {
+            rdfHandler.StartRdf();
+
             foreach (var triplesMap in r2RML.TriplesMaps)
             {
-                _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection);
+                _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, rdfHandler);
             }
+
+            rdfHandler.EndRdf(true);
+        }
+
+        /// <summary>
+        /// Generates triples from <paramref name="r2RML"/> mappings and returns the generated dataset
+        /// </summary>
+        public ITripleStore GenerateTriples(IR2RML r2RML)
+        {
+            var tripleStore = new TripleStore();
+            GenerateTriples(r2RML, tripleStore);
+            return tripleStore;
+        }
+
+        /// <summary>
+        /// Generates triples from <paramref name="r2RML"/> mappings and adds the generated triples to the given <see cref="ITripleStore"/>
+        /// </summary>
+        public void GenerateTriples(IR2RML r2RML, ITripleStore tripleStore)
+        {
+            IRdfHandler handler = new StoreHandler(tripleStore);
+            GenerateTriples(r2RML, handler);
         }
 
         #endregion

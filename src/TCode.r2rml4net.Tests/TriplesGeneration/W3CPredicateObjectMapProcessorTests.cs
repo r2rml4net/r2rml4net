@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _subjectGraphs = new IUriNode[0];
             _subject = new Mock<IUriNode>().Object;
             _storeWriter.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
-            _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object, _storeWriter.Object);
+            _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object);
         }
 
         [TestCase(0)]
@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predicateObjectMap.Setup(map => map.PredicateMaps).Returns(predicateMaps);
 
             // when
-            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object);
+            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);
 
             // then
             _termGenerator.Verify(gen => gen.GenerateTerm<IUriNode>(It.IsAny<IPredicateMap>(), _logicalRow.Object), Times.Exactly(mapsCount));
@@ -66,7 +66,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predicateObjectMap.Setup(map => map.ObjectMaps).Returns(objectMaps);
 
             // when
-            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object);
+            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);
 
             // then
             _termGenerator.Verify(gen => gen.GenerateTerm<INode>(It.IsAny<IObjectMap>(), _logicalRow.Object), Times.Exactly(mapsCount));
@@ -87,7 +87,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predicateObjectMap.Setup(map => map.GraphMaps).Returns(graphMaps);
 
             // when
-            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object);
+            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);
 
             // then
             _termGenerator.Verify(gen => gen.GenerateTerm<IUriNode>(It.IsAny<IGraphMap>(), _logicalRow.Object), Times.Exactly(mapsCount));
@@ -116,7 +116,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                           .Returns(() => new Mock<INode>().Object);
 
             // when
-            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object);
+            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);
 
             // then
             _storeWriter.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)),
@@ -152,7 +152,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 new Tuple<Expression<Func<IUriNode, object>>, Func<object>>(map => map.Uri, () => new Uri("http://www.example.com/graph")));
 
             // when
-            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object);
+            _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);
 
             // then
             _storeWriter.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri != null)),

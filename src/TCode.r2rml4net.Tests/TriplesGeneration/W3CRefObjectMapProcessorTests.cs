@@ -36,7 +36,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjMap.Setup(map => map.SubjectMap).Returns(_subjectMap.Object);
             _refObjMap.Setup(map => map.PredicateObjectMap).Returns(_predObjectMap.Object);
 
-            _processor = new W3CRefObjectMapProcessor(_termGenerator.Object, _rdfHandler.Object);
+            _processor = new W3CRefObjectMapProcessor(_termGenerator.Object);
         }
 
         [TestCase(0)]
@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(c => c.CreateCommand()).Returns(() => CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(
@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(c => c.CreateCommand()).Returns(() => CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(
@@ -91,7 +91,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predObjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(graphsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(
@@ -115,7 +115,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _subjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(graphsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(
@@ -139,7 +139,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _predObjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(graphsCount));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(
@@ -172,7 +172,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                           .Returns(() => CreateMockedUriNode(new Uri("http://www.exampl.com/node")));
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2);
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
 
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.IsAny<Triple>()), Times.Exactly(expectedCallsCount));

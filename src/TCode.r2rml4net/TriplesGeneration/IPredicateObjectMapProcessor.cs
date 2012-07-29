@@ -15,6 +15,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// <paramref name="subject"/>, <see cref="IPredicateObjectMap.PredicateMaps"/>, <see cref="IPredicateObjectMap.ObjectMaps"/>
         /// and a union of <see cref="IPredicateObjectMap.GraphMaps"/> and <paramref name="subjectGraphs"/>
         /// </summary>
-        void ProcessPredicateObjectMap(INode subject, IPredicateObjectMap predicateObjectMap, IEnumerable<IUriNode> subjectGraphs, IDataRecord logicalRow);
+        void ProcessPredicateObjectMap(INode subject, IPredicateObjectMap predicateObjectMap, IEnumerable<IUriNode> subjectGraphs, IDataRecord logicalRow, IRdfHandler rdfHandler);
     }
 }
