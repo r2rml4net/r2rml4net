@@ -10,7 +10,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     internal class W3CTriplesMapProcessor : MapProcessorBase, ITriplesMapProcessor
     {
-        public ITriplesGenerationLog Log { get; set; }
         public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
         public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
@@ -43,7 +42,11 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
             else
             {
-                using (IDataReader logicalTable = FetchLogicalRows(connection, triplesMap.EffectiveSqlQuery))
+                IDataReader logicalTable;
+                if(!FetchLogicalRows(connection, triplesMap, out logicalTable))
+                    return;
+
+                using (logicalTable)
                 {
                     IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                     while (logicalTable.Read())

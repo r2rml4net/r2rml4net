@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Log;
+using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 
@@ -17,6 +20,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private IEnumerable<IUriNode> _graphs;
         private IEnumerable<INode> _objects;
         private Mock<IRDFTermGenerator> _termGenerator;
+        private Mock<ITriplesGenerationLog> _log;
 
         [SetUp]
         public void Setup()
@@ -27,6 +31,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _graphs = new IUriNode[0];
 
             _termGenerator = new Mock<IRDFTermGenerator>();
+            _log = new Mock<ITriplesGenerationLog>();
 
             _rdfHandler = new Mock<IRdfHandler>();
             _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
@@ -35,6 +40,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                              {
                                  CallBase = true
                              };
+            _processor.Object.Log =_log.Object;
         }
 
         [Test]
@@ -106,6 +112,25 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
+        }
+
+        [Test]
+        public void HandlesSqlExecuteErrorGracefully()
+        {
+            // given
+            var connection = new Mock<IDbConnection>();
+            var command = new Mock<IDbCommand>();
+            var map = new Mock<IQueryMap>();
+            connection.Setup(con => con.CreateCommand()).Returns(command.Object);
+            command.Setup(cmd => cmd.ExecuteReader()).Throws<Exception>();
+            
+            // when
+            IDataReader reader;
+            bool result = _processor.Object.FetchLogicalRows(connection.Object, map.Object, out reader);
+
+            // then
+            Assert.IsFalse(result);
+            Assert.IsNull(reader);
         }
     }
 }

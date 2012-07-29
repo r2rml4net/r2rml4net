@@ -180,5 +180,21 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                     _connection.Object, 5, _rdfHandler.Object),
                 Times.Never());
         }
+
+        [Test]
+        public void LogsSqlExecuteError()
+        {
+            // given
+            Mock<IDbCommand> command = new Mock<IDbCommand>();
+            command.Setup(com => com.ExecuteReader()).Throws(new Exception("Error message"));
+            _connection.Setup(con => con.CreateCommand()).Returns(command.Object);
+            _triplesMap.Setup(map => map.SubjectMap).Returns(new Mock<ISubjectMap>().Object);
+
+            // when
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
+
+            // then
+            _log.Verify(log => log.LogQueryExecutionError(_triplesMap.Object, "Error message"), Times.Once());
+        }
     }
 }

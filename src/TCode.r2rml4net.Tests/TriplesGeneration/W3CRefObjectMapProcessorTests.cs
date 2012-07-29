@@ -2,6 +2,7 @@
 using System.Data;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.TriplesGeneration;
@@ -19,6 +20,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IDbConnection> _connection;
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<IPredicateObjectMap> _predObjectMap;
+        private Mock<ITriplesGenerationLog> _log;
 
         [SetUp]
         public void Setup()
@@ -29,6 +31,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler = new Mock<IRdfHandler>();
             _subjectMap = new Mock<ISubjectMap>();
             _predObjectMap = new Mock<IPredicateObjectMap>();
+            _log = new Mock<ITriplesGenerationLog>();
 
             _rdfHandler.Setup(handler => handler.CreateUriNode(It.IsAny<Uri>()))
                        .Returns((Uri u) => CreateMockedUriNode(u));
@@ -36,7 +39,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjMap.Setup(map => map.SubjectMap).Returns(_subjectMap.Object);
             _refObjMap.Setup(map => map.PredicateObjectMap).Returns(_predObjectMap.Object);
 
-            _processor = new W3CRefObjectMapProcessor(_termGenerator.Object);
+            _processor = new W3CRefObjectMapProcessor(_termGenerator.Object)
+                {
+                    Log = _log.Object
+                };
         }
 
         [TestCase(0)]
@@ -176,6 +182,21 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.IsAny<Triple>()), Times.Exactly(expectedCallsCount));
+        }
+
+        [Test]
+        public void LogsSqlExecuteError()
+        {
+            // given
+            Mock<IDbCommand> command = new Mock<IDbCommand>();
+            command.Setup(com => com.ExecuteReader()).Throws(new Exception("Error message"));
+            _connection.Setup(con => con.CreateCommand()).Returns(command.Object);
+
+            // when
+            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
+
+            // then
+            _log.Verify(log => log.LogQueryExecutionError(_refObjMap.Object, "Error message"), Times.Once());
         }
     }
 }

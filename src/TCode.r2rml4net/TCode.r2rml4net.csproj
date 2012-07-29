@@ -66,6 +66,7 @@
     <Compile Include="Mapping\IGraphMap.cs" />
     <Compile Include="Mapping\ILiteralTermMap.cs" />
     <Compile Include="Mapping\IPredicateMap.cs" />
+    <Compile Include="Mapping\IQueryMap.cs" />
     <Compile Include="Mapping\ITermType.cs" />
     <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

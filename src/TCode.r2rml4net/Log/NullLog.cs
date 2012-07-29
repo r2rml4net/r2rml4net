@@ -37,6 +37,10 @@ namespace TCode.r2rml4net.Log
         {
         }
 
+        public void LogQueryExecutionError(IQueryMap map, string errorMessage)
+        {
+        }
+
         #endregion
 
         #region Implementation of IRDFTermGenerationLog
