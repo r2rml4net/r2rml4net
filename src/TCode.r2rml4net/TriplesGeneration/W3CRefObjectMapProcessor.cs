@@ -12,14 +12,14 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// <remarks>see http://www.w3.org/TR/r2rml/#generated-triples</remarks>
     class W3CRefObjectMapProcessor : MapProcessorBase, IRefObjectMapProcessor
     {
-        public W3CRefObjectMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
-            : base(termGenerator, rdfHandler)
+        public W3CRefObjectMapProcessor(IRDFTermGenerator termGenerator)
+            : base(termGenerator)
         {
         }
 
         #region Implementation of IRefObjectMapProcessor
 
-        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount)
+        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount, IRdfHandler rdfHandler)
         {
             using (var dataReader = FetchLogicalRows(dbConnection, refObjectMap.EffectiveSqlQuery))
             {
@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                     foreach (IUriNode predicate in predicates)
                     {
-                        AddTriplesToDataSet(subject, predicate, @object, subjectGraphs.Union(predObjectGraphs));
+                        AddTriplesToDataSet(subject, predicate, @object, subjectGraphs.Union(predObjectGraphs), rdfHandler);
                     }
                 }
             }

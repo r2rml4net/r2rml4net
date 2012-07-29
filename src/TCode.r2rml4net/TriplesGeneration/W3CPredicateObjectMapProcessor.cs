@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,14 +8,14 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     class W3CPredicateObjectMapProcessor : MapProcessorBase, IPredicateObjectMapProcessor
     {
-        public W3CPredicateObjectMapProcessor(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
-            : base(termGenerator, rdfHandler)
+        public W3CPredicateObjectMapProcessor(IRDFTermGenerator termGenerator)
+            : base(termGenerator)
         {
         }
 
         #region Implementation of IPredicateObjectMapProcessor
 
-        public void ProcessPredicateObjectMap(INode subject, IPredicateObjectMap predicateObjectMap, IEnumerable<IUriNode> subjectGraphs, IDataRecord logicalRow)
+        public void ProcessPredicateObjectMap(INode subject, IPredicateObjectMap predicateObjectMap, IEnumerable<IUriNode> subjectGraphs, IDataRecord logicalRow, IRdfHandler rdfHandler)
         {
             var predicates = (from predicateMap in predicateObjectMap.PredicateMaps
                               select TermGenerator.GenerateTerm<IUriNode>(predicateMap, logicalRow)).ToArray();
@@ -26,7 +25,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                           select TermGenerator.GenerateTerm<IUriNode>(graphMap, logicalRow)).ToArray();
             var subjectGraphsLocal = subjectGraphs.ToArray();
 
-            AddTriplesToDataSet(subject, predicates, objects, graphs.Union(subjectGraphsLocal).ToList());
+            AddTriplesToDataSet(subject, predicates, objects, graphs.Union(subjectGraphsLocal).ToList(), rdfHandler);
         }
 
         #endregion

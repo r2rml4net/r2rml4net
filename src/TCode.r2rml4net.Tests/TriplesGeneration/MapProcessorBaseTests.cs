@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler = new Mock<IRdfHandler>();
             _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
 
-            _processor = new Mock<MapProcessorBase>(_termGenerator.Object, _rdfHandler.Object)
+            _processor = new Mock<MapProcessorBase>(_termGenerator.Object)
                              {
                                  CallBase = true
                              };
@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         public void AddsToDefaultGraphWhenNoGraphSpecified()
         {
             // when
-            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs);
+            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs, _rdfHandler.Object);
 
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
@@ -57,7 +57,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                           };
 
             // when
-            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs);
+            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs, _rdfHandler.Object);
 
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
@@ -68,22 +68,23 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         {
             // given
             _rdfHandler = new Mock<IRdfHandler>(MockBehavior.Strict);
+            _rdfHandler.Setup(writer => writer.CreateUriNode(new Uri("http://www.w3.org/ns/r2rml#defaultGraph"))).Returns((Uri uri) => CreateMockedUriNode(uri));
 
             // when
-            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0]);
-            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null });
-            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null });
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[0], _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), GenerateNMocks<INode>(1), new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, GenerateNMocks<INode>(1), new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, GenerateNMocks<IUriNode>(1), new INode[] { null }, new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(_subject, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null }, _rdfHandler.Object);
+            _processor.Object.AddTriplesToDataSet(null, new IUriNode[] { null }, new INode[] { null }, new IUriNode[] { null }, _rdfHandler.Object);
 
             // then
             _rdfHandler.VerifyAll();
@@ -100,7 +101,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                           };
 
             // when
-            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs);
+            _processor.Object.AddTriplesToDataSet(_subject, _predicates, _objects, _graphs, _rdfHandler.Object);
 
             // then
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());

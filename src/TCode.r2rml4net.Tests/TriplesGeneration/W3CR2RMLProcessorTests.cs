@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
+using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
@@ -15,10 +16,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IR2RML> _r2RML;
         private Mock<DbConnection> _connection;
         private Mock<ITriplesMapProcessor> _triplesMapProcessor;
+        private Mock<IRdfHandler> _rdfHandler;
 
         [SetUp]
         public void Setup()
         {
+            _rdfHandler = new Mock<IRdfHandler>();
             _r2RML = new Mock<IR2RML>();
             _connection = new Mock<DbConnection>();
             _triplesMapProcessor = new Mock<ITriplesMapProcessor>();
@@ -33,18 +36,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             var triplesMaps = GenerateTriplesMaps(triplesMapsCount).ToList();
             _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>()));
+            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), _rdfHandler.Object));
 
             // when
-            _triplesGenerator.GenerateTriples(_r2RML.Object);
+            _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
 
             // then
             _r2RML.Verify(rml => rml.TriplesMaps, Times.Once());
-            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>()), Times.Exactly(triplesMapsCount));
+            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), _rdfHandler.Object), Times.Exactly(triplesMapsCount));
             foreach (var triplesMap in triplesMaps)
             {
                 ITriplesMap map = triplesMap;
-                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>()), Times.Once());
+                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>(), _rdfHandler.Object), Times.Once());
             }
         }
 

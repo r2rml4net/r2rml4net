@@ -15,16 +15,13 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// The rr:defaultGraph URI string
         /// </summary>
         protected const string RrDefaultgraph = "http://www.w3.org/ns/r2rml#defaultGraph";
-        private readonly IRdfHandler _rdfHandler;
         private readonly IRDFTermGenerator _termGenerator;
 
         /// <summary>
         /// Creates an instance
         /// </summary>
-        /// <param name="rdfHandler">handler for generated triples</param>
-        protected MapProcessorBase(IRDFTermGenerator termGenerator, IRdfHandler rdfHandler)
+        protected MapProcessorBase(IRDFTermGenerator termGenerator)
         {
-            _rdfHandler = rdfHandler;
             _termGenerator = termGenerator;
         }
 
@@ -37,7 +34,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// Adds zero or more triples to the output dataset
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-add-triples</remarks>
-        protected internal void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IEnumerable<INode> objects, IEnumerable<IUriNode> graphs)
+        protected internal void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IEnumerable<INode> objects, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
         {
             var objectsLocal = objects.ToList();
             var graphsLocal = graphs.ToArray();
@@ -46,54 +43,46 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 foreach (INode @object in objectsLocal)
                 {
-                    AddTriplesToDataSet(subject, predicate, @object, graphsLocal);
+                    AddTriplesToDataSet(subject, predicate, @object, graphsLocal, rdfHandler);
                 }
             }
         }
 
-        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode @object, IEnumerable<IUriNode> graphs)
+        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode @object, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
         {
             IEnumerable<IUriNode> graphsLocal = graphs.ToList();
             if (!graphsLocal.Any())
-                graphsLocal = new[] { CreateUriNode(new Uri(RrDefaultgraph)) };
+                graphsLocal = new[] { rdfHandler.CreateUriNode(new Uri(RrDefaultgraph)) };
 
             foreach (IUriNode graph in graphsLocal.Where(g => g != null))
             {
                 if (new Uri(RrDefaultgraph).Equals(graph.Uri))
                 {
-                    AddTripleToDataSet(subject, predicate, @object);
+                    AddTripleToDataSet(subject, predicate, @object, rdfHandler);
                 }
                 else
                 {
-                    AddTripleToDataSet(subject, predicate, @object, graph);
+                    AddTripleToDataSet(subject, predicate, @object, graph, rdfHandler);
                 }
             }
         }
 
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object)
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IRdfHandler rdfHandler)
         {
             if (subject == null || predicate == null || @object == null)
                 return;
 
             var triple = new Triple(subject, predicate, @object);
-            _rdfHandler.HandleTriple(triple);
+            rdfHandler.HandleTriple(triple);
         }
 
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IUriNode graph)
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IUriNode graph, IRdfHandler rdfHandler)
         {
             if (subject == null || predicate == null || @object == null || graph == null)
                 return;
 
             var triple = new Triple(subject, predicate, @object, graph.Uri);
-            _rdfHandler.HandleTriple(triple);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="IUriNode"/> for the given <see cref="Uri"/>
-        /// </summary>
-        protected IUriNode CreateUriNode(Uri uri)
-        {
-            return _rdfHandler.CreateUriNode(uri);
+            rdfHandler.HandleTriple(triple);
         }
 
         protected static IDataReader FetchLogicalRows(IDbConnection connection, string effectiveSqlQuery)

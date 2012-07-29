@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler = new Mock<IRdfHandler>();
             _predicateObjectMapProcessor = new Mock<IPredicateObjectMapProcessor>();
             _refObjectMapProcessor = new Mock<IRefObjectMapProcessor>();
-            _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object, _rdfHandler.Object)
+            _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object)
                                        {
                                            Log = _log.Object,
                                            PredicateObjectMapProcessor = _predicateObjectMapProcessor.Object,
@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMap.Setup(proc => proc.SubjectMap).Returns((ISubjectMap)null);
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _connection.Verify(conn => conn.CreateCommand(), Times.Never());
@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(tg => tg.GenerateTerm<INode>(subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));
@@ -85,7 +85,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             subjectMap.Verify(sm => sm.Classes, Times.Once());
@@ -104,7 +104,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _termGenerator.Verify(tg => tg.GenerateTerm<IUriNode>(It.IsAny<IGraphMap>(), It.IsAny<IDataRecord>()), Times.Exactly(rowsCount * graphsCount));
@@ -123,11 +123,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(rowsCount));
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _predicateObjectMapProcessor.Verify(
-                proc => proc.ProcessPredicateObjectMap(It.IsAny<INode>(), It.IsAny<IPredicateObjectMap>(), It.IsAny<IEnumerable<IUriNode>>(), It.IsAny<IDataRecord>()),
+                proc => proc.ProcessPredicateObjectMap(It.IsAny<INode>(), It.IsAny<IPredicateObjectMap>(), It.IsAny<IEnumerable<IUriNode>>(), It.IsAny<IDataRecord>(), _rdfHandler.Object),
                 Times.Exactly(mapsCount * rowsCount));
         }
 
@@ -148,13 +148,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 );
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
                     It.IsAny<IRefObjectMap>(),
-                    _connection.Object, 5),
+                    _connection.Object, 5, _rdfHandler.Object),
                 Times.Exactly(refObjectMapsCount));
         }
 
@@ -171,13 +171,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             predicateObjectMap.Setup(map => map.RefObjectMaps).Returns(() => new[] { refObjectMap.Object });
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object);
+            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
 
             // then
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
                     It.IsAny<IRefObjectMap>(),
-                    _connection.Object, 5),
+                    _connection.Object, 5, _rdfHandler.Object),
                 Times.Never());
         }
     }
