@@ -318,19 +318,16 @@ namespace TCode.r2rml4net.Mapping
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
-            if (triplesForPredicate.Length == 1)
-                if (triplesForPredicate[0].Object is ILiteralNode)
+            if (triplesForPredicate.Length > 1)
+                throw new InvalidTriplesMapException(
+                    string.Format("Term map {1} contains multiple constant values:\r\n{0}",
+                                  string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
+                                  Node));
+
+            if (triplesForPredicate.Length == 1 && triplesForPredicate[0].Object is ILiteralNode)
                     return triplesForPredicate[0].Object.ToString();
-                else
-                    throw new InvalidTriplesMapException(string.Format("Term map value for {0} must be a literal", predicate.Uri));
 
-            if (triplesForPredicate.Length == 0)
-                return null;
-
-            throw new InvalidTriplesMapException(
-                string.Format("Term map contains multiple values for {1}:\r\n{0}",
-                              string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
-                              predicate.Uri));
+            return null;
         }
 
         /// <summary>
@@ -341,19 +338,16 @@ namespace TCode.r2rml4net.Mapping
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
-            if (triplesForPredicate.Length == 1)
-                if (triplesForPredicate[0].Object is IUriNode)
+            if (triplesForPredicate.Length > 1)
+                throw new InvalidTriplesMapException(
+                    string.Format("Term map {1} contains multiple values constant values:\r\n{0}",
+                                  string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
+                                  Node));
+
+            if (triplesForPredicate.Length == 1 && triplesForPredicate[0].Object is IUriNode)
                     return ((IUriNode)triplesForPredicate[0].Object).Uri;
-                else
-                    throw new InvalidTriplesMapException(string.Format("Term map value for {0} must be a URI", predicate.Uri));
 
-            if (triplesForPredicate.Length == 0)
-                return null;
-
-            throw new InvalidTriplesMapException(
-                string.Format("Term map contains multiple values for {1}:\r\n{0}",
-                              string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
-                              predicate.Uri));
+            return null;
         }
 
     }
