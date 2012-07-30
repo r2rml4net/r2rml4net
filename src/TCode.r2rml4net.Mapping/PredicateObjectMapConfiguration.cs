@@ -64,15 +64,25 @@ namespace TCode.r2rml4net.Mapping
 
         private void CreateObjectMaps()
         {
-            var query =
-                new SparqlParameterizedString(
-                    "SELECT ?objectMap WHERE { @parentMap @objectMapProperty ?objectMap FILTER NOT EXISTS { ?objectMap @parentTriplesMap ?triplesMap } }");
-            query.SetParameter("parentMap", Node);
+            var query = new SparqlParameterizedString(@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
+SELECT ?predObj ?objectMap  
+WHERE
+{ 
+    { 
+        @triplesMap rr:predicateObjectMap ?predObj .
+        ?predObj rr:objectMap ?objectMap 
+        FILTER NOT EXISTS 
+        {
+            ?objectMap rr:parentTriplesMap ?triplesMap 
+        } 
+    } 
+}");
+            query.SetParameter("triplesMap", TriplesMap.Node);
             query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
             query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
 
-            foreach (var result in resultSet)
+            foreach (var result in resultSet.Where(result => result["predObj"].Equals(Node)))
             {
                 var subConfiguration = new ObjectMapConfiguration(TriplesMap, this, R2RMLMappings);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(result.Value("objectMap"));
