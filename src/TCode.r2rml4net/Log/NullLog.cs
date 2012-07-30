@@ -45,6 +45,10 @@ namespace TCode.r2rml4net.Log
         {
         }
 
+        public void LogInvaldTriplesMap(ITriplesMap triplesMap, string message)
+        {
+        }
+
         #endregion
 
         #region Implementation of IRDFTermGenerationLog
