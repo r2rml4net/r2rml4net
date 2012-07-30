@@ -10,19 +10,27 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     {
         private GraphMapConfiguration _graphMap;
         private Mock<ITriplesMapConfiguration> _triplesMap;
+        private Mock<IGraphMapParent> _predicateObjectMap;
+        private IGraph _graph;
 
         [SetUp]
         public void Setup()
         {
-            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            IUriNode triplesMapNode = graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
-            Mock<IPredicateObjectMapConfiguration> predicateObjectMap = new Mock<IPredicateObjectMapConfiguration>();
-            predicateObjectMap.Setup(map => map.Node).Returns(graph.CreateBlankNode("predicateObjectMap"));
+            _graph = new R2RMLConfiguration().R2RMLMappings;
+            IUriNode triplesMapNode = _graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
+            _predicateObjectMap = new Mock<IGraphMapParent>();
+            _predicateObjectMap.Setup(map => map.Node).Returns(_graph.CreateBlankNode("predicateObjectMap"));
 
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(triplesMapNode);
 
-            _graphMap = new GraphMapConfiguration(_triplesMap.Object, predicateObjectMap.Object, graph);
+            _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void NodeCannotBeNull()
+        {
+            _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null);
         }
 
         [Test]
