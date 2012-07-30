@@ -56,14 +56,14 @@ namespace TCode.r2rml4net.Mapping
 
             foreach (var triplesMapNode in triplesMapsTriples.Select(triple => triple.Subject))
             {
-                var triplesMapConfiguration = new TriplesMapConfiguration(this, R2RMLMappings);
+                var triplesMapConfiguration = new TriplesMapConfiguration(this, R2RMLMappings, triplesMapNode);
                 triplesMaps.Add(triplesMapNode, triplesMapConfiguration);
                 _triplesMaps.Add(triplesMapConfiguration);
             }
 
             foreach (var triplesMapPair in triplesMaps)
             {
-                triplesMapPair.Value.RecursiveInitializeSubMapsFromCurrentGraph(triplesMapPair.Key);
+                triplesMapPair.Value.RecursiveInitializeSubMapsFromCurrentGraph();
             }
         }
 
@@ -96,7 +96,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
-            var triplesMapConfiguration = new TriplesMapConfiguration(this, R2RMLMappings) { TableName = tablename };
+            var triplesMapConfiguration = TriplesMapConfiguration.FromTable(this, R2RMLMappings, tablename);
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
@@ -106,7 +106,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
-            var triplesMapConfiguration = new TriplesMapConfiguration(this, R2RMLMappings) { SqlQuery = sqlQuery };
+            var triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(this, R2RMLMappings, sqlQuery);
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }

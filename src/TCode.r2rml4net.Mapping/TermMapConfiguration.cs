@@ -20,13 +20,10 @@ namespace TCode.r2rml4net.Mapping
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
 
-        /// <summary>
-        /// </summary>
-        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings)
-            : base(parentTriplesMap, r2RMLMappings)
+        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node) 
+            : base(parentTriplesMap, r2RMLMappings, node)
         {
             ParentMapNode = parentMap.Node;
-            Node = R2RMLMappings.CreateBlankNode();
         }
 
         #region Implementation of ITermMapConfiguration

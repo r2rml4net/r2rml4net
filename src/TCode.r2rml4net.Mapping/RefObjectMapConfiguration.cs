@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using VDS.RDF;
 using VDS.RDF.Query;
 
@@ -12,9 +11,18 @@ namespace TCode.r2rml4net.Mapping
         readonly ITriplesMapConfiguration _childTriplesMap;
 
         internal RefObjectMapConfiguration(IPredicateObjectMap predicateObjectMap, ITriplesMapConfiguration childTriplesMap, ITriplesMap parentTriplesMap, IGraph mappings)
-             : base(childTriplesMap, mappings)
+            : this(predicateObjectMap, childTriplesMap, parentTriplesMap, mappings, mappings.CreateBlankNode())
         {
-            Node = mappings.CreateBlankNode();
+        }
+
+        internal RefObjectMapConfiguration(
+            IPredicateObjectMap predicateObjectMap,
+            ITriplesMapConfiguration childTriplesMap,
+            ITriplesMap parentTriplesMap,
+            IGraph mappings,
+            INode node)
+            : base(childTriplesMap, mappings, node)
+        {
             _predicateObjectMap = predicateObjectMap;
             _childTriplesMap = childTriplesMap;
             _parentTriplesMap = parentTriplesMap;
@@ -26,21 +34,19 @@ namespace TCode.r2rml4net.Mapping
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-        }
-
-        protected internal override void RecursiveInitializeSubMapsFromCurrentGraph(INode refObjectMapNode)
-        {
-            if (refObjectMapNode == null)
-                throw new ArgumentNullException("refObjectMapNode");
-
-            R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
-            R2RMLMappings.Retract(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
-
-            Node = refObjectMapNode;
             AssertObjectMapSubgraph();
-
-            base.RecursiveInitializeSubMapsFromCurrentGraph(refObjectMapNode);
         }
+
+        //protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        //{
+        //    R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
+        //    R2RMLMappings.Retract(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
+
+        //    Node = refObjectMapNode;
+        //    AssertObjectMapSubgraph();
+
+        //    base.RecursiveInitializeSubMapsFromCurrentGraph();
+        //}
 
         #endregion
 
@@ -53,7 +59,7 @@ namespace TCode.r2rml4net.Mapping
             R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrJoinCondition), joinConditionNode);
             R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrChild), R2RMLMappings.CreateLiteralNode(childColumn));
             R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParent), R2RMLMappings.CreateLiteralNode(parentColumn));
-        } 
+        }
 
         #endregion
 
@@ -61,7 +67,7 @@ namespace TCode.r2rml4net.Mapping
 
         public IEnumerable<JoinCondition> JoinConditions
         {
-            get 
+            get
             {
                 SparqlParameterizedString sparql = new SparqlParameterizedString(
 @"PREFIX rr: <http://www.w3.org/ns/r2rml#>

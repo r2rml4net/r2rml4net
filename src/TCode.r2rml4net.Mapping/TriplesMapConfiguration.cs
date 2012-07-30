@@ -19,10 +19,38 @@ namespace TCode.r2rml4net.Mapping
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
 
-        internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings)
-            : base(r2RMLMappings)
+        internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, INode node)
+            : base(r2RMLMappings, node)
         {
             _r2RMLConfiguration = r2RMLConfiguration;
+        }
+
+        internal static TriplesMapConfiguration FromSqlQuery(R2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string sqlQuery)
+        {
+            if (sqlQuery == null)
+                throw new ArgumentNullException("sqlQuery");
+            if (string.IsNullOrWhiteSpace(sqlQuery))
+                throw new ArgumentOutOfRangeException("sqlQuery");
+
+            INode node = AssertSqlQueryTriples(r2RMLMappings, sqlQuery);
+
+            return new TriplesMapConfiguration(r2RMLConfiguration, r2RMLMappings, node);
+        }
+
+        internal static TriplesMapConfiguration FromTable(R2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string tableName)
+        {
+            if (tableName == null)
+                throw new ArgumentNullException("tableName");
+            if (string.IsNullOrWhiteSpace(tableName))
+                throw new ArgumentOutOfRangeException("tableName");
+
+            string tablename = TrimTableName(tableName);
+            if (tablename == string.Empty)
+                throw new ArgumentOutOfRangeException("tableName", "The table name seems invalid");
+
+            INode node = AssertTableNameTriples(r2RMLMappings, tablename);
+
+            return new TriplesMapConfiguration(r2RMLConfiguration, r2RMLMappings, node);
         }
 
         #region Implementation of ITriplesMapConfiguration
@@ -57,24 +85,6 @@ WHERE
                 }
                 return null;
             }
-            internal set
-            {
-                if (this.TableName != null)
-                    throw new InvalidTriplesMapException("Table name already set", Uri);
-                if (this.SqlQuery != null)
-                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query", Uri);
-
-                if (value == null)
-                    throw new ArgumentNullException("value");
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentOutOfRangeException("value");
-
-                string tablename = TrimTableName(value);
-                if (tablename == string.Empty)
-                    throw new ArgumentOutOfRangeException("value", "The table name seems invalid");
-
-                AssertTableNameTriples(tablename);
-            }
         }
 
         private static string TrimTableName(string tablename)
@@ -98,30 +108,34 @@ WHERE
             return stringBuilder.ToString();
         }
 
-        private void AssertTableNameTriples(string tablename)
+        private static INode AssertTableNameTriples(IGraph r2RMLMappings, string tablename)
         {
-            Node = R2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
+            var node = r2RMLMappings.CreateUriNode(new Uri(string.Format("{0}TriplesMap", tablename), UriKind.Relative));
 
             IBlankNode tableDefinition;
-            AssertTriplesMapsTriples(out tableDefinition);
+            AssertTriplesMapsTriples(r2RMLMappings, node, out tableDefinition);
 
-            var tableName = R2RMLMappings.CreateUriNode(R2RMLUris.RrTableNameProperty);
-            var tableNameLiteral = R2RMLMappings.CreateLiteralNode(tablename);
+            var tableName = r2RMLMappings.CreateUriNode(R2RMLUris.RrTableNameProperty);
+            var tableNameLiteral = r2RMLMappings.CreateLiteralNode(tablename);
 
-            R2RMLMappings.Assert(tableDefinition, tableName, tableNameLiteral);
+            r2RMLMappings.Assert(tableDefinition, tableName, tableNameLiteral);
+
+            return node;
         }
 
-        private void AssertSqlQueryTriples(string sqlQuery)
+        private static INode AssertSqlQueryTriples(IGraph r2RMLMappings, string sqlQuery)
         {
-            Node = R2RMLMappings.CreateBlankNode();
+            var node = r2RMLMappings.CreateBlankNode();
 
             IBlankNode tableDefinition;
-            AssertTriplesMapsTriples(out tableDefinition);
+            AssertTriplesMapsTriples(r2RMLMappings, node, out tableDefinition);
 
-            var sqlQueryLiteral = R2RMLMappings.CreateLiteralNode(sqlQuery);
-            var sqlQueryProperty = R2RMLMappings.CreateUriNode(R2RMLUris.RrSqlQueryProperty);
+            var sqlQueryLiteral = r2RMLMappings.CreateLiteralNode(sqlQuery);
+            var sqlQueryProperty = r2RMLMappings.CreateUriNode(R2RMLUris.RrSqlQueryProperty);
 
-            R2RMLMappings.Assert(tableDefinition, sqlQueryProperty, sqlQueryLiteral);
+            r2RMLMappings.Assert(tableDefinition, sqlQueryProperty, sqlQueryLiteral);
+
+            return node;
         }
 
         /// <summary>
@@ -153,20 +167,6 @@ WHERE
                 }
                 return null;
             }
-            internal set
-            {
-                if (this.SqlQuery != null)
-                    throw new InvalidTriplesMapException("SQL query already set", Uri);
-                if (this.TableName != null)
-                    throw new InvalidTriplesMapException("Cannot set both table name and SQL query", Uri);
-
-                if (value == null)
-                    throw new ArgumentNullException("value");
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentOutOfRangeException("value");
-
-                AssertSqlQueryTriples(value);
-            }
         }
 
         /// <summary>
@@ -183,15 +183,15 @@ WHERE
             }
         }
 
-        private void AssertTriplesMapsTriples(out IBlankNode tableDefinition)
+        private static void AssertTriplesMapsTriples(IGraph r2RMLMappings, INode treipleMapsNode, out IBlankNode tableDefinition)
         {
-            var tripleMapClass = R2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
-            var type = R2RMLMappings.CreateUriNode(R2RMLUris.RdfType);
-            var logicalTable = R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty);
-            tableDefinition = R2RMLMappings.CreateBlankNode();
+            var tripleMapClass = r2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
+            var type = r2RMLMappings.CreateUriNode(R2RMLUris.RdfType);
+            var logicalTable = r2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty);
+            tableDefinition = r2RMLMappings.CreateBlankNode();
 
-            R2RMLMappings.Assert(Node, type, tripleMapClass);
-            R2RMLMappings.Assert(Node, logicalTable, tableDefinition);
+            r2RMLMappings.Assert(treipleMapsNode, type, tripleMapClass);
+            r2RMLMappings.Assert(treipleMapsNode, logicalTable, tableDefinition);
         }
 
         /// <summary>
@@ -284,10 +284,10 @@ WHERE
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, graph => new PredicateObjectMapConfiguration(this, graph), _predicateObjectMaps);
+            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, (graph, node) => new PredicateObjectMapConfiguration(this, graph, node), _predicateObjectMaps);
 
             var subjectMaps = new List<SubjectMapConfiguration>();
-            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, graph => new SubjectMapConfiguration(this, graph), subjectMaps);
+            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node), subjectMaps);
 
             if(subjectMaps.Count > 1)
                 throw new InvalidTriplesMapException("Triples map can only have one subject map");

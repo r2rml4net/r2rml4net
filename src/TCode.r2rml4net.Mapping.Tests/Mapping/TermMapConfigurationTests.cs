@@ -169,7 +169,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void MustBeInitializedWithANode()
         {
-            _termMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(null);
+            _termMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
         }
 
         [Test]
