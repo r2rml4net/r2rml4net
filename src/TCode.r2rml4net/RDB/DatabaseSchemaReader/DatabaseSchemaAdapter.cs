@@ -85,7 +85,8 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             {
                 string[] referencedColumns;
                 DatabaseTable referencedTable = fk.ReferencedTable(_schema);
-                if (referencedTable.PrimaryKey == null)
+                if (referencedTable.PrimaryKey == null
+                    || referencedTable.PrimaryKey.Name != fk.RefersToConstraint)
                 {
                     referencedColumns = referencedTable.UniqueKeys.Single(key => key.Name == fk.RefersToConstraint).Columns.ToArray();
                 }
