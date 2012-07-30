@@ -62,6 +62,9 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         protected BaseConfiguration(IGraph existingMappingsGraph, INode node)
         {
+            if (node == null)
+                throw new ArgumentNullException("node");
+
             _node = node;
             R2RMLMappings = existingMappingsGraph;
             EnsureNoShortcutSubmaps();

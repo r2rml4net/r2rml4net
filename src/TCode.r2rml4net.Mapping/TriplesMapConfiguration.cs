@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Mapping
             _r2RMLConfiguration = r2RMLConfiguration;
         }
 
-        internal static TriplesMapConfiguration FromSqlQuery(R2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string sqlQuery)
+        internal static TriplesMapConfiguration FromSqlQuery(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string sqlQuery)
         {
             if (sqlQuery == null)
                 throw new ArgumentNullException("sqlQuery");
@@ -37,7 +37,7 @@ namespace TCode.r2rml4net.Mapping
             return new TriplesMapConfiguration(r2RMLConfiguration, r2RMLMappings, node);
         }
 
-        internal static TriplesMapConfiguration FromTable(R2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string tableName)
+        internal static TriplesMapConfiguration FromTable(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string tableName)
         {
             if (tableName == null)
                 throw new ArgumentNullException("tableName");
