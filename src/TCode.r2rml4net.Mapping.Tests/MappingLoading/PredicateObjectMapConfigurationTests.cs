@@ -41,7 +41,7 @@ ex:PredicateObjectMap
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
@@ -66,7 +66,7 @@ ex:PredicateObjectMap rr:predicate ex:Employee, ex:Worker .");
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
@@ -91,7 +91,7 @@ ex:PredicateObjectMap rr:graph ex:Employee, ex:Worker .");
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.GraphMaps.Count());
@@ -127,7 +127,7 @@ ex:PredicateObjectMap rr:objectMap [
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
@@ -152,7 +152,7 @@ ex:PredicateObjectMap rr:object ex:Employee, ex:Worker .");
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
@@ -183,7 +183,7 @@ ex:refObjectMap rr:parentTriplesMap ex:TriplesMap2 .");
 
             // when
             var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
-            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:PredicateObjectMap"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());

@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph);
-            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
+            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", subjectMap.Template);
@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph);
-            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
+            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
@@ -88,7 +88,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph);
-            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:subject"));
+            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
@@ -112,7 +112,7 @@ ex:TriplesMap rr:subject ex:Value .");
 
             // when
             var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph);
-            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, subjectMap.ConstantValue);

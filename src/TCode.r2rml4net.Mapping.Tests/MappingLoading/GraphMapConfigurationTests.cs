@@ -36,7 +36,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
-            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", graphMap.Template);
@@ -63,7 +63,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
-            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
@@ -89,7 +89,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph);
-            graphMap.RecursiveInitializeSubMapsFromCurrentGraph(graphMap.R2RMLMappings.GetBlankNode("autos1"));
+            graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);

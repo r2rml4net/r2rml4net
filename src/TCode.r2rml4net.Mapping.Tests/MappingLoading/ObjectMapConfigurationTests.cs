@@ -34,7 +34,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
 
             // when
             var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph);
-            objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/{JOB}", objectMap.Template);
@@ -59,7 +59,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
 
             // when
             var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph);
-            objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
@@ -83,7 +83,7 @@ ex:PredicateObjectMap rr:object ex:someObject .");
 
             // when
             var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph);
-            objectMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);

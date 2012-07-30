@@ -13,7 +13,7 @@ namespace TCode.r2rml4net.Mapping
     /// </summary>
     public abstract class BaseConfiguration : IMapBase
     {
-        private INode _node;
+        private readonly INode _node;
         private readonly ITriplesMapConfiguration _triplesMap;
 
         private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
@@ -41,18 +41,28 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Constructor used by <see cref="R2RMLConfiguration"/>
         /// </summary>
+        /// <param name="graph">existing graph with mappings</param>
+        internal BaseConfiguration(IGraph graph)
+        {
+            R2RMLMappings = graph;
+            EnsurePrefixes();
+        }
+
+        /// <summary>
+        /// Constructor used by <see cref="R2RMLConfiguration"/>
+        /// </summary>
         /// <param name="baseUri">R2RML graph's base URI</param>
         protected BaseConfiguration(Uri baseUri)
+            : this(new Graph { BaseUri = baseUri })
         {
-            R2RMLMappings = new Graph { BaseUri = baseUri };
-            EnsurePrefixes();
         }
 
         /// <summary>
         /// Constructor used by <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(IGraph existingMappingsGraph)
+        protected BaseConfiguration(IGraph existingMappingsGraph, INode node)
         {
+            _node = node;
             R2RMLMappings = existingMappingsGraph;
             EnsureNoShortcutSubmaps();
             EnsurePrefixes();
@@ -61,8 +71,8 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Constructor used by implementations other than <see cref="R2RMLConfiguration"/> and <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph)
-            : this(existingMappingsGraph)
+        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node)
+            : this(existingMappingsGraph, node)
         {
             _triplesMap = triplesMap;
         }
@@ -78,11 +88,6 @@ WHERE { ?map rr:subject ?value }";
             {
                 return _node;
             }
-            protected set
-            {
-                if (UsesNode)
-                    _node = value;
-            }
         }
 
         #endregion
@@ -97,12 +102,8 @@ WHERE { ?map rr:subject ?value }";
         /// Reads all maps contained in the current configuration and creates configuration objects
         /// </summary>
         /// <remarks>Used in loading configuration from an exinsting graph</remarks>
-        protected internal virtual void RecursiveInitializeSubMapsFromCurrentGraph(INode currentNode)
+        protected internal void RecursiveInitializeSubMapsFromCurrentGraph()
         {
-            if (UsesNode && currentNode == null)
-                throw new ArgumentNullException("currentNode");
-
-            Node = currentNode;
             InitializeSubMapsFromCurrentGraph();
         }
 
@@ -131,7 +132,7 @@ WHERE { ?map rr:subject ?value }";
 
         /// <summary>
         /// </summary>
-        protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
+        protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, INode, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
             where TConfiguration : BaseConfiguration
         {
             var mapPropety = R2RMLMappings.CreateUriNode(property);
@@ -139,8 +140,8 @@ WHERE { ?map rr:subject ?value }";
 
             foreach (var triple in triples.ToArray())
             {
-                var subConfiguration = createSubConfiguration(R2RMLMappings);
-                subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph(triple.Object);
+                var subConfiguration = createSubConfiguration(R2RMLMappings, triple.Object);
+                subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
                 subMaps.Add(subConfiguration);
             }
         }

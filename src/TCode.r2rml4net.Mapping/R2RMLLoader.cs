@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Mapping
         private static IR2RML InitializeMappings(IGraph graph)
         {
             var mappings = new R2RMLConfiguration(graph);
-            mappings.RecursiveInitializeSubMapsFromCurrentGraph(null);
+            mappings.RecursiveInitializeSubMapsFromCurrentGraph();
             return mappings;
         }
     }

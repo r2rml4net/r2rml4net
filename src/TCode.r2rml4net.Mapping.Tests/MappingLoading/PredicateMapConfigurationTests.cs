@@ -33,7 +33,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
 
             // when
             var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph);
-            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateMap.Template);
@@ -57,7 +57,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
 
             // when
             var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph);
-            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
@@ -80,7 +80,7 @@ ex:PredicateObjectMap rr:predicate ex:Value .");
 
             // when
             var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph);
-            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetBlankNode("autos1"));
+            predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
