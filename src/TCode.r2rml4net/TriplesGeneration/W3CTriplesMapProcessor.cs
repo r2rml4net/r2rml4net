@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -36,6 +37,8 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler)
         {
+            IList<Action> refObjectMapProcesses = new List<Action>();
+
             if (triplesMap.SubjectMap == null)
             {
                 Log.LogMissingSubject(triplesMap);
@@ -67,15 +70,19 @@ namespace TCode.r2rml4net.TriplesGeneration
                         {
                             PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable, rdfHandler);
 
-                            foreach (
-                                IRefObjectMap refObjectMap in
-                                    map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
+                            foreach (var refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
                             {
-                                RefObjectMapProcessor.ProcessRefObjectMap(refObjectMap, connection,
-                                                                          logicalTable.FieldCount, rdfHandler);
+                                IRefObjectMap objectMap = refObjectMap;
+                                var fieldCount = logicalTable.FieldCount;
+                                refObjectMapProcesses.Add(() => RefObjectMapProcessor.ProcessRefObjectMap(objectMap, connection, fieldCount, rdfHandler));
                             }
                         }
                     }
+                }
+
+                foreach (var refObjectMapProcess in refObjectMapProcesses)
+                {
+                    refObjectMapProcess.Invoke();
                 }
             }
         }
