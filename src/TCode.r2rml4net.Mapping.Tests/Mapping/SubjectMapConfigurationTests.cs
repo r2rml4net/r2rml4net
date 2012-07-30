@@ -7,6 +7,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class SubjectMapConfigurationTests
     {
+        private IGraph _graph;
         private SubjectMapConfiguration _subjectMapConfiguration;
         private IUriNode _triplesMapNode;
         private Mock<ITriplesMapConfiguration> _triplesMap;
@@ -14,12 +15,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [SetUp]
         public void Setup()
         {
-            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
-            _triplesMapNode = graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
+            _graph = new R2RMLConfiguration().R2RMLMappings;
+            _triplesMapNode = _graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
          
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, graph);
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph);
         }
 
         [Test]
@@ -147,6 +148,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CreatesCorrectShortcutPropertyNode()
         {
             Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#subject"), _subjectMapConfiguration.CreateShortcutPropertyNode().Uri);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void NodeCannotBeNull()
+        {
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, null);
         }
     }
 }

@@ -29,7 +29,7 @@ ex:triplesMap rr:subjectMap ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -53,7 +53,7 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -78,10 +78,10 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:subjectMap ex:subject1 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => triplesMap.RecursiveInitializeSubMapsFromCurrentGraph());
+            Assert.Throws<InvalidTriplesMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
         }
     }
 }
