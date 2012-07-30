@@ -29,8 +29,8 @@ ex:triplesMap rr:subjectMap ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
-            triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap"));
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
+            triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.GetUriNode("ex:subject"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
@@ -53,8 +53,8 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
-            triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap"));
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
+            triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.GetBlankNode("autos1"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
@@ -78,10 +78,10 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:subjectMap ex:subject1 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph);
+            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => triplesMap.RecursiveInitializeSubMapsFromCurrentGraph(graph.GetUriNode("ex:triplesMap")));
+            Assert.Throws<InvalidTriplesMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
         }
     }
 }
