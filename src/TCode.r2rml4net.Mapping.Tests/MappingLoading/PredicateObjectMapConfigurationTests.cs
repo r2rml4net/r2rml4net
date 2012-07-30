@@ -109,11 +109,15 @@ ex:PredicateObjectMap rr:graph ex:Employee, ex:Worker .");
             graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
 @prefix rr: <http://www.w3.org/ns/r2rml#>.
 
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap, ex:PredicateObjectMap1 .
   
 ex:PredicateObjectMap rr:objectMap 
     [ rr:constant ex:Employee ], 
     [ rr:template ""http://data.example.com/user/{EMPNO}"" ] .
+  
+ex:PredicateObjectMap1 rr:objectMap 
+    [ rr:constant ex:Xxx ], 
+    [ rr:template ""http://data.example.com/user/{xxx}"" ] .
 
 ex:PredicateObjectMap rr:objectMap [
     rr:parentTriplesMap ex:TriplesMap2
