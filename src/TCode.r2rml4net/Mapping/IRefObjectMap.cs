@@ -6,7 +6,7 @@ namespace TCode.r2rml4net.Mapping
     /// Represents a RefObjectMap
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-referencing-object-map</remarks>
-    public interface IRefObjectMap : IMapBase
+    public interface IRefObjectMap : IMapBase, IQueryMap
     {
         /// <summary>
         /// Optional join conditions associated with this <see cref="IRefObjectMap"/>
@@ -25,6 +25,11 @@ namespace TCode.r2rml4net.Mapping
         /// <remarks>http://www.w3.org/TR/r2rml/#foreign-key</remarks>
         string ParentEffectiveSqlQuery { get; }
 
-        string EffectiveSqlQuery { get; }
+        /// <summary>
+        /// Returns the referenced triples map's subject
+        /// </summary>
+        ISubjectMap SubjectMap { get; }
+
+        IPredicateObjectMap PredicateObjectMap { get; }
     }
 }

@@ -8,7 +8,7 @@ namespace TCode.r2rml4net.Mapping
     /// Base fluent configuration of term maps (subject maps, predicate maps, graph maps or object maps) 
     /// backed by a DotNetRDF graph (see <see cref="ITermMapConfiguration"/>)
     /// </summary>
-    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration
+    public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermType
     {
         /// <summary>
         /// The parent node for the current term map
@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.IsConstantValued"/>
+        /// <see cref="ITermMapConfiguration.IsConstantValued(Uri)"/>
         /// </summary>
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// <see cref="ITermMapConfiguration.IsTemplateValued"/>
+        /// <see cref="ITermMapConfiguration.IsTemplateValued(string)"/>
         /// </summary>
         public ITermTypeConfiguration IsTemplateValued(string template)
         {
@@ -221,6 +221,45 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        bool ITermMap.IsConstantValued
+        {
+            get { return ConstantValue != null; }
+        }
+
+        bool ITermMap.IsColumnValued
+        {
+            get { return ColumnName != null; }
+        }
+
+        bool ITermMap.IsTemplateValued
+        {
+            get { return Template != null; }
+        }
+
+        ITermType ITermMap.TermType
+        {
+            get { return this; }
+        }
+
+        #endregion
+
+        #region Implementation of ITermType
+
+        public bool IsURI
+        {
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+        }
+
+        bool ITermType.IsBlankNode
+        {
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+        }
+
+        bool ITermType.IsLiteral
+        {
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+        }
+
         #endregion
 
         /// <summary>
@@ -310,5 +349,6 @@ namespace TCode.r2rml4net.Mapping
 
             return null;
         }
+
     }
 }
