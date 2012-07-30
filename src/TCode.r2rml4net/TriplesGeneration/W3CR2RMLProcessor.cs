@@ -50,6 +50,8 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// <param name="triplesMapProcessor"></param>
         protected internal W3CR2RMLProcessor(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
+            Log = NullLog.Instance;
+
             _triplesMapProcessor = triplesMapProcessor;
             _connection = connection;
 
