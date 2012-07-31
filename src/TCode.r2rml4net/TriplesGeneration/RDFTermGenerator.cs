@@ -17,13 +17,13 @@ namespace TCode.r2rml4net.TriplesGeneration
         static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
-        private ILexicalFormProvider _lexicalFormProvider = new XSDLexicalFormProvider();
+        private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
 
-        public ILexicalFormProvider LexicalFormProvider
+        public ISQLValuesMappingStrategy SqlValuesMappingStrategy
         {
-            get { return _lexicalFormProvider; }
-            set { _lexicalFormProvider = value; }
+            get { return _sqlValuesMappingStrategy; }
+            set { _sqlValuesMappingStrategy = value; }
         }
 
         public IRDFTermGenerationLog Log
@@ -71,7 +71,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
         {
-            if(string.IsNullOrWhiteSpace(termMap.Template))
+            if (string.IsNullOrWhiteSpace(termMap.Template))
                 throw new InvalidTemplateException(termMap);
 
             string value;
@@ -113,8 +113,8 @@ namespace TCode.r2rml4net.TriplesGeneration
                 throw new ArgumentNullException();
             }
 
-            return LexicalFormProvider.GetLexicalForm(columnIndex,
-                                                      logicalRow);
+            Uri datatype;
+            return SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out datatype);
         }
 
         private INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
@@ -135,7 +135,13 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return null;
             }
 
-            string value = LexicalFormProvider.GetLexicalForm(columnIndex, logicalRow);
+            Uri implicitDatatype;
+            string value = SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out implicitDatatype);
+
+            if (termMap.TermType.IsLiteral)
+            {
+                return GenerateTermForLiteral(termMap, value, implicitDatatype);
+            }
 
             return GenerateTermForValue(termMap, value);
         }
@@ -165,23 +171,32 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
             if (termMap.TermType.IsLiteral)
             {
-                if(!(termMap is ILiteralTermMap))
-                    throw new InvalidTermException(termMap, "Term map cannot be of term type literal");
+                var literalTermMap = termMap as ILiteralTermMap;
 
-                ILiteralTermMap literalTermMap = (ILiteralTermMap)termMap;
-
-                if (literalTermMap.LanguageTag != null && literalTermMap.DataTypeURI != null)
-                    throw new InvalidTermException(termMap, "Literal term map cannot have both language tag and datatype set");
-
-                if (literalTermMap.LanguageTag != null)
-                    return NodeFactory.CreateLiteralNode(value, literalTermMap.LanguageTag);
-                if (literalTermMap.DataTypeURI != null)
-                    return NodeFactory.CreateLiteralNode(value, literalTermMap.DataTypeURI);
-
-                return NodeFactory.CreateLiteralNode(value);
+                return GenerateTermForLiteral(literalTermMap, value);
             }
 
-            throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-vbalued");
+            throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-valued");
+        }
+
+        private ILiteralNode GenerateTermForLiteral(ITermMap termMap, string value, Uri datatypeUriOverride = null)
+        {
+            if (!(termMap is ILiteralTermMap))
+                throw new InvalidTermException(termMap, "Term map cannot be of term type literal");
+
+            var literalTermMap = termMap as ILiteralTermMap;
+            Uri datatypeUri = datatypeUriOverride ?? literalTermMap.DataTypeURI;
+            string languageTag = literalTermMap.LanguageTag;
+
+            if (languageTag != null && datatypeUri != null)
+                throw new InvalidTermException(literalTermMap, "Literal term map cannot have both language tag and datatype set");
+
+            if (languageTag != null)
+                return NodeFactory.CreateLiteralNode(value, languageTag);
+            if (datatypeUri != null)
+                return NodeFactory.CreateLiteralNode(value, datatypeUri);
+
+            return NodeFactory.CreateLiteralNode(value);
         }
 
         private INode CreateConstantValue(ITermMap termMap)
