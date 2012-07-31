@@ -98,7 +98,7 @@
     <Compile Include="RDF\R2RMLUris.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
-    <Compile Include="TriplesGeneration\ILexicalFormProvider.cs" />
+    <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
     <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\MapProcessorBase.cs" />
     <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
-    <Compile Include="RDF\XSDLexicalFormProvider.cs" />
+    <Compile Include="RDF\DefaultSQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
