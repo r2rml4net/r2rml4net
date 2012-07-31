@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -12,9 +13,5 @@ namespace TCode.r2rml4net.Mapping
         /// triples for each RDF term as described on http://www.w3.org/TR/r2rml/#typing
         /// </summary>
         ISubjectMapConfiguration AddClass(Uri classIri);
-        /// <summary>
-        /// All classes added to this subject map
-        /// </summary>
-        Uri[] ClassIris { get; }
     }
 }

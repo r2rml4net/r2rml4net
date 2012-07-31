@@ -58,6 +58,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual(uri, _termMapConfiguration.ConstantValue);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsConstantValued);
         }
 
         [Test]
@@ -80,6 +81,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsColumnValued);
         }
 
         [Test]
@@ -115,6 +117,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
             Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
             Assert.AreEqual(template, _termMapConfiguration.Template);
+            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsTemplateValued);
         }
 
         [Test]
@@ -146,6 +149,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
             Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.ToString());
+            Assert.IsTrue((_termMapConfiguration as ITermType).IsBlankNode);
+            Assert.IsFalse((_termMapConfiguration as ITermType).IsURI);
+            Assert.IsFalse((_termMapConfiguration as ITermType).IsLiteral);
         }
 
         [Test]
@@ -203,6 +209,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
+        }
+
+        [Test]
+        public void TermTypeIsIriByDefault()
+        {
+            ITermType type = _termMapConfiguration;
+            Assert.IsTrue(type.IsURI);
+            Assert.IsFalse(type.IsLiteral);
+            Assert.IsFalse(type.IsBlankNode);
         }
     }
 }
