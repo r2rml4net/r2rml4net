@@ -5,23 +5,35 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
-    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration
+    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, ITermType
     {
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
             : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())
         {
         }
 
-        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node) 
+        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node)
             : base(parentTriplesMap, parentMap, r2RMLMappings, node)
         {
         }
+
+        #region Implementation of ITermMap
+
+        bool ITermMap.IsConstantValued
+        {
+            get
+            {
+                return ConstantValue != null || !string.IsNullOrEmpty(Literal);
+            }
+        }
+
+        #endregion
 
         #region Implementation of IObjectMapConfiguration
 
         public ILiteralTermMapConfiguration IsConstantValued(string literal)
         {
-            if(Literal != null)
+            if (Literal != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
             EnsureRelationWithParentMap();
@@ -185,7 +197,7 @@ namespace TCode.r2rml4net.Mapping
                         throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
 
                     IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
-                    if(dataTypeUriNode==null)
+                    if (dataTypeUriNode == null)
                         throw new InvalidTriplesMapException("Object map has datatype set but it is not a URI");
 
                     return dataTypeUriNode.Uri;
