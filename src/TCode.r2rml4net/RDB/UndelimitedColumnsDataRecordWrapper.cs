@@ -3,11 +3,11 @@ using System.Data;
 
 namespace TCode.r2rml4net.RDB.ADO.NET
 {
-    public class UnquotedColumnDataRecordWrapper : IDataRecord
+    public class UndelimitedColumnsDataRecordWrapper : IDataRecord
     {
         private readonly IDataRecord _wrapped;
 
-        public UnquotedColumnDataRecordWrapper(IDataRecord wrapped)
+        public UndelimitedColumnsDataRecordWrapper(IDataRecord wrapped)
         {
             _wrapped = wrapped;
         }
@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.RDB.ADO.NET
 
         public int GetOrdinal(string name)
         {
-            return _wrapped.GetOrdinal(EnsureColumnNameUnquoted(name));
+            return _wrapped.GetOrdinal(EnsureColumnNameUndelimited(name));
         }
 
         public bool GetBoolean(int i)
@@ -136,15 +136,14 @@ namespace TCode.r2rml4net.RDB.ADO.NET
 
         public object this[string name]
         {
-            get { return _wrapped[EnsureColumnNameUnquoted(name)]; }
+            get { return _wrapped[EnsureColumnNameUndelimited(name)]; }
         }
 
         #endregion
 
-        private string EnsureColumnNameUnquoted(string columnName)
+        private static string EnsureColumnNameUndelimited(string columnName)
         {
             return DatabaseIdentifiersHelper.GetColumnNameUnquoted(columnName);
         }
-
     }
 }
