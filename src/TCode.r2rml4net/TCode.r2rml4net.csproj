@@ -70,7 +70,7 @@
     <Compile Include="Mapping\ITermType.cs" />
     <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RDB\ADO.NET\UnquotedColumnDataRecordWrapper.cs" />
+    <Compile Include="RDB\UndelimitedColumnsDataRecordWrapper.cs" />
     <Compile Include="RDB\DatabaseIdentifiersHelper.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
