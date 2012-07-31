@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             INode node = null;
 
-            var logicalRowWrapped = new UnquotedColumnDataRecordWrapper(logicalRow);
+            var logicalRowWrapped = new UndelimitedColumnsDataRecordWrapper(logicalRow);
 
             if (termMap.IsConstantValued)
             {
