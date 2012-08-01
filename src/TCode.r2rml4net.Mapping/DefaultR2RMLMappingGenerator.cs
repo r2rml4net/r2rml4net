@@ -65,9 +65,11 @@ namespace TCode.r2rml4net.Mapping
             if (table.PrimaryKey.Length == 0)
             {
                 // empty primary key generates blank node subjects
+                var joinedColumnNames = string.Join("_", table.Select(col => string.Format("{{{0}}}", col.Name)));
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
-                    .TermType.IsBlankNode();
+                    .TermType.IsBlankNode()
+                    .IsTemplateValued(string.Format("{0}_{1}", table.Name, joinedColumnNames));
             }
             else
             {
@@ -89,7 +91,7 @@ namespace TCode.r2rml4net.Mapping
             var literalTermMap = propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
 
             var dataTypeUri = XsdDatatypes.GetDataType(column.Type);
-            if(dataTypeUri != null)
+            if (dataTypeUri != null)
                 literalTermMap.HasDataType(dataTypeUri);
         }
 
@@ -141,10 +143,10 @@ namespace TCode.r2rml4net.Mapping
             foreignKey = foreignKey.ToArray();
             referencedPrimaryKey = referencedPrimaryKey.ToArray();
 
-            if(foreignKey.Count() != referencedPrimaryKey.Count())
+            if (foreignKey.Count() != referencedPrimaryKey.Count())
                 throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", tableName), "foreignKey");
 
-            if(!foreignKey.Any())
+            if (!foreignKey.Any())
                 throw new ArgumentException("Empty foreign key", "foreignKey");
 
             StringBuilder template = new StringBuilder(CreateUriForTable(tableName) + "/");

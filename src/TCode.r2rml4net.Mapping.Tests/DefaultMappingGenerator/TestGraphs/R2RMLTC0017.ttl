@@ -41,6 +41,7 @@
 	[ 
 	  rr:termType rr:BlankNode ;
 	  rr:class <http://example.com/成分>;
+	  rr:template "成分_{植物名}_{使用部}_{皿}";
 	];
 
     rr:predicateObjectMap
