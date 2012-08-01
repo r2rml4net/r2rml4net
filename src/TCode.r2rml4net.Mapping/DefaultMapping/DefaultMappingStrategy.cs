@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace TCode.r2rml4net.Mapping.DefaultMapping
@@ -31,6 +32,34 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             string template = UrlEncode(CreateSubjectUri(baseUri, tableName).ToString());
             template += "/" + string.Join(";", primaryKeyColumns.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
             return template;
+        }
+
+        public Uri CreateReferencePredicateUri(Uri baseUri, string tableName, IEnumerable<string> foreignKeyColumns)
+        {
+            string uri = baseUri + UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKeyColumns.Select(UrlEncode));
+
+            return new Uri(UrlEncode(uri));
+        }
+
+        public string CreateReferenceObjectTemplate(Uri baseUri, string tableName, IEnumerable<string> foreignKey, IEnumerable<string> referencedPrimaryKey)
+        {
+            foreignKey = foreignKey.ToArray();
+            referencedPrimaryKey = referencedPrimaryKey.ToArray();
+
+            if (foreignKey.Count() != referencedPrimaryKey.Count())
+                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", tableName), "foreignKey");
+
+            if (!foreignKey.Any())
+                throw new ArgumentException("Empty foreign key", "foreignKey");
+
+            StringBuilder template = new StringBuilder(CreateSubjectUri(baseUri, tableName) + "/");
+            template.AppendFormat("{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(0)), foreignKey.ElementAt(0));
+            for (int i = 1; i < foreignKey.Count(); i++)
+            {
+                template.AppendFormat(";{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(1)), foreignKey.ElementAt(1));
+            }
+
+            return UrlEncode(template.ToString());
         }
 
         #endregion
