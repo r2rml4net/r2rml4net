@@ -11,6 +11,11 @@ namespace TCode.r2rml4net.RDB
     {
         private readonly IList<ColumnMetadata> _columns = new List<ColumnMetadata>();
 
+        public TableMetadata()
+        {
+            ForeignKeys = new ForeignKeyMetadata[0];
+        }
+
         /// <summary>
         /// Table name
         /// </summary>
