@@ -107,7 +107,12 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
         {
             var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
 
-            Uri foreignKeyRefUri = CreateUriForReferenceProperty(foreignKey.TableName, foreignKey.ForeignKeyColumns);
+            Uri foreignKeyRefUri = 
+                MappingStrategy.CreateReferencePredicateUri(
+                    MappingBaseUri,
+                    foreignKey.TableName,
+                    foreignKey.ForeignKeyColumns);
+
             foreignKeyMap.CreatePredicateMap()
                 .IsConstantValued(foreignKeyRefUri);
 
@@ -117,43 +122,18 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             }
             else
             {
-                var templateForForeignKey = CreateTemplateForForeignKey(foreignKey.ReferencedTableName,
-                                                                        foreignKey.ForeignKeyColumns,
-                                                                        foreignKey.ReferencedColumns);
+                var templateForForeignKey = MappingStrategy.CreateReferenceObjectTemplate(
+                    MappingBaseUri,
+                    foreignKey.ReferencedTableName,
+                    foreignKey.ForeignKeyColumns,
+                    foreignKey.ReferencedColumns);
+
                 foreignKeyMap.CreateObjectMap()
-                    .IsTemplateValued(UrlEncode(templateForForeignKey));
+                    .IsTemplateValued(templateForForeignKey);
             }
         }
 
         #endregion
-
-        private Uri CreateUriForReferenceProperty(string tableName, IEnumerable<string> foreignKey)
-        {
-            string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKey.Select(UrlEncode));
-
-            return new Uri(UrlEncode(uri));
-        }
-
-        private string CreateTemplateForForeignKey(string tableName, IEnumerable<string> foreignKey, IEnumerable<string> referencedPrimaryKey)
-        {
-            foreignKey = foreignKey.ToArray();
-            referencedPrimaryKey = referencedPrimaryKey.ToArray();
-
-            if (foreignKey.Count() != referencedPrimaryKey.Count())
-                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", tableName), "foreignKey");
-
-            if (!foreignKey.Any())
-                throw new ArgumentException("Empty foreign key", "foreignKey");
-
-            StringBuilder template = new StringBuilder(MappingStrategy.CreateSubjectUri(MappingBaseUri, tableName) + "/");
-            template.AppendFormat("{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(0)), foreignKey.ElementAt(0));
-            for (int i = 1; i < foreignKey.Count(); i++)
-            {
-                template.AppendFormat(";{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(1)), foreignKey.ElementAt(1));
-            }
-            return template.ToString();
-        }
-
         string UrlEncode(string unescapedString)
         {
             return HttpUtility.UrlDecode(unescapedString).Replace(" ", "%20");

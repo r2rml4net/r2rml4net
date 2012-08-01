@@ -40,8 +40,13 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [Test]
         public void TestForTableWithoutPrimaryKey()
         {
-            TestStrategyUsage(RelationalTestMappings.D001_1table1column);
             TestStrategyUsage(RelationalTestMappings.D003_1table3columns);
+        }
+
+        [Test]
+        public void AnotherTestForTableWithoutPrimaryKey()
+        {
+            TestStrategyUsage(RelationalTestMappings.D001_1table1column);
         }
 
         [Test]
@@ -56,6 +61,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             TestStrategyUsage(RelationalTestMappings.D006_1table1primarykey1column);
         }
 
+        [Test]
+        public void TestForTableWithForeignKey()
+        {
+            TestStrategyUsage(RelationalTestMappings.D009_2tables1primarykey1foreignkey);
+        }
+
         private void TestStrategyUsage(TableCollection tables)
         {
             // given
@@ -67,6 +78,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                             .Returns(new Uri("http://predicate.uri"));
             _mappingStrategy.Setup(ms => ms.CreateSubjectTemplateForPrimaryKey(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                             .Returns("template");
+            _mappingStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                            .Returns(new Uri("http://ref.uri"));
+            _mappingStrategy.Setup(ms =>
+                                   ms.CreateReferenceObjectTemplate(_mappingBaseUri,
+                                                                    It.IsAny<string>(),
+                                                                    It.IsAny<IEnumerable<string>>(),
+                                                                    It.IsAny<IEnumerable<string>>()))
+                            .Returns("termplate");
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when
@@ -80,6 +99,23 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 _mappingStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
                                         Times.Exactly(columnsCount));
                 _mappingStrategy.Verify(ms => ms.CreateSubjectUri(_mappingBaseUri, tableName), Times.Once());
+
+                //if(table.ForeignKeys != null)
+                foreach (var fk in table.ForeignKeys)
+                {
+                    ForeignKeyMetadata fk1 = fk;
+                    _mappingStrategy.Verify(ms =>
+                        ms.CreateReferencePredicateUri(_mappingBaseUri, tableName, fk1.ForeignKeyColumns),
+                        Times.Once());
+                    _mappingStrategy.Verify(ms =>
+                                            ms.CreateReferenceObjectTemplate(
+                                                _mappingBaseUri,
+                                                fk1.ReferencedTableName,
+                                                fk1.ForeignKeyColumns,
+                                                fk1.ReferencedColumns));
+
+                    _mappingStrategy.Verify(ms => ms.CreateSubjectUri(_mappingBaseUri, fk1.ReferencedTableName), Times.Once());
+                }
             }
 
             foreach (var table in tables.Where(t => t.PrimaryKey.Length == 0))
@@ -95,7 +131,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             foreach (var table in tables.Where(t => t.PrimaryKey.Length > 0))
             {
                 var tableName = table.Name;
-                var columnsCount = table.ColumnsCount;
+                var columnsCount = table.PrimaryKey.Length;
                 _mappingStrategy.Verify(
                     ms =>
                     ms.CreateSubjectTemplateForPrimaryKey(_mappingBaseUri, tableName, It.Is<IEnumerable<string>>(names => names.Count() == columnsCount)),
