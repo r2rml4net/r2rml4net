@@ -102,5 +102,24 @@ namespace TCode.r2rml4net.Tests.Metadata
             // then
             Assert.Throws<ArgumentException>(() => table.Add(new ColumnMetadata { Name = "Column" }));
         }
+
+        [Test]
+        public void TableWithNoForeignKeysReturnsEmptyCollection()
+        {
+            // given
+            TableMetadata table = new TableMetadata
+                {
+                    new ColumnMetadata{Name="Id", IsPrimaryKey=true},
+                    new ColumnMetadata{Name="A"},
+                    new ColumnMetadata{Name="B"}
+                };
+
+            // when
+            var foreignKeys = table.ForeignKeys;
+
+            // then
+            Assert.IsNotNull(foreignKeys);
+            Assert.IsEmpty(foreignKeys);
+        }
     }
 }
