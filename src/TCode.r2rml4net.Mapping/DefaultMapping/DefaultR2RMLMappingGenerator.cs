@@ -8,7 +8,7 @@ using TCode.r2rml4net.RDF;
 
 #pragma warning disable
 
-namespace TCode.r2rml4net.Mapping
+namespace TCode.r2rml4net.Mapping.DefaultMapping
 {
     /// <summary>
     /// Builds a R2RML graph from a relational database's schema
@@ -29,6 +29,7 @@ namespace TCode.r2rml4net.Mapping
 
             MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
             MappedDataBaseUri = new Uri("http://example.com/");
+            MappingStrategy = new DefaultMappingStrategy();
         }
 
         /// <summary>
@@ -39,6 +40,8 @@ namespace TCode.r2rml4net.Mapping
         /// Base URI used to generate triples' subjects
         /// </summary>
         public Uri MappedDataBaseUri { get; private set; }
+
+        public IDirectMappingStrategy MappingStrategy { get; set; }
 
         /// <summary>
         /// Generates default R2RML mappings based on database metadata
