@@ -67,7 +67,10 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             var classIri = MappingStrategy.CreateSubjectUri(MappingBaseUri, table.Name);
             if (table.PrimaryKey.Length == 0)
             {
-                string template = MappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table.Name, table.Select(col => col.Name));
+                string template = MappingStrategy.CreateSubjectTemplateForNoPrimaryKey(
+                    table.Name, 
+                    table.Select(col => col.Name));
+
                 // empty primary key generates blank node subjects
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
@@ -76,7 +79,10 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             }
             else
             {
-                string template = CreateTemplateForPrimaryKey(table.Name, table.PrimaryKey.Select(pk => pk.Name));
+                string template = MappingStrategy.CreateSubjectTemplateForPrimaryKey(
+                    MappingBaseUri,
+                    table.Name,
+                    table.PrimaryKey.Select(pk => pk.Name));
 
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
@@ -126,13 +132,6 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             string uri = this.MappedDataBaseUri + UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKey.Select(UrlEncode));
 
             return new Uri(UrlEncode(uri));
-        }
-
-        private string CreateTemplateForPrimaryKey(string tableName, IEnumerable<string> primaryKey)
-        {
-            string template = UrlEncode(MappingStrategy.CreateSubjectUri(MappingBaseUri, tableName).ToString());
-            template += "/" + string.Join(";", primaryKey.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
-            return template;
         }
 
         private string CreateTemplateForForeignKey(string tableName, IEnumerable<string> foreignKey, IEnumerable<string> referencedPrimaryKey)
