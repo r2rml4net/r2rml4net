@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Mapping.DefaultMapping;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 using System.IO;
@@ -23,6 +24,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _databaseMetedata = new Mock<IDatabaseMetadata>();
             _configuration = new R2RMLConfiguration(new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/"));
             _defaultR2RMLMappingGenerator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
+        }
+
+        [Test]
+        public void CreatedWithDefaultGenerationAlgorithm()
+        {
+            Assert.IsTrue(_defaultR2RMLMappingGenerator.MappingStrategy is DefaultMappingStrategy);
         }
 
         [Test, Description("Building graph visits the table collection")]
