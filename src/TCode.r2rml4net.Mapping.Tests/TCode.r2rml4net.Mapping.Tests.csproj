@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
+    <Compile Include="Mocks\MockConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
