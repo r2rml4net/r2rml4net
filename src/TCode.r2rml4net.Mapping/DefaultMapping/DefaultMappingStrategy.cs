@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 namespace TCode.r2rml4net.Mapping.DefaultMapping
@@ -23,6 +24,13 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
         {
             string predicateUriString = string.Format("{0}{1}#{2}", baseUri, tableName, columnName);
             return new Uri(predicateUriString);
+        }
+
+        public string CreateSubjectTemplateForPrimaryKey(Uri baseUri, string tableName, IEnumerable<string> primaryKeyColumns)
+        {
+            string template = UrlEncode(CreateSubjectUri(baseUri, tableName).ToString());
+            template += "/" + string.Join(";", primaryKeyColumns.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
+            return template;
         }
 
         #endregion
