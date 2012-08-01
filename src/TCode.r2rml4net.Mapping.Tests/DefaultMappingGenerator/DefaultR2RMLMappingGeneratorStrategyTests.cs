@@ -40,34 +40,45 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [Test]
         public void TestForSimpleTable()
         {
-            // given
-            _mappingStrategy.Setup(ms => ms.CreateUriForTable(_mappingBaseUri, "Student")).Returns(new Uri("http://template.uri"));
-            _mappingStrategy.Setup(ms => ms.CreateTemplateForNoPrimaryKey("Student", It.IsAny<IEnumerable<string>>())).Returns("template");
-            _databaseMetedata.Setup(meta => meta.Tables).Returns(RelationalTestMappings.D001_1table1column);
-
-            // when
-            _generator.GenerateMappings();
-
-            // then
-            _mappingStrategy.Verify(ms => ms.CreateUriForTable(_mappingBaseUri, "Student"), Times.Once());
-            _mappingStrategy.Verify(ms => ms.CreateTemplateForNoPrimaryKey("Student", It.Is<IEnumerable<string>>(c => c.Contains("Name"))), Times.Once());
+            TestStrategyUsage(RelationalTestMappings.D001_1table1column);
         }
 
         [Test]
         public void TestForTableWithMultipleColumns()
         {
+            TestStrategyUsage(RelationalTestMappings.TypedColumns);
+        }
+
+        private void TestStrategyUsage(TableCollection tables)
+        {
             // given
-            _mappingStrategy.Setup(ms => ms.CreateUriForTable(_mappingBaseUri, "Student")).Returns(new Uri("http://template.uri"));
-            _mappingStrategy.Setup(ms => ms.CreateTemplateForNoPrimaryKey("Student", It.IsAny<IEnumerable<string>>())).Returns("template");
-            var tableCollection = RelationalTestMappings.TypedColumns;
-            _databaseMetedata.Setup(meta => meta.Tables).Returns(tableCollection);
+            _mappingStrategy.Setup(ms => ms.CreateSubjectUri(_mappingBaseUri, It.IsAny<string>())).Returns(new Uri("http://template.uri"));
+            _mappingStrategy.Setup(ms => ms.CreateSubjectTemplateForNoPrimaryKey(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns("template");
+            _mappingStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<string>())).Returns(new Uri("http://predicate.uri"));
+            _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when
             _generator.GenerateMappings();
 
             // then
-            _mappingStrategy.Verify(ms => ms.CreateUriForTable(_mappingBaseUri, "Student"), Times.Once());
-            _mappingStrategy.Verify(ms => ms.CreateTemplateForNoPrimaryKey("Student", It.Is<IEnumerable<string>>(names => names.Count()==15)), Times.Once());
+            foreach (var table in tables)
+            {
+                var tableName = table.Name;
+                var columnsCount = table.ColumnsCount;
+                _mappingStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
+                                        Times.Exactly(columnsCount));
+                _mappingStrategy.Verify(ms => ms.CreateSubjectUri(_mappingBaseUri, tableName), Times.Once());
+            }
+
+            foreach (var table in tables.Where(t => t.PrimaryKey.Length == 0))
+            {
+                var tableName = table.Name;
+                var columnsCount = table.ColumnsCount;
+                _mappingStrategy.Verify(
+                    ms =>
+                    ms.CreateSubjectTemplateForNoPrimaryKey(tableName, It.Is<IEnumerable<string>>(names => names.Count() == columnsCount)),
+                    Times.Once());
+            }
         }
     }
 }

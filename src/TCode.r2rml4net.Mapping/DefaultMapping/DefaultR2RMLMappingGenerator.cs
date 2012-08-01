@@ -64,10 +64,10 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
         {
             _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
 
-            var classIri = MappingStrategy.CreateUriForTable(MappingBaseUri, table.Name);
+            var classIri = MappingStrategy.CreateSubjectUri(MappingBaseUri, table.Name);
             if (table.PrimaryKey.Length == 0)
             {
-                string template = MappingStrategy.CreateTemplateForNoPrimaryKey(table.Name, table.Select(col => col.Name));
+                string template = MappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table.Name, table.Select(col => col.Name));
                 // empty primary key generates blank node subjects
                 _currentTriplesMapConfiguration.SubjectMap
                     .AddClass(classIri)
@@ -86,8 +86,7 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
 
         public void Visit(ColumnMetadata column)
         {
-            string predicateUriString = string.Format("{0}{1}#{2}", this.MappedDataBaseUri, column.Table.Name, column.Name);
-            Uri predicateUri = new Uri(predicateUriString);
+            Uri predicateUri = MappingStrategy.CreatePredicateUri(MappingBaseUri, column.Table.Name, column.Name);
 
             var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
@@ -131,7 +130,7 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
 
         private string CreateTemplateForPrimaryKey(string tableName, IEnumerable<string> primaryKey)
         {
-            string template = UrlEncode(MappingStrategy.CreateUriForTable(MappingBaseUri, tableName).ToString());
+            string template = UrlEncode(MappingStrategy.CreateSubjectUri(MappingBaseUri, tableName).ToString());
             template += "/" + string.Join(";", primaryKey.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
             return template;
         }
@@ -147,7 +146,7 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             if (!foreignKey.Any())
                 throw new ArgumentException("Empty foreign key", "foreignKey");
 
-            StringBuilder template = new StringBuilder(MappingStrategy.CreateUriForTable(MappingBaseUri, tableName) + "/");
+            StringBuilder template = new StringBuilder(MappingStrategy.CreateSubjectUri(MappingBaseUri, tableName) + "/");
             template.AppendFormat("{0}={{{1}}}", UrlEncode(referencedPrimaryKey.ElementAt(0)), foreignKey.ElementAt(0));
             for (int i = 1; i < foreignKey.Count(); i++)
             {
