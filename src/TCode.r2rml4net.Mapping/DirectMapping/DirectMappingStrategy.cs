@@ -1,22 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    public class DefaultMappingStrategy : MappingStrategyBase, IDirectMappingStrategy
+    public class DirectMappingStrategy : MappingStrategyBase, IDirectMappingStrategy
     {
         private ISubjectMappingStrategy _subjectMappingStrategy;
 
-        public DefaultMappingStrategy()
+        public DirectMappingStrategy()
             : this(new DirectMappingOptions())
         {
         }
 
-        public DefaultMappingStrategy(DirectMappingOptions options)
+        public DirectMappingStrategy(DirectMappingOptions options)
             : base(options)
         {
         }
@@ -48,7 +45,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             get
             {
                 if(_subjectMappingStrategy == null)
-                    _subjectMappingStrategy = new DefaultSubjectMapping(Options);
+                    _subjectMappingStrategy = new SubjectMappingStrategy(Options);
 
                 return _subjectMappingStrategy;
             }

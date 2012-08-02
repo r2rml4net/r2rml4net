@@ -55,12 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectMapping\DefaultColumnMapping.cs" />
-    <Compile Include="DirectMapping\DefaultForeignKeyMapping.cs" />
-    <Compile Include="DirectMapping\DefaultMappingStrategy.cs" />
-    <Compile Include="DirectMapping\DefaultR2RMLMappingGenerator.cs" />
+    <Compile Include="DirectMapping\ColumnMappingStrategy.cs" />
+    <Compile Include="DirectMapping\ForeignKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\DirectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\R2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
-    <Compile Include="DirectMapping\DefaultSubjectMapping.cs" />
+    <Compile Include="DirectMapping\SubjectMappingStrategy.cs" />
     <Compile Include="DirectMapping\DirectMappingHelper.cs" />
     <Compile Include="DirectMapping\DirectMappingOptions.cs" />
     <Compile Include="DirectMapping\MappingStrategyBase.cs" />

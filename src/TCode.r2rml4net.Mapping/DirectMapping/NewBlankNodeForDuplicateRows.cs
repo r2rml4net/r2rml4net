@@ -3,7 +3,7 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    public class NewBlankNodeForDuplicateRows : DefaultMappingStrategy
+    public class NewBlankNodeForDuplicateRows : DirectMappingStrategy
     {
         public NewBlankNodeForDuplicateRows()
             : this(new DirectMappingOptions())
@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         {
         }
 
-        #region Overrides of DefaultMappingStrategy
+        #region Overrides of DirectMappingStrategy
 
         public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {

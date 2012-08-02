@@ -3,7 +3,7 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    public class DefaultColumnMapping : IColumnMappingStrategy
+    public class ColumnMappingStrategy : IColumnMappingStrategy
     {
         #region Implementation of IColumnMappingStrategy
 

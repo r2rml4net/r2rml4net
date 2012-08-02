@@ -11,7 +11,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     [TestFixture]
     public class DefaultR2RMLMappingGeneratorStrategyTests
     {
-        private DefaultR2RMLMappingGenerator _generator;
+        private R2RMLMappingGenerator _generator;
         private Mock<IDatabaseMetadata> _databaseMetedata;
         private Mock<IDirectMappingStrategy> _mappingStrategy;
         private Mock<IForeignKeyMappingStrategy> _foreignKeyStrategy;
@@ -27,7 +27,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _mappingStrategy = new Mock<IDirectMappingStrategy>(MockBehavior.Strict);
             _foreignKeyStrategy = new Mock<IForeignKeyMappingStrategy>(MockBehavior.Strict);
             _columnStrategy = new Mock<IColumnMappingStrategy>(MockBehavior.Strict);
-            _generator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
+            _generator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
                 {
                     MappingStrategy = _mappingStrategy.Object,
                     ForeignKeyMappingStrategy = _foreignKeyStrategy.Object,

@@ -5,11 +5,11 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    public class DefaultForeignKeyMapping : MappingStrategyBase, IForeignKeyMappingStrategy
+    public class ForeignKeyMappingStrategy : MappingStrategyBase, IForeignKeyMappingStrategy
     {
         private ISubjectMappingStrategy _subjectMappingStrategy;
 
-        public DefaultForeignKeyMapping(DirectMappingOptions options)
+        public ForeignKeyMappingStrategy(DirectMappingOptions options)
             : base(options)
         {
         }
@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             get
             {
                 if (_subjectMappingStrategy == null)
-                    _subjectMappingStrategy = new DefaultSubjectMapping(Options);
+                    _subjectMappingStrategy = new SubjectMappingStrategy(Options);
 
                 return _subjectMappingStrategy;
             }
