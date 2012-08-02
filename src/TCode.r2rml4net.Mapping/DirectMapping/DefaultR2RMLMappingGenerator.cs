@@ -106,7 +106,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public void Visit(ColumnMetadata column)
         {
-            Uri predicateUri = ColumnMappingStrategy.CreatePredicateUri(MappingBaseUri, column.Table.Name, column.Name);
+            Uri predicateUri = ColumnMappingStrategy.CreatePredicateUri(MappingBaseUri, column);
 
             var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
@@ -124,8 +124,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             Uri foreignKeyRefUri = 
                 ForeignKeyMappingStrategy.CreateReferencePredicateUri(
                     MappingBaseUri,
-                    foreignKey.TableName,
-                    foreignKey.ForeignKeyColumns);
+                    foreignKey);
 
             foreignKeyMap.CreatePredicateMap()
                 .IsConstantValued(foreignKeyRefUri);
@@ -136,11 +135,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             }
             else
             {
-                var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(
-                    MappingBaseUri,
-                    foreignKey.ReferencedTableName,
-                    foreignKey.ForeignKeyColumns,
-                    foreignKey.ReferencedColumns);
+                var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(MappingBaseUri, foreignKey);
 
                 foreignKeyMap.CreateObjectMap()
                     .IsTemplateValued(templateForForeignKey);

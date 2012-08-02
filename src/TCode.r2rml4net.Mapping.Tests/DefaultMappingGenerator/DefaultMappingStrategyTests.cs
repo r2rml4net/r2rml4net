@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.DirectMapping;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
@@ -18,10 +18,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void GeneratesSubjectBlankNodesComposedOfAllColumns(int columnsCount, string columnSeparator, string expectedTemplate)
         {
             // given
-            var columns = new List<string>();
+            TableMetadata table = new TableMetadata { Name = "Table" };
             for (int i = 1; i <= columnsCount; i++)
             {
-                columns.Add("Column" + i);
+                table.Add(new ColumnMetadata { Name = "Column" + i });
             }
             _strategy = new DefaultSubjectMapping(new DirectMappingOptions
                 {
@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 });
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey("Table", columns);
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
             Assert.AreEqual(expectedTemplate, template);
@@ -39,14 +39,18 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void CanGenerateTemplatesWithRegularIdentifiers()
         {
             // given
-            var columns = new[] { "ColumnA", "Column B", "Yet another column" };
+            TableMetadata table = new TableMetadata { Name = "Table" };
+            foreach (var column in new[] { "ColumnA", "Column B", "Yet another column" })
+            {
+                table.Add(new ColumnMetadata { Name = column });
+            }
             _strategy = new DefaultSubjectMapping(new DirectMappingOptions
             {
                 UseDelimitedIdentifiers = false
             });
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey("Table", columns);
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
             Assert.AreEqual("Table_{ColumnA}_{Column B}_{Yet another column}", template);
@@ -58,9 +62,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         {
             // given
             _strategy = new DefaultSubjectMapping(new DirectMappingOptions());
+            var table = new TableMetadata { Name = "Table" };
+            foreach (var column in columns)
+            {
+                table.Add(new ColumnMetadata { Name = column });
+            }
 
             // when
-            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), "Table", columns);
+            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), table);
 
             // then
             Assert.AreEqual(expected, template);

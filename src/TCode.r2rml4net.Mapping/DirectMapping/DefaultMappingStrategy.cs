@@ -25,10 +25,8 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public virtual void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            string template = SubjectMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(
-                    table.Name,
-                    table.Select(col => col.Name));
-            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table.Name);
+            string template = SubjectMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode().IsTemplateValued(template);
@@ -36,12 +34,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table.Name);
+            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table);
 
-            string template = SubjectMappingStrategy.CreateSubjectTemplateForPrimaryKey(
-                baseUri,
-                table.Name,
-                table.PrimaryKey.Select(pk => pk.Name));
+            string template = SubjectMappingStrategy.CreateSubjectTemplateForPrimaryKey(baseUri, table);
 
             subjectMap.AddClass(classIri).IsTemplateValued(template);
         }

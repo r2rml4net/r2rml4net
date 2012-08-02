@@ -1,12 +1,13 @@
 using System;
-using System.Collections.Generic;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     public interface ISubjectMappingStrategy
     {
-        Uri CreateSubjectUri(Uri baseUri, string tableName);
-        string CreateSubjectTemplateForNoPrimaryKey(string tableName, IEnumerable<string> columns);
-        string CreateSubjectTemplateForPrimaryKey(Uri mappingBaseUri, string tableName, IEnumerable<string> primaryKeyColumns);
+        Uri CreateSubjectUri(Uri baseUri, TableMetadata table);
+        string CreateSubjectTemplateForNoPrimaryKey(TableMetadata table);
+        string CreateSubjectTemplateForPrimaryKey(Uri baseUri, TableMetadata table);
+        Uri CreateSubjectUri(Uri baseUri, ForeignKeyMetadata foreignKey);
     }
 }
