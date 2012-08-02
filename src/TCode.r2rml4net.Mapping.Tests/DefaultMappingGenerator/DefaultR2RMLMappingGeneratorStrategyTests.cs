@@ -74,14 +74,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private void TestStrategyUsage(TableCollection tables)
         {
             // given
-            _mappingStrategy.Setup(ms => ms.CreateSubjectUri(_mappingBaseUri, It.IsAny<string>()))
-                            .Returns(new Uri("http://template.uri"));
-            _mappingStrategy.Setup(ms => ms.CreateSubjectTemplateForNoPrimaryKey(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
-                            .Returns("template");
+            _mappingStrategy.Setup(ms => ms.CreateSubjectMapForPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
+            _mappingStrategy.Setup(ms => ms.CreateSubjectMapForNoPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
             _mappingStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<string>()))
                             .Returns(new Uri("http://predicate.uri"));
-            _mappingStrategy.Setup(ms => ms.CreateSubjectTemplateForPrimaryKey(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
-                            .Returns("template");
             _mappingStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                             .Returns(new Uri("http://ref.uri"));
             _mappingStrategy.Setup(ms =>
@@ -102,7 +98,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 var columnsCount = table.ColumnsCount;
                 _mappingStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
                                         Times.Exactly(columnsCount));
-                _mappingStrategy.Verify(ms => ms.CreateSubjectUri(_mappingBaseUri, tableName), Times.Once());
 
                 //if(table.ForeignKeys != null)
                 foreach (var fk in table.ForeignKeys)
@@ -117,29 +112,28 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                                                 fk1.ReferencedTableName,
                                                 fk1.ForeignKeyColumns,
                                                 fk1.ReferencedColumns));
-
-                    _mappingStrategy.Verify(ms => ms.CreateSubjectUri(_mappingBaseUri, fk1.ReferencedTableName), Times.Once());
                 }
             }
 
             foreach (var table in tables.Where(t => t.PrimaryKey.Length == 0))
             {
-                var tableName = table.Name;
-                var columnsCount = table.ColumnsCount;
-                _mappingStrategy.Verify(
-                    ms =>
-                    ms.CreateSubjectTemplateForNoPrimaryKey(tableName, It.Is<IEnumerable<string>>(names => names.Count() == columnsCount)),
-                    Times.Once());
+                TableMetadata table1 = table;
+                _mappingStrategy.Setup(ms =>
+                    ms.CreateSubjectMapForNoPrimaryKey(
+                    It.IsAny<ISubjectMapConfiguration>(),
+                    _mappingBaseUri,
+                    table1));
+
             }
 
             foreach (var table in tables.Where(t => t.PrimaryKey.Length > 0))
             {
-                var tableName = table.Name;
-                var columnsCount = table.PrimaryKey.Length;
-                _mappingStrategy.Verify(
-                    ms =>
-                    ms.CreateSubjectTemplateForPrimaryKey(_mappingBaseUri, tableName, It.Is<IEnumerable<string>>(names => names.Count() == columnsCount)),
-                    Times.Once());
+                TableMetadata table1 = table;
+                _mappingStrategy.Setup(ms =>
+                    ms.CreateSubjectMapForPrimaryKey(
+                    It.IsAny<ISubjectMapConfiguration>(),
+                    _mappingBaseUri,
+                    table1));
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 
@@ -56,29 +55,13 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         {
             _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
 
-            var classIri = MappingStrategy.CreateSubjectUri(MappingBaseUri, table.Name);
             if (table.PrimaryKey.Length == 0)
             {
-                string template = MappingStrategy.CreateSubjectTemplateForNoPrimaryKey(
-                    table.Name, 
-                    table.Select(col => col.Name));
-
-                // empty primary key generates blank node subjects
-                _currentTriplesMapConfiguration.SubjectMap
-                    .AddClass(classIri)
-                    .TermType.IsBlankNode()
-                    .IsTemplateValued(template);
+                MappingStrategy.CreateSubjectMapForNoPrimaryKey(_currentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
             }
             else
             {
-                string template = MappingStrategy.CreateSubjectTemplateForPrimaryKey(
-                    MappingBaseUri,
-                    table.Name,
-                    table.PrimaryKey.Select(pk => pk.Name));
-
-                _currentTriplesMapConfiguration.SubjectMap
-                    .AddClass(classIri)
-                    .IsTemplateValued(template);
+                MappingStrategy.CreateSubjectMapForPrimaryKey(_currentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
             }
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
@@ -11,5 +12,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         string CreateSubjectTemplateForPrimaryKey(Uri mappingBaseUri, string tableName, IEnumerable<string> primaryKeyColumns);
         Uri CreateReferencePredicateUri(Uri baseUri, string tableName, IEnumerable<string> foreignKeyColumns);
         string CreateReferenceObjectTemplate(Uri mappingBaseUri, string referencedTableName, IEnumerable<string> foreignKeyColumns, IEnumerable<string> referencedColumns);
+        void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table);
+        void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table);
     }
 }
