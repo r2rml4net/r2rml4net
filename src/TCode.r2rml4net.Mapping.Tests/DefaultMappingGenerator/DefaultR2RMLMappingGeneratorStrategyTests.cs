@@ -54,6 +54,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         }
 
         [Test]
+        public void TestForTableWithCompositePrimaryKey()
+        {
+            TestStrategyUsage(RelationalTestMappings.D008_1table1compositeprimarykey3columns);
+        }
+
+        [Test]
         public void TestForTableWithPrimaryKey()
         {
             TestStrategyUsage(RelationalTestMappings.D006_1table1primarykey1column);

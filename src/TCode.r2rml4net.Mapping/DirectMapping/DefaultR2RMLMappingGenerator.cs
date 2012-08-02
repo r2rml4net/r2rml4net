@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TCode.r2rml4net.RDB;
-using System.Web;
 using TCode.r2rml4net.RDF;
 
 #pragma warning disable
@@ -129,9 +126,5 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         }
 
         #endregion
-        string UrlEncode(string unescapedString)
-        {
-            return HttpUtility.UrlDecode(unescapedString).Replace(" ", "%20");
-        }
     }
 }
