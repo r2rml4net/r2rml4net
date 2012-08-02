@@ -17,7 +17,7 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
 
         public string CreateSubjectTemplateForNoPrimaryKey(string tableName, IEnumerable<string> columns)
         {
-            var joinedColumnNames = string.Join("_", columns);
+            var joinedColumnNames = string.Join("_", columns.Select(col => string.Format("{{{0}}}", col)));
             return string.Format("{0}_{1}", tableName, joinedColumnNames);
         }
 
