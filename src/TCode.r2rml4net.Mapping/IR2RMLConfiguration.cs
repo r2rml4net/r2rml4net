@@ -1,3 +1,5 @@
+using System;
+
 namespace TCode.r2rml4net.Mapping
 {
     /// <summary>
@@ -18,5 +20,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <param name="sqlQuery">a valid SQL query</param>
         ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery);
+
+        Uri BaseUri { get; }
     }
 }

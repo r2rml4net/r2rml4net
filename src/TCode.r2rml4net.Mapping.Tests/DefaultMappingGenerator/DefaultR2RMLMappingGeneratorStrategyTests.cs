@@ -17,7 +17,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private Mock<IDirectMappingStrategy> _mappingStrategy;
         private Mock<IR2RMLConfiguration> _configuration;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
-        private readonly Uri _mappedDataBaseUri = new Uri("http://data.uri/");
 
         [SetUp]
         public void Setup()
@@ -28,8 +27,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _generator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
                 {
                     MappingStrategy = _mappingStrategy.Object,
-                    MappingBaseUri = _mappingBaseUri,
-                    MappedDataBaseUri = _mappedDataBaseUri
+                    MappingBaseUri = _mappingBaseUri
                 };
             _configuration.Setup(conf => conf.CreateTriplesMapFromR2RMLView(It.IsAny<string>()))
                 .Returns(new MockConfiguration(_mappingBaseUri, _configuration.Object));
