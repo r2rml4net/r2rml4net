@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -82,15 +81,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForNoPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
-            _columnStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<string>()))
+            _columnStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<ColumnMetadata>()))
                            .Returns(new Uri("http://predicate.uri"));
-            _foreignKeyStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+            _foreignKeyStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<ForeignKeyMetadata>()))
                                .Returns(new Uri("http://ref.uri"));
-            _foreignKeyStrategy.Setup(ms => ms.CreateReferenceObjectTemplate(_mappingBaseUri,
-                                                                             It.IsAny<string>(),
-                                                                             It.IsAny<IEnumerable<string>>(),
-                                                                             It.IsAny<IEnumerable<string>>()))
-                .Returns("termplate");
+            _foreignKeyStrategy.Setup(ms => ms.CreateReferenceObjectTemplate(_mappingBaseUri, It.IsAny<ForeignKeyMetadata>()))
+                               .Returns("termplate");
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when
@@ -99,24 +95,18 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // then
             foreach (var table in tables)
             {
-                var tableName = table.Name;
-                var columnsCount = table.ColumnsCount;
-                _columnStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
-                                       Times.Exactly(columnsCount));
+                foreach (var column in table)
+                {
+                    ColumnMetadata column1 = column;
+                    _columnStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, column1), Times.Once());
+                }
 
                 //if(table.ForeignKeys != null)
                 foreach (var fk in table.ForeignKeys)
                 {
                     ForeignKeyMetadata fk1 = fk;
-                    _foreignKeyStrategy.Verify(ms =>
-                        ms.CreateReferencePredicateUri(_mappingBaseUri, tableName, fk1.ForeignKeyColumns),
-                        Times.Once());
-                    _foreignKeyStrategy.Verify(ms =>
-                                               ms.CreateReferenceObjectTemplate(
-                                                   _mappingBaseUri,
-                                                   fk1.ReferencedTableName,
-                                                   fk1.ForeignKeyColumns,
-                                                   fk1.ReferencedColumns));
+                    _foreignKeyStrategy.Verify(ms =>ms.CreateReferencePredicateUri(_mappingBaseUri, fk1),Times.Once());
+                    _foreignKeyStrategy.Verify(ms =>ms.CreateReferenceObjectTemplate(_mappingBaseUri,fk1));
                 }
             }
 

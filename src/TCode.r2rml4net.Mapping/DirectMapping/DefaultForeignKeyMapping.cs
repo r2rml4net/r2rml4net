@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
@@ -16,29 +16,26 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #region Implementation of IForeignKeyMappingStrategy
 
-        public virtual Uri CreateReferencePredicateUri(Uri baseUri, string tableName, IEnumerable<string> foreignKeyColumns)
+        public virtual Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            string uri = baseUri + DirectMappingHelper.UrlEncode(tableName) + "#ref-" + string.Join(".", foreignKeyColumns.Select(DirectMappingHelper.UrlEncode));
+            string uri = baseUri + DirectMappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(".", foreignKey.ForeignKeyColumns.Select(DirectMappingHelper.UrlEncode));
 
             return new Uri(DirectMappingHelper.UrlEncode(uri));
         }
 
-        public virtual string CreateReferenceObjectTemplate(Uri baseUri, string tableName, IEnumerable<string> foreignKey, IEnumerable<string> referencedPrimaryKey)
+        public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKeys)
         {
-            foreignKey = foreignKey.ToArray();
-            referencedPrimaryKey = referencedPrimaryKey.ToArray();
+            if (foreignKeys.ForeignKeyColumns.Length != foreignKeys.ReferencedColumns.Length)
+                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKeys), "foreignKeys");
 
-            if (foreignKey.Count() != referencedPrimaryKey.Count())
-                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", tableName), "foreignKey");
+            if (!foreignKeys.ForeignKeyColumns.Any())
+                throw new ArgumentException("Empty foreign key", "foreignKeys");
 
-            if (!foreignKey.Any())
-                throw new ArgumentException("Empty foreign key", "foreignKey");
-
-            StringBuilder template = new StringBuilder(SubjectMappingStrategy.CreateSubjectUri(baseUri, tableName) + "/");
-            template.AppendFormat("{0}={1}", DirectMappingHelper.UrlEncode(referencedPrimaryKey.ElementAt(0)), DirectMappingHelper.EncloseColumnName(foreignKey.ElementAt(0)));
-            for (int i = 1; i < foreignKey.Count(); i++)
+            StringBuilder template = new StringBuilder(SubjectMappingStrategy.CreateSubjectUri(baseUri, foreignKeys) + "/");
+            template.AppendFormat("{0}={1}", DirectMappingHelper.UrlEncode(foreignKeys.ReferencedColumns[0]), DirectMappingHelper.EncloseColumnName(foreignKeys.ForeignKeyColumns[0]));
+            for (int i = 1; i < foreignKeys.ForeignKeyColumns.Count(); i++)
             {
-                template.AppendFormat(";{0}={1}", DirectMappingHelper.UrlEncode(referencedPrimaryKey.ElementAt(i)), DirectMappingHelper.EncloseColumnName(foreignKey.ElementAt(i)));
+                template.AppendFormat(";{0}={1}", DirectMappingHelper.UrlEncode(foreignKeys.ReferencedColumns[i]), DirectMappingHelper.EncloseColumnName(foreignKeys.ForeignKeyColumns[i]));
             }
 
             return DirectMappingHelper.UrlEncode(template.ToString());

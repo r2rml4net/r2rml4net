@@ -20,7 +20,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table.Name);
+            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode();
