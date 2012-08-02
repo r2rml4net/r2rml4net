@@ -7,7 +7,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     /// <summary>
     /// Builds a R2RML graph from a relational database's schema
     /// </summary>
-    public class DefaultR2RMLMappingGenerator : IDatabaseMetadataVisitor
+    public class R2RMLMappingGenerator : IDatabaseMetadataVisitor
     {
         private readonly IDatabaseMetadata _databaseMetadataProvider;
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
@@ -15,12 +15,12 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private IDirectMappingStrategy _mappingStrategy;
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
-        private DirectMappingOptions _options;
+        private readonly DirectMappingOptions _options;
 
         /// <summary>
-        /// Creates <see cref="DefaultR2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
+        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DefaultR2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, DirectMappingOptions options)
+        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, DirectMappingOptions options)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
             this._r2RMLConfiguration = r2RMLConfiguration;
@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             MappingBaseUri = r2RMLConfiguration.BaseUri;
         }
 
-        public DefaultR2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
+        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
             :this(databaseMetadataProvider, r2RMLConfiguration, new DirectMappingOptions())
         {
             
@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             get
             {
                 if(_mappingStrategy == null)
-                    _mappingStrategy = new DefaultMappingStrategy(_options);
+                    _mappingStrategy = new DirectMappingStrategy(_options);
                 return _mappingStrategy;
             }
             set { _mappingStrategy = value; }
@@ -56,7 +56,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             get
             {
                 if (_foreignKeyMappingStrategy == null)
-                    _foreignKeyMappingStrategy = new DefaultForeignKeyMapping(_options); 
+                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy(_options); 
                 return _foreignKeyMappingStrategy;
             }
             set { _foreignKeyMappingStrategy = value; }
@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             get
             {
                 if (_columnMappingStrategy == null)
-                    _columnMappingStrategy = new DefaultColumnMapping();
+                    _columnMappingStrategy = new ColumnMappingStrategy();
                 return _columnMappingStrategy;
             }
             set { _columnMappingStrategy = value; }
