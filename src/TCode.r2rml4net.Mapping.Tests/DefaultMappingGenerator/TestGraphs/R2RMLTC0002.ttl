@@ -13,7 +13,7 @@
 	[ 
 	  rr:termType rr:BlankNode;  
 	  rr:class <http://example.com/Student>;
-	  rr:template "Student_{Int32}_{Varchar}_{NVarchar}_{Float}_{Double}_{Decimal}_{Money}_{Date}_{Time}_{DateTime}_{DateTime2}_{Boolean}_{Binary}_{Int16}_{Int64}"
+	  rr:template "Student_{\"Int32\"}_{\"Varchar\"}_{\"NVarchar\"}_{\"Float\"}_{\"Double\"}_{\"Decimal\"}_{\"Money\"}_{\"Date\"}_{\"Time\"}_{\"DateTime\"}_{\"DateTime2\"}_{\"Boolean\"}_{\"Binary\"}_{\"Int16\"}_{\"Int64\"}"
 	];
 
     rr:predicateObjectMap

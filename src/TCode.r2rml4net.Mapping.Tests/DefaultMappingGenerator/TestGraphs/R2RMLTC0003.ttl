@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "Student_{ID}_{Name}_{LastName}";
+	  rr:template "Student_{\"ID\"}_{\"Name\"}_{\"LastName\"}";
 	  rr:termType rr:BlankNode;  
 	  rr:class <http://example.com/Student>
 	];

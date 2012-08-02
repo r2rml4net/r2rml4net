@@ -15,6 +15,8 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private DefaultR2RMLMappingGenerator _generator;
         private Mock<IDatabaseMetadata> _databaseMetedata;
         private Mock<IDirectMappingStrategy> _mappingStrategy;
+        private Mock<IForeignKeyMappingStrategy> _foreignKeyStrategy;
+        private Mock<IColumnMappingStrategy> _columnStrategy;
         private Mock<IR2RMLConfiguration> _configuration;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
@@ -24,9 +26,13 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration = new Mock<IR2RMLConfiguration>();
             _databaseMetedata = new Mock<IDatabaseMetadata>();
             _mappingStrategy = new Mock<IDirectMappingStrategy>(MockBehavior.Strict);
+            _foreignKeyStrategy = new Mock<IForeignKeyMappingStrategy>(MockBehavior.Strict);
+            _columnStrategy = new Mock<IColumnMappingStrategy>(MockBehavior.Strict);
             _generator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
                 {
                     MappingStrategy = _mappingStrategy.Object,
+                    ForeignKeyMappingStrategy = _foreignKeyStrategy.Object,
+                    ColumnMappingStrategy = _columnStrategy.Object,
                     MappingBaseUri = _mappingBaseUri
                 };
             _configuration.Setup(conf => conf.CreateTriplesMapFromR2RMLView(It.IsAny<string>()))
@@ -76,16 +82,15 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForNoPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
-            _mappingStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<string>()))
-                            .Returns(new Uri("http://predicate.uri"));
-            _mappingStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
-                            .Returns(new Uri("http://ref.uri"));
-            _mappingStrategy.Setup(ms =>
-                                   ms.CreateReferenceObjectTemplate(_mappingBaseUri,
-                                                                    It.IsAny<string>(),
-                                                                    It.IsAny<IEnumerable<string>>(),
-                                                                    It.IsAny<IEnumerable<string>>()))
-                            .Returns("termplate");
+            _columnStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<string>()))
+                           .Returns(new Uri("http://predicate.uri"));
+            _foreignKeyStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                               .Returns(new Uri("http://ref.uri"));
+            _foreignKeyStrategy.Setup(ms => ms.CreateReferenceObjectTemplate(_mappingBaseUri,
+                                                                             It.IsAny<string>(),
+                                                                             It.IsAny<IEnumerable<string>>(),
+                                                                             It.IsAny<IEnumerable<string>>()))
+                .Returns("termplate");
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when
@@ -96,22 +101,22 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 var tableName = table.Name;
                 var columnsCount = table.ColumnsCount;
-                _mappingStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
-                                        Times.Exactly(columnsCount));
+                _columnStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, tableName, It.IsAny<string>()),
+                                       Times.Exactly(columnsCount));
 
                 //if(table.ForeignKeys != null)
                 foreach (var fk in table.ForeignKeys)
                 {
                     ForeignKeyMetadata fk1 = fk;
-                    _mappingStrategy.Verify(ms =>
+                    _foreignKeyStrategy.Verify(ms =>
                         ms.CreateReferencePredicateUri(_mappingBaseUri, tableName, fk1.ForeignKeyColumns),
                         Times.Once());
-                    _mappingStrategy.Verify(ms =>
-                                            ms.CreateReferenceObjectTemplate(
-                                                _mappingBaseUri,
-                                                fk1.ReferencedTableName,
-                                                fk1.ForeignKeyColumns,
-                                                fk1.ReferencedColumns));
+                    _foreignKeyStrategy.Verify(ms =>
+                                               ms.CreateReferenceObjectTemplate(
+                                                   _mappingBaseUri,
+                                                   fk1.ReferencedTableName,
+                                                   fk1.ForeignKeyColumns,
+                                                   fk1.ReferencedColumns));
                 }
             }
 

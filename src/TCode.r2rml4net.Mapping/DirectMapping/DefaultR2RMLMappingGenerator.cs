@@ -24,7 +24,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             this._r2RMLConfiguration = r2RMLConfiguration;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
-            MappingStrategy = new DefaultMappingStrategy();
+
+            var mappingStrategy = new DefaultMappingStrategy();
+            MappingStrategy = mappingStrategy;
+            ForeignKeyMappingStrategy = mappingStrategy;
+            ColumnMappingStrategy = mappingStrategy;
         }
 
         /// <summary>
@@ -33,6 +37,8 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         public Uri MappingBaseUri { get; set; }
 
         public IDirectMappingStrategy MappingStrategy { get; set; }
+        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy { get; set; }
+        public IColumnMappingStrategy ColumnMappingStrategy { get; set; }
 
         /// <summary>
         /// Generates default R2RML mappings based on database metadata
@@ -67,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public void Visit(ColumnMetadata column)
         {
-            Uri predicateUri = MappingStrategy.CreatePredicateUri(MappingBaseUri, column.Table.Name, column.Name);
+            Uri predicateUri = ColumnMappingStrategy.CreatePredicateUri(MappingBaseUri, column.Table.Name, column.Name);
 
             var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
@@ -83,7 +89,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
 
             Uri foreignKeyRefUri = 
-                MappingStrategy.CreateReferencePredicateUri(
+                ForeignKeyMappingStrategy.CreateReferencePredicateUri(
                     MappingBaseUri,
                     foreignKey.TableName,
                     foreignKey.ForeignKeyColumns);
@@ -97,7 +103,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             }
             else
             {
-                var templateForForeignKey = MappingStrategy.CreateReferenceObjectTemplate(
+                var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(
                     MappingBaseUri,
                     foreignKey.ReferencedTableName,
                     foreignKey.ForeignKeyColumns,

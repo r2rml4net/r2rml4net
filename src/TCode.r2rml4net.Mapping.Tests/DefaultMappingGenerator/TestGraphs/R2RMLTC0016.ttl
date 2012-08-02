@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/Patient/ID={ID}";
+	  rr:template "http://example.com/Patient/ID={\"ID\"}";
 	  rr:class <http://example.com/Patient>;
 	];
 

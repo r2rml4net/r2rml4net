@@ -8,13 +8,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     [TestFixture]
     public class DefaultMappingStrategyTests
     {
-        DefaultMappingStrategy _strategy;
-
-        [SetUp]
-        public void Setup()
-        {
-            _strategy = new DefaultMappingStrategy();
-        }
+        DefaultSubjectMappingStrategy _strategy;
 
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidTriplesMapException))]
         [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
@@ -29,7 +23,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 columns.Add("Column" + i);
             }
-            _strategy.Options.TemplateSeparator = columnSeparator;
+            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions
+                {
+                    TemplateSeparator = columnSeparator
+                });
 
             // when
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey("Table", columns);
@@ -43,7 +40,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         {
             // given
             var columns = new[] { "ColumnA", "Column B", "Yet another column" };
-            _strategy.Options.UseDelimitedIdentifiers = false;
+            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions
+            {
+                UseDelimitedIdentifiers = false
+            });
 
             // when
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey("Table", columns);
@@ -56,6 +56,9 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [TestCase("http://www.example.com/", new[] { "PK 1", "PK2" }, "http://www.example.com/Table/PK%201={\"PK 1\"};PK2={\"PK2\"}")]
         public void GeneratesSubjectTemplateFromPrimaryKey(string baseUriString, string[] columns, string expected)
         {
+            // given
+            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions());
+
             // when
             var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), "Table", columns);
 
