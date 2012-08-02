@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/Country/Code={Code};Lan={Lan}";
+	  rr:template "http://example.com/Country/Code={\"Code\"};Lan={\"Lan\"}";
 	  rr:class <http://example.com/Country>;
 	];
 

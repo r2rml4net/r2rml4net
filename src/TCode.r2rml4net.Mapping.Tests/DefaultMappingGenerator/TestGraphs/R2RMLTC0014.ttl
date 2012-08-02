@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/EMP/empno={empno}";
+	  rr:template "http://example.com/EMP/empno={\"empno\"}";
 	  rr:class <http://example.com/EMP>
 	];
 
@@ -59,7 +59,7 @@
 	[ 
 	  rr:termType rr:BlankNode ;
 	  rr:class <http://example.com/LIKES> ;
-	  rr:template "LIKES_{id}_{likeType}_{likedObj}";
+	  rr:template "LIKES_{\"id\"}_{\"likeType\"}_{\"likedObj\"}";
 	];
 
     rr:predicateObjectMap
@@ -90,7 +90,7 @@
 	[ 
 	  rr:termType rr:BlankNode ;
 	  rr:class <http://example.com/DEPT>;
-	  rr:template "DEPT_{deptno}_{dname}_{loc}"
+	  rr:template "DEPT_{\"deptno\"}_{\"dname\"}_{\"loc\"}"
 	];
 
     rr:predicateObjectMap

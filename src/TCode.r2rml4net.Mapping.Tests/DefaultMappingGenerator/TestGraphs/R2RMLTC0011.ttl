@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/Student/ID={ID}";
+	  rr:template "http://example.com/Student/ID={\"ID\"}";
 	  rr:class <http://example.com/Student>
 	];
 
@@ -39,7 +39,7 @@
 
 	rr:subjectMap
 	[
-	  rr:template "http://example.com/Sport/ID={ID}";
+	  rr:template "http://example.com/Sport/ID={\"ID\"}";
 	  rr:class <http://example.com/Sport>
 	];
 
@@ -63,7 +63,7 @@
 
 	rr:subjectMap
 	[
-	  rr:template "http://example.com/Student_Sport/ID_Student={ID_Student};ID_Sport={ID_Sport}";
+	  rr:template "http://example.com/Student_Sport/ID_Student={\"ID_Student\"};ID_Sport={\"ID_Sport\"}";
 	  rr:class <http://example.com/Student_Sport>
 	];
 
@@ -82,12 +82,12 @@
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Sport> ] ; 
-      rr:objectMap [ rr:template "http://example.com/Sport/ID={ID_Sport}"; ]
+      rr:objectMap [ rr:template "http://example.com/Sport/ID={\"ID_Sport\"}"; ]
     ];
 
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/Student_Sport#ref-ID_Student> ] ; 
-      rr:objectMap [ rr:template "http://example.com/Student/ID={ID_Student}"; ]
+      rr:objectMap [ rr:template "http://example.com/Student/ID={\"ID_Student\"}"; ]
     ]
 	.

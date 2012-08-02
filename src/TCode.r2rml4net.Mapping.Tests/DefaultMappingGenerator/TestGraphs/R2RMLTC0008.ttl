@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/Student/Name={Name};LastName={LastName}";  
+	  rr:template "http://example.com/Student/Name={\"Name\"};LastName={\"LastName\"}";  
 	  rr:class <http://example.com/Student>
 	];
 

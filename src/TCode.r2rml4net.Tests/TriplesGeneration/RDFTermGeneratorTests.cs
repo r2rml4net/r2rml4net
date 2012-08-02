@@ -651,5 +651,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_graphMap.Object, _logicalRow.Object));
         }
+
+        [Test]
+        public void ThrowsWhenTermIsNeitherColumnNorTemplateNorConstantValue()
+        {
+            // given
+            _termMap.Setup(tm => tm.IsConstantValued).Returns(false);
+            _termMap.Setup(tm => tm.IsTemplateValued).Returns(false);
+            _termMap.Setup(tm => tm.IsColumnValued).Returns(false);
+
+            // then
+            Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
+        }
     }
 }

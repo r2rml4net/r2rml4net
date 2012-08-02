@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/植物/名={名};使用部={使用部}";
+	  rr:template "http://example.com/植物/名={\"名\"};使用部={\"使用部\"}";
 	  rr:class <http://example.com/植物>;
 	];
 
@@ -41,7 +41,7 @@
 	[ 
 	  rr:termType rr:BlankNode ;
 	  rr:class <http://example.com/成分>;
-	  rr:template "成分_{植物名}_{使用部}_{皿}";
+	  rr:template "成分_{\"植物名\"}_{\"使用部\"}_{\"皿\"}";
 	];
 
     rr:predicateObjectMap
@@ -65,6 +65,6 @@
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/成分#ref-植物名.使用部> ] ; 
-      rr:objectMap [ rr:template "http://example.com/植物/名={植物名};使用部={使用部}" ]
+      rr:objectMap [ rr:template "http://example.com/植物/名={\"植物名\"};使用部={\"使用部\"}" ]
     ]
     .

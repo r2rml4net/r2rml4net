@@ -58,8 +58,15 @@
     <Compile Include="DirectMapping\DefaultMappingStrategy.cs" />
     <Compile Include="DirectMapping\DefaultR2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
+    <Compile Include="DirectMapping\DefaultSubjectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\DirectMappingHelper.cs" />
     <Compile Include="DirectMapping\DirectMappingOptions.cs" />
+    <Compile Include="DirectMapping\DirectMappingStrategyBase.cs" />
     <Compile Include="DirectMapping\IDirectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IForeignKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IColumnMappingStrategy.cs" />
+    <Compile Include="DirectMapping\ISubjectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\NewBlankNodeForDuplicateRows.cs" />
     <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="IGraphMapParent.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />

@@ -47,9 +47,12 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             var logicalRowWrapped = new UndelimitedColumnsDataRecordWrapper(logicalRow);
 
+            if(!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
+                throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
+
             if (termMap.IsConstantValued)
             {
-                node = CreateConstantValue(termMap);
+                node = CreateNodeFromConstant(termMap);
             }
             else if (termMap.IsColumnValued)
             {
@@ -69,7 +72,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #endregion
 
-        private INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
+        protected INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
         {
             if (string.IsNullOrWhiteSpace(termMap.Template))
                 throw new InvalidTemplateException(termMap);
@@ -90,34 +93,35 @@ namespace TCode.r2rml4net.TriplesGeneration
             return GenerateTermForValue(termMap, value);
         }
 
-        private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
+        protected INode CreateNodeFromConstant(ITermMap termMap)
         {
-            try
+            var uriValuedTermMap = termMap as IUriValuedTermMap;
+            if (uriValuedTermMap != null)
             {
-                return TemplateReplaceRegex.Replace(template, match => ReplaceColumnReference(match, logicalRow));
+                if (uriValuedTermMap.URI == null)
+                    throw new InvalidTermException(termMap, "IRI-valued term map must have IRI set");
+
+                return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
             }
-            catch (ArgumentNullException)
+
+            var objectMap = termMap as IObjectMap;
+            if (objectMap != null)
             {
-                return null;
+                if (objectMap.URI != null && objectMap.Literal != null)
+                    throw new InvalidTermException(termMap, "Object map's value cannot be both IRI and literal.");
+
+                if (objectMap.URI != null)
+                    return NodeFactory.CreateUriNode(objectMap.URI);
+                if (objectMap.Literal != null)
+                    return NodeFactory.CreateLiteralNode(objectMap.Literal);
+
+                throw new InvalidTermException(termMap, "Neither IRI nor literal was set");
             }
+
+            return null;
         }
 
-        private string ReplaceColumnReference(Match match, IDataRecord logicalRow)
-        {
-            var columnName = match.Captures[0].Value.TrimStart('{').TrimEnd('}');
-            int columnIndex = logicalRow.GetOrdinal(columnName);
-
-            if (logicalRow.IsDBNull(columnIndex))
-            {
-                Log.LogNullValueForColumn(columnName);
-                throw new ArgumentNullException();
-            }
-
-            Uri datatype;
-            return SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out datatype);
-        }
-
-        private INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
+        protected INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
         {
             int columnIndex;
             try
@@ -179,6 +183,33 @@ namespace TCode.r2rml4net.TriplesGeneration
             throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-valued");
         }
 
+        private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
+        {
+            try
+            {
+                return TemplateReplaceRegex.Replace(template, match => ReplaceColumnReference(match, logicalRow));
+            }
+            catch (ArgumentNullException)
+            {
+                return null;
+            }
+        }
+
+        private string ReplaceColumnReference(Match match, IDataRecord logicalRow)
+        {
+            var columnName = match.Captures[0].Value.TrimStart('{').TrimEnd('}');
+            int columnIndex = logicalRow.GetOrdinal(columnName);
+
+            if (logicalRow.IsDBNull(columnIndex))
+            {
+                Log.LogNullValueForColumn(columnName);
+                throw new ArgumentNullException();
+            }
+
+            Uri datatype;
+            return SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out datatype);
+        }
+
         private ILiteralNode GenerateTermForLiteral(ITermMap termMap, string value, Uri datatypeUriOverride = null)
         {
             if (!(termMap is ILiteralTermMap))
@@ -197,34 +228,6 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return NodeFactory.CreateLiteralNode(value, datatypeUri);
 
             return NodeFactory.CreateLiteralNode(value);
-        }
-
-        private INode CreateConstantValue(ITermMap termMap)
-        {
-            var uriValuedTermMap = termMap as IUriValuedTermMap;
-            if (uriValuedTermMap != null)
-            {
-                if (uriValuedTermMap.URI == null)
-                    throw new InvalidTermException(termMap, "IRI-valued term map must have IRI set");
-
-                return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
-            }
-
-            var objectMap = termMap as IObjectMap;
-            if (objectMap != null)
-            {
-                if (objectMap.URI != null && objectMap.Literal != null)
-                    throw new InvalidTermException(termMap, "Object map's value cannot be both IRI and literal.");
-
-                if (objectMap.URI != null)
-                    return NodeFactory.CreateUriNode(objectMap.URI);
-                if (objectMap.Literal != null)
-                    return NodeFactory.CreateLiteralNode(objectMap.Literal);
-
-                throw new InvalidTermException(termMap, "Neither IRI nor literal was set");
-            }
-
-            return null;
         }
     }
 }
