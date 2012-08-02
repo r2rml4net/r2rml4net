@@ -27,8 +27,7 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
             this._databaseMetadataProvider = databaseMetadataProvider;
             this._r2RMLConfiguration = r2RMLConfiguration;
 
-            MappingBaseUri = new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/");
-            MappedDataBaseUri = new Uri("http://example.com/");
+            MappingBaseUri = r2RMLConfiguration.BaseUri;
             MappingStrategy = new DefaultMappingStrategy();
         }
 
@@ -36,10 +35,6 @@ namespace TCode.r2rml4net.Mapping.DefaultMapping
         /// R2RML graph's base URI
         /// </summary>
         public Uri MappingBaseUri { get; set; }
-        /// <summary>
-        /// Base URI used to generate triples' subjects
-        /// </summary>
-        public Uri MappedDataBaseUri { get; set; }
 
         public IDirectMappingStrategy MappingStrategy { get; set; }
 

@@ -22,7 +22,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _configuration = new R2RMLConfiguration(new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/"));
+            _configuration = new R2RMLConfiguration(new Uri("http://example.com/"));
             _defaultR2RMLMappingGenerator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
         }
 
