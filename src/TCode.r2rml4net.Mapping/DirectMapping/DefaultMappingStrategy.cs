@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
@@ -60,6 +61,29 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             }
 
             return UrlEncode(template.ToString());
+        }
+
+        public void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
+        {
+            string template = CreateSubjectTemplateForNoPrimaryKey(
+                    table.Name,
+                    table.Select(col => col.Name));
+            var classIri = CreateSubjectUri(baseUri, table.Name);
+
+            // empty primary key generates blank node subjects
+            subjectMap.AddClass(classIri).TermType.IsBlankNode().IsTemplateValued(template);
+        }
+
+        public void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
+        {
+            var classIri = CreateSubjectUri(baseUri, table.Name);
+
+            string template = CreateSubjectTemplateForPrimaryKey(
+                baseUri,
+                table.Name,
+                table.PrimaryKey.Select(pk => pk.Name));
+
+            subjectMap.AddClass(classIri).IsTemplateValued(template);
         }
 
         #endregion
