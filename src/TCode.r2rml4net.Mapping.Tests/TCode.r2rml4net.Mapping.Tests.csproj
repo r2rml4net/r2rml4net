@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultMappingGenerator\ColumnMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
