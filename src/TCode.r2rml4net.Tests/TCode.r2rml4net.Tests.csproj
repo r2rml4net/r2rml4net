@@ -39,9 +39,9 @@
     <Reference Include="DatabaseSchemaReader">
       <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
     </Reference>
-    <Reference Include="dotNetRDF, Version=0.7.0.2246, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="dotNetRDF, Version=0.7.1.2329, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotNetRDF.0.7.1\lib\net40\dotNetRDF.dll</HintPath>
+      <HintPath>..\..\lib\dotNetRDF.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\dotNetRDF.0.7.0\lib\net40\HtmlAgilityPack.dll</HintPath>

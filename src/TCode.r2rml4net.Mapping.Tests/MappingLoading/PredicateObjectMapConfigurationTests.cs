@@ -3,6 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using VDS.RDF;
 using Moq;
+using VDS.RDF.Parsing;
+using VDS.RDF.Query;
+using VDS.RDF.Query.Datasets;
+using VDS.RDF.Update;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
@@ -131,10 +135,10 @@ ex:PredicateObjectMap rr:objectMap [
 
             // then
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.ObjectMaps.ElementAt(0).URI);
-            Assert.AreEqual("http://data.example.com/user/{EMPNO}", predicateObjectMap.ObjectMaps.ElementAt(1).Template);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(1).Node);
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => new Uri("http://www.example.com/Employee").Equals(map.URI)));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => "http://data.example.com/user/{EMPNO}".Equals(map.Template)));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
         }
 
         [Test]
@@ -156,10 +160,34 @@ ex:PredicateObjectMap rr:object ex:Employee, ex:Worker .");
 
             // then
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.ObjectMaps.ElementAt(0).URI);
-            Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.ObjectMaps.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.ObjectMaps.Cast<ObjectMapConfiguration>().ElementAt(1).Node);
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
+        }
+
+        [Test]
+        public void CanBeInitializedWithObjectMapsUsingShortcutWhenBlankNodeIsUsed()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap _:blank .
+_:blank rr:object ex:Employee, ex:Worker .");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+
+            // when
+            var predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph, graph.GetBlankNode("blank"));
+            predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
+
+            // then
+            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
         }
 
         [Test]
@@ -189,6 +217,64 @@ ex:refObjectMap rr:parentTriplesMap ex:TriplesMap2 .");
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
             Assert.AreEqual(1, predicateObjectMap.RefObjectMaps.Count());
             Assert.AreEqual(graph.CreateUriNode("ex:refObjectMap"), predicateObjectMap.RefObjectMaps.Cast<RefObjectMapConfiguration>().ElementAt(0).Node);
+        }
+
+        private const string InitialGraph = 
+@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap _:blank .
+_:blank rr:object ex:Employee, ex:Worker .";
+
+        private const string ReplaceConstantsSparql =
+@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
+
+DELETE { ?map rr:object ?value . }
+INSERT { ?map rr:objectMap [ rr:constant ?value ] . }
+WHERE { ?map rr:object ?value }";
+
+        private const string QuerySparql =
+@"prefix ex: <http://www.example.com/>
+prefix rr: <http://www.w3.org/ns/r2rml#>
+
+select *
+where
+{
+ex:triplesMap rr:predicateObjectMap ?map .
+?map rr:constant ?value
+}";
+
+        const string ExpectedGraph =
+@"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap _:blank.
+_:blank rr:objectMap _:autos1.
+_:autos1 rr:constant ex:Employee.
+_:autos2 rr:constant ex:Worker.
+_:blank rr:objectMap _:autos2.";
+
+        [Test]
+        public void Test()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(InitialGraph);
+            IGraph expectedGraph = new Graph();
+            expectedGraph.LoadFromString(ExpectedGraph);
+
+            // when
+            TripleStore store = new TripleStore();
+            store.Add(graph);
+
+            var dataset = new InMemoryDataset(store, graph.BaseUri);
+            ISparqlUpdateProcessor processor = new LeviathanUpdateProcessor(dataset);
+            var updateParser = new SparqlUpdateParser();
+
+            processor.ProcessCommandSet(updateParser.ParseFromString(ReplaceConstantsSparql));
+
+            // then
+            Assert.IsTrue(((SparqlResultSet)graph.ExecuteQuery(QuerySparql)).Any()); // this fails
         }
     }
 }
