@@ -58,6 +58,7 @@
     <Compile Include="DirectMapping\DefaultMappingStrategy.cs" />
     <Compile Include="DirectMapping\DefaultR2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
+    <Compile Include="DirectMapping\DirectMappingOptions.cs" />
     <Compile Include="DirectMapping\IDirectMappingStrategy.cs" />
     <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="IGraphMapParent.cs" />
