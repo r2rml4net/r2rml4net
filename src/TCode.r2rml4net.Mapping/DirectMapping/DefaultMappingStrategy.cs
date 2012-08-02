@@ -7,8 +7,15 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    class DefaultMappingStrategy : IDirectMappingStrategy
+    public class DefaultMappingStrategy : IDirectMappingStrategy
     {
+        private readonly DirectMappingOptions _options;
+
+        public DefaultMappingStrategy()
+        {
+            _options = new DirectMappingOptions();
+        }
+
         #region Implementation of IDirectMappingStrategy
 
         public Uri CreateSubjectUri(Uri baseUri, string tableName)
@@ -18,8 +25,13 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public string CreateSubjectTemplateForNoPrimaryKey(string tableName, IEnumerable<string> columns)
         {
-            var joinedColumnNames = string.Join("_", columns.Select(col => string.Format("{{{0}}}", col)));
-            return string.Format("{0}_{1}", tableName, joinedColumnNames);
+            var columnsArray = columns as string[] ?? columns.ToArray();
+
+            if (!columnsArray.Any())
+                throw new InvalidTriplesMapException(string.Format("No columns for table {0}", tableName));
+
+            var joinedColumnNames = string.Join(Options.TemplateSeparator, columnsArray.Select(EncloseColumnName));
+            return string.Format("{0}{1}{2}", tableName, Options.TemplateSeparator, joinedColumnNames);
         }
 
         public Uri CreatePredicateUri(Uri baseUri, string tableName, string columnName)
@@ -31,7 +43,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         public string CreateSubjectTemplateForPrimaryKey(Uri baseUri, string tableName, IEnumerable<string> primaryKeyColumns)
         {
             string template = UrlEncode(CreateSubjectUri(baseUri, tableName).ToString());
-            template += "/" + string.Join(";", primaryKeyColumns.Select(pk => string.Format("{0}={{{1}}}", UrlEncode(pk), pk)));
+            template += "/" + string.Join(";", primaryKeyColumns.Select(pk => string.Format("{0}={1}", UrlEncode(pk), EncloseColumnName(pk))));
             return template;
         }
 
@@ -88,9 +100,27 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #endregion
 
+        public DirectMappingOptions Options
+        {
+            get { return _options; }
+        }
+
         protected string UrlEncode(string unescapedString)
         {
             return HttpUtility.UrlDecode(unescapedString).Replace(" ", "%20");
+        }
+
+        protected virtual string DelimitIdentifier(string identifier)
+        {
+            if (Options.UseDelimitedIdentifiers)
+                return string.Format("{0}{1}{2}", Options.SqlIdentifierLeftDelimiter, identifier, Options.SqlIdentifierRightDelimiter);
+
+            return identifier;
+        }
+
+        protected virtual string EncloseColumnName(string columnName)
+        {
+            return string.Format("{{{0}}}", DelimitIdentifier(columnName));
         }
     }
 }
