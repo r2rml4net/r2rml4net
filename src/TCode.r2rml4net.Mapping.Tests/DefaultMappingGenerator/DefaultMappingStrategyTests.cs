@@ -8,7 +8,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     [TestFixture]
     public class DefaultMappingStrategyTests
     {
-        DefaultSubjectMappingStrategy _strategy;
+        DefaultSubjectMapping _strategy;
 
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidTriplesMapException))]
         [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
@@ -23,7 +23,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 columns.Add("Column" + i);
             }
-            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions
+            _strategy = new DefaultSubjectMapping(new DirectMappingOptions
                 {
                     TemplateSeparator = columnSeparator
                 });
@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         {
             // given
             var columns = new[] { "ColumnA", "Column B", "Yet another column" };
-            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions
+            _strategy = new DefaultSubjectMapping(new DirectMappingOptions
             {
                 UseDelimitedIdentifiers = false
             });
@@ -57,7 +57,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void GeneratesSubjectTemplateFromPrimaryKey(string baseUriString, string[] columns, string expected)
         {
             // given
-            _strategy = new DefaultSubjectMappingStrategy(new DirectMappingOptions());
+            _strategy = new DefaultSubjectMapping(new DirectMappingOptions());
 
             // when
             var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), "Table", columns);
