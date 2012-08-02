@@ -2,8 +2,6 @@
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 
-#pragma warning disable
-
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     /// <summary>
@@ -14,21 +12,27 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private readonly IDatabaseMetadata _databaseMetadataProvider;
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
         private ITriplesMapConfiguration _currentTriplesMapConfiguration;
+        private IDirectMappingStrategy _mappingStrategy;
+        private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
+        private IColumnMappingStrategy _columnMappingStrategy;
+        private DirectMappingOptions _options;
 
         /// <summary>
         /// Creates <see cref="DefaultR2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public DefaultR2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
+        public DefaultR2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, DirectMappingOptions options)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
             this._r2RMLConfiguration = r2RMLConfiguration;
+            _options = options;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
+        }
 
-            var mappingStrategy = new DefaultMappingStrategy();
-            MappingStrategy = mappingStrategy;
-            ForeignKeyMappingStrategy = mappingStrategy;
-            ColumnMappingStrategy = mappingStrategy;
+        public DefaultR2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
+            :this(databaseMetadataProvider, r2RMLConfiguration, new DirectMappingOptions())
+        {
+            
         }
 
         /// <summary>
@@ -36,9 +40,38 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         /// </summary>
         public Uri MappingBaseUri { get; set; }
 
-        public IDirectMappingStrategy MappingStrategy { get; set; }
-        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy { get; set; }
-        public IColumnMappingStrategy ColumnMappingStrategy { get; set; }
+        public IDirectMappingStrategy MappingStrategy
+        {
+            get
+            {
+                if(_mappingStrategy == null)
+                    _mappingStrategy = new DefaultMappingStrategy(_options);
+                return _mappingStrategy;
+            }
+            set { _mappingStrategy = value; }
+        }
+
+        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy
+        {
+            get
+            {
+                if (_foreignKeyMappingStrategy == null)
+                    _foreignKeyMappingStrategy = new DefaultForeignKeyMapping(_options); 
+                return _foreignKeyMappingStrategy;
+            }
+            set { _foreignKeyMappingStrategy = value; }
+        }
+
+        public IColumnMappingStrategy ColumnMappingStrategy
+        {
+            get
+            {
+                if (_columnMappingStrategy == null)
+                    _columnMappingStrategy = new DefaultColumnMapping();
+                return _columnMappingStrategy;
+            }
+            set { _columnMappingStrategy = value; }
+        }
 
         /// <summary>
         /// Generates default R2RML mappings based on database metadata

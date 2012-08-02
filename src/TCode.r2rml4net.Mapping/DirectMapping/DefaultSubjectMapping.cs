@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    public class DefaultSubjectMappingStrategy : DirectMappingStrategyBase, ISubjectMappingStrategy
+    public class DefaultSubjectMapping : MappingStrategyBase, ISubjectMappingStrategy
     {
-        public DefaultSubjectMappingStrategy(DirectMappingOptions options)
+        public DefaultSubjectMapping(DirectMappingOptions options)
             : base(options)
         {
         }
