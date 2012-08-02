@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TCode.r2rml4net.Mapping.DefaultMapping
+namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     public interface IDirectMappingStrategy
     {

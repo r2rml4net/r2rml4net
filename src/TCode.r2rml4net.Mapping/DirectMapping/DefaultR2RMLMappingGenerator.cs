@@ -8,7 +8,7 @@ using TCode.r2rml4net.RDF;
 
 #pragma warning disable
 
-namespace TCode.r2rml4net.Mapping.DefaultMapping
+namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     /// <summary>
     /// Builds a R2RML graph from a relational database's schema

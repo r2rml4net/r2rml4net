@@ -55,10 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultMapping\DefaultMappingStrategy.cs" />
-    <Compile Include="DefaultMapping\DefaultR2RMLMappingGenerator.cs" />
+    <Compile Include="DirectMapping\DefaultMappingStrategy.cs" />
+    <Compile Include="DirectMapping\DefaultR2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
-    <Compile Include="DefaultMapping\IDirectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IDirectMappingStrategy.cs" />
     <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="IGraphMapParent.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />

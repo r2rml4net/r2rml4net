@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace TCode.r2rml4net.Mapping.DefaultMapping
+namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     class DefaultMappingStrategy : IDirectMappingStrategy
     {
