@@ -71,20 +71,16 @@ namespace TCode.r2rml4net.Mapping
 SELECT ?predObj ?objectMap  
 WHERE
 { 
-    { 
-        @triplesMap rr:predicateObjectMap ?predObj .
-        ?predObj rr:objectMap ?objectMap 
-        FILTER NOT EXISTS 
-        {
-            ?objectMap rr:parentTriplesMap ?triplesMap 
-        } 
-    } 
+    @triplesMap rr:predicateObjectMap ?predObj .
+    ?predObj rr:objectMap ?objectMap .
+    optional { ?objectMap rr:parentTriplesMap ?triplesMap }
+    FILTER(!BOUND(?triplesMap))
 }");
             query.SetParameter("triplesMap", TriplesMap.Node);
             query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
             query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
-
+            
             foreach (var result in resultSet.Where(result => result["predObj"].Equals(Node)))
             {
                 var subConfiguration = new ObjectMapConfiguration(TriplesMap, this, R2RMLMappings, result["objectMap"]);
