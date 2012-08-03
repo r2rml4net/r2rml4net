@@ -18,24 +18,33 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public virtual Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            string uri = baseUri + DirectMappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(".", foreignKey.ForeignKeyColumns.Select(DirectMappingHelper.UrlEncode));
+            if (baseUri == null)
+                throw new ArgumentNullException("baseUri");
+            if (foreignKey == null)
+                throw new ArgumentNullException("foreignKey");
+            if (string.IsNullOrWhiteSpace(foreignKey.TableName))
+                throw new ArgumentException("Invalid referenced table's name");
+            if (!foreignKey.ForeignKeyColumns.Any())
+                throw new ArgumentException("Empty foreign key", "foreignKey");
+
+            string uri = baseUri + DirectMappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(";", foreignKey.ForeignKeyColumns.Select(DirectMappingHelper.UrlEncode));
 
             return new Uri(DirectMappingHelper.UrlEncode(uri));
         }
 
-        public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKeys)
+        public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            if (foreignKeys.ForeignKeyColumns.Length != foreignKeys.ReferencedColumns.Length)
-                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKeys), "foreignKeys");
+            if (!foreignKey.ForeignKeyColumns.Any())
+                throw new ArgumentException("Empty foreign key", "foreignKey");
 
-            if (!foreignKeys.ForeignKeyColumns.Any())
-                throw new ArgumentException("Empty foreign key", "foreignKeys");
+            if (foreignKey.ForeignKeyColumns.Length != foreignKey.ReferencedColumns.Length)
+                throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKey.TableName), "foreignKey");
 
-            StringBuilder template = new StringBuilder(SubjectMappingStrategy.CreateSubjectUri(baseUri, foreignKeys) + "/");
-            template.AppendFormat("{0}={1}", DirectMappingHelper.UrlEncode(foreignKeys.ReferencedColumns[0]), DirectMappingHelper.EncloseColumnName(foreignKeys.ForeignKeyColumns[0]));
-            for (int i = 1; i < foreignKeys.ForeignKeyColumns.Count(); i++)
+            StringBuilder template = new StringBuilder(SubjectMappingStrategy.CreateSubjectUri(baseUri, foreignKey) + "/");
+            template.AppendFormat("{0}={1}", DirectMappingHelper.UrlEncode(foreignKey.ReferencedColumns[0]), DirectMappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[0]));
+            for (int i = 1; i < foreignKey.ForeignKeyColumns.Count(); i++)
             {
-                template.AppendFormat(";{0}={1}", DirectMappingHelper.UrlEncode(foreignKeys.ReferencedColumns[i]), DirectMappingHelper.EncloseColumnName(foreignKeys.ForeignKeyColumns[i]));
+                template.AppendFormat(";{0}={1}", DirectMappingHelper.UrlEncode(foreignKey.ReferencedColumns[i]), DirectMappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[i]));
             }
 
             return DirectMappingHelper.UrlEncode(template.ToString());
