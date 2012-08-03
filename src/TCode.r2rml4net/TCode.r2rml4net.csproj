@@ -96,8 +96,10 @@
     <Compile Include="Mapping\ITriplesMap.cs" />
     <Compile Include="Mapping\JoinCondition.cs" />
     <Compile Include="RDF\R2RMLUris.cs" />
+    <Compile Include="RDF\TripleExtensions.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
+    <Compile Include="RDF\BlankNodeSubjectReplaceHandler.cs" />
     <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />

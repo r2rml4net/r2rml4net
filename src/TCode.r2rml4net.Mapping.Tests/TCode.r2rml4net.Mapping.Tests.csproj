@@ -92,6 +92,7 @@
     <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
     <Compile Include="Mapping\TermMapConfigurationTests.cs" />
     <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
+    <Compile Include="RDF\BlankNodeSubjectReplaceHandlerTests.cs" />
     <Compile Include="RelationalExampleMappings.cs" />
     <Compile Include="UriConstants.cs" />
   </ItemGroup>
