@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
 
@@ -68,13 +69,15 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         public void GenerateTriples(IR2RML r2RML, IRdfHandler rdfHandler)
         {
-            rdfHandler.StartRdf();
+            IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler);
+
+            blankNodeReplaceHandler.StartRdf();
 
             foreach (var triplesMap in r2RML.TriplesMaps)
             {
                 try
                 {
-                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, rdfHandler);
+                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, blankNodeReplaceHandler);
                 }
                 catch (InvalidTermException e)
                 {
@@ -86,7 +89,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
             }
 
-            rdfHandler.EndRdf(true);
+            blankNodeReplaceHandler.EndRdf(true);
         }
 
         /// <summary>
