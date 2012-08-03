@@ -65,7 +65,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var table = new TableMetadata { Name = "Table" };
             foreach (var column in columns)
             {
-                table.Add(new ColumnMetadata { Name = column });
+                table.Add(new ColumnMetadata { Name = column, IsPrimaryKey = true });
             }
 
             // when
@@ -73,6 +73,18 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // then
             Assert.AreEqual(expected, template);
+        }
+
+        [Test]
+        public void ThrowsOnTemplateGenerationIfNoPrimaryKey()
+        {
+            // given
+            _strategy = new SubjectMappingStrategy(new DirectMappingOptions());
+            var table = new TableMetadata { Name = "Table" };
+            table.Add(new ColumnMetadata { Name = "Not primary key" });
+
+            // when
+            Assert.Throws<ArgumentException>(() => _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://www.example.com/"), table));
         }
     }
 }

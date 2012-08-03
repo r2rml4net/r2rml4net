@@ -69,6 +69,7 @@
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
     <Compile Include="DefaultMappingGenerator\DirectMappingOptionsTests.cs" />
+    <Compile Include="DefaultMappingGenerator\SubjectMappingStrategytests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
