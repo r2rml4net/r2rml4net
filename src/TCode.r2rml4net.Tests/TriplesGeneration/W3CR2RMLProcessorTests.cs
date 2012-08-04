@@ -4,6 +4,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 
@@ -36,18 +37,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             var triplesMaps = GenerateTriplesMaps(triplesMapsCount).ToList();
             _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), _rdfHandler.Object));
+            _triplesMapProcessor.Setup(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), It.IsAny<BlankNodeSubjectReplaceHandler>()));
 
             // when
             _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
 
             // then
             _r2RML.Verify(rml => rml.TriplesMaps, Times.Once());
-            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), _rdfHandler.Object), Times.Exactly(triplesMapsCount));
+            _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Exactly(triplesMapsCount));
             foreach (var triplesMap in triplesMaps)
             {
                 ITriplesMap map = triplesMap;
-                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>(), _rdfHandler.Object), Times.Once());
+                _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>(), It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Once());
             }
         }
 
