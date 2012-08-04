@@ -43,8 +43,12 @@ namespace TCode.r2rml4net.RDF
                     case XsdDatatypes.Decimal:
                         return logicalRow.GetDecimal(columnIndex).ToString(CultureInfo.InvariantCulture);
                     case XsdDatatypes.Double:
-                        return logicalRow.GetDouble(columnIndex).ToString("0.0" + new string('#', 29) + "E-0",
-                                                                          CultureInfo.InvariantCulture);
+                        var format = "0.0" + new string('#', 29) + "E-0";
+
+                        return logicalRow.GetFieldType(columnIndex) == typeof(float) 
+                            ? logicalRow.GetFloat(columnIndex).ToString(format, CultureInfo.InvariantCulture) 
+                            : logicalRow.GetDouble(columnIndex).ToString(format, CultureInfo.InvariantCulture);
+
                     case XsdDatatypes.DateTime:
                         return logicalRow.GetDateTime(columnIndex).ToUniversalTime().ToString("u").Replace(' ', 'T');
                     case XsdDatatypes.Time:
