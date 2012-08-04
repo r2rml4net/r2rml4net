@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                              {
                                  CallBase = true
                              };
-            _processor.Object.Log =_log.Object;
+            _processor.Object.Log = _log.Object;
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void HandlesSqlExecuteErrorGracefully()
+        public void ThrowsErrorOnInvalidSqlAlndLogsIt()
         {
             // given
             var connection = new Mock<IDbConnection>();
@@ -123,14 +123,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var map = new Mock<IQueryMap>();
             connection.Setup(con => con.CreateCommand()).Returns(command.Object);
             command.Setup(cmd => cmd.ExecuteReader()).Throws<Exception>();
-            
+
             // when
             IDataReader reader;
-            bool result = _processor.Object.FetchLogicalRows(connection.Object, map.Object, out reader);
+            Assert.Throws<InvalidTriplesMapException>(() => _processor.Object.FetchLogicalRows(connection.Object, map.Object, out reader));
 
             // then
-            Assert.IsFalse(result);
-            Assert.IsNull(reader);
+            _log.Verify(log => log.LogQueryExecutionError(It.IsAny<IQueryMap>(), It.IsAny<string>()));
         }
     }
 }

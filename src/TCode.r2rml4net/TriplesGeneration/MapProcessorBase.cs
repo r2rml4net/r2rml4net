@@ -104,7 +104,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 catch (Exception e)
                 {
                     LogSqlExecuteError(map, e.Message);
-                    return false;
+                    throw new InvalidTriplesMapException("Error executing query");
                 }
             }
 

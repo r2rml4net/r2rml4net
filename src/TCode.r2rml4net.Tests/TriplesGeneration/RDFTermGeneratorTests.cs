@@ -202,7 +202,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void ColumnNotFoundReturnsNullNodeAndLogsError()
+        public void ColumnNotFoundThrowsAndLogsError()
         {
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName))
@@ -212,13 +212,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName);
 
             // when
-            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+            Assert.Throws<InvalidTriplesMapException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
 
             // then
-            Assert.IsNull(node);
             _logicalRow.VerifyAll();
             _log.Verify(log => log.LogColumnNotFound(_termMap.Object, ColumnName));
-            _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
         #region IRI term type

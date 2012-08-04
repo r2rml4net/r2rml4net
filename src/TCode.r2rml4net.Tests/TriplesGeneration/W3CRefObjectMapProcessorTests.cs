@@ -185,7 +185,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void LogsSqlExecuteError()
+        public void LogsSqlExecuteErrorAndThrows()
         {
             // given
             Mock<IDbCommand> command = new Mock<IDbCommand>();
@@ -193,7 +193,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(con => con.CreateCommand()).Returns(command.Object);
 
             // when
-            _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object);
+            Assert.Throws<InvalidTriplesMapException>(() => _processor.ProcessRefObjectMap(_refObjMap.Object, _connection.Object, 2, _rdfHandler.Object));
 
             // then
             _log.Verify(log => log.LogQueryExecutionError(_refObjMap.Object, "Error message"), Times.Once());
