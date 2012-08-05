@@ -7,7 +7,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     public class ForeignKeyMappingStrategy : MappingStrategyBase, IForeignKeyMappingStrategy
     {
-        private ISubjectMappingStrategy _subjectMappingStrategy;
+        private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
         public ForeignKeyMappingStrategy(DirectMappingOptions options)
             : base(options)
@@ -40,7 +40,13 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (foreignKey.ForeignKeyColumns.Length != foreignKey.ReferencedColumns.Length)
                 throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKey.TableName), "foreignKey");
 
-            StringBuilder template = new StringBuilder(SubjectMappingStrategy.CreateSubjectUri(baseUri, foreignKey) + "/");
+            if (foreignKey.IsCandidateKeyReference)
+                throw new ArgumentException(
+                    string.Format(
+                        "Primary key reference expected but was canditate key reference between tables {0} and {1}",
+                        foreignKey.TableName, foreignKey.ReferencedTableName));
+
+            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, foreignKey.ReferencedTableName) + "/");
             template.AppendFormat("{0}={1}", DirectMappingHelper.UrlEncode(foreignKey.ReferencedColumns[0]), DirectMappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[0]));
             for (int i = 1; i < foreignKey.ForeignKeyColumns.Count(); i++)
             {
@@ -50,18 +56,31 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             return DirectMappingHelper.UrlEncode(template.ToString());
         }
 
+        public string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey)
+        {
+            if (foreignKey == null)
+                throw new ArgumentNullException("foreignKey");
+            if (!foreignKey.IsCandidateKeyReference)
+                throw new ArgumentException(
+                    string.Format(
+                        "Canditate key reference expected but was primary key reference between tables {0} and {1}",
+                        foreignKey.TableName, foreignKey.ReferencedTableName));
+            
+            return CreateBlankNodeTemplate(foreignKey.ReferencedTableName, foreignKey.ReferencedColumns);
+        }
+
         #endregion
 
-        public ISubjectMappingStrategy SubjectMappingStrategy
+        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
         {
             get
             {
-                if (_subjectMappingStrategy == null)
-                    _subjectMappingStrategy = new SubjectMappingStrategy(Options);
+                if (_primaryKeyMappingStrategy == null)
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(Options);
 
-                return _subjectMappingStrategy;
+                return _primaryKeyMappingStrategy;
             }
-            set { _subjectMappingStrategy = value; }
+            set { _primaryKeyMappingStrategy = value; }
         }
     }
 }

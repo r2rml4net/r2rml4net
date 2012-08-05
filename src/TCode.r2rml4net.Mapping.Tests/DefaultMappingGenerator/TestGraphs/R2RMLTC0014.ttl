@@ -46,7 +46,11 @@
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/EMP#ref-deptno> ] ; 
-      rr:objectMap [ rr:termType rr:BlankNode ]
+      rr:objectMap 
+	  [ 
+	    rr:termType rr:BlankNode;
+	    rr:template "DEPT_{\"deptno\"}";
+      ]
     ]
     .
 
@@ -90,7 +94,7 @@
 	[ 
 	  rr:termType rr:BlankNode ;
 	  rr:class <http://example.com/DEPT>;
-	  rr:template "DEPT_{\"deptno\"}_{\"dname\"}_{\"loc\"}"
+	  rr:template "DEPT_{\"deptno\"}"
 	];
 
     rr:predicateObjectMap

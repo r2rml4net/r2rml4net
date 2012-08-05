@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     public abstract class MappingStrategyBase
@@ -19,6 +22,13 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         protected DirectMappingHelper DirectMappingHelper
         {
             get { return _directMappingHelper; }
+        }
+
+        protected string CreateBlankNodeTemplate(string tableName, IEnumerable<string> columnsArray)
+        {
+            var joinedColumnNames = string.Join(Options.TemplateSeparator,
+                                                columnsArray.Select(DirectMappingHelper.EncloseColumnName));
+            return string.Format("{0}{1}{2}", tableName, Options.TemplateSeparator, joinedColumnNames);
         }
     }
 }

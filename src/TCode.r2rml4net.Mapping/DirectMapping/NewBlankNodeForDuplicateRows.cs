@@ -3,6 +3,7 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
+    [Obsolete("Remove?")]
     public class NewBlankNodeForDuplicateRows : DirectMappingStrategy
     {
         public NewBlankNodeForDuplicateRows()
@@ -20,7 +21,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            var classIri = SubjectMappingStrategy.CreateSubjectUri(baseUri, table);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, table.Name);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode();

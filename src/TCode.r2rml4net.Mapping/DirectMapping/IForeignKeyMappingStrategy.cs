@@ -7,5 +7,6 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     {
         Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey);
         string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey);
+        string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey);
     }
 }

@@ -7,12 +7,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class SubjectMappingStrategyTests
     {
-        private SubjectMappingStrategy _strategy;
+        private PrimaryKeyMappingStrategy _strategy;
 
         [SetUp]
         public void Setup()
         {
-            _strategy = new SubjectMappingStrategy(new DirectMappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
         }
 
         [TestCase("http://example.com")]
@@ -23,7 +23,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             TableMetadata table = new TableMetadata { Name = "TableXYZ" };
 
             // when
-            var subjectUri = _strategy.CreateSubjectUri(new Uri(baseUri), table);
+            var subjectUri = _strategy.CreateSubjectUri(new Uri(baseUri), table.Name);
 
             // then
             Assert.AreEqual("http://example.com/TableXYZ", subjectUri.ToString());

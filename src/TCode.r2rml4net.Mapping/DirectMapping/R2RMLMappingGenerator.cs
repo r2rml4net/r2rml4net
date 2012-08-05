@@ -15,6 +15,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private IDirectMappingStrategy _mappingStrategy;
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
+        private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
         private readonly DirectMappingOptions _options;
 
         /// <summary>
@@ -30,9 +31,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         }
 
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
-            :this(databaseMetadataProvider, r2RMLConfiguration, new DirectMappingOptions())
+            : this(databaseMetadataProvider, r2RMLConfiguration, new DirectMappingOptions())
         {
-            
+
         }
 
         /// <summary>
@@ -44,22 +45,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         {
             get
             {
-                if(_mappingStrategy == null)
+                if (_mappingStrategy == null)
                     _mappingStrategy = new DirectMappingStrategy(_options);
                 return _mappingStrategy;
             }
             set { _mappingStrategy = value; }
-        }
-
-        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy
-        {
-            get
-            {
-                if (_foreignKeyMappingStrategy == null)
-                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy(_options); 
-                return _foreignKeyMappingStrategy;
-            }
-            set { _foreignKeyMappingStrategy = value; }
         }
 
         public IColumnMappingStrategy ColumnMappingStrategy
@@ -71,6 +61,17 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 return _columnMappingStrategy;
             }
             set { _columnMappingStrategy = value; }
+        }
+
+        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
+        {
+            get
+            {
+                if (_primaryKeyMappingStrategy == null)
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(_options);
+                return _primaryKeyMappingStrategy;
+            } 
+            set { _primaryKeyMappingStrategy = value; }
         }
 
         /// <summary>
@@ -121,24 +122,15 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         {
             var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
 
-            Uri foreignKeyRefUri = 
-                ForeignKeyMappingStrategy.CreateReferencePredicateUri(
-                    MappingBaseUri,
-                    foreignKey);
-
-            foreignKeyMap.CreatePredicateMap()
-                .IsConstantValued(foreignKeyRefUri);
+            MappingStrategy.CreatePredicateMapForForeignKey(foreignKeyMap.CreatePredicateMap(), MappingBaseUri, foreignKey);
 
             if (foreignKey.IsCandidateKeyReference)
             {
-                foreignKeyMap.CreateObjectMap().TermType.IsBlankNode();
+                MappingStrategy.CreateObjectMapForCandidateKeyReference(foreignKeyMap.CreateObjectMap(), foreignKey);
             }
             else
             {
-                var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(MappingBaseUri, foreignKey);
-
-                foreignKeyMap.CreateObjectMap()
-                    .IsTemplateValued(templateForForeignKey);
+                MappingStrategy.CreateObjectMapForPrimaryKeyReference(foreignKeyMap.CreateObjectMap(), MappingBaseUri, foreignKey);
             }
         }
 
