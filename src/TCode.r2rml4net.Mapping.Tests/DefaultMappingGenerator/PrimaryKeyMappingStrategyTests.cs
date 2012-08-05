@@ -6,7 +6,7 @@ using TCode.r2rml4net.RDB;
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     [TestFixture]
-    public class DefaultMappingStrategyTests
+    public class PrimaryKeyMappingStrategyTests
     {
         PrimaryKeyMappingStrategy _strategy;
 
