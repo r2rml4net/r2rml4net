@@ -5,7 +5,17 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mocks
 {
-    internal class MockConfiguration :ITriplesMapFromR2RMLViewConfiguration, ITriplesMapConfiguration, ISubjectMapConfiguration, IPredicateObjectMapConfiguration, IGraphMap, ITermTypeConfiguration, ITermType, IObjectMapConfiguration, ILiteralTermMapConfiguration
+    internal class MockConfiguration :
+        ITriplesMapFromR2RMLViewConfiguration,
+        ITriplesMapConfiguration, 
+        ISubjectMapConfiguration, 
+        IPredicateObjectMapConfiguration, 
+        IGraphMap, 
+        ITermTypeConfiguration, 
+        ITermType, 
+        IObjectMapConfiguration,
+        ILiteralTermMapConfiguration,
+        ITermMapConfiguration
     {
         public MockConfiguration(Uri baseURI, IR2RMLConfiguration r2RMLConfiguration)
         {

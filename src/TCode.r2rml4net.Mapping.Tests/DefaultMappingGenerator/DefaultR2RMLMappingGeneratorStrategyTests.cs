@@ -30,7 +30,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _generator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
                 {
                     MappingStrategy = _mappingStrategy.Object,
-                    ForeignKeyMappingStrategy = _foreignKeyStrategy.Object,
                     ColumnMappingStrategy = _columnStrategy.Object,
                     MappingBaseUri = _mappingBaseUri
                 };
@@ -76,17 +75,27 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             TestStrategyUsage(RelationalTestMappings.D009_2tables1primarykey1foreignkey);
         }
 
+        [Test]
+        public void TestForTableWithCompositeKeyReference()
+        {
+            TestStrategyUsage(RelationalTestMappings.D015_1table3columns1composityeprimarykey);
+        }
+
+        //[Test]
+        //public void TestForTableWithCandidateKeyReference()
+        //{
+        //    TestStrategyUsage(RelationalTestMappings.D015_1table3columns1composityeprimarykey);
+        //}
+
         private void TestStrategyUsage(TableCollection tables)
         {
             // given
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
             _mappingStrategy.Setup(ms => ms.CreateSubjectMapForNoPrimaryKey(It.IsAny<ISubjectMapConfiguration>(), _mappingBaseUri, It.IsAny<TableMetadata>()));
+            _mappingStrategy.Setup(ms => ms.CreatePredicateMapForForeignKey(It.IsAny<ITermMapConfiguration>(), _mappingBaseUri, It.IsAny<ForeignKeyMetadata>()));
+            _mappingStrategy.Setup(ms => ms.CreateObjectMapForPrimaryKeyReference(It.IsAny<IObjectMapConfiguration>(), _mappingBaseUri, It.IsAny<ForeignKeyMetadata>()));
             _columnStrategy.Setup(ms => ms.CreatePredicateUri(_mappingBaseUri, It.IsAny<ColumnMetadata>()))
                            .Returns(new Uri("http://predicate.uri"));
-            _foreignKeyStrategy.Setup(ms => ms.CreateReferencePredicateUri(_mappingBaseUri, It.IsAny<ForeignKeyMetadata>()))
-                               .Returns(new Uri("http://ref.uri"));
-            _foreignKeyStrategy.Setup(ms => ms.CreateReferenceObjectTemplate(_mappingBaseUri, It.IsAny<ForeignKeyMetadata>()))
-                               .Returns("termplate");
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when
@@ -101,12 +110,23 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                     _columnStrategy.Verify(ms => ms.CreatePredicateUri(_mappingBaseUri, column1), Times.Once());
                 }
 
-                //if(table.ForeignKeys != null)
                 foreach (var fk in table.ForeignKeys)
                 {
                     ForeignKeyMetadata fk1 = fk;
-                    _foreignKeyStrategy.Verify(ms =>ms.CreateReferencePredicateUri(_mappingBaseUri, fk1),Times.Once());
-                    _foreignKeyStrategy.Verify(ms =>ms.CreateReferenceObjectTemplate(_mappingBaseUri,fk1));
+                    _mappingStrategy.Verify(ms => ms.CreatePredicateMapForForeignKey(It.IsAny<ITermMapConfiguration>(), _mappingBaseUri, fk1), Times.Once());
+                    if (fk.IsCandidateKeyReference)
+                    {
+                        _foreignKeyStrategy.Verify(fks => fks.CreateObjectTemplateForCandidateKeyReference(fk1), Times.Once());
+                        _mappingStrategy.Verify(ms =>
+                            ms.CreateObjectMapForCandidateKeyReference(It.IsAny<IObjectMapConfiguration>(), It.IsAny<ForeignKeyMetadata>()),
+                            Times.Once());
+                    }
+                    else
+                    {
+                        _mappingStrategy.Verify(ms =>
+                            ms.CreateObjectMapForPrimaryKeyReference(It.IsAny<IObjectMapConfiguration>(), _mappingBaseUri, It.IsAny<ForeignKeyMetadata>()),
+                            Times.Once());
+                    }
                 }
             }
 
