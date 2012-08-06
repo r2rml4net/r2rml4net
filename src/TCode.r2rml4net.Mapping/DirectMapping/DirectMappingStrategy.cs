@@ -22,6 +22,16 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public virtual void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
+            if (subjectMap == null)
+                throw new ArgumentNullException("subjectMap");
+            if (baseUri == null)
+                throw new ArgumentNullException("baseUri");
+            if (table == null)
+                throw new ArgumentNullException("table");
+
+            if (table.PrimaryKey.Length != 0)
+                throw new ArgumentException(string.Format("Table {0} has primay key. CreateSubjectMapForPrimaryKey method should be used", table.Name));
+
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table);
             var classIri = PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, table.Name);
 
@@ -31,6 +41,16 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
+            if (subjectMap == null)
+                throw new ArgumentNullException("subjectMap");
+            if (baseUri == null)
+                throw new ArgumentNullException("baseUri");
+            if (table == null)
+                throw new ArgumentNullException("table");
+
+            if(table.PrimaryKey.Length == 0)
+                throw new ArgumentException(string.Format("Table {0} has no primay key", table.Name));
+
             var classIri = PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, table.Name);
 
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(baseUri, table);
@@ -38,20 +58,20 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             subjectMap.AddClass(classIri).IsTemplateValued(template);
         }
 
-        public void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri baseUri, ForeignKeyMetadata foreignKey)
         {
             Uri foreignKeyRefUri = ForeignKeyMappingStrategy.CreateReferencePredicateUri(baseUri, foreignKey);
             predicateMap.IsConstantValued(foreignKeyRefUri);
         }
 
-        public void CreateObjectMapForCandidateKeyReference(IObjectMapConfiguration objectMap, ForeignKeyMetadata foreignKey)
+        public virtual void CreateObjectMapForCandidateKeyReference(IObjectMapConfiguration objectMap, ForeignKeyMetadata foreignKey)
         {
             objectMap
                 .IsTemplateValued(ForeignKeyMappingStrategy.CreateObjectTemplateForCandidateKeyReference(foreignKey))
                 .IsBlankNode();
         }
 
-        public void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri baseUri, ForeignKeyMetadata foreignKey)
         {
             var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(baseUri, foreignKey);
             objectMap.IsTemplateValued(templateForForeignKey);
