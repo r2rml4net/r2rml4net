@@ -180,7 +180,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                        };
             }
         }
-        
+
         /// <summary>
         /// http://www.w3.org/2001/sw/rdb2rdf/test-cases/#D008-1table1compositeprimarykey3columns1row
         /// </summary>
@@ -672,6 +672,52 @@ namespace TCode.r2rml4net.Mapping.Tests
                 {
                     i18N1, i18N2
                 };
+            }
+        }
+
+        public static TableCollection NoPrimaryKeyThreeUniqueKeys
+        {
+            get
+            {
+                var col1 = new ColumnMetadata
+                    {
+                        Name = "ID",
+                        Type = R2RMLType.Integer
+                    };
+                var col2 = new ColumnMetadata
+                    {
+                        Name = "Name",
+                        Type = R2RMLType.String
+                    };
+                var col3 = new ColumnMetadata
+                    {
+                        Name = "LastName",
+                        Type = R2RMLType.String
+                    };
+                var col4 = new ColumnMetadata
+                    {
+                        Name = "Column4",
+                        Type = R2RMLType.String
+                    };
+                var studentsTable = new TableMetadata
+                            {
+                                col1,
+                                col2,
+                                col3,
+                                col4
+                            };
+                studentsTable.Name = "Student";
+                studentsTable.UniqueKeys = new UniqueKeyCollection
+                    {
+                        new ColumnCollection{col1},
+                        new ColumnCollection{col1, col2},
+                        new ColumnCollection{col3, col4},
+                    };
+
+                return new TableCollection
+                       {
+                           studentsTable
+                       };
             }
         }
     }

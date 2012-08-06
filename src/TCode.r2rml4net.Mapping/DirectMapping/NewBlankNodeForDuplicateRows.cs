@@ -3,7 +3,7 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
-    [Obsolete("Remove?")]
+    [Obsolete("Produces invalid R2RML. Consider removind")]
     public class NewBlankNodeForDuplicateRows : DirectMappingStrategy
     {
         public NewBlankNodeForDuplicateRows()

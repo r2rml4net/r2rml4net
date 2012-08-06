@@ -92,7 +92,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                 {
                     keyMetadata.Add(table[column]);
                 }
-
+                
                 table.UniqueKeys.Add(keyMetadata);
             }
 
