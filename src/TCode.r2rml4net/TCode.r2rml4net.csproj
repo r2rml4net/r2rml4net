@@ -96,6 +96,7 @@
     <Compile Include="RDB\TableCollection.cs" />
     <Compile Include="RDB\TableMetadata.cs" />
     <Compile Include="RDB\UniqueKeyCollection.cs" />
+    <Compile Include="RDB\UniqueKeyMetadata.cs" />
     <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
     <Compile Include="RDF\BlankNodeReplaceHandler.cs" />
     <Compile Include="RDF\R2RMLUris.cs" />

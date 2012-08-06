@@ -58,6 +58,8 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                         _tables.Add(TableMetadataFromDatabaseTable(dbTable));
                     }
 
+                    MarkReferencedUniqueKeys();
+
                     // todo: default generation from View?
                     //foreach (var view in _schema.Views)
                     //{
@@ -66,6 +68,23 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                 }
 
                 return _tables;
+            }
+        }
+
+        private void MarkReferencedUniqueKeys()
+        {
+            foreach (var table in _tables.Where(t => t.ForeignKeys.Any()))
+            {
+                foreach (var foreignKey in table.ForeignKeys.Where(fk => fk.IsCandidateKeyReference))
+                {
+                    var referencedTable = _tables[foreignKey.ReferencedTableName];
+
+                    foreach (var uniqueKey in referencedTable.UniqueKeys)
+                    {
+                        if (foreignKey.ReferencedColumns.Except(uniqueKey.Select(c => c.Name)).Any()) continue;
+                        uniqueKey.IsReferenced = true;
+                    }
+                }
             }
         }
 
@@ -86,7 +105,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 
             foreach (var uniqueKey in dbTable.UniqueKeys)
             {
-                var keyMetadata = new ColumnCollection();
+                var keyMetadata = new UniqueKeyMetadata();
 
                 foreach (var column in uniqueKey.Columns)
                 {
