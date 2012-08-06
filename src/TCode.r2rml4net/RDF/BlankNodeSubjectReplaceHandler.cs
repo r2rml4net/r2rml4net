@@ -25,18 +25,29 @@ namespace TCode.r2rml4net.RDF
         protected override bool HandleTripleInternal(Triple t)
         {
             IBlankNode subject = t.Subject as IBlankNode;
+            IBlankNode @object = t.Object as IBlankNode;
             Triple toHandle = t;
 
+            IBlankNode replacedSubject = null, replacedObject = null;
             if (subject != null)
             {
                 if (!_replacedNodes.ContainsKey(subject.InternalID))
                 {
                     _replacedNodes.Add(subject.InternalID, _wrapped.CreateBlankNode());
                 }
-                IBlankNode replacedSubject = _replacedNodes[subject.InternalID];
-
-                toHandle = t.CloneTriple(replacedSubject);
+                replacedSubject = _replacedNodes[subject.InternalID];
             }
+            if (@object !=null)
+            {
+                if (!_replacedNodes.ContainsKey(@object.InternalID))
+                {
+                    _replacedNodes.Add(@object.InternalID, _wrapped.CreateBlankNode());
+                }
+                replacedObject = _replacedNodes[@object.InternalID];
+            }
+
+            if (replacedSubject != null || replacedObject != null)
+                toHandle = t.CloneTriple(replacedSubject: replacedSubject, replacedObject: replacedObject);
 
             return _wrapped.HandleTriple(toHandle);
         }
