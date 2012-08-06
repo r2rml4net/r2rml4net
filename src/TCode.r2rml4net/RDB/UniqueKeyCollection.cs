@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace TCode.r2rml4net.RDB
 {
-    public class UniqueKeyCollection : IEnumerable<ColumnCollection>
+    public class UniqueKeyCollection : IEnumerable<UniqueKeyMetadata>
     {
-        private readonly IList<ColumnCollection> _uniqueKeys = new List<ColumnCollection>();
+        private readonly IList<UniqueKeyMetadata> _uniqueKeys = new List<UniqueKeyMetadata>();
 
         #region Implementation of IEnumerable
 
@@ -18,7 +18,7 @@ namespace TCode.r2rml4net.RDB
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
         /// <filterpriority>1</filterpriority>
-        public IEnumerator<ColumnCollection> GetEnumerator()
+        public IEnumerator<UniqueKeyMetadata> GetEnumerator()
         {
             return _uniqueKeys.GetEnumerator();
         }
@@ -37,7 +37,7 @@ namespace TCode.r2rml4net.RDB
 
         #endregion
 
-        public void Add(ColumnCollection uniqueKey)
+        public void Add(UniqueKeyMetadata uniqueKey)
         {
             if(uniqueKey == null)
                 throw new ArgumentNullException("uniqueKey");
