@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
     public class PrimaryKeyMappingStrategy : MappingStrategyBase, IPrimaryKeyMappingStrategy
     {
+        public IDefaultMappingGenerationLog Log { get; set; }
+
         public PrimaryKeyMappingStrategy(DirectMappingOptions options)
             : base(options)
         {
+            Log = NullLog.Instance;
         }
 
         #region Implementation of IPrimaryKeyMappingStrategy
@@ -34,7 +38,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             var uniqueKeys = table.UniqueKeys.ToArray();
             var referencedUniqueKeys = uniqueKeys.Where(uq => uq.IsReferenced).ToArray();
             if (referencedUniqueKeys.Length > 1)
-                ;
+                Log.LogMultipleCompositeKeyReferences(table);
 
             ColumnCollection columnsForTemplate;
 
