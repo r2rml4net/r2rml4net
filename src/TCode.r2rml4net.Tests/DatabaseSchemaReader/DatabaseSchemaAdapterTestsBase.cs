@@ -21,13 +21,14 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         [Test]
         public void ContainsTablesCorrectly()
         {
-            Assert.AreEqual(5, DatabaseSchema.Tables.Count);
+            Assert.AreEqual(6, DatabaseSchema.Tables.Count);
             var tableNames = DatabaseSchema.Tables.Select(t => t.Name).ToArray();
             Assert.Contains("CandidateKey", tableNames);
             Assert.Contains("CandidateRef", tableNames);
             Assert.Contains("ForeignKeyReference", tableNames);
             Assert.Contains("HasPrimaryKey", tableNames);
             Assert.Contains("ManyDataTypes", tableNames);
+            Assert.Contains("MultipleUniqueKeys", tableNames);
         }
 
         [Test]
@@ -62,6 +63,25 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.AreEqual(1, DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey.Length);
             Assert.AreEqual("Id", DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey[0].Name);
             Assert.AreEqual("ForeignKey", DatabaseSchema.Tables["ForeignKeyReference"].PrimaryKey[0].Name);
+        }
+
+        [Test]
+        public void ReadsUniqueKeys()
+        {
+            Assert.AreEqual(3, DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys.Count());
+
+            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+                                 .SingleOrDefault(uq => uq.ColumnsCount == 1 &&
+                                                        uq.Any(col => col.Name == "UQ3")));
+            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+                                 .SingleOrDefault(uq => uq.ColumnsCount == 2 &&
+                                                        uq.Any(col => col.Name == "UQ1_1") &&
+                                                        uq.Any(col => col.Name == "UQ1_2")));
+            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+                                 .SingleOrDefault(uq => uq.ColumnsCount == 3 &&
+                                                        uq.Any(col => col.Name == "UQ2_1") &&
+                                                        uq.Any(col => col.Name == "UQ2_2") &&
+                                                        uq.Any(col => col.Name == "UQ2_3")));
         }
     }
 }
