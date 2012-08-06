@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// <summary>
     /// Default implementation of the <a href="http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term">RDF term generation process</a>
     /// </summary>
-    class RDFTermGenerator : IRDFTermGenerator
+    public class RDFTermGenerator : IRDFTermGenerator
     {
         static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
