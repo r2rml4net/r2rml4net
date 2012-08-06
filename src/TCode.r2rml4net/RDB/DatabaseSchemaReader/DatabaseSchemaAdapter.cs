@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DatabaseSchemaReader.DataSchema;
 using DatabaseSchemaReader;
@@ -81,31 +82,49 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Type = ColumnTypeMapper.GetColumnTypeFromColumn(column.DataType)
                 });
 
-            table.ForeignKeys = dbTable.ForeignKeys.Select(fk =>
+            table.ForeignKeys = GetForeignKeys(dbTable).ToArray();
+
+            foreach (var uniqueKey in dbTable.UniqueKeys)
+            {
+                var keyMetadata = new ColumnCollection();
+
+                foreach (var column in uniqueKey.Columns)
+                {
+                    keyMetadata.Add(table[column]);
+                }
+
+                table.UniqueKeys.Add(keyMetadata);
+            }
+
+            return table;
+        }
+
+        private IEnumerable<ForeignKeyMetadata> GetForeignKeys(DatabaseTable table)
+        {
+            foreach (var fk in table.ForeignKeys)
             {
                 string[] referencedColumns;
                 DatabaseTable referencedTable = fk.ReferencedTable(_schema);
                 if (referencedTable.PrimaryKey == null
                     || referencedTable.PrimaryKey.Name != fk.RefersToConstraint)
                 {
-                    referencedColumns = referencedTable.UniqueKeys.Single(key => key.Name == fk.RefersToConstraint).Columns.ToArray();
+                    referencedColumns =
+                        referencedTable.UniqueKeys.Single(key => key.Name == fk.RefersToConstraint).Columns.ToArray();
                 }
                 else
                 {
                     referencedColumns = fk.ReferencedColumns(_schema).ToArray();
                 }
 
-                return new ForeignKeyMetadata
-                {
-                    TableName = table.Name,
-                    ForeignKeyColumns = fk.Columns.ToArray(),
-                    ReferencedColumns = referencedColumns,
-                    ReferencedTableName = referencedTable.Name,
-                    IsCandidateKeyReference = referencedTable.PrimaryKey == null
-                };
-            }).ToArray();
-
-            return table;
+                yield return new ForeignKeyMetadata
+                    {
+                        TableName = table.Name,
+                        ForeignKeyColumns = fk.Columns.ToArray(),
+                        ReferencedColumns = referencedColumns,
+                        ReferencedTableName = referencedTable.Name,
+                        IsCandidateKeyReference = referencedTable.PrimaryKey == null
+                    };
+            }
         }
     }
 }
