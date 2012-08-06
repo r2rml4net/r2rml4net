@@ -1,4 +1,5 @@
-﻿using TCode.r2rml4net.Mapping;
+﻿using System;
+using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
@@ -15,6 +16,7 @@ namespace TCode.r2rml4net.Log
 
         void LogTermGenerated(INode node);
         void LogNullTermGenerated(ITermMap termMap);
+        [Obsolete("With the blank node replacing behavior, this is redundant")]
         void LogInvalidBlankNode(ITermMap termMap, string blankNodeIdentifier);
         void LogNullValueForColumn(string columnName);
     }

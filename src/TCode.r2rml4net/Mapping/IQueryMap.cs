@@ -1,6 +1,6 @@
 namespace TCode.r2rml4net.Mapping
 {
-    public interface IQueryMap
+    public interface IQueryMap : IMapBase
     {
         /// <summary>
         /// Gets the effective sql query of a <see cref="ITriplesMap"/> or a <see cref="IRefObjectMap"/>
