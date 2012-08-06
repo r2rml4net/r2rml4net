@@ -31,8 +31,26 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (table == null)
                 throw new ArgumentNullException("table");
 
-            var columnsArray = table.Select(c => c.Name).ToArray();
+            var uniqueKeys = table.UniqueKeys.ToArray();
+            var referencedUniqueKeys = uniqueKeys.Where(uq => uq.IsReferenced).ToArray();
+            if (referencedUniqueKeys.Length > 1)
+                ;
 
+            ColumnCollection columnsForTemplate;
+
+            if (uniqueKeys.Any())
+            {
+                if (referencedUniqueKeys.Length == 1)
+                    columnsForTemplate = referencedUniqueKeys.Single();
+                else
+                    columnsForTemplate = uniqueKeys.OrderBy(c => c.ColumnsCount).First();
+            }
+            else
+            {
+                columnsForTemplate = table;
+            }
+
+            var columnsArray=columnsForTemplate.Select(c => c.Name).ToArray();
             var name = table.Name;
             if (!columnsArray.Any())
                 throw new InvalidTriplesMapException(string.Format("No columns for table {0}", name));
