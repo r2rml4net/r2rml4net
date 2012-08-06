@@ -32,6 +32,15 @@ namespace TCode.r2rml4net.Mapping
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
 
+        /// <summary>
+        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings 
+        /// and base URI set to <see cref="DefaultBaseUri"/>
+        /// </summary>
+        public R2RMLConfiguration()
+            : this(DefaultBaseUri)
+        {
+        }
+
         internal R2RMLConfiguration(IGraph mappingsGraph)
             : base(mappingsGraph)
         {
@@ -83,15 +92,6 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings 
-        /// and base URI set to <see cref="DefaultBaseUri"/>
-        /// </summary>
-        public R2RMLConfiguration()
-            : this(DefaultBaseUri)
-        {
-        }
-
-        /// <summary>
         /// Creates a Triples Map with physical table datasource and adds it to the R2RML mappings
         /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
@@ -109,6 +109,11 @@ namespace TCode.r2rml4net.Mapping
             var triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(this, R2RMLMappings, sqlQuery);
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
+        }
+
+        public Uri BaseUri
+        {
+            get { return R2RMLMappings.BaseUri; }
         }
 
         IGraph _graphCopy;

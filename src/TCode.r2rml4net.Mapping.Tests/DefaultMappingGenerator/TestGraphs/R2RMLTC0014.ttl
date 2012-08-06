@@ -1,6 +1,6 @@
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+@base <http://example.com/> .
 
 <EMPTriplesMap>
      a rr:TriplesMap;
@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/EMP/empno={empno}";
+	  rr:template "http://example.com/EMP/empno={\"empno\"}";
 	  rr:class <http://example.com/EMP>
 	];
 
@@ -46,7 +46,11 @@
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/EMP#ref-deptno> ] ; 
-      rr:objectMap [ rr:termType rr:BlankNode ]
+      rr:objectMap 
+	  [ 
+	    rr:termType rr:BlankNode;
+	    rr:template "DEPT_{\"deptno\"}";
+      ]
     ]
     .
 
@@ -58,7 +62,8 @@
     rr:subjectMap 
 	[ 
 	  rr:termType rr:BlankNode ;
-	  rr:class <http://example.com/LIKES>
+	  rr:class <http://example.com/LIKES> ;
+	  rr:template "LIKES_{\"id\"}_{\"likeType\"}_{\"likedObj\"}";
 	];
 
     rr:predicateObjectMap
@@ -88,7 +93,8 @@
     rr:subjectMap 
 	[ 
 	  rr:termType rr:BlankNode ;
-	  rr:class <http://example.com/DEPT>
+	  rr:class <http://example.com/DEPT>;
+	  rr:template "DEPT_{\"deptno\"}"
 	];
 
     rr:predicateObjectMap

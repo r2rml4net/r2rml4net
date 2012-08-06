@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Moq;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Mapping.DirectMapping;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 using System.IO;
@@ -13,7 +14,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     [TestFixture]
     public class DefaultR2RMLMappingGeneratorTests
     {
-        private DefaultR2RMLMappingGenerator _defaultR2RMLMappingGenerator;
+        private R2RMLMappingGenerator _r2RMLMappingGenerator;
         private Mock<IDatabaseMetadata> _databaseMetedata;
         private R2RMLConfiguration _configuration;
 
@@ -21,8 +22,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _configuration = new R2RMLConfiguration(new Uri("http://mappingpedia.org/rdb2rdf/r2rml/tc/"));
-            _defaultR2RMLMappingGenerator = new DefaultR2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
+            _configuration = new R2RMLConfiguration(new Uri("http://example.com/"));
+            _r2RMLMappingGenerator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
+        }
+
+        [Test]
+        public void CreatedWithDefaultGenerationAlgorithm()
+        {
+            Assert.IsTrue(_r2RMLMappingGenerator.MappingStrategy is DirectMappingStrategy);
         }
 
         [Test, Description("Building graph visits the table collection")]
@@ -33,7 +40,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _databaseMetedata.Setup(db => db.Tables).Returns(tables);
 
             // when
-            _defaultR2RMLMappingGenerator.GenerateMappings();
+            _r2RMLMappingGenerator.GenerateMappings();
 
             // then
             _databaseMetedata.Verify(db => db.Tables, Times.Exactly(2));
@@ -46,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _databaseMetedata.Setup(meta => meta.Tables).Returns(tables);
 
             // when 
-            _defaultR2RMLMappingGenerator.GenerateMappings();
+            _r2RMLMappingGenerator.GenerateMappings();
 
             // then
             Graph expected = new Graph();

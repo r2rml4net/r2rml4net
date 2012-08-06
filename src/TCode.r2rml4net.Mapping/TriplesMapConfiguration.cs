@@ -210,6 +210,10 @@ WHERE
             }
         }
 
+        /// <summary>
+        /// Gets the effective sql query based on <see cref="TableName"/> or <see cref="SqlQuery"/>
+        /// </summary>
+        /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         public string EffectiveSqlQuery
         {
             get

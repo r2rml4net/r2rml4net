@@ -2,7 +2,7 @@
 
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+@base <http://example.com/> .
 
 <StudentTriplesMap>
      a rr:TriplesMap;
@@ -11,6 +11,7 @@
 
     rr:subjectMap 
 	[ 
+	  rr:template "Student_{\"Name\"}";
 	  rr:termType rr:BlankNode;  
 	  rr:class <http://example.com/Student>
 	];

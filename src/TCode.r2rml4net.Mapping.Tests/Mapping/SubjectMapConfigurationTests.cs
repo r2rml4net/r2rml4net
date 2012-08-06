@@ -35,10 +35,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.AddClass(class1).AddClass(class2).AddClass(class3);
 
             // then
-            Assert.AreEqual(3, _subjectMapConfiguration.ClassIris.Length);
-            Assert.Contains(class1, _subjectMapConfiguration.ClassIris);
-            Assert.Contains(class2, _subjectMapConfiguration.ClassIris);
-            Assert.Contains(class3, _subjectMapConfiguration.ClassIris);
+            Assert.AreEqual(3, _subjectMapConfiguration.Classes.Length);
+            Assert.Contains(class1, _subjectMapConfiguration.Classes);
+            Assert.Contains(class2, _subjectMapConfiguration.Classes);
+            Assert.Contains(class3, _subjectMapConfiguration.Classes);
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.AddClass(class1).IsTemplateValued(template);
 
             // then
-            Assert.Contains(class1, _subjectMapConfiguration.ClassIris);
+            Assert.Contains(class1, _subjectMapConfiguration.Classes);
             Assert.AreEqual(template, _subjectMapConfiguration.Template);
         }
 

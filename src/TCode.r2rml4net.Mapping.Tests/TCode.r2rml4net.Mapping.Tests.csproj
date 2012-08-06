@@ -64,7 +64,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultMappingGenerator\ColumnMappingStrategyTests.cs" />
+    <Compile Include="DefaultMappingGenerator\PrimaryKeyMappingStrategyTests.cs" />
+    <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
+    <Compile Include="DefaultMappingGenerator\DirectMappingOptionsTests.cs" />
+    <Compile Include="DefaultMappingGenerator\ForeignKeyMappingStrategyTests.cs" />
+    <Compile Include="DefaultMappingGenerator\SubjectMappingStrategytests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
@@ -80,11 +86,13 @@
     <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
+    <Compile Include="Mocks\MockConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
     <Compile Include="Mapping\TermMapConfigurationTests.cs" />
     <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
+    <Compile Include="RDF\BlankNodeSubjectReplaceHandlerTests.cs" />
     <Compile Include="RelationalExampleMappings.cs" />
     <Compile Include="UriConstants.cs" />
   </ItemGroup>

@@ -57,12 +57,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidTemplateException.cs" />
+    <Compile Include="InvalidTermException.cs" />
     <Compile Include="InvalidTriplesMapException.cs" />
     <Compile Include="IVistitable.cs" />
+    <Compile Include="Log\IRDFTermGenerationLog.cs" />
+    <Compile Include="Log\ITriplesGenerationLog.cs" />
+    <Compile Include="Log\NullLog.cs" />
     <Compile Include="Mapping\IGraphMap.cs" />
+    <Compile Include="Mapping\ILiteralTermMap.cs" />
     <Compile Include="Mapping\IMapBase.cs" />
     <Compile Include="Mapping\IObjectMap.cs" />
     <Compile Include="Mapping\IPredicateMap.cs" />
+    <Compile Include="Mapping\IQueryMap.cs" />
+    <Compile Include="Mapping\ITermType.cs" />
+    <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Mapping\IPredicateObjectMap.cs" />
     <Compile Include="Mapping\IR2RML.cs" />
     <Compile Include="Mapping\IRefObjectMap.cs" />
@@ -72,6 +81,7 @@
     <Compile Include="Mapping\JoinCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDB\ColumnCollection.cs" />
+    <Compile Include="RDB\UndelimitedColumnsDataRecordWrapper.cs" />
     <Compile Include="RDB\DatabaseIdentifiersHelper.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
@@ -87,7 +97,25 @@
     <Compile Include="RDB\TableMetadata.cs" />
     <Compile Include="RDB\UniqueKeyCollection.cs" />
     <Compile Include="RDB\W3cEffectiveSqlBuilder.cs" />
+    <Compile Include="RDF\BlankNodeReplaceHandler.cs" />
+    <Compile Include="RDF\R2RMLUris.cs" />
+    <Compile Include="RDF\TripleExtensions.cs" />
     <Compile Include="RDF\XsdDatatypes.cs" />
+    <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
+    <Compile Include="RDF\BlankNodeSubjectReplaceHandler.cs" />
+    <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
+    <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
+    <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
+    <Compile Include="TriplesGeneration\IRefObjectMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\MapProcessorBase.cs" />
+    <Compile Include="TriplesGeneration\RDFTermGenerator.cs" />
+    <Compile Include="RDF\DefaultSQLValuesMappingStrategy.cs" />
+    <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\W3CRefObjectMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
+    <Compile Include="TriplesGeneration\W3CR2RMLProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

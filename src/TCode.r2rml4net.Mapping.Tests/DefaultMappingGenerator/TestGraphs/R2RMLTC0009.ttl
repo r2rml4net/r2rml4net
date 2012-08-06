@@ -1,6 +1,6 @@
 @prefix rr: <http://www.w3.org/ns/r2rml#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+@base <http://example.com/> .
 
 <StudentTriplesMap>
      a rr:TriplesMap;
@@ -9,7 +9,7 @@
 
     rr:subjectMap 
 	[ 
-	  rr:template "http://example.com/Student/ID={ID}";
+	  rr:template "http://example.com/Student/ID={\"ID\"}";
 	  rr:class <http://example.com/Student>
 	];
 
@@ -34,7 +34,7 @@
     rr:predicateObjectMap
     [ 
       rr:predicateMap [ rr:constant <http://example.com/Student#ref-Sport> ] ; 
-      rr:objectMap [ rr:template "http://example.com/Sport/ID={Sport}"; ]
+      rr:objectMap [ rr:template "http://example.com/Sport/ID={\"Sport\"}"; ]
     ]
     .
 
@@ -45,7 +45,7 @@
 
 	rr:subjectMap
 	[
-	  rr:template "http://example.com/Sport/ID={ID}";
+	  rr:template "http://example.com/Sport/ID={\"ID\"}";
 	  rr:class <http://example.com/Sport>
 	];
 

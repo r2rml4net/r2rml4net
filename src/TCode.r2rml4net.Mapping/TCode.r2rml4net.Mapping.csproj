@@ -55,8 +55,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultR2RMLMappingGenerator.cs" />
+    <Compile Include="DirectMapping\ColumnMappingStrategy.cs" />
+    <Compile Include="DirectMapping\ForeignKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\DirectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\R2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
+    <Compile Include="DirectMapping\PrimaryKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\DirectMappingHelper.cs" />
+    <Compile Include="DirectMapping\DirectMappingOptions.cs" />
+    <Compile Include="DirectMapping\MappingStrategyBase.cs" />
+    <Compile Include="DirectMapping\IDirectMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IForeignKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IColumnMappingStrategy.cs" />
+    <Compile Include="DirectMapping\IPrimaryKeyMappingStrategy.cs" />
+    <Compile Include="DirectMapping\NewBlankNodeForDuplicateRows.cs" />
     <Compile Include="GraphMapConfiguration.cs" />
     <Compile Include="IGraphMapParent.cs" />
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />

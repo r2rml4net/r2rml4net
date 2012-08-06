@@ -93,6 +93,11 @@ WHERE { ?map rr:subject ?value }";
             }
         }
 
+        public Uri BaseURI
+        {
+            get { return R2RMLMappings.BaseUri; }
+        }
+
         #endregion
 
         private void EnsurePrefixes()

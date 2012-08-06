@@ -6,7 +6,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Configuration for term maps which can be of term-type rr:Literal. See http://www.w3.org/TR/r2rml/#termtype
     /// </summary>
-    public interface ILiteralTermMapConfiguration
+    public interface ILiteralTermMapConfiguration : ILiteralTermMap
     {
         /// <summary>
         /// Sets the datatype of the term map

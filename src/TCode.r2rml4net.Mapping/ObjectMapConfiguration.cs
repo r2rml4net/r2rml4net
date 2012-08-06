@@ -5,23 +5,35 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
-    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration
+    internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, ITermType
     {
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
             : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())
         {
         }
 
-        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node) 
+        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node)
             : base(parentTriplesMap, parentMap, r2RMLMappings, node)
         {
         }
+
+        #region Implementation of ITermMap
+
+        bool ITermMap.IsConstantValued
+        {
+            get
+            {
+                return ConstantValue != null || !string.IsNullOrEmpty(Literal);
+            }
+        }
+
+        #endregion
 
         #region Implementation of IObjectMapConfiguration
 
         public ILiteralTermMapConfiguration IsConstantValued(string literal)
         {
-            if(Literal != null)
+            if (Literal != null)
                 throw new InvalidTriplesMapException("Term map can have at most one constant value");
 
             EnsureRelationWithParentMap();
@@ -165,6 +177,58 @@ namespace TCode.r2rml4net.Mapping
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             // object map contains no submaps
+        }
+
+        #endregion
+
+        #region Implementation of ILiteralTermMap
+
+        public Uri DataTypeURI
+        {
+            get
+            {
+                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+
+                var datatypeTriple = datatypeTriples.SingleOrDefault();
+                if (datatypeTriple != null)
+                {
+                    if (languageTagTriples.Any())
+                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+
+                    IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
+                    if (dataTypeUriNode == null)
+                        throw new InvalidTriplesMapException("Object map has datatype set but it is not a URI");
+
+                    return dataTypeUriNode.Uri;
+                }
+
+                return null;
+            }
+        }
+
+        public string LanguageTag
+        {
+            get
+            {
+                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+
+                var languagTagTriple = languageTagTriples.SingleOrDefault();
+                if (languagTagTriple != null)
+                {
+                    if (datatypeTriples.Any())
+                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+
+                    ILiteralNode languageTagNode = languagTagTriple.Object as ILiteralNode;
+                    if (languageTagNode == null)
+                        throw new InvalidTriplesMapException("Object map has literal set but it is not a literal");
+
+                    return languageTagNode.Value;
+                }
+
+                return null;
+            }
         }
 
         #endregion
