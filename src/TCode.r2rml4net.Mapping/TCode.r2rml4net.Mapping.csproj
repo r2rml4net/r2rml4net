@@ -74,6 +74,8 @@
     <Compile Include="INonLiteralTermMapConfigutarion.cs" />
     <Compile Include="ILiteralTermMapConfiguration.cs" />
     <Compile Include="IRefObjectMapConfiguration.cs" />
+    <Compile Include="Log\IDefaultMappingGenerationLog.cs" />
+    <Compile Include="Log\NullLog.cs" />
     <Compile Include="ObjectMapConfiguration.cs" />
     <Compile Include="PredicateMapConfiguration.cs" />
     <Compile Include="PredicateObjectMapConfiguration.cs" />

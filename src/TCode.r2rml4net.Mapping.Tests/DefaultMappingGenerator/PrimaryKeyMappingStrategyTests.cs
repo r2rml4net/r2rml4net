@@ -1,5 +1,7 @@
 ﻿using System;
+using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping.DirectMapping;
 using TCode.r2rml4net.RDB;
 
@@ -91,17 +93,20 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             Assert.Throws<ArgumentException>(() => _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://www.example.com/"), table));
         }
 
-        [Test, Ignore("refactor to add logging")]
+        [Test]
         public void LogsErrorOnGeneratingTemplateForMultipleReferencedUniqueKeysAndUsesTheShortest()
         {
             // given
             var table = RelationalTestMappings.NoPrimaryKeyThreeUniqueKeys["Student"];
+            Mock<IDefaultMappingGenerationLog> log = new Mock<IDefaultMappingGenerationLog>();
+            _strategy.Log = log.Object;
 
             // when
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
             Assert.AreEqual("Student_{\"ID\"}", template);
+            log.Verify(l => l.LogMultipleCompositeKeyReferences(table), Times.Once());
         }
 
         [Test]
