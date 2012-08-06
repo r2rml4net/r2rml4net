@@ -21,7 +21,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         [Test]
         public void ContainsTablesCorrectly()
         {
-            Assert.AreEqual(6, DatabaseSchema.Tables.Count);
+            Assert.AreEqual(8, DatabaseSchema.Tables.Count);
             var tableNames = DatabaseSchema.Tables.Select(t => t.Name).ToArray();
             Assert.Contains("CandidateKey", tableNames);
             Assert.Contains("CandidateRef", tableNames);
@@ -44,6 +44,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 
             // CandidateRef - CandidateKey
             TableMetadata candidateRefTable = DatabaseSchema.Tables.Single(t => t.Name == "CandidateRef");
+            TableMetadata candidateKeyTable = DatabaseSchema.Tables["CandidateKey"];
             Assert.AreEqual(1, candidateRefTable.ForeignKeys.Length);
             Assert.AreEqual("RefCol1", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[0]);
             Assert.AreEqual("RefCol2", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[1]);
@@ -51,6 +52,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.AreEqual("KeyCol2", candidateRefTable.ForeignKeys[0].ReferencedColumns[1]);
             Assert.AreEqual("CandidateRef", candidateRefTable.ForeignKeys[0].TableName);
             Assert.AreEqual("CandidateKey", candidateRefTable.ForeignKeys[0].ReferencedTableName);
+            Assert.IsTrue(candidateKeyTable.UniqueKeys.ElementAt(0).IsReferenced);
         }
 
         [Test]
@@ -66,22 +68,25 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         }
 
         [Test]
-        public void ReadsUniqueKeys()
+        public void ReadsUniqueKeysAndMarksReferenced()
         {
             Assert.AreEqual(3, DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys.Count());
 
             Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 1 &&
-                                                        uq.Any(col => col.Name == "UQ3")));
+                                                        uq.Any(col => col.Name == "UQ3") &&
+                                                        uq.IsReferenced));
             Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 2 &&
                                                         uq.Any(col => col.Name == "UQ1_1") &&
-                                                        uq.Any(col => col.Name == "UQ1_2")));
+                                                        uq.Any(col => col.Name == "UQ1_2") &&
+                                                        uq.IsReferenced));
             Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 3 &&
                                                         uq.Any(col => col.Name == "UQ2_1") &&
                                                         uq.Any(col => col.Name == "UQ2_2") &&
-                                                        uq.Any(col => col.Name == "UQ2_3")));
+                                                        uq.Any(col => col.Name == "UQ2_3") &&
+                                                        !uq.IsReferenced));
         }
     }
 }

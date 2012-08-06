@@ -164,3 +164,33 @@ CREATE TABLE [dbo].[MultipleUniqueKeys](
 ) ON [PRIMARY]
 
 GO
+
+CREATE TABLE [dbo].[ReferencesCandidateWhileOtherExist](
+	[REF1] [int] NOT NULL,
+	[REF2] [nvarchar](50) NOT NULL
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[ReferencesCandidateWhileOtherExist]  WITH CHECK ADD  CONSTRAINT [FK_ReferencesCandidateWhileOtherExist_MultipleUniqueKeys] FOREIGN KEY([REF1], [REF2])
+REFERENCES [dbo].[MultipleUniqueKeys] ([UQ1_1], [UQ1_2])
+GO
+
+ALTER TABLE [dbo].[ReferencesCandidateWhileOtherExist] CHECK CONSTRAINT [FK_ReferencesCandidateWhileOtherExist_MultipleUniqueKeys]
+GO
+
+CREATE TABLE [dbo].[AnotherReference](
+	[REF3] [nchar](10) NOT NULL
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[AnotherReference]  WITH CHECK ADD  CONSTRAINT [FK_AnotherReference_MultipleUniqueKeys] FOREIGN KEY([REF3])
+REFERENCES [dbo].[MultipleUniqueKeys] ([UQ3])
+GO
+
+ALTER TABLE [dbo].[AnotherReference] CHECK CONSTRAINT [FK_AnotherReference_MultipleUniqueKeys]
+GO
+
+
+

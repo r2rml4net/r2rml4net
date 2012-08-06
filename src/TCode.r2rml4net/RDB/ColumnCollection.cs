@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.RDB
                 if (string.IsNullOrWhiteSpace(columnName))
                     throw new ArgumentOutOfRangeException("columnName");
 
-                var column = Enumerable.SingleOrDefault<ColumnMetadata>(this, c => c.Name == columnName);
+                var column = this.SingleOrDefault(c => c.Name == columnName);
                 if (column == null)
                     throw new IndexOutOfRangeException(string.Format("Table does not contain column {0}", columnName));
 
