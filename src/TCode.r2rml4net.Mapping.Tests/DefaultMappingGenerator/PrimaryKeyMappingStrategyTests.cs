@@ -10,6 +10,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     {
         PrimaryKeyMappingStrategy _strategy;
 
+        [SetUp]
+        public void Setup()
+        {
+            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
+        }
+
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidTriplesMapException))]
         [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
         [TestCase(3, "_", "Table_{\"Column1\"}_{\"Column2\"}_{\"Column3\"}")]
@@ -61,7 +67,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void GeneratesSubjectTemplateFromPrimaryKey(string baseUriString, string[] columns, string expected)
         {
             // given
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
             var table = new TableMetadata { Name = "Table" };
             foreach (var column in columns)
             {
@@ -79,12 +84,117 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         public void ThrowsOnTemplateGenerationIfNoPrimaryKey()
         {
             // given
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
             var table = new TableMetadata { Name = "Table" };
             table.Add(new ColumnMetadata { Name = "Not primary key" });
 
             // when
             Assert.Throws<ArgumentException>(() => _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://www.example.com/"), table));
+        }
+
+        [Test, Ignore("refactor to add logging")]
+        public void LogsErrorOnGeneratingTemplateForMultipleReferencedUniqueKeysAndUsesTheShortest()
+        {
+            // given
+            var table = RelationalTestMappings.NoPrimaryKeyThreeUniqueKeys["Student"];
+
+            // when
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+
+            // then
+            Assert.AreEqual("Student_{\"ID\"}", template);
+        }
+
+        [Test]
+        public void WhenAUniqueKeyIsReferencedGeneratesBlankNodeForItsColumns()
+        {
+            // given
+            var columnId = new ColumnMetadata
+                {
+                    Name = "ID",
+                    Type = R2RMLType.Integer
+                };
+            var columnName = new ColumnMetadata
+                {
+                    Name = "PESEL",
+                    Type = R2RMLType.String
+                };
+            var columnLastName = new ColumnMetadata
+                {
+                    Name = "LastName",
+                    Type = R2RMLType.String
+                };
+            var studentsTable = new TableMetadata
+                            {
+                                columnId,
+                                columnName,
+                                columnLastName
+                            };
+            studentsTable.Name = "Student";
+            studentsTable.UniqueKeys.Add(new UniqueKeyMetadata { columnId });
+            var uniqueKey = new UniqueKeyMetadata { columnName };
+            uniqueKey.IsReferenced = true;
+            studentsTable.UniqueKeys.Add(uniqueKey);
+
+            // when
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(studentsTable);
+
+            // then
+            Assert.AreEqual("Student_{\"PESEL\"}", template);
+        }
+
+        [Test]
+        public void WhenNoUniqueKeyIsReferencedGeneratesTemplateOfTheShortest()
+        {
+            // given
+            var columnId = new ColumnMetadata
+            {
+                Name = "ID",
+                Type = R2RMLType.Integer
+            };
+            var columnPesel = new ColumnMetadata
+            {
+                Name = "PESEL",
+                Type = R2RMLType.String
+            };
+            var columnLastName = new ColumnMetadata
+            {
+                Name = "Name",
+                Type = R2RMLType.String
+            };
+            var columnName = new ColumnMetadata
+            {
+                Name = "LastName",
+                Type = R2RMLType.String
+            };
+            var yetAnotherColumn = new ColumnMetadata
+            {
+                Name = "another",
+                Type = R2RMLType.String
+            };
+            var otherColumn = new ColumnMetadata
+            {
+                Name = "other",
+                Type = R2RMLType.String
+            };
+            var studentsTable = new TableMetadata
+                            {
+                                columnId,
+                                columnName,
+                                columnLastName,
+                                columnPesel,
+                                otherColumn,
+                                yetAnotherColumn
+                            };
+            studentsTable.Name = "Student";
+            studentsTable.UniqueKeys.Add(new UniqueKeyMetadata { columnId });
+            studentsTable.UniqueKeys.Add(new UniqueKeyMetadata { columnName, columnLastName });
+            studentsTable.UniqueKeys.Add(new UniqueKeyMetadata { columnPesel, otherColumn, yetAnotherColumn });
+
+            // when
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(studentsTable);
+
+            // then
+            Assert.AreEqual("Student_{\"ID\"}", template);
         }
     }
 }

@@ -489,6 +489,8 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                        IsCandidateKeyReference = true
                                                    }
                                            };
+                var uniqueKey = new UniqueKeyMetadata { deptTable["deptno"] };
+                deptTable.UniqueKeys.Add(uniqueKey);
 
                 return new TableCollection
                            {
@@ -707,11 +709,15 @@ namespace TCode.r2rml4net.Mapping.Tests
                                 col4
                             };
                 studentsTable.Name = "Student";
+                var uniqueKey = new UniqueKeyMetadata { col1, col2 };
+                uniqueKey.IsReferenced = true;
+                var uniqueKey2 = new UniqueKeyMetadata { col3, col4 };
+                uniqueKey2.IsReferenced = true;
                 studentsTable.UniqueKeys = new UniqueKeyCollection
                     {
-                        new ColumnCollection{col1},
-                        new ColumnCollection{col1, col2},
-                        new ColumnCollection{col3, col4},
+                        new UniqueKeyMetadata{col1},
+                        uniqueKey,
+                        uniqueKey2,
                     };
 
                 return new TableCollection
