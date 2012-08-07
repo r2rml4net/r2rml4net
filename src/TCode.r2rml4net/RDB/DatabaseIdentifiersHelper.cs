@@ -4,11 +4,14 @@ namespace TCode.r2rml4net.RDB
 {
     static class DatabaseIdentifiersHelper
     {
-        private static readonly Regex ColumnNameRegex = new Regex(@"^[\""`'\[]+([_ a-zA-Z0-9]+)[\""`'\]]+$");
+        private static readonly char[] StartDelimiters = new[] { '`', '\"', '[' };
+        private static readonly char[] EndDelimiters = new[] { '`', '\"', ']' };
+
+        private static readonly Regex ColumnNameRegex = new Regex(@"^[\""`'\[](.+[^\""`'\]])[\""`'\]]$");
 
         internal static string GetColumnNameUnquoted(string columnName)
         {
-            return ColumnNameRegex.Replace(columnName, "$1");
+            return columnName.TrimStart(StartDelimiters).TrimEnd(EndDelimiters);
         }
 
         internal static string DelimitIdentifier(string identifier, MappingOptions options)

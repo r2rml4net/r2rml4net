@@ -6,13 +6,14 @@ namespace TCode.r2rml4net.Tests.RDB
     [TestFixture]
     public class DatabaseIdentifiersHelperTests
     {
+        [TestCase("\"葉\"", "葉")]
         [TestCase("[Column]", "Column")]
         [TestCase("\"Column\"", "Column")]
         [TestCase("`Column`", "Column")]
         [TestCase("`Column with spaces and_underscored]", "Column with spaces and_underscored")]
         [TestCase("\"Column with spaces and_underscored\"", "Column with spaces and_underscored")]
         [TestCase("[Column with spaces and_underscored]", "Column with spaces and_underscored")]
-        public void EcsapesSimpleColumnNames(string inputName, string expectedName)
+        public void EscapesSimpleColumnNames(string inputName, string expectedName)
         {
             Assert.AreEqual(expectedName, DatabaseIdentifiersHelper.GetColumnNameUnquoted(inputName));
         }
