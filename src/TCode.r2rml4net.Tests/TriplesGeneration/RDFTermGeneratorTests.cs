@@ -305,37 +305,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #endregion
 
-        #region BlankNode term type
-
-        [Test]
-        public void ReturnsBlankNodeWithCustomIdentifier()
-        {
-            // given
-            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
-            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            Uri datatype;
-            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
-                                .Returns("value")
-                                .Verifiable();
-            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
-            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termType.Setup(type => type.IsBlankNode).Returns(true).Verifiable();
-
-            // when
-            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
-
-            // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IBlankNode);
-            Assert.AreEqual("value", (node as IBlankNode).InternalID);
-            _logicalRow.VerifyAll();
-            _termMap.VerifyAll();
-            _termType.VerifyAll();
-            _log.Verify(log => log.LogTermGenerated(node));
-        }
-
-        #endregion
-
         #region Literal term type
 
         [Test]
@@ -549,34 +518,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void ReplacesColumnNamesWithValuesForBlankNodeTemplatedTermMap()
-        {
-            // given
-            _logicalRow.Setup(rec => rec.GetOrdinal("id")).Returns(1).Verifiable();
-            _logicalRow.Setup(rec => rec.GetOrdinal("name")).Returns(2).Verifiable();
-            _logicalRow.Setup(rec => rec.IsDBNull(It.IsAny<int>())).Returns(false).Verifiable();
-            _objectMap.Setup(map => map.IsTemplateValued).Returns(true);
-            _objectMap.Setup(map => map.Template).Returns("person_{id}_{name}");
-            _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
-            _termType.Setup(tt => tt.IsBlankNode).Returns(true).Verifiable();
-            Uri type;
-            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, It.IsAny<IDataRecord>(), out type)).Returns("5").Verifiable();
-            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(2, It.IsAny<IDataRecord>(), out type)).Returns("Pluskiewicz").Verifiable();
-
-            // when
-            var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
-
-            // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IBlankNode);
-            Assert.AreEqual("person_5_Pluskiewicz", (node as IBlankNode).InternalID);
-            _logicalRow.VerifyAll();
-            _logicalRow.Verify();
-            _objectMap.VerifyAll();
-            _termType.VerifyAll();
-        }
-
-        [Test]
         public void ReplacesAndEscapesColumnNameWithValuesForIRITemplatedTermMap()
         {
             // given
@@ -660,6 +601,76 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
+        }
+
+        [Test]
+        public void ByDefaultPreservesDuplicateRows()
+        {
+            Assert.IsTrue(_termGenerator.PreserveDuplicateRows);
+        }
+
+        [Test]
+        public void RetrunsDifferentSubjectBlankNodesForSameValues()
+        {
+            // given
+            const string nodeId = "node id";
+            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+
+            // when
+            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+
+            // then
+            Assert.AreNotSame(node, node2);
+        }
+
+        [Test]
+        public void RetrunsSameSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
+        {
+            // given
+            const string nodeId = "node id";
+            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            _termGenerator = new RDFTermGenerator(false);
+
+            // when
+            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+
+            // then
+            Assert.AreSame(node, node2);
+        }
+
+        [Test]
+        public void ReusesNodesForObjectsWhenPreservingDulplicateRows()
+        {
+            // given
+            const string nodeId = "node id";
+            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            _objectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            _termGenerator = new RDFTermGenerator(false);
+
+            // when
+            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+
+            // then
+            Assert.AreSame(node, node2);
+        }
+
+        [Test]
+        public void ReusesNodesForObjectsWhenNotPreservingDulplicateRows()
+        {
+            // given
+            const string nodeId = "node id";
+            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            _objectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+
+            // when
+            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+
+            // then
+            Assert.AreSame(node, node2);
         }
     }
 }
