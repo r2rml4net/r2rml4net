@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB.ADO.NET;
 using TCode.r2rml4net.RDF;
+using VDS.Common;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -19,6 +21,17 @@ namespace TCode.r2rml4net.TriplesGeneration
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
+        private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new HashTable<string, IBlankNode>(256);
+
+        public RDFTermGenerator()
+            : this(true)
+        {
+        }
+
+        public RDFTermGenerator(bool preserveDuplicateRows)
+        {
+            PreserveDuplicateRows = preserveDuplicateRows;
+        }
 
         public ISQLValuesMappingStrategy SqlValuesMappingStrategy
         {
@@ -38,6 +51,8 @@ namespace TCode.r2rml4net.TriplesGeneration
             set { _nodeFactory = value; }
         }
 
+        public bool PreserveDuplicateRows { get; set; }
+
         #region Implementation of IRDFTermGenerator
 
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
@@ -47,7 +62,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             var logicalRowWrapped = new UndelimitedColumnsDataRecordWrapper(logicalRow);
 
-            if(!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
+            if (!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
                 throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
 
             if (termMap.IsConstantValued)
@@ -168,10 +183,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
             if (termMap.TermType.IsBlankNode)
             {
-                if (!ValidBlankNodeRegex.IsMatch(value))
-                    Log.LogInvalidBlankNode(termMap, value);
-
-                return NodeFactory.CreateBlankNode(value);
+                return GenerateBlankNodeForValue(termMap, value);
             }
             if (termMap.TermType.IsLiteral)
             {
@@ -181,6 +193,40 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
 
             throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-valued");
+        }
+
+        private INode GenerateBlankNodeForValue(ITermMap termMap, string value)
+        {
+            if (!ValidBlankNodeRegex.IsMatch(value))
+                Log.LogInvalidBlankNode(termMap, value);
+
+            IBlankNode blankNode;
+            if (termMap is ISubjectMap)
+            {
+                if (!_blankNodeSubjects.ContainsKey(value))
+                {
+                    blankNode = _nodeFactory.CreateBlankNode();
+                    _blankNodeSubjects.Add(value, blankNode);
+                }
+                else if (PreserveDuplicateRows)
+                {
+                    blankNode = _nodeFactory.CreateBlankNode();
+                }
+                else
+                {
+                    blankNode = _blankNodeSubjects[value];
+                }
+            }
+            else
+            {
+                if (!_blankNodeSubjects.ContainsKey(value))
+                {
+                    _blankNodeSubjects.Add(value, _nodeFactory.CreateBlankNode());
+                }
+                blankNode = _blankNodeSubjects[value];
+            }
+
+            return blankNode;
         }
 
         private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
