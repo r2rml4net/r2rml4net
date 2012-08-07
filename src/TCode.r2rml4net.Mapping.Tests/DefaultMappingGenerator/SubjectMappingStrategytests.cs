@@ -12,7 +12,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
         }
 
         [TestCase("http://example.com")]

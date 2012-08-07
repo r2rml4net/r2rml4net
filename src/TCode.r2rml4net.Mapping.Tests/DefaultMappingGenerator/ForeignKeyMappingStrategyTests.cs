@@ -13,7 +13,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new ForeignKeyMappingStrategy(new DirectMappingOptions());
+            _strategy = new ForeignKeyMappingStrategy(new MappingOptions());
         }
 
         [Test]

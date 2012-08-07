@@ -10,7 +10,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     {
         public IDefaultMappingGenerationLog Log { get; set; }
 
-        public PrimaryKeyMappingStrategy(DirectMappingOptions options)
+        public PrimaryKeyMappingStrategy(MappingOptions options)
             : base(options)
         {
             Log = NullLog.Instance;
@@ -27,7 +27,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (string.IsNullOrWhiteSpace(tableName))
                 throw new ArgumentException("Invalid table name");
 
-            return new Uri(baseUri, DirectMappingHelper.UrlEncode(tableName));
+            return new Uri(baseUri, MappingHelper.UrlEncode(tableName));
         }
 
         public virtual string CreateSubjectTemplateForNoPrimaryKey(TableMetadata table)
@@ -72,8 +72,8 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (!table.PrimaryKey.Any())
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
 
-            string template = DirectMappingHelper.UrlEncode(CreateSubjectUri(baseUri, table.Name).ToString());
-            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => pk.Name).Select(pk => string.Format("{0}={1}", DirectMappingHelper.UrlEncode(pk), DirectMappingHelper.EncloseColumnName(pk))));
+            string template = MappingHelper.UrlEncode(CreateSubjectUri(baseUri, table.Name).ToString());
+            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => pk.Name).Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }
 

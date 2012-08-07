@@ -16,12 +16,12 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
-        private readonly DirectMappingOptions _options;
+        private readonly MappingOptions _options;
 
         /// <summary>
         /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, DirectMappingOptions options)
+        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, MappingOptions options)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
             this._r2RMLConfiguration = r2RMLConfiguration;
@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         }
 
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
-            : this(databaseMetadataProvider, r2RMLConfiguration, new DirectMappingOptions())
+            : this(databaseMetadataProvider, r2RMLConfiguration, new MappingOptions())
         {
 
         }

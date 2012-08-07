@@ -8,6 +8,18 @@ namespace TCode.r2rml4net.RDB
     /// </summary>
     public class W3CEffectiveSqlBuilder : IEffectiveSqlBuilder
     {
+        private readonly MappingOptions _options;
+
+        public W3CEffectiveSqlBuilder(MappingOptions options)
+        {
+            _options = options;
+        }
+
+        public W3CEffectiveSqlBuilder()
+            : this(new MappingOptions())
+        {
+        }
+
         #region Implementation of IEffectiveSqlBuilder
 
         /// <summary>
@@ -23,7 +35,7 @@ namespace TCode.r2rml4net.RDB
             }
 
             if (triplesMap.TableName != null)
-                return string.Format("SELECT * FROM {0}", triplesMap.TableName);
+                return string.Format("SELECT * FROM {0}", DatabaseIdentifiersHelper.DelimitIdentifier(triplesMap.TableName, _options));
 
             return triplesMap.SqlQuery;
         }
@@ -38,7 +50,7 @@ namespace TCode.r2rml4net.RDB
             if (refObjectMap.JoinConditions.Any())
             {
                 var joinStatements =
-                    refObjectMap.JoinConditions.Select(join => string.Format("child.{0}=parent.{1}", join.ChildColumn, join.ParentColumn));
+                    refObjectMap.JoinConditions.Select(join => string.Format("child.\"{0}\"=parent.\"{1}\"", join.ChildColumn, join.ParentColumn));
 
                 return string.Format(@"SELECT * FROM ({0}) AS child, 
 ({1}) AS parent

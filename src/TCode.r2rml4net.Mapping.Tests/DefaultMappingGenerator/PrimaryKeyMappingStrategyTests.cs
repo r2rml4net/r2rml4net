@@ -15,7 +15,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
         }
 
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidTriplesMapException))]
@@ -31,7 +31,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = "Column" + i });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
                 {
                     TemplateSeparator = columnSeparator
                 });
@@ -52,7 +52,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = column });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new DirectMappingOptions
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
             {
                 UseDelimitedIdentifiers = false
             });

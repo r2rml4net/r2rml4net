@@ -1,18 +1,17 @@
 ﻿using System;
 using NUnit.Framework;
-using TCode.r2rml4net.Mapping.DirectMapping;
 
-namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
+namespace TCode.r2rml4net.Tests
 {
     [TestFixture]
-    public class DirectMappingOptionsTests
+    public class MappingOptionsTests
     {
-        private DirectMappingOptions _options;
+        private MappingOptions _options;
 
         [SetUp]
         public void Setup()
         {
-            _options = new DirectMappingOptions();
+            _options = new MappingOptions();
         }
 
         [Test]

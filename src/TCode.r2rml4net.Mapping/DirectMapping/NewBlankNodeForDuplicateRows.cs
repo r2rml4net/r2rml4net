@@ -7,12 +7,12 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     public class NewBlankNodeForDuplicateRows : DirectMappingStrategy
     {
         public NewBlankNodeForDuplicateRows()
-            : this(new DirectMappingOptions())
+            : this(new MappingOptions())
         {
 
         }
 
-        public NewBlankNodeForDuplicateRows(DirectMappingOptions options)
+        public NewBlankNodeForDuplicateRows(MappingOptions options)
             : base(options)
         {
         }
