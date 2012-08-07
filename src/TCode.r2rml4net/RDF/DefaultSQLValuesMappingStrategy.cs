@@ -50,11 +50,13 @@ namespace TCode.r2rml4net.RDF
                             : logicalRow.GetDouble(columnIndex).ToString(format, CultureInfo.InvariantCulture);
 
                     case XsdDatatypes.DateTime:
-                        return logicalRow.GetDateTime(columnIndex).ToUniversalTime().ToString("u").Replace(' ', 'T');
+                        return GetUtcTime(columnIndex, logicalRow).ToString("u").Replace(' ', 'T').TrimEnd('Z');
                     case XsdDatatypes.Time:
-                        return logicalRow.GetDateTime(columnIndex).ToUniversalTime().ToString("u").Split(' ')[1];
+                        return GetUtcTime(columnIndex, logicalRow).ToString("u").Split(' ')[1];
                     case XsdDatatypes.Date:
-                        return logicalRow.GetDateTime(columnIndex).ToUniversalTime().ToString("u").Split(' ')[0];
+                        return GetUtcTime(columnIndex, logicalRow).ToString("u").Split(' ')[0];
+                    case XsdDatatypes.Binary:
+                        return ByteArrayToString((byte[]) logicalRow.GetValue(columnIndex));
                 }
             }
 
@@ -95,6 +97,25 @@ namespace TCode.r2rml4net.RDF
             _datatypeMappings.Add(typeof(double), XsdDatatypes.Double);
             _datatypeMappings.Add(typeof(DateTime), XsdDatatypes.DateTime);
             _datatypeMappings.Add(typeof(TimeSpan), XsdDatatypes.DateTime);
+        }
+
+        static DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
+        {
+            return TimeZoneInfo.ConvertTimeToUtc(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Utc);
+        }
+
+        static string ByteArrayToString(byte[] bytes)
+        {
+            char[] c = new char[bytes.Length * 2];
+            byte b;
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                b = ((byte)(bytes[i] >> 4));
+                c[i * 2] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+                b = ((byte)(bytes[i] & 0xF));
+                c[i * 2 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+            }
+            return new string(c);
         }
     }
 }
