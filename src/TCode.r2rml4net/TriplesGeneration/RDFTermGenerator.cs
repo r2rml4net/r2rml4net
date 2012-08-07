@@ -102,9 +102,6 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return null;
             }
 
-            if (!string.IsNullOrWhiteSpace(value) && termMap.TermType.IsURI)
-                value = Uri.EscapeUriString(value);
-
             return GenerateTermForValue(termMap, value);
         }
 
@@ -233,7 +230,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             try
             {
-                return TemplateReplaceRegex.Replace(template, match => ReplaceColumnReference(match, logicalRow));
+                return TemplateReplaceRegex.Replace(template, match => Uri.EscapeDataString(ReplaceColumnReference(match, logicalRow)));
             }
             catch (ArgumentNullException)
             {
