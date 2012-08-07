@@ -10,5 +10,13 @@ namespace TCode.r2rml4net.RDB
         {
             return ColumnNameRegex.Replace(columnName, "$1");
         }
+
+        internal static string DelimitIdentifier(string identifier, MappingOptions options)
+        {
+            if (options.UseDelimitedIdentifiers && !ColumnNameRegex.IsMatch(identifier))
+                return string.Format("{0}{1}{2}", options.SqlIdentifierLeftDelimiter, identifier, options.SqlIdentifierRightDelimiter);
+
+            return identifier; 
+        }
     }
 }

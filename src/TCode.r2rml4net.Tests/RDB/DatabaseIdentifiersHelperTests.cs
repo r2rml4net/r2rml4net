@@ -17,10 +17,19 @@ namespace TCode.r2rml4net.Tests.RDB
             Assert.AreEqual(expectedName, DatabaseIdentifiersHelper.GetColumnNameUnquoted(inputName));
         }
 
-        //[TestCase("Column with \"quoted value\"", @"""Column ""with quotes""")]
-        //public void EcsapesColumnNamesWithQuotes(string inputName, string expectedName)
-        //{
-        //    Assert.AreEqual(expectedName, DatabaseIdentifiersHelper.GetColumnNameUnquoted(inputName));
-        //}
+        [TestCase('[', ']')]
+        [TestCase('`', '`')]
+        [TestCase('\"', '\"')]
+        public void DoesntDelimitIfAlreadyDelimited(char delimitLeft, char delimitRight)
+        {
+            // given
+            string sqlId = string.Format("{0}some idenfifier{1}", delimitLeft, delimitRight);
+
+            // when
+            var delimited = DatabaseIdentifiersHelper.DelimitIdentifier(sqlId, new MappingOptions());
+
+            // then
+            Assert.AreEqual(sqlId, delimited);
+        }
     }
 }

@@ -1,14 +1,14 @@
 using System;
 
-namespace TCode.r2rml4net.Mapping.DirectMapping
+namespace TCode.r2rml4net
 {
-    public sealed class DirectMappingOptions
+    public sealed class MappingOptions
     {
         private string _templateSeparator;
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
 
-        internal DirectMappingOptions()
+        public MappingOptions()
         {
             TemplateSeparator = DefaultTemplateSeparator;
             SqlIdentifierRightDelimiter = DefaultIdentifierDelimiter;

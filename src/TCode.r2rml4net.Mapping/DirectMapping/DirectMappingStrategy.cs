@@ -9,11 +9,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
 
         public DirectMappingStrategy()
-            : this(new DirectMappingOptions())
+            : this(new MappingOptions())
         {
         }
 
-        public DirectMappingStrategy(DirectMappingOptions options)
+        public DirectMappingStrategy(MappingOptions options)
             : base(options)
         {
         }

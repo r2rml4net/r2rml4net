@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
         public void ReturnsSqlQueryAsEffectiveSql()
         {
             // given
-            const string sqlQuery = "SELECT a, b FROM c as Table";
+            const string sqlQuery = "SELECT \"a\", \"b\" FROM \"c\" as Table";
             _triplesMap.Setup(tm => tm.TableName);
             _triplesMap.Setup(tm => tm.SqlQuery).Returns(sqlQuery);
 
@@ -48,23 +48,22 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             string sql = _sqlBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
 
             // then
-            Assert.AreEqual("SELECT * FROM Student", sql);
+            Assert.AreEqual("SELECT * FROM \"Student\"", sql);
         }
 
         [Test]
         public void RefObjectMapWithNoJoinConditionsGiven()
         {
             // given
-            _refObjectMap.Setup(rom => rom.ChildEffectiveSqlQuery).Returns("SELECT * FROM A");
+            _refObjectMap.Setup(rom => rom.ChildEffectiveSqlQuery).Returns("SELECT * FROM \"A\"");
             _refObjectMap.Setup(rom => rom.JoinConditions).Returns(new JoinCondition[0]);
 
             // when
             string sql = _sqlBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
 
             // then
-            Assert.AreEqual("SELECT * FROM (SELECT * FROM A) AS tmp", sql);
+            Assert.AreEqual("SELECT * FROM (SELECT * FROM \"A\") AS tmp", sql);
         }
-
 
         [Test]
         public void RefObjectMapWithSingleJoinCondition()
@@ -81,7 +80,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             AssertContainsSequence(sql,
                                    "SELECT * FROM (SELECT * FROM A) AS child,",
                                    "(SELECT * FROM B) AS parent",
-                                   "WHERE child.colX=parent.colY");
+                                   "WHERE child.\"colX\"=parent.\"colY\"");
         }
 
         [Test]
@@ -104,9 +103,9 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             AssertContainsSequence(sql,
                                    "SELECT * FROM (SELECT * FROM A) AS child,",
                                    "(SELECT * FROM B) AS parent",
-                                   "child.colX=parent.colY",
-                                   "child.foo=parent.bar",
-                                   "child.dlihc=parent.tnerap");
+                                   "child.\"colX\"=parent.\"colY\"",
+                                   "child.\"foo\"=parent.\"bar\"",
+                                   "child.\"dlihc\"=parent.\"tnerap\"");
         }
 
         static void AssertContainsSequence(string actualString, params string[] expectedValues)

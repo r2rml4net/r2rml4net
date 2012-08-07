@@ -61,8 +61,6 @@
     <Compile Include="DirectMapping\R2RMLMappingGenerator.cs" />
     <Compile Include="BaseConfiguration.cs" />
     <Compile Include="DirectMapping\PrimaryKeyMappingStrategy.cs" />
-    <Compile Include="DirectMapping\DirectMappingHelper.cs" />
-    <Compile Include="DirectMapping\DirectMappingOptions.cs" />
     <Compile Include="DirectMapping\MappingStrategyBase.cs" />
     <Compile Include="DirectMapping\IDirectMappingStrategy.cs" />
     <Compile Include="DirectMapping\IForeignKeyMappingStrategy.cs" />
