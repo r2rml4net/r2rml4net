@@ -17,7 +17,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     public class RDFTermGenerator : IRDFTermGenerator
     {
         static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
-        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([ \\\""a-zA-Z0-9]+)(?<-N>\})(?(N)(?!))");
+        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\}.]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             string value;
             try
             {
-                value = ReplaceColumnReferences(termMap.Template, logicalRow);
+                value = ReplaceColumnReferences(termMap.Template, logicalRow, termMap.TermType.IsURI);
             }
             catch (IndexOutOfRangeException)
             {
@@ -226,11 +226,15 @@ namespace TCode.r2rml4net.TriplesGeneration
             return blankNode;
         }
 
-        private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
+        private string ReplaceColumnReferences(string template, IDataRecord logicalRow, bool escapeValues)
         {
             try
             {
-                return TemplateReplaceRegex.Replace(template, match => Uri.EscapeDataString(ReplaceColumnReference(match, logicalRow)));
+                return TemplateReplaceRegex.Replace(template, match =>
+                    {
+                        var replacement = ReplaceColumnReference(match, logicalRow);
+                        return escapeValues ? Uri.EscapeDataString(replacement) : replacement;
+                    });
             }
             catch (ArgumentNullException)
             {

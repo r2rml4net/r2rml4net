@@ -456,6 +456,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(true).Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}");
+            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(tt => tt.IsURI).Returns(false);
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
@@ -478,12 +480,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(2)).Returns(true).Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
+            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(tt => tt.IsURI).Returns(true);
+            Uri typeUri;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, It.IsAny<IDataRecord>(), out typeUri)).Returns("value");
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
             Assert.IsNull(node);
+            _lexicalFormProvider.VerifyAll();
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
@@ -500,6 +507,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
             _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
             _termType.Setup(tt => tt.IsLiteral).Returns(true).Verifiable();
+            _termType.Setup(tt => tt.IsURI).Returns(false).Verifiable();
             Uri type;
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, It.IsAny<IDataRecord>(), out type)).Returns("5").Verifiable();
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(2, It.IsAny<IDataRecord>(), out type)).Returns("Tomasz Pluskiewicz").Verifiable();
