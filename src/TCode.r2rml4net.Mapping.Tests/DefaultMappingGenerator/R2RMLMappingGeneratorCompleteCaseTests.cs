@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Moq;
-using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.Mapping.DirectMapping;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
@@ -12,7 +11,7 @@ using VDS.RDF.Writing;
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     [TestFixture]
-    public class DefaultR2RMLMappingGeneratorTests
+    public class R2RMLMappingGeneratorCompleteCaseTests
     {
         private R2RMLMappingGenerator _r2RMLMappingGenerator;
         private Mock<IDatabaseMetadata> _databaseMetedata;

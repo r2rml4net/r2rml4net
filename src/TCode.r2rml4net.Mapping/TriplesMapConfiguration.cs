@@ -218,7 +218,7 @@ WHERE
         {
             get
             {
-                return R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForTriplesMap(this);
+                return R2RMLConfiguration.SqlQueryBuilder.GetEffectiveQueryForTriplesMap(this);
             }
         }
 

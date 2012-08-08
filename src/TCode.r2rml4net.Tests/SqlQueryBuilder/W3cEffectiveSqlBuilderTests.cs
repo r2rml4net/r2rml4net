@@ -9,14 +9,14 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
     [TestFixture]
     public class W3CEffectiveSqlBuilderTests
     {
-        private W3CEffectiveSqlBuilder _sqlBuilder;
+        private W3CSqlQueryBuilder _sqlQueryBuilder;
         Mock<IRefObjectMap> _refObjectMap;
         private Mock<ITriplesMap> _triplesMap;
 
         [SetUp]
         public void Setup()
         {
-            _sqlBuilder = new W3CEffectiveSqlBuilder();
+            _sqlQueryBuilder = new W3CSqlQueryBuilder();
             _refObjectMap = new Mock<IRefObjectMap>(MockBehavior.Strict);
             _triplesMap = new Mock<ITriplesMap>();
         }
@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             _triplesMap.Setup(tm => tm.SqlQuery).Returns(sqlQuery);
 
             // when
-            string sql = _sqlBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
+            string sql = _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
 
             // then
             Assert.AreEqual(sqlQuery, sql);
@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             _triplesMap.Setup(tm => tm.SqlQuery);
 
             // when
-            string sql = _sqlBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
+            string sql = _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
 
             // then
             Assert.AreEqual("SELECT * FROM \"Student\"", sql);
@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             _refObjectMap.Setup(rom => rom.JoinConditions).Returns(new JoinCondition[0]);
 
             // when
-            string sql = _sqlBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
+            string sql = _sqlQueryBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
 
             // then
             Assert.AreEqual("SELECT * FROM (SELECT * FROM \"A\") AS tmp", sql);
@@ -74,7 +74,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             _refObjectMap.Setup(rom => rom.ParentEffectiveSqlQuery).Returns("SELECT * FROM B");
 
             // when
-            string sql = _sqlBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
+            string sql = _sqlQueryBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
 
             // then
             AssertContainsSequence(sql,
@@ -97,7 +97,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             _refObjectMap.Setup(rom => rom.ParentEffectiveSqlQuery).Returns("SELECT * FROM B");
 
             // when
-            string sql = _sqlBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
+            string sql = _sqlQueryBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
 
             // then
             AssertContainsSequence(sql,

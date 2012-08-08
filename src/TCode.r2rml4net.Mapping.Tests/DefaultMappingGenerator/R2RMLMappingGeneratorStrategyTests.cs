@@ -9,7 +9,7 @@ using TCode.r2rml4net.RDB;
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     [TestFixture]
-    public class DefaultR2RMLMappingGeneratorStrategyTests
+    public class R2RMLMappingGeneratorStrategyTests
     {
         private R2RMLMappingGenerator _generator;
         private Mock<IDatabaseMetadata> _databaseMetedata;

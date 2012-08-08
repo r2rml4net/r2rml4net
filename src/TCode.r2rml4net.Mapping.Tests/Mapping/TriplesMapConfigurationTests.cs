@@ -218,10 +218,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             const string excpetedSql = "SELECT * FROM (SELECT * FROM A) AS tmp";
-            Mock<IEffectiveSqlBuilder> sqlBuilder = new Mock<IEffectiveSqlBuilder>();
+            Mock<ISqlQueryBuilder> sqlBuilder = new Mock<ISqlQueryBuilder>();
             sqlBuilder.Setup(builder => builder.GetEffectiveQueryForTriplesMap(It.IsAny<ITriplesMap>()))
                       .Returns(excpetedSql);
-            _r2RMLConfiguration.Setup(config => config.EffectiveSqlBuilder).Returns(sqlBuilder.Object);
+            _r2RMLConfiguration.Setup(config => config.SqlQueryBuilder).Returns(sqlBuilder.Object);
 
             // when
             string sql = _triplesMapConfiguration.EffectiveSqlQuery;
