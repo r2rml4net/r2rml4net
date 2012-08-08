@@ -14,6 +14,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private Mock<IR2RMLConfiguration> _configuration;
         private Mock<IDatabaseMetadata> _databaseMetedata;
         private Mock<ISqlQueryBuilder> _sqlBuilder;
+        private Mock<IDirectMappingStrategy> _mappingStrategy;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
         [SetUp]
@@ -22,11 +23,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration = new Mock<IR2RMLConfiguration>();
             _databaseMetedata = new Mock<IDatabaseMetadata>();
             _sqlBuilder = new Mock<ISqlQueryBuilder>();
+            _mappingStrategy = new Mock<IDirectMappingStrategy>();
             _generator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
             {
                 MappingBaseUri = _mappingBaseUri,
                 SqlBuilder = _sqlBuilder.Object,
-                MappingStrategy = new Mock<IDirectMappingStrategy>().Object
+                MappingStrategy = _mappingStrategy.Object
             };
             _configuration.Setup(c => c.CreateTriplesMapFromTable(It.IsAny<string>()))
                           .Returns(new MockConfiguration(_mappingBaseUri, _configuration.Object));
@@ -46,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // then
             _configuration.Verify(conf => conf.CreateTriplesMapFromTable(tableName), Times.Once());
-        }   
+        }
 
         [Test]
         public void CreatesTriplesMapFromTableWithoutPrimaryKey()
@@ -112,6 +114,38 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // then
             _configuration.Verify(conf => conf.CreateTriplesMapFromR2RMLView(expectedQuery), Times.Once());
             _sqlBuilder.Verify(sql => sql.GetR2RMLViewForJoinedTables(table), Times.Once());
+        }
+
+        [Test]
+        public void CreatesUriTemplateIfCandidateForeignKeyTargetHasPrimaryKey()
+        {
+            // given 
+            TableMetadata referenced = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id" }
+                };
+            referenced.Name = "target";
+            var fk = new ForeignKeyMetadata
+                {
+                    ReferencedColumns = new[] { "unique1", "unique2" },
+                    ForeignKeyColumns = new[] { "candidate1", "candidate2" },
+                    IsCandidateKeyReference = true,
+                    ReferencedTableHasPrimaryKey = true,
+                    TableName = "source",
+                    ReferencedTable = referenced
+                };
+            _generator.CurrentTriplesMapConfiguration = new MockConfiguration(_mappingBaseUri, _configuration.Object);
+
+            // when
+            _generator.Visit(fk);
+
+            // then
+            _mappingStrategy.Verify(ms =>
+                                    ms.CreateObjectMapForPrimaryKeyReference(
+                                        It.IsAny<IObjectMapConfiguration>(),
+                                        _mappingBaseUri,
+                                        fk),
+                                    Times.Once());
         }
     }
 }

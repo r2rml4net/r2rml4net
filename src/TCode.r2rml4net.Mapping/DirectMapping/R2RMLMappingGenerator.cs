@@ -12,9 +12,8 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     {
         private readonly IDatabaseMetadata _databaseMetadataProvider;
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
-        private ITriplesMapConfiguration _currentTriplesMapConfiguration;
+        internal ITriplesMapConfiguration CurrentTriplesMapConfiguration;
         private IDirectMappingStrategy _mappingStrategy;
-        private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
         private readonly MappingOptions _options;
@@ -100,18 +99,18 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (table.ForeignKeys.Any(fk => fk.ReferencedTableHasPrimaryKey))
             {
                 var r2RMLView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
-                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(r2RMLView);
+                CurrentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(r2RMLView);
             }
             else
-                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
+                CurrentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
 
             if (table.PrimaryKey.Length == 0)
             {
-                MappingStrategy.CreateSubjectMapForNoPrimaryKey(_currentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
+                MappingStrategy.CreateSubjectMapForNoPrimaryKey(CurrentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
             }
             else
             {
-                MappingStrategy.CreateSubjectMapForPrimaryKey(_currentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
+                MappingStrategy.CreateSubjectMapForPrimaryKey(CurrentTriplesMapConfiguration.SubjectMap, MappingBaseUri, table);
             }
         }
 
@@ -119,7 +118,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         {
             Uri predicateUri = ColumnMappingStrategy.CreatePredicateUri(MappingBaseUri, column);
 
-            var propertyObjectMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
+            var propertyObjectMap = CurrentTriplesMapConfiguration.CreatePropertyObjectMap();
             propertyObjectMap.CreatePredicateMap().IsConstantValued(predicateUri);
             var literalTermMap = propertyObjectMap.CreateObjectMap().IsColumnValued(column.Name);
 
@@ -130,11 +129,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public void Visit(ForeignKeyMetadata foreignKey)
         {
-            var foreignKeyMap = _currentTriplesMapConfiguration.CreatePropertyObjectMap();
+            var foreignKeyMap = CurrentTriplesMapConfiguration.CreatePropertyObjectMap();
 
             MappingStrategy.CreatePredicateMapForForeignKey(foreignKeyMap.CreatePredicateMap(), MappingBaseUri, foreignKey);
 
-            if (foreignKey.IsCandidateKeyReference)
+            if (foreignKey.IsCandidateKeyReference && !foreignKey.ReferencedTableHasPrimaryKey)
             {
                 MappingStrategy.CreateObjectMapForCandidateKeyReference(foreignKeyMap.CreateObjectMap(), foreignKey);
             }
