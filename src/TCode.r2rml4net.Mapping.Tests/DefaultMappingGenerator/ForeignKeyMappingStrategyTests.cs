@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreateReferencePredicateUri(new Uri("http://example.com"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/Table#ref-FK", uri.ToString());
+            Assert.AreEqual("http://example.com/Table#ref-FK", uri.AbsoluteUri);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreateReferencePredicateUri(new Uri("http://example.com"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/Table#ref-FK1;FK2;FK3", uri.ToString());
+            Assert.AreEqual("http://example.com/Table#ref-FK1;FK2;FK3", uri.AbsoluteUri);
         }
 
         [Test]

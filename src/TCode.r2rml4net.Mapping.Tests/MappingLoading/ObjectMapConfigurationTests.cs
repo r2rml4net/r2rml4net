@@ -39,7 +39,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
 
             // then
             Assert.AreEqual("http://data.example.com/{JOB}", objectMap.Template);
-            Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.AbsoluteUri);
             Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.Node);
         }
 

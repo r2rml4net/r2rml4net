@@ -112,7 +112,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrDataTypeProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RdfInteger)))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
@@ -144,7 +144,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageTagProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
@@ -201,7 +201,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.TermType.IsLiteral();
 
             // then
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
         }
 
         [Test]
