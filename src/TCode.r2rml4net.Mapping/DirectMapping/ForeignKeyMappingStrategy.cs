@@ -23,7 +23,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (foreignKey == null)
                 throw new ArgumentNullException("foreignKey");
             if (string.IsNullOrWhiteSpace(foreignKey.TableName))
-                throw new ArgumentException("Invalid referenced table's name");
+                throw new ArgumentException("Invalid referencing table's name");
             if (!foreignKey.ForeignKeyColumns.Any())
                 throw new ArgumentException("Empty foreign key", "foreignKey");
 
@@ -40,17 +40,24 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (foreignKey.ForeignKeyColumns.Length != foreignKey.ReferencedColumns.Length)
                 throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKey.TableName), "foreignKey");
 
-            if (foreignKey.IsCandidateKeyReference)
+            if (foreignKey.IsCandidateKeyReference && (!foreignKey.ReferencedTableHasPrimaryKey || !foreignKey.ReferencedTable.PrimaryKey.Any()))
                 throw new ArgumentException(
                     string.Format(
-                        "Primary key reference expected but was canditate key reference between tables {0} and {1}",
+                        "Canditate key reference between tables {0} and {1} but table {1} has no primary key",
                         foreignKey.TableName, foreignKey.ReferencedTable.Name));
 
+            string[] referencedColumns = foreignKey.ReferencedTableHasPrimaryKey
+                ? foreignKey.ReferencedTable.PrimaryKey.Select(c => c.Name).ToArray()
+                : foreignKey.ReferencedColumns;
+            string[] foreignKeyColumns = foreignKey.ReferencedTableHasPrimaryKey
+                ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c.Name)).ToArray()
+                : foreignKey.ForeignKeyColumns;
+
             StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
-            template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(foreignKey.ReferencedColumns[0]), MappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[0]));
-            for (int i = 1; i < foreignKey.ForeignKeyColumns.Count(); i++)
+            template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(referencedColumns[0]), MappingHelper.EncloseColumnName(foreignKeyColumns[0]));
+            for (int i = 1; i < foreignKeyColumns.Length; i++)
             {
-                template.AppendFormat(";{0}={1}", MappingHelper.UrlEncode(foreignKey.ReferencedColumns[i]), MappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[i]));
+                template.AppendFormat(";{0}={1}", MappingHelper.UrlEncode(referencedColumns[i]), MappingHelper.EncloseColumnName(foreignKeyColumns[i]));
             }
 
             return MappingHelper.UrlEncode(template.ToString());
@@ -65,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                     string.Format(
                         "Canditate key reference expected but was primary key reference between tables {0} and {1}",
                         foreignKey.TableName, foreignKey.ReferencedTable.Name));
-            
+
             return CreateBlankNodeTemplate(foreignKey.ReferencedTable.Name, foreignKey.ReferencedColumns);
         }
 

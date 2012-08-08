@@ -726,5 +726,52 @@ namespace TCode.r2rml4net.Mapping.Tests
                        };
             }
         }
+
+        public static TableCollection CandidateKeyReferencsTableWithPrimaryKey
+        {
+            get
+            {
+                TableMetadata target = new TableMetadata
+                    {
+                        new ColumnMetadata {Name = "Id", IsPrimaryKey = true},
+                        new ColumnMetadata {Name = "UQ1"},
+                        new ColumnMetadata {Name = "UQ2"}
+                    };
+                target.Name = "Target";
+                var uniqueKey = new UniqueKeyMetadata
+                    {
+                        target["UQ1"],
+                        target["UQ2"]
+                    };
+                uniqueKey.IsReferenced = true;
+                target.UniqueKeys.Add(uniqueKey);
+
+                TableMetadata source = new TableMetadata
+                    {
+                        new ColumnMetadata {Name = "FK1"},
+                        new ColumnMetadata {Name = "FK2"},
+                        new ColumnMetadata {Name = "Some column"}
+                    };
+                source.Name = "Source";
+                source.ForeignKeys = new[]
+                    {
+                        new ForeignKeyMetadata
+                            {
+                                ForeignKeyColumns = new[] {"FK1", "FK2"},
+                                ReferencedColumns = new[] {"UQ1", "UQ2"},
+                                ReferencedTable = target,
+                                IsCandidateKeyReference = true,
+                                ReferencedTableHasPrimaryKey = true,
+                                TableName = "Source"
+                            }
+                    };
+
+                return new TableCollection
+                    {
+                        source,
+                        target
+                    };
+            }
+        }
     }
 }

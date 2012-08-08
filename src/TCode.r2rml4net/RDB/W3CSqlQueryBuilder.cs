@@ -74,7 +74,7 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
 
             var fkTargetHasPrimaryKey = table.ForeignKeys.Where(fk => fk.ReferencedTableHasPrimaryKey).ToArray();
 
-            sqlBuilder.AppendFormat("SELECT child.*, {0}", string.Join(", ", GetJoinedPrimaryKeys(fkTargetHasPrimaryKey)));
+            sqlBuilder.AppendFormat("SELECT child.*, {0}", string.Join(", ", GetJoinedPrimaryKeyColumnList(fkTargetHasPrimaryKey)));
             sqlBuilder.AppendLine();
             sqlBuilder.AppendFormat("FROM {0} as child", DatabaseIdentifiersHelper.DelimitIdentifier(table.Name, _options));
             sqlBuilder.AppendLine();
@@ -95,15 +95,16 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
 
         #endregion
 
-        private IEnumerable<string> GetJoinedPrimaryKeys(IEnumerable<ForeignKeyMetadata> foreignKeys)
+        private IEnumerable<string> GetJoinedPrimaryKeyColumnList(IEnumerable<ForeignKeyMetadata> foreignKeys)
         {
             int i = 1;
             return from foreignKey in foreignKeys
                    let tableAlias = "p" + i++
                    from pkColumn in foreignKey.ReferencedTable.PrimaryKey
-                   select string.Format("{0}.{1}",
+                   select string.Format("{0}.{1} as {2}",
                                         tableAlias,
-                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn.Name, _options));
+                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn.Name, _options),
+                                        DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name + pkColumn.Name, _options));
         }
 
         private IEnumerable<string> GetJoinConditions(ForeignKeyMetadata foreignKey, string parent)
