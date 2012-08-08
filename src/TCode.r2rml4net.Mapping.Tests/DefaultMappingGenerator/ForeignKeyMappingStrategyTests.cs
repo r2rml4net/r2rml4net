@@ -22,7 +22,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata{Name = "Other"},
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK" },
                 ReferencedColumns = new[] { "ID" }
@@ -41,7 +41,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK1", "FK2", "FK3" },
                 ReferencedColumns = new[] { "ID1", "ID2", "ID3" }
@@ -60,7 +60,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK" },
                 ReferencedColumns = new[] { "ID" }
@@ -80,7 +80,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK1", "FK2", "FK3" },
                 ReferencedColumns = new[] { "ID1", "ID2", "ID3" }
@@ -99,7 +99,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK1", "FK2", "FK3" },
                 ReferencedColumns = new[] { "ID1", "ID2", "ID3" },
@@ -119,7 +119,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK1", "FK2", "FK3" },
                 ReferencedColumns = new[] { "ID1", "ID2", "ID3" },
@@ -136,7 +136,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTableName = "Other",
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK1", "FK2", "FK3" },
                 ReferencedColumns = new[] { "ID1", "ID2", "ID3" }

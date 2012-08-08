@@ -57,6 +57,10 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     {
                         _tables.Add(TableMetadataFromDatabaseTable(dbTable));
                     }
+                    foreach (var dbTable in _schema.Tables)
+                    {
+                        ReadKeysMetadata(dbTable);
+                    }
 
                     MarkReferencedUniqueKeys();
 
@@ -71,15 +75,31 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             }
         }
 
+        private void ReadKeysMetadata(DatabaseTable dbTable)
+        {
+            var table = Tables[dbTable.Name];
+            table.ForeignKeys = GetForeignKeys(dbTable).ToArray();
+
+            foreach (var uniqueKey in dbTable.UniqueKeys)
+            {
+                var keyMetadata = new UniqueKeyMetadata();
+
+                foreach (var column in uniqueKey.Columns)
+                {
+                    keyMetadata.Add(table[column]);
+                }
+
+                table.UniqueKeys.Add(keyMetadata);
+            }
+        }
+
         private void MarkReferencedUniqueKeys()
         {
             foreach (var table in _tables.Where(t => t.ForeignKeys.Any()))
             {
                 foreach (var foreignKey in table.ForeignKeys.Where(fk => fk.IsCandidateKeyReference))
                 {
-                    var referencedTable = _tables[foreignKey.ReferencedTableName];
-
-                    foreach (var uniqueKey in referencedTable.UniqueKeys)
+                    foreach (var uniqueKey in foreignKey.ReferencedTable.UniqueKeys)
                     {
                         if (foreignKey.ReferencedColumns.Except(uniqueKey.Select(c => c.Name)).Any()) continue;
                         uniqueKey.IsReferenced = true;
@@ -101,20 +121,6 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     Type = ColumnTypeMapper.GetColumnTypeFromColumn(column.DataType)
                 });
 
-            table.ForeignKeys = GetForeignKeys(dbTable).ToArray();
-
-            foreach (var uniqueKey in dbTable.UniqueKeys)
-            {
-                var keyMetadata = new UniqueKeyMetadata();
-
-                foreach (var column in uniqueKey.Columns)
-                {
-                    keyMetadata.Add(table[column]);
-                }
-                
-                table.UniqueKeys.Add(keyMetadata);
-            }
-
             return table;
         }
 
@@ -122,26 +128,31 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         {
             foreach (var fk in table.ForeignKeys)
             {
+                bool isCandidateKey;
                 string[] referencedColumns;
                 DatabaseTable referencedTable = fk.ReferencedTable(_schema);
                 if (referencedTable.PrimaryKey == null
                     || referencedTable.PrimaryKey.Name != fk.RefersToConstraint)
                 {
+                    isCandidateKey = true;
                     referencedColumns =
                         referencedTable.UniqueKeys.Single(key => key.Name == fk.RefersToConstraint).Columns.ToArray();
                 }
                 else
                 {
+                    isCandidateKey = false;
                     referencedColumns = fk.ReferencedColumns(_schema).ToArray();
                 }
-
+                
+                var referencedTableMeta = Tables[referencedTable.Name];
                 yield return new ForeignKeyMetadata
                     {
                         TableName = table.Name,
                         ForeignKeyColumns = fk.Columns.ToArray(),
                         ReferencedColumns = referencedColumns,
-                        ReferencedTableName = referencedTable.Name,
-                        IsCandidateKeyReference = referencedTable.PrimaryKey == null
+                        ReferencedTable = referencedTableMeta,
+                        IsCandidateKeyReference = isCandidateKey,
+                        ReferencedTableHasPrimaryKey = referencedTableMeta.PrimaryKey.Any()
                     };
             }
         }

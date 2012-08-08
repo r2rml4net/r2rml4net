@@ -244,16 +244,6 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                 }
                                         };
                 studentsTable.Name = "Student";
-                studentsTable.ForeignKeys = new[]
-                                                {
-                                                    new ForeignKeyMetadata
-                                                        {
-                                                            TableName = "Student",
-                                                            ReferencedTableName = "Sport",
-                                                            ForeignKeyColumns = new[] {"Sport"},
-                                                            ReferencedColumns = new[] {"ID"}
-                                                        }
-                                                };
 
                 var sportTable = new TableMetadata
                                      {
@@ -270,6 +260,16 @@ namespace TCode.r2rml4net.Mapping.Tests
                                              }
                                      };
                 sportTable.Name = "Sport";
+                studentsTable.ForeignKeys = new[]
+                                                {
+                                                    new ForeignKeyMetadata
+                                                        {
+                                                            TableName = "Student",
+                                                            ReferencedTable = sportTable,
+                                                            ForeignKeyColumns = new[] {"Sport"},
+                                                            ReferencedColumns = new[] {"ID"}
+                                                        }
+                                                };
 
                 return new TableCollection
                        {
@@ -380,14 +380,14 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                         {
                                                             ForeignKeyColumns = new[] {"ID_Student"},
                                                             ReferencedColumns = new[] {"ID"},
-                                                            ReferencedTableName = "Student",
+                                                            ReferencedTable = studentTable,
                                                             TableName = "Student_Sport"
                                                         },
                                                     new ForeignKeyMetadata
                                                         {
                                                             ForeignKeyColumns = new[] {"ID_Sport"},
                                                             ReferencedColumns = new[] {"ID"},
-                                                            ReferencedTableName = "Sport",
+                                                            ReferencedTable = sportTable,
                                                             TableName = "Student_Sport"
                                                         }
                                                 };
@@ -484,7 +484,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                                                    {
                                                        ForeignKeyColumns = new[] {"deptno"},
                                                        ReferencedColumns = new[] {"deptno"},
-                                                       ReferencedTableName = "DEPT",
+                                                       ReferencedTable = deptTable,
                                                        TableName = "EMP",
                                                        IsCandidateKeyReference = true
                                                    }
@@ -662,7 +662,7 @@ namespace TCode.r2rml4net.Mapping.Tests
                     {
                         ForeignKeyColumns=new[] {"植物名", "使用部"},
                         ReferencedColumns = new [] {"名", "使用部"},
-                        ReferencedTableName = "植物",
+                        ReferencedTable = i18N2,
                         TableName = "成分"
                     }
                 };
