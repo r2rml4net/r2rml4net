@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TCode.r2rml4net.Mapping;
 
 namespace TCode.r2rml4net.RDB
@@ -62,9 +65,60 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
 
         public string GetR2RMLViewForJoinedTables(TableMetadata table)
         {
-            throw new System.NotImplementedException();
+            if (table == null)
+                throw new ArgumentNullException("table");
+            if (table.ForeignKeys.All(fk => !fk.ReferencedTableHasPrimaryKey))
+                throw new ArgumentException("None of the referenced tables have a primary key", "table");
+
+            StringBuilder sqlBuilder = new StringBuilder();
+
+            var fkTargetHasPrimaryKey = table.ForeignKeys.Where(fk => fk.ReferencedTableHasPrimaryKey).ToArray();
+
+            sqlBuilder.AppendFormat("SELECT child.*, {0}", string.Join(", ", GetJoinedPrimaryKeys(fkTargetHasPrimaryKey)));
+            sqlBuilder.AppendLine();
+            sqlBuilder.AppendFormat("FROM {0} as child", DatabaseIdentifiersHelper.DelimitIdentifier(table.Name, _options));
+            sqlBuilder.AppendLine();
+
+            int i = 1;
+            foreach (var foreignKey in fkTargetHasPrimaryKey)
+            {
+                sqlBuilder.AppendFormat("JOIN {0} as p{1} ON",
+                    DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name, _options),
+                    i);
+                sqlBuilder.AppendLine();
+                sqlBuilder.Append(string.Join(" AND ", GetJoinConditions(foreignKey, "p" + i++)));
+                sqlBuilder.AppendLine();
+            }
+
+            return sqlBuilder.ToString();
         }
 
         #endregion
+
+        private IEnumerable<string> GetJoinedPrimaryKeys(IEnumerable<ForeignKeyMetadata> foreignKeys)
+        {
+            int i = 1;
+            return from foreignKey in foreignKeys
+                   let tableAlias = "p" + i++
+                   from pkColumn in foreignKey.ReferencedTable.PrimaryKey
+                   select string.Format("{0}.{1}",
+                                        tableAlias,
+                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn.Name, _options));
+        }
+
+        private IEnumerable<string> GetJoinConditions(ForeignKeyMetadata foreignKey, string parent)
+        {
+            return foreignKey.ReferencedColumns
+                .Select((t, colIdx) => string.Format("{0}.{1} = child.{2}",
+                                                     parent,
+                                                     DatabaseIdentifiersHelper.DelimitIdentifier(
+                                                         t,
+                                                         _options
+                                                     ),
+                                                     DatabaseIdentifiersHelper.DelimitIdentifier(
+                                                         foreignKey.ForeignKeyColumns[colIdx],
+                                                         _options
+                                                     )));
+        }
     }
 }
