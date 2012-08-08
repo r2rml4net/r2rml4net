@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 
@@ -28,6 +29,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             _options = options;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
+            SqlBuilder = new W3CSqlQueryBuilder(options);
         }
 
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
@@ -70,9 +72,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 if (_primaryKeyMappingStrategy == null)
                     _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(_options);
                 return _primaryKeyMappingStrategy;
-            } 
+            }
             set { _primaryKeyMappingStrategy = value; }
         }
+
+        public ISqlQueryBuilder SqlBuilder { get; set; }
 
         /// <summary>
         /// Generates default R2RML mappings based on database metadata
@@ -93,7 +97,13 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public void Visit(TableMetadata table)
         {
-            _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
+            if (table.ForeignKeys.Any(fk => fk.ReferencedTableHasPrimaryKey))
+            {
+                var r2RMLView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
+                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(r2RMLView);
+            }
+            else
+                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
 
             if (table.PrimaryKey.Length == 0)
             {

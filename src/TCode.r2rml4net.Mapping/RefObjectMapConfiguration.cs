@@ -110,7 +110,7 @@ WHERE {
         {
             get
             {
-                return TriplesMap.R2RMLConfiguration.EffectiveSqlBuilder.GetEffectiveQueryForRefObjectMap(this);
+                return TriplesMap.R2RMLConfiguration.SqlQueryBuilder.GetEffectiveQueryForRefObjectMap(this);
             }
         }
 

@@ -4,23 +4,23 @@ using TCode.r2rml4net.Mapping;
 namespace TCode.r2rml4net.RDB
 {
     /// <summary>
-    /// Implementation of <see cref="IEffectiveSqlBuilder"/>, which returns effective sql query as described on R2RML specifications page
+    /// Implementation of <see cref="ISqlQueryBuilder"/>, which returns effective sql query as described on R2RML specifications page
     /// </summary>
-    public class W3CEffectiveSqlBuilder : IEffectiveSqlBuilder
+    public class W3CSqlQueryBuilder : ISqlQueryBuilder
     {
         private readonly MappingOptions _options;
 
-        public W3CEffectiveSqlBuilder(MappingOptions options)
+        public W3CSqlQueryBuilder(MappingOptions options)
         {
             _options = options;
         }
 
-        public W3CEffectiveSqlBuilder()
+        public W3CSqlQueryBuilder()
             : this(new MappingOptions())
         {
         }
 
-        #region Implementation of IEffectiveSqlBuilder
+        #region Implementation of ISqlQueryBuilder
 
         /// <summary>
         /// Gets effective sql query based on table name or sql view
@@ -58,6 +58,11 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
             }
 
             return string.Format("SELECT * FROM ({0}) AS tmp", refObjectMap.ChildEffectiveSqlQuery);
+        }
+
+        public string GetR2RMLViewForJoinedTables(TableMetadata table)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

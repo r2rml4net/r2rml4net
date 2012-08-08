@@ -19,7 +19,7 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
-        IEffectiveSqlBuilder _effectiveSqlBuilder = new W3CEffectiveSqlBuilder();
+        ISqlQueryBuilder _sqlQueryBuilder = new W3CSqlQueryBuilder();
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
         /// <summary>
@@ -136,12 +136,12 @@ namespace TCode.r2rml4net.Mapping
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IEffectiveSqlBuilder"/>
+        /// Gets or sets the <see cref="ISqlQueryBuilder"/>
         /// </summary>
-        public IEffectiveSqlBuilder EffectiveSqlBuilder
+        public ISqlQueryBuilder SqlQueryBuilder
         {
-            get { return _effectiveSqlBuilder; }
-            set { _effectiveSqlBuilder = value; }
+            get { return _sqlQueryBuilder; }
+            set { _sqlQueryBuilder = value; }
         }
 
         #region Implementation of IR2RML

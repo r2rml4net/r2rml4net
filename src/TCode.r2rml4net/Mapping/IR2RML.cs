@@ -14,8 +14,8 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         IEnumerable<ITriplesMap> TriplesMaps { get; }
         /// <summary>
-        /// Gets or sets the <see cref="IEffectiveSqlBuilder"/>
+        /// Gets or sets the <see cref="ISqlQueryBuilder"/>
         /// </summary>
-        IEffectiveSqlBuilder EffectiveSqlBuilder { get; set; }
+        ISqlQueryBuilder SqlQueryBuilder { get; set; }
     }
 }

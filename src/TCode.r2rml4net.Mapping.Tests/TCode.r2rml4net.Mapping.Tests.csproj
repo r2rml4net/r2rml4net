@@ -67,9 +67,10 @@
     <Compile Include="DefaultMappingGenerator\ColumnMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DirectMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\PrimaryKeyMappingStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\DefaultR2RMLMappingGeneratorTests.cs" />
+    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorStrategyTests.cs" />
+    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorCompleteCaseTests.cs" />
     <Compile Include="DefaultMappingGenerator\ForeignKeyMappingStrategyTests.cs" />
+    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorTests.cs" />
     <Compile Include="DefaultMappingGenerator\SubjectMappingStrategytests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />

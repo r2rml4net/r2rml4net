@@ -60,11 +60,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             Mock<IR2RMLConfiguration> r2RML = new Mock<IR2RMLConfiguration>();
-            Mock<IEffectiveSqlBuilder> sqlBuilder = new Mock<IEffectiveSqlBuilder>();
+            Mock<ISqlQueryBuilder> sqlBuilder = new Mock<ISqlQueryBuilder>();
             const string excpetedSql = "SELECT * FROM (SELECT * FROM A) AS tmp";
             sqlBuilder.Setup(builder => builder.GetEffectiveQueryForRefObjectMap(It.IsAny<IRefObjectMap>()))
                       .Returns(excpetedSql);
-            r2RML.Setup(config => config.EffectiveSqlBuilder).Returns(sqlBuilder.Object);
+            r2RML.Setup(config => config.SqlQueryBuilder).Returns(sqlBuilder.Object);
             _parentTriplesMap.Setup(tm => tm.R2RMLConfiguration).Returns(r2RML.Object);
 
             // when
@@ -74,7 +74,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(excpetedSql, sql);
             sqlBuilder.Verify(builder => builder.GetEffectiveQueryForRefObjectMap(It.IsAny<IRefObjectMap>()),
                               Times.Once());
-            r2RML.Verify(config => config.EffectiveSqlBuilder, Times.Once());
+            r2RML.Verify(config => config.SqlQueryBuilder, Times.Once());
             _parentTriplesMap.Verify(tm => tm.R2RMLConfiguration, Times.Once());
         }
     }
