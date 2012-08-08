@@ -37,11 +37,12 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         {
             // HasPrimaryKey - ForeignKeyReference
             TableMetadata foreignKeyReferenceTable = DatabaseSchema.Tables.Single(t => t.Name == "ForeignKeyReference");
+            TableMetadata hasPrimaryKey = DatabaseSchema.Tables["HasPrimaryKey"];
             Assert.AreEqual(1, foreignKeyReferenceTable.ForeignKeys.Length);
             Assert.AreEqual("ForeignKey", foreignKeyReferenceTable.ForeignKeys[0].ForeignKeyColumns[0]);
             Assert.AreEqual("Id", foreignKeyReferenceTable.ForeignKeys[0].ReferencedColumns[0]);
             Assert.AreEqual("ForeignKeyReference", foreignKeyReferenceTable.ForeignKeys[0].TableName);
-            Assert.AreEqual("HasPrimaryKey", foreignKeyReferenceTable.ForeignKeys[0].ReferencedTableName);
+            Assert.AreSame(hasPrimaryKey, foreignKeyReferenceTable.ForeignKeys[0].ReferencedTable);
 
             // CandidateRef - CandidateKey
             TableMetadata candidateRefTable = DatabaseSchema.Tables.Single(t => t.Name == "CandidateRef");
@@ -52,7 +53,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.AreEqual("KeyCol1", candidateRefTable.ForeignKeys[0].ReferencedColumns[0]);
             Assert.AreEqual("KeyCol2", candidateRefTable.ForeignKeys[0].ReferencedColumns[1]);
             Assert.AreEqual("CandidateRef", candidateRefTable.ForeignKeys[0].TableName);
-            Assert.AreEqual("CandidateKey", candidateRefTable.ForeignKeys[0].ReferencedTableName);
+            Assert.AreSame(candidateKeyTable, candidateRefTable.ForeignKeys[0].ReferencedTable);
             Assert.IsTrue(candidateKeyTable.UniqueKeys.ElementAt(0).IsReferenced);
         }
 

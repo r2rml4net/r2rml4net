@@ -44,9 +44,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 throw new ArgumentException(
                     string.Format(
                         "Primary key reference expected but was canditate key reference between tables {0} and {1}",
-                        foreignKey.TableName, foreignKey.ReferencedTableName));
+                        foreignKey.TableName, foreignKey.ReferencedTable.Name));
 
-            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, foreignKey.ReferencedTableName) + "/");
+            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
             template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(foreignKey.ReferencedColumns[0]), MappingHelper.EncloseColumnName(foreignKey.ForeignKeyColumns[0]));
             for (int i = 1; i < foreignKey.ForeignKeyColumns.Count(); i++)
             {
@@ -64,9 +64,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 throw new ArgumentException(
                     string.Format(
                         "Canditate key reference expected but was primary key reference between tables {0} and {1}",
-                        foreignKey.TableName, foreignKey.ReferencedTableName));
+                        foreignKey.TableName, foreignKey.ReferencedTable.Name));
             
-            return CreateBlankNodeTemplate(foreignKey.ReferencedTableName, foreignKey.ReferencedColumns);
+            return CreateBlankNodeTemplate(foreignKey.ReferencedTable.Name, foreignKey.ReferencedColumns);
         }
 
         #endregion

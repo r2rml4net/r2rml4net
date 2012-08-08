@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Get the referenced table
         /// </summary>
-        public string ReferencedTableName { get; internal set; }
+        public TableMetadata ReferencedTable { get; internal set; }
         /// <summary>
         /// Gets the referenced columns
         /// </summary>
