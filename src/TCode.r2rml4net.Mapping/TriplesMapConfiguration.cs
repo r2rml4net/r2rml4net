@@ -201,8 +201,6 @@ WHERE
         {
             get
             {
-                AssertTriplesMapInitialized();
-
                 if (_subjectMapConfiguration == null)
                     _subjectMapConfiguration= new SubjectMapConfiguration(this, R2RMLMappings);
 
@@ -227,8 +225,6 @@ WHERE
         /// </summary>
         public IPredicateObjectMapConfiguration CreatePropertyObjectMap()
         {
-            AssertTriplesMapInitialized();
-
             var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings);
             _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
@@ -316,8 +312,6 @@ WHERE
         {
             get
             {
-                AssertTriplesMapInitialized();
-
                 if (_subjectMapConfiguration == null)
                     _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
 
@@ -341,12 +335,6 @@ WHERE
 
                 return logicalTables.First().Object as IBlankNode;
             }
-        }
-
-        void AssertTriplesMapInitialized()
-        {
-            if (Uri == null)
-                throw new InvalidOperationException("Triples map hasn't been initialized yet. Please set the TableName or SqlQuery property");
         }
     }
 }

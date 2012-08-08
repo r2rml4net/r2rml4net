@@ -159,7 +159,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             // then
             AssertContainsSequence(query,
                 "SELECT child.*,",
-                "p1.\"Id\"",
+                "p1.\"Id\" as \"targetId\"",
                 "FROM \"source\" as child",
                 "JOIN \"target\" as p1",
                 "ON",
@@ -201,8 +201,8 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             // then
             AssertContainsSequence(query,
                 "SELECT child.*,",
-                "p1.\"Id\"",
-                "p1.\"Id2\"",
+                "p1.\"Id\" as \"targetId\"",
+                "p1.\"Id2\" as \"targetId2\"",
                 "FROM \"source\" as child",
                 "JOIN \"target\" as p1",
                 "ON",
@@ -258,9 +258,9 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             // then
             AssertContainsSequence(query,
                 "SELECT child.*,",
-                "p1.\"Id\"",
-                "p2.\"Id\"",
-                "p2.\"Id1\"",
+                "p1.\"Id\" as \"targetId\"",
+                "p2.\"Id\" as \"secondId\"",
+                "p2.\"Id1\" as \"secondId1\"",
                 "FROM \"source\" as child",
                 "JOIN \"target\" as p1",
                 "p1.\"unique1\" = child.\"candidate1\"",
@@ -317,8 +317,8 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             // then
             AssertContainsSequence(query,
                 "SELECT child.*,",
-                "p1.\"Id\"",
-                "p1.\"Id1\"",
+                "p1.\"Id\" as \"secondId\"",
+                "p1.\"Id1\" as \"secondId1\"",
                 "FROM \"source\" as child",
                 "JOIN \"second\" as p1",
                 "p1.\"pk1\" = child.\"fk1\"",

@@ -137,6 +137,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             TestMappingGeneration(RelationalTestMappings.D017_I18NnoSpecialChars, "R2RMLTC0017.ttl");
         }
 
+        [Test]
+        public void TableWithCandidateKeyReferenceAndPrimaryKey()
+        {
+            TestMappingGeneration(RelationalTestMappings.CandidateKeyReferencsTableWithPrimaryKey, "DirectCandidatePrimary.ttl");
+        }
+
         private string Serialize(IGraph graph) 
         {
             using (TextWriter writer = new System.IO.StringWriter())

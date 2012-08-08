@@ -158,12 +158,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             );
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void CannotGetSubjectMapBeforeInitializingTriplesMap()
-        {
-            var subjectMap = _triplesMapConfiguration.SubjectMap;
-        }
-
         [Test]
         public void CanCreateSubjectMaps()
         {
@@ -191,12 +185,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreSame(subjectMapConfiguration, shouldBeTheSame);
-        }
-
-        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void CannotCreatePropertyMapBeforeInitializingTriplesMap()
-        {
-            IPredicateObjectMapConfiguration predicateObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
         }
 
         [Test]
