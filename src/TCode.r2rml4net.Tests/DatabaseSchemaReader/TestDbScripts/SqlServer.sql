@@ -192,5 +192,39 @@ GO
 ALTER TABLE [dbo].[AnotherReference] CHECK CONSTRAINT [FK_AnotherReference_MultipleUniqueKeys]
 GO
 
+CREATE TABLE [dbo].[PrimaryAndUnique](
+	[Id] [int] NOT NULL,
+	[IdPart2] [int] NOT NULL,
+	[Unique] [nchar](10) NOT NULL,
+	[Unique2] [int] NOT NULL,
+ CONSTRAINT [PK_PrimaryAndUnique] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[IdPart2] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
+ CONSTRAINT [IX_PrimaryAndUnique] UNIQUE NONCLUSTERED 
+(
+	[Unique] ASC,
+	[Unique2] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[ReferencesUnique](
+	[Ref1] [nchar](10) NOT NULL,
+	[Ref2] [int] NOT NULL,
+	[Colu1] [nchar](10) NULL,
+	[Col2] [nvarchar](50) NULL
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[ReferencesUnique]  WITH CHECK ADD  CONSTRAINT [FK_ReferencesUnique_PrimaryAndUnique] FOREIGN KEY([Ref1], [Ref2])
+REFERENCES [dbo].[PrimaryAndUnique] ([Unique], [Unique2])
+GO
+
+ALTER TABLE [dbo].[ReferencesUnique] CHECK CONSTRAINT [FK_ReferencesUnique_PrimaryAndUnique]
+GO
 
 

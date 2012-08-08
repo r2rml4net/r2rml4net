@@ -25,5 +25,7 @@ namespace TCode.r2rml4net.RDB
         /// Returns true if the referenced columns do not form a primary key
         /// </summary>
         public bool IsCandidateKeyReference { get; internal set; }
+
+        public bool ReferencedTableHasPrimaryKey { get; internal set; }
     }
 }
