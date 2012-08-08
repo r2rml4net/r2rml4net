@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using DatabaseSchemaReader;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 using TCode.r2rml4net.RDB;
 
@@ -21,7 +20,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
         [Test]
         public void ContainsTablesCorrectly()
         {
-            Assert.AreEqual(8, DatabaseSchema.Tables.Count);
+            Assert.AreEqual(10, DatabaseSchema.Tables.Count);
             var tableNames = DatabaseSchema.Tables.Select(t => t.Name).ToArray();
             Assert.Contains("CandidateKey", tableNames);
             Assert.Contains("CandidateRef", tableNames);
@@ -29,6 +28,8 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.Contains("HasPrimaryKey", tableNames);
             Assert.Contains("ManyDataTypes", tableNames);
             Assert.Contains("MultipleUniqueKeys", tableNames);
+            Assert.Contains("PrimaryAndUnique", tableNames);
+            Assert.Contains("ReferencesUnique", tableNames);
         }
 
         [Test]
@@ -87,6 +88,14 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
                                                         uq.Any(col => col.Name == "UQ2_2") &&
                                                         uq.Any(col => col.Name == "UQ2_3") &&
                                                         !uq.IsReferenced));
+        }
+
+        [Test]
+        public void SetsFlagIfCandidateReferenceTargetHasPrimaryKey()
+        {
+            Assert.AreEqual(1, DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys.Length);
+            Assert.IsTrue(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].IsCandidateKeyReference);
+            Assert.IsTrue(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].ReferencedTableHasPrimaryKey);
         }
     }
 }
