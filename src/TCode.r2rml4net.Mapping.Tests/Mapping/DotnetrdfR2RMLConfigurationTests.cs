@@ -87,7 +87,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var triplesMap = _configuration.CreateTriplesMapFromTable(tablename);
 
             // then
-            Assert.AreEqual(triplesMapUri, triplesMap.Uri.ToString());
+            Assert.AreEqual(triplesMapUri, triplesMap.Uri.AbsoluteUri);
             _configuration.R2RMLMappings.VerifyHasTriple(triplesMapUri, UriConstants.RdfType, UriConstants.RrTriplesMapClass);
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMapUri, UriConstants.RrLogicalTableProperty);
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrTableNameProperty, tablename);
@@ -118,10 +118,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void ConfigurationBuilderCreatedWithGraphWithDefaultNamespaces()
         {
             Assert.IsTrue(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rr"));
-            Assert.AreEqual("http://www.w3.org/ns/r2rml#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rr").ToString());
+            Assert.AreEqual("http://www.w3.org/ns/r2rml#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rr").AbsoluteUri);
 
             Assert.IsTrue(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rdf"));
-            Assert.AreEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rdf").ToString());
+            Assert.AreEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rdf").AbsoluteUri);
         }
 
         [Test]

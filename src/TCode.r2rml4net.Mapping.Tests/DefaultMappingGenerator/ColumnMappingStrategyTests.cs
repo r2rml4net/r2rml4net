@@ -27,7 +27,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreatePredicateUri(new Uri(baseUri), columnMetadata);
 
             // then
-            Assert.AreEqual("http://example.com/TableABC#ColumnXYZ", uri.ToString());
+            Assert.AreEqual("http://example.com/TableABC#ColumnXYZ", uri.AbsoluteUri);
         }
 
         [Test]

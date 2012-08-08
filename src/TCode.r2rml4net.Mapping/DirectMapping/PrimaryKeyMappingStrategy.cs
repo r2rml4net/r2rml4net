@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (!table.PrimaryKey.Any())
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
 
-            string template = MappingHelper.UrlEncode(CreateSubjectUri(baseUri, table.Name).ToString());
+            string template = MappingHelper.UrlEncode(CreateSubjectUri(baseUri, table.Name).AbsoluteUri);
             template += "/" + string.Join(";", table.PrimaryKey.Select(pk => pk.Name).Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }

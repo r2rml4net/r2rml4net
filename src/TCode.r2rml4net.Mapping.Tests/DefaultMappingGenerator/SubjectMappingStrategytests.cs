@@ -26,7 +26,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var subjectUri = _strategy.CreateSubjectUri(new Uri(baseUri), table.Name);
 
             // then
-            Assert.AreEqual("http://example.com/TableXYZ", subjectUri.ToString());
+            Assert.AreEqual("http://example.com/TableXYZ", subjectUri.AbsoluteUri);
         }
     }
 }

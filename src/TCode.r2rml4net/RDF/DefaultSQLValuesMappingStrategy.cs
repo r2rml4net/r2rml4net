@@ -34,7 +34,7 @@ namespace TCode.r2rml4net.RDF
         {
             if (dataType != null)
             {
-                string uriString = dataType.ToString();
+                string uriString = dataType.AbsoluteUri;
 
                 switch (uriString)
                 {

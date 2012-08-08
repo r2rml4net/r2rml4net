@@ -37,7 +37,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", subjectMap.Template);
-            Assert.AreEqual("http://www.example.com/triplesMap", ((IUriNode)subjectMap.ParentMapNode).Uri.ToString());
+            Assert.AreEqual("http://www.example.com/triplesMap", ((IUriNode)subjectMap.ParentMapNode).Uri.AbsoluteUri);
             Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
         }
 

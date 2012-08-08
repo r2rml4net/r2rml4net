@@ -244,17 +244,17 @@ namespace TCode.r2rml4net.Mapping
 
         public bool IsURI
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
         }
 
         bool ITermType.IsBlankNode
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
         }
 
         bool ITermType.IsLiteral
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.ToString()).Equals(TermTypeURI.ToString()); }
+            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
         }
 
         #endregion

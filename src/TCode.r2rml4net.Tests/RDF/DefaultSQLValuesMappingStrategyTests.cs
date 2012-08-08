@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Tests.RDF
 
             // then
             Assert.IsNotNull(datatype);
-            Assert.AreEqual(uri, datatype.ToString());
+            Assert.AreEqual(uri, datatype.AbsoluteUri);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace TCode.r2rml4net.Tests.RDF
             Uri datatype;
             _strategy.GetLexicalForm(ColumnIndex, _logicalRow.Object, out datatype);
             Assert.IsNotNull(datatype);
-            Assert.AreEqual(XsdDatatypes.Date, datatype.ToString());
+            Assert.AreEqual(XsdDatatypes.Date, datatype.AbsoluteUri);
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace TCode.r2rml4net.Tests.RDF
             Uri datatype;
             _strategy.GetLexicalForm(ColumnIndex, _logicalRow.Object, out datatype);
             Assert.IsNotNull(datatype);
-            Assert.AreEqual(XsdDatatypes.Time, datatype.ToString());
+            Assert.AreEqual(XsdDatatypes.Time, datatype.AbsoluteUri);
         }
 
         [TestCase(true, "true")]

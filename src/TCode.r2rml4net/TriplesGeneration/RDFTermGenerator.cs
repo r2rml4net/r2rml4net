@@ -169,14 +169,22 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             if (termMap.TermType.IsURI)
             {
-                if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
-                    return NodeFactory.CreateUriNode(new Uri(value));
+                try
+                {
+                    var uri = new Uri(value, UriKind.RelativeOrAbsolute);
 
-                value = termMap.BaseURI + value;
-                if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
-                    return NodeFactory.CreateUriNode(new Uri(value));
+                    if (uri.IsAbsoluteUri)
+                        return NodeFactory.CreateUriNode(uri);
 
-                throw new InvalidTermException(termMap, string.Format("Value {0} is invalid", value));
+                    uri = new Uri(termMap.BaseURI + value);
+                    if (uri.IsAbsoluteUri)
+                        return NodeFactory.CreateUriNode(uri);
+                }
+                catch (UriFormatException ex)
+                {
+                    throw new InvalidTermException(termMap, string.Format("Value {0} is invalid. {1}", value, ex.Message));
+                }
+
             }
             if (termMap.TermType.IsBlankNode)
             {
@@ -233,7 +241,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return TemplateReplaceRegex.Replace(template, match =>
                     {
                         var replacement = ReplaceColumnReference(match, logicalRow);
-                        return escapeValues ? Uri.EscapeDataString(replacement) : replacement;
+                        return replacement;
                     });
             }
             catch (ArgumentNullException)

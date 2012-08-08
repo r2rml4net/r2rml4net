@@ -24,7 +24,7 @@ namespace TCode.r2rml4net.Tests
 
             // then
             Assert.IsNotNull(uri);
-            Assert.AreEqual(expectedUri, uri.ToString());
+            Assert.AreEqual(expectedUri, uri.AbsoluteUri);
         }
 
         [TestCase(R2RMLType.String)]

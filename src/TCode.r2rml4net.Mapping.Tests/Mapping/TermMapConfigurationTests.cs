@@ -79,7 +79,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
             Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
             Assert.IsTrue(((ITermMap)_termMapConfiguration).IsColumnValued);
         }
@@ -115,7 +115,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
             Assert.AreEqual(template, _termMapConfiguration.Template);
             Assert.IsTrue(((ITermMap)_termMapConfiguration).IsTemplateValued);
         }
@@ -148,7 +148,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
-            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.ToString());
+            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.AbsoluteUri);
             Assert.IsTrue((_termMapConfiguration as ITermType).IsBlankNode);
             Assert.IsFalse((_termMapConfiguration as ITermType).IsURI);
             Assert.IsFalse((_termMapConfiguration as ITermType).IsLiteral);
