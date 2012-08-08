@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
         public void RefObjectMapWithSingleJoinCondition()
         {
             // given
-            _refObjectMap.Setup(rom => rom.JoinConditions).Returns(new[] {new JoinCondition("colX", "colY")});
+            _refObjectMap.Setup(rom => rom.JoinConditions).Returns(new[] { new JoinCondition("colX", "colY") });
             _refObjectMap.Setup(rom => rom.ChildEffectiveSqlQuery).Returns("SELECT * FROM A");
             _refObjectMap.Setup(rom => rom.ParentEffectiveSqlQuery).Returns("SELECT * FROM B");
 
@@ -106,6 +106,223 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                                    "child.\"colX\"=parent.\"colY\"",
                                    "child.\"foo\"=parent.\"bar\"",
                                    "child.\"dlihc\"=parent.\"tnerap\"");
+        }
+
+        [Test]
+        public void ThrowsIfNoForeignKeyReferencedTableHasPrimaryKey()
+        {
+            // given
+            TableMetadata table = new TableMetadata
+                {
+                    ForeignKeys = new[]
+                        {
+                            new ForeignKeyMetadata {ReferencedTableHasPrimaryKey = false},
+                            new ForeignKeyMetadata {ReferencedTableHasPrimaryKey = false},
+                            new ForeignKeyMetadata {ReferencedTableHasPrimaryKey = false},
+                            new ForeignKeyMetadata {ReferencedTableHasPrimaryKey = false}
+                        }
+                };
+
+            // then
+            Assert.Throws<ArgumentException>(() => _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table));
+        }
+
+        [Test]
+        public void ReturnsJoinedQueryForSingleReferenceSimplePrimaryKey()
+        {
+            // given
+            TableMetadata referenced = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id", IsPrimaryKey = true }
+                };
+            referenced.Name = "target";
+            TableMetadata table = new TableMetadata
+            {
+                Name = "source",
+                ForeignKeys = new[]
+                        {
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"unique1", "unique2"},
+                                    ForeignKeyColumns = new []{"candidate1", "candidate2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = true,
+                                    TableName = "source",
+                                    ReferencedTable = referenced
+                                }, 
+                        }
+            };
+
+            // when
+            var query = _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table);
+
+            // then
+            AssertContainsSequence(query,
+                "SELECT child.*,",
+                "p1.\"Id\"",
+                "FROM \"source\" as child",
+                "JOIN \"target\" as p1",
+                "ON",
+                "p1.\"unique1\" = child.\"candidate1\"",
+                "AND",
+                "p1.\"unique2\" = child.\"candidate2\"");
+        }
+
+        [Test]
+        public void ReturnsJoinedQueryForSingleReferenceCompositePrimaryKey()
+        {
+            // given
+            TableMetadata referenced = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id", IsPrimaryKey = true },
+                    new ColumnMetadata { Name = "Id2", IsPrimaryKey = true }
+                };
+            referenced.Name = "target";
+            TableMetadata table = new TableMetadata
+            {
+                Name = "source",
+                ForeignKeys = new[]
+                        {
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"unique1", "unique2"},
+                                    ForeignKeyColumns = new []{"candidate1", "candidate2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = true,
+                                    TableName = "source",
+                                    ReferencedTable = referenced
+                                }, 
+                        }
+            };
+
+            // when
+            var query = _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table);
+
+            // then
+            AssertContainsSequence(query,
+                "SELECT child.*,",
+                "p1.\"Id\"",
+                "p1.\"Id2\"",
+                "FROM \"source\" as child",
+                "JOIN \"target\" as p1",
+                "ON",
+                "p1.\"unique1\" = child.\"candidate1\"",
+                "AND",
+                "p1.\"unique2\" = child.\"candidate2\"");
+        }
+
+        [Test]
+        public void ReturnsJoinedQueryForMultipleReferencesMixedPrimaryKeys()
+        {
+            // given
+            TableMetadata referenced = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id", IsPrimaryKey = true }
+                };
+            referenced.Name = "target";
+            TableMetadata referenced1 = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id", IsPrimaryKey = true },
+                    new ColumnMetadata { Name = "Id1", IsPrimaryKey = true }
+                };
+            referenced1.Name = "second";
+            TableMetadata table = new TableMetadata
+            {
+                Name = "source",
+                ForeignKeys = new[]
+                        {
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"unique1", "unique2"},
+                                    ForeignKeyColumns = new []{"candidate1", "candidate2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = true,
+                                    TableName = "source",
+                                    ReferencedTable = referenced
+                                }, 
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"pk1", "pk2"},
+                                    ForeignKeyColumns = new []{"fk1", "fk2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = true,
+                                    TableName = "source",
+                                    ReferencedTable = referenced1
+                                }
+                        }
+            };
+
+            // when
+            var query = _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table);
+
+            // then
+            AssertContainsSequence(query,
+                "SELECT child.*,",
+                "p1.\"Id\"",
+                "p2.\"Id\"",
+                "p2.\"Id1\"",
+                "FROM \"source\" as child",
+                "JOIN \"target\" as p1",
+                "p1.\"unique1\" = child.\"candidate1\"",
+                "p1.\"unique2\" = child.\"candidate2\"",
+                "JOIN \"second\" as p2",
+                "p2.\"pk1\" = child.\"fk1\"",
+                "p2.\"pk2\" = child.\"fk2\"");
+        }
+
+        [Test]
+        public void ReturnsJoinedQueryOnlyForTablesWith()
+        {
+            // given
+            TableMetadata referenced = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id" }
+                };
+            referenced.Name = "target";
+            TableMetadata referenced1 = new TableMetadata
+                {
+                    new ColumnMetadata { Name = "Id", IsPrimaryKey = true },
+                    new ColumnMetadata { Name = "Id1", IsPrimaryKey = true }
+                };
+            referenced1.Name = "second";
+            TableMetadata table = new TableMetadata
+            {
+                Name = "source",
+                ForeignKeys = new[]
+                        {
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"unique1", "unique2"},
+                                    ForeignKeyColumns = new []{"candidate1", "candidate2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = false,
+                                    TableName = "source",
+                                    ReferencedTable = referenced
+                                }, 
+                            new ForeignKeyMetadata
+                                {
+                                    ReferencedColumns = new []{"pk1", "pk2"},
+                                    ForeignKeyColumns = new []{"fk1", "fk2"},
+                                    IsCandidateKeyReference = true,
+                                    ReferencedTableHasPrimaryKey = true,
+                                    TableName = "source",
+                                    ReferencedTable = referenced1
+                                }
+                        }
+            };
+
+            // when
+            var query = _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table);
+
+            // then
+            AssertContainsSequence(query,
+                "SELECT child.*,",
+                "p1.\"Id\"",
+                "p1.\"Id1\"",
+                "FROM \"source\" as child",
+                "JOIN \"second\" as p1",
+                "p1.\"pk1\" = child.\"fk1\"",
+                "p1.\"pk2\" = child.\"fk2\"");
         }
 
         static void AssertContainsSequence(string actualString, params string[] expectedValues)
