@@ -265,7 +265,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "LEFT JOIN \"target\" as p1",
                 "p1.\"unique1\" = child.\"candidate1\"",
                 "p1.\"unique2\" = child.\"candidate2\"",
-                "LeFT JOIN \"second\" as p2",
+                "LEFT JOIN \"second\" as p2",
                 "p2.\"pk1\" = child.\"fk1\"",
                 "p2.\"pk2\" = child.\"fk2\"");
         }

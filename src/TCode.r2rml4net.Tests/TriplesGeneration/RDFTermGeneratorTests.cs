@@ -648,8 +648,9 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.AreSame(node, node2);
         }
 
-        [Test]
-        public void ReusesNodesForObjectsWhenPreservingDulplicateRows()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ReusesNodesForObjectsAndSubjectsWhenNotPreservingDulplicateRows(bool subjectFirst)
         {
             // given
             const string nodeId = "node id";
@@ -658,15 +659,26 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termGenerator = new RDFTermGenerator(false);
 
             // when
-            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-            var node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+            INode node2;
+            INode node;
+            if (subjectFirst)
+            {
+                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+            }
+            else
+            {
+                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            }
 
             // then
             Assert.AreSame(node, node2);
         }
 
-        [Test]
-        public void ReusesNodesForObjectsWhenNotPreservingDulplicateRows()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ReusesNodesForObjectsAndSubjectsWhenPreservingDulplicateRows(bool subjectFirst)
         {
             // given
             const string nodeId = "node id";
@@ -674,8 +686,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
             // when
-            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-            var node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+            INode node2;
+            INode node;
+            if (subjectFirst)
+            {
+                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+            }
+            else
+            {
+                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            }
 
             // then
             Assert.AreSame(node, node2);

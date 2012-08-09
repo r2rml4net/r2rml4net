@@ -22,6 +22,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
         private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new HashTable<string, IBlankNode>(256);
+        private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new HashTable<string, IBlankNode>(256);
 
         public RDFTermGenerator()
             : this(true)
@@ -210,7 +211,15 @@ namespace TCode.r2rml4net.TriplesGeneration
             {
                 if (!_blankNodeSubjects.ContainsKey(value))
                 {
-                    blankNode = _nodeFactory.CreateBlankNode();
+                    if (_blankNodeObjects.ContainsKey(value))
+                    {
+                        blankNode = _blankNodeObjects[value];
+                    }
+                    else
+                    {
+                        blankNode = _nodeFactory.CreateBlankNode();
+                        _blankNodeObjects.Add(value, blankNode);
+                    }
                     _blankNodeSubjects.Add(value, blankNode);
                 }
                 else if (PreserveDuplicateRows)
@@ -221,14 +230,17 @@ namespace TCode.r2rml4net.TriplesGeneration
                 {
                     blankNode = _blankNodeSubjects[value];
                 }
+
+                if(!_blankNodeObjects.ContainsKey(value))
+                    _blankNodeObjects.Add(value, blankNode);
             }
             else
             {
-                if (!_blankNodeSubjects.ContainsKey(value))
+                if (!_blankNodeObjects.ContainsKey(value))
                 {
-                    _blankNodeSubjects.Add(value, _nodeFactory.CreateBlankNode());
+                    _blankNodeObjects.Add(value, _nodeFactory.CreateBlankNode());
                 }
-                blankNode = _blankNodeSubjects[value];
+                blankNode = _blankNodeObjects[value];
             }
 
             return blankNode;
