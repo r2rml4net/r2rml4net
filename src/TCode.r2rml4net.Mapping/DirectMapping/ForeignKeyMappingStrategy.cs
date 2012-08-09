@@ -46,10 +46,10 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                         "Canditate key reference between tables {0} and {1} but table {1} has no primary key",
                         foreignKey.TableName, foreignKey.ReferencedTable.Name));
 
-            string[] referencedColumns = foreignKey.ReferencedTableHasPrimaryKey
+            string[] referencedColumns = foreignKey.IsCandidateKeyReference && foreignKey.ReferencedTableHasPrimaryKey
                 ? foreignKey.ReferencedTable.PrimaryKey.Select(c => c.Name).ToArray()
                 : foreignKey.ReferencedColumns;
-            string[] foreignKeyColumns = foreignKey.ReferencedTableHasPrimaryKey
+            string[] foreignKeyColumns = foreignKey.IsCandidateKeyReference && foreignKey.ReferencedTableHasPrimaryKey
                 ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c.Name)).ToArray()
                 : foreignKey.ForeignKeyColumns;
 
@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                         "Canditate key reference expected but was primary key reference between tables {0} and {1}",
                         foreignKey.TableName, foreignKey.ReferencedTable.Name));
 
-            return CreateBlankNodeTemplate(foreignKey.ReferencedTable.Name, foreignKey.ReferencedColumns);
+            return CreateBlankNodeTemplate(foreignKey.ReferencedTable.Name, foreignKey.ForeignKeyColumns);
         }
 
         #endregion

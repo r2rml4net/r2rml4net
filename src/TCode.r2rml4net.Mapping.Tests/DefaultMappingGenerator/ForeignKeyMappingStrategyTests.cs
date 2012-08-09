@@ -22,7 +22,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             var foreignKey = new ForeignKeyMetadata
             {
-                ReferencedTable = new TableMetadata{Name = "Other"},
+                ReferencedTable = new TableMetadata { Name = "Other" },
                 TableName = "Table",
                 ForeignKeyColumns = new[] { "FK" },
                 ReferencedColumns = new[] { "ID" }
@@ -110,7 +110,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateObjectTemplateForCandidateKeyReference(foreignKey);
 
             // then
-            Assert.AreEqual("Other_{\"ID1\"}_{\"ID2\"}_{\"ID3\"}", template);
+            Assert.AreEqual("Other_{\"FK1\"}_{\"FK2\"}_{\"FK3\"}", template);
         }
 
         [Test]
@@ -144,6 +144,29 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // when
             Assert.Throws<ArgumentException>(() => _strategy.CreateObjectTemplateForCandidateKeyReference(foreignKey));
+        }
+
+        [Test]
+        public void GeneratesForeignKeyObjectTemplateForCandidateKeyRefWhereTableHasPrimaryKey()
+        {
+            // given
+            var referencedTable = new TableMetadata { Name = "Other" };
+            referencedTable.Add(new ColumnMetadata { IsPrimaryKey = true, Name = "ID" });
+            var foreignKey = new ForeignKeyMetadata
+            {
+                ReferencedTable = referencedTable,
+                TableName = "Table",
+                ForeignKeyColumns = new[] { "FK" },
+                ReferencedColumns = new[] { "ID" },
+                IsCandidateKeyReference = false,
+                ReferencedTableHasPrimaryKey = true
+            };
+
+            // when
+            var template = _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com/base/"), foreignKey);
+
+            // then
+            Assert.AreEqual("http://example.com/base/Other/ID={\"FK\"}", template);
         }
     }
 }
