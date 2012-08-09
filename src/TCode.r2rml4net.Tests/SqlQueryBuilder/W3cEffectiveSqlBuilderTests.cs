@@ -161,7 +161,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "SELECT child.*,",
                 "p1.\"Id\" as \"targetId\"",
                 "FROM \"source\" as child",
-                "JOIN \"target\" as p1",
+                "LEFT JOIN \"target\" as p1",
                 "ON",
                 "p1.\"unique1\" = child.\"candidate1\"",
                 "AND",
@@ -204,7 +204,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p1.\"Id\" as \"targetId\"",
                 "p1.\"Id2\" as \"targetId2\"",
                 "FROM \"source\" as child",
-                "JOIN \"target\" as p1",
+                "LEFT JOIN \"target\" as p1",
                 "ON",
                 "p1.\"unique1\" = child.\"candidate1\"",
                 "AND",
@@ -262,10 +262,10 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p2.\"Id\" as \"secondId\"",
                 "p2.\"Id1\" as \"secondId1\"",
                 "FROM \"source\" as child",
-                "JOIN \"target\" as p1",
+                "LEFT JOIN \"target\" as p1",
                 "p1.\"unique1\" = child.\"candidate1\"",
                 "p1.\"unique2\" = child.\"candidate2\"",
-                "JOIN \"second\" as p2",
+                "LeFT JOIN \"second\" as p2",
                 "p2.\"pk1\" = child.\"fk1\"",
                 "p2.\"pk2\" = child.\"fk2\"");
         }
@@ -320,7 +320,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p1.\"Id\" as \"secondId\"",
                 "p1.\"Id1\" as \"secondId1\"",
                 "FROM \"source\" as child",
-                "JOIN \"second\" as p1",
+                "LEFT JOIN \"second\" as p1",
                 "p1.\"pk1\" = child.\"fk1\"",
                 "p1.\"pk2\" = child.\"fk2\"");
         }

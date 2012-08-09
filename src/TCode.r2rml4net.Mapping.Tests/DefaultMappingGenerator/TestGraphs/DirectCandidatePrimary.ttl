@@ -36,7 +36,7 @@
     
     rr:logicalTable [rr:sqlQuery """SELECT child.*, p1.\"Id\" as \"TargetId\"
 FROM \"Source\" as child
-JOIN \"Target\" as p1 ON
+LEFT JOIN \"Target\" as p1 ON
 p1.\"UQ1\" = child.\"FK1\" AND p1.\"UQ2\" = child.\"FK2\"
 """];
 

@@ -96,7 +96,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         public void Visit(TableMetadata table)
         {
-            if (table.ForeignKeys.Any(fk => fk.ReferencedTableHasPrimaryKey))
+            if (table.ForeignKeys.Any(fk => fk.IsCandidateKeyReference && fk.ReferencedTableHasPrimaryKey))
             {
                 var r2RMLView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
                 CurrentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(r2RMLView);

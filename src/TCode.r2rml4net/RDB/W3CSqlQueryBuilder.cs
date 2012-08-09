@@ -82,7 +82,7 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
             int i = 1;
             foreach (var foreignKey in fkTargetHasPrimaryKey)
             {
-                sqlBuilder.AppendFormat("JOIN {0} as p{1} ON",
+                sqlBuilder.AppendFormat("LEFT JOIN {0} as p{1} ON",
                     DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name, _options),
                     i);
                 sqlBuilder.AppendLine();

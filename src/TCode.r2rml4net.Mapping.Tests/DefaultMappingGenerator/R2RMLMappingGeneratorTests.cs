@@ -78,8 +78,9 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration.Verify(conf => conf.CreateTriplesMapFromTable(tableName), Times.Once());
         }
 
-        [Test]
-        public void CreatesTriplesMapFromSqlViewForTableWithCandidateKeyReferenceReferencingTablePrimaryKey()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void CreatesTriplesMapFromSqlViewForTableWithCandidateKeyReferenceReferencingTablePrimaryKey(bool isCandidateKeyRef)
         {
             //given
             const string expectedQuery = @"SELECT something";
@@ -98,7 +99,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                             new ForeignKeyMetadata
                                 {
                                     TableName = "Referencing",
-                                    IsCandidateKeyReference = true,
+                                    IsCandidateKeyReference = isCandidateKeyRef,
                                     ReferencedTableHasPrimaryKey = true,
                                     ReferencedColumns = new[] {"unique1", "unique2"},
                                     ForeignKeyColumns = new[] {"fk1", "fk2"},
@@ -106,14 +107,20 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                                 }
                         }
                 };
+            table.Name = "TableName";
             _sqlBuilder.Setup(sql => sql.GetR2RMLViewForJoinedTables(table)).Returns(expectedQuery);
 
             // when
             _generator.Visit(table);
 
             // then
-            _configuration.Verify(conf => conf.CreateTriplesMapFromR2RMLView(expectedQuery), Times.Once());
-            _sqlBuilder.Verify(sql => sql.GetR2RMLViewForJoinedTables(table), Times.Once());
+            if (isCandidateKeyRef)
+            {
+                _sqlBuilder.Verify(sql => sql.GetR2RMLViewForJoinedTables(table), Times.Once()); 
+                _configuration.Verify(conf => conf.CreateTriplesMapFromR2RMLView(expectedQuery), Times.Once());
+            }
+            else
+                _configuration.Verify(conf => conf.CreateTriplesMapFromTable("TableName"), Times.Once());
         }
 
         [Test]
