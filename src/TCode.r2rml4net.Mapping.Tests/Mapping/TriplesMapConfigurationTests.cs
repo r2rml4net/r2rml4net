@@ -34,6 +34,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual(query, _triplesMapConfiguration.SqlQuery);
+            Assert.IsNull(_triplesMapConfiguration.TableName);
         }
 
         [TestCase("TableName", "TableName")]
@@ -50,6 +51,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual(expected, _triplesMapConfiguration.TableName);
+            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
         }
 
         [TestCase("`Schema`.`TableName`")]
@@ -64,6 +66,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual("Schema.TableName", _triplesMapConfiguration.TableName);
+            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
         }
 
         [TestCase("[Database].[Schema].[TableName]")]
@@ -77,6 +80,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual("Database.Schema.TableName", _triplesMapConfiguration.TableName);
+            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
         }
 
         [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
@@ -216,6 +220,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.AreEqual(excpetedSql, sql);
+        }
+
+        [Test]
+        public void BlankNodeTriplesMapsDontInterfereWithEachOther()
+        {
+            // given
+            var fromTable = TriplesMapConfiguration.FromTable(_r2RMLConfiguration.Object, _r2RMLMappings, "Table");
+            var fromSqlQuery = TriplesMapConfiguration.FromSqlQuery(_r2RMLConfiguration.Object, _r2RMLMappings, "SElECT * FROM y");
+
+            // then
+            Assert.IsNull(fromTable.SqlQuery);
+            Assert.IsNull(fromSqlQuery.TableName);
+            Assert.AreEqual("Table", fromTable.TableName);
+            Assert.AreEqual("SElECT * FROM y", fromSqlQuery.SqlQuery);
         }
     }
 }

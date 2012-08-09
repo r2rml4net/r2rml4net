@@ -62,27 +62,26 @@ namespace TCode.r2rml4net.Mapping
         {
             get
             {
-                if (Node != null)
-                {
-                    var sparqlQuery = new SparqlParameterizedString(
+                var sparqlQuery = new SparqlParameterizedString(
 @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 
-SELECT ?tableName
+SELECT ?tableName ?triplesMap
 WHERE 
 {{
-    @triplesMap rr:logicalTable ?lt .
-    ?lt rr:tableName ?tableName
+    ?triplesMap rr:logicalTable ?lt .
+    ?lt rr:tableName ?tableName .
 }}");
 
-                    sparqlQuery.SetParameter("triplesMap", Node);
-                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
+                var result = ((SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery))
+                    .Where(r => Node.Equals(r["triplesMap"]))
+                    .ToList();
 
-                    if (result.Count > 1)
-                        throw new InvalidTriplesMapException("Triples map contains multiple table names", Uri);
+                if (result.Count > 1)
+                    throw new InvalidTriplesMapException("Triples map contains multiple table names", Uri);
 
-                    if (result.Count == 1)
-                        return result[0].Value("tableName").ToString();
-                }
+                if (result.Count == 1)
+                    return result[0].Value("tableName").ToString();
+
                 return null;
             }
         }
@@ -145,26 +144,24 @@ WHERE
         {
             get
             {
-                if (Node != null)
-                {
-                    var sparqlQuery = new SparqlParameterizedString(
+                var sparqlQuery = new SparqlParameterizedString(
 @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
 
-SELECT ?sqlQuery
+SELECT ?sqlQuery ?triplesMap
 WHERE 
 {{
-    @triplesMap rr:logicalTable ?lt .
-    ?lt rr:sqlQuery ?sqlQuery
+    ?triplesMap rr:logicalTable ?lt .
+    ?lt rr:sqlQuery ?sqlQuery 
 }}");
-                    sparqlQuery.SetParameter("triplesMap", Node);
-                    var result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery);
+                var result = ((SparqlResultSet)R2RMLMappings.ExecuteQuery(sparqlQuery))
+                    .Where(r => Node.Equals(r["triplesMap"]))
+                    .ToList();
 
-                    if (result.Count > 1)
-                        throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", Uri);
+                if (result.Count > 1)
+                    throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", Uri);
 
-                    if (result.Count == 1)
-                        return result[0].Value("sqlQuery").ToString();
-                }
+                if (result.Count == 1)
+                    return result[0].Value("sqlQuery").ToString();
                 return null;
             }
         }
@@ -176,7 +173,7 @@ WHERE
         {
             get
             {
-                if (Node== null || !(Node is IUriNode))
+                if (Node == null || !(Node is IUriNode))
                     return null;
 
                 return (Node as IUriNode).Uri;
@@ -202,7 +199,7 @@ WHERE
             get
             {
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration= new SubjectMapConfiguration(this, R2RMLMappings);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
@@ -289,7 +286,7 @@ WHERE
             var subjectMaps = new List<SubjectMapConfiguration>();
             CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node), subjectMaps);
 
-            if(subjectMaps.Count > 1)
+            if (subjectMaps.Count > 1)
                 throw new InvalidTriplesMapException("Triples map can only have one subject map");
             _subjectMapConfiguration = subjectMaps.SingleOrDefault();
         }
