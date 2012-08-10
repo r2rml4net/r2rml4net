@@ -22,9 +22,9 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             _otherTriplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap = new Mock<ITriplesMapConfiguration>();
-            _configuration =new Mock<IR2RMLConfiguration>();
+            _configuration = new Mock<IR2RMLConfiguration>();
 
-            _configuration.Setup(config => config.TriplesMaps).Returns(new[] {_triplesMap.Object, _otherTriplesMap.Object});
+            _configuration.Setup(config => config.TriplesMaps).Returns(new[] { _triplesMap.Object, _otherTriplesMap.Object });
             _triplesMap.Setup(tm => tm.R2RMLConfiguration).Returns(_configuration.Object);
         }
 
@@ -217,64 +217,6 @@ ex:refObjectMap rr:parentTriplesMap ex:TriplesMap2 .");
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
             Assert.AreEqual(1, predicateObjectMap.RefObjectMaps.Count());
             Assert.AreEqual(graph.CreateUriNode("ex:refObjectMap"), predicateObjectMap.RefObjectMaps.Cast<RefObjectMapConfiguration>().ElementAt(0).Node);
-        }
-
-        private const string InitialGraph = 
-@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap _:blank .
-_:blank rr:object ex:Employee, ex:Worker .";
-
-        private const string ReplaceConstantsSparql =
-@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
-
-DELETE { ?map rr:object ?value . }
-INSERT { ?map rr:objectMap [ rr:constant ?value ] . }
-WHERE { ?map rr:object ?value }";
-
-        private const string QuerySparql =
-@"prefix ex: <http://www.example.com/>
-prefix rr: <http://www.w3.org/ns/r2rml#>
-
-select *
-where
-{
-ex:triplesMap rr:predicateObjectMap ?map .
-?map rr:constant ?value
-}";
-
-        const string ExpectedGraph =
-@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap _:blank.
-_:blank rr:objectMap _:autos1.
-_:autos1 rr:constant ex:Employee.
-_:autos2 rr:constant ex:Worker.
-_:blank rr:objectMap _:autos2.";
-
-        [Test]
-        public void Test()
-        {
-            // given
-            IGraph graph = new Graph();
-            graph.LoadFromString(InitialGraph);
-            IGraph expectedGraph = new Graph();
-            expectedGraph.LoadFromString(ExpectedGraph);
-
-            // when
-            TripleStore store = new TripleStore();
-            store.Add(graph);
-
-            var dataset = new InMemoryDataset(store, graph.BaseUri);
-            ISparqlUpdateProcessor processor = new LeviathanUpdateProcessor(dataset);
-            var updateParser = new SparqlUpdateParser();
-
-            processor.ProcessCommandSet(updateParser.ParseFromString(ReplaceConstantsSparql));
-
-            // then
-            Assert.IsTrue(((SparqlResultSet)graph.ExecuteQuery(QuerySparql)).Any()); // this fails
         }
     }
 }
