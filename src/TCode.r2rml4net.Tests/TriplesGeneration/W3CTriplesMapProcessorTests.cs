@@ -140,7 +140,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Mock<ISubjectMap> subjectMap = new Mock<ISubjectMap>();
             Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
             _triplesMap.Setup(proc => proc.SubjectMap).Returns(subjectMap.Object);
-            _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(1));
+            _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(10));
             _triplesMap.Setup(map => map.PredicateObjectMaps).Returns(new[] { predicateObjectMap.Object });
             predicateObjectMap.Setup(map => map.RefObjectMaps).Returns(() =>
                 GenerateNMocks<IRefObjectMap>(refObjectMapsCount,

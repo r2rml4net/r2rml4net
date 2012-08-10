@@ -69,13 +69,16 @@ namespace TCode.r2rml4net.TriplesGeneration
                         foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                         {
                             PredicateObjectMapProcessor.ProcessPredicateObjectMap(subject, map, graphs, logicalTable, rdfHandler);
+                        }
+                    }
 
-                            foreach (var refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
-                            {
-                                IRefObjectMap objectMap = refObjectMap;
-                                var fieldCount = logicalTable.FieldCount;
-                                refObjectMapProcesses.Add(() => RefObjectMapProcessor.ProcessRefObjectMap(objectMap, triplesMap.SubjectMap, connection, fieldCount, rdfHandler));
-                            }
+                    foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
+                    {
+                        foreach (var refObjectMap in map.RefObjectMaps.Where(refMap => refMap.SubjectMap != null))
+                        {
+                            IRefObjectMap objectMap = refObjectMap;
+                            var fieldCount = logicalTable.FieldCount;
+                            refObjectMapProcesses.Add(() => RefObjectMapProcessor.ProcessRefObjectMap(objectMap, triplesMap.SubjectMap, connection, fieldCount, rdfHandler));
                         }
                     }
                 }
