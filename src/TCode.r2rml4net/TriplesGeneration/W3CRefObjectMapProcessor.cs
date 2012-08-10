@@ -19,22 +19,26 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IRefObjectMapProcessor
 
-        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, IDbConnection dbConnection, int childColumnsCount, IRdfHandler rdfHandler)
+        public void ProcessRefObjectMap(IRefObjectMap refObjectMap, ISubjectMap subjectMap, IDbConnection dbConnection, int childColumnsCount, IRdfHandler rdfHandler)
         {
             IDataReader dataReader;
             if (!FetchLogicalRows(dbConnection, refObjectMap, out dataReader))
                 return;
-            
+
             using (dataReader)
             {
                 while (dataReader.Read())
                 {
                     var childRow = WrapDataRecord(dataReader, childColumnsCount,
                                                   ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
-                    var parentRow = WrapDataRecord(dataReader, childColumnsCount,
+                    IDataRecord parentRow;
+                    if (childColumnsCount == dataReader.FieldCount)
+                        parentRow = childRow;
+                    else
+                        parentRow = WrapDataRecord(dataReader, childColumnsCount,
                                                    ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
 
-                    var subject = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, childRow);
+                    var subject = TermGenerator.GenerateTerm<INode>(subjectMap, childRow);
                     var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
                                      select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
                     var @object = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, parentRow);

@@ -74,7 +74,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                             {
                                 IRefObjectMap objectMap = refObjectMap;
                                 var fieldCount = logicalTable.FieldCount;
-                                refObjectMapProcesses.Add(() => RefObjectMapProcessor.ProcessRefObjectMap(objectMap, connection, fieldCount, rdfHandler));
+                                refObjectMapProcesses.Add(() => RefObjectMapProcessor.ProcessRefObjectMap(objectMap, triplesMap.SubjectMap, connection, fieldCount, rdfHandler));
                             }
                         }
                     }
