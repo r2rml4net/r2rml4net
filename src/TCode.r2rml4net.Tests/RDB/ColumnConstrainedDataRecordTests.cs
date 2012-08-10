@@ -56,20 +56,37 @@ namespace TCode.r2rml4net.Tests.RDB
             _wrappedRecord.Verify(r => r.GetString(underlyingColumnFetched));
         }
 
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 2, 2)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 6, 1)]
-        public void ReturnsCorrectOrdinalForColumnName(ColumnConstrainedDataRecord.ColumnLimitType limitType, int actualColumnIndex, int expectedColumnIndex)
+        [TestCase(2, 2)]
+        public void ReturnsCorrectOrdinalForColumnNameInFirstNColumns(int actualColumnIndex, int expectedColumnIndex)
         {
             // given
             const string columnName = "column";
             _wrappedRecord.Setup(r => r.GetOrdinal(columnName)).Returns(actualColumnIndex);
-            _dataRecord = new ColumnConstrainedDataRecord(_wrappedRecord.Object, 5, limitType);
+            _wrappedRecord.Setup(r => r.GetName(6)).Returns("column");
+            _dataRecord = new ColumnConstrainedDataRecord(_wrappedRecord.Object, 5, ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
 
             // when
             var columnIndex = _dataRecord.GetOrdinal(columnName);
 
             // then
             _wrappedRecord.Verify(r => r.GetOrdinal(columnName), Times.Once());
+            Assert.AreEqual(expectedColumnIndex, columnIndex);
+        }
+
+        [TestCase(6, 1)]
+        public void ReturnsCorrectOrdinalForColumnNameInAllButFirstNColumns(int actualColumnIndex, int expectedColumnIndex)
+        {
+            // given
+            const string columnName = "column";
+            _wrappedRecord.Setup(r => r.GetOrdinal(columnName)).Returns(actualColumnIndex);
+            _wrappedRecord.Setup(r => r.GetName(actualColumnIndex)).Returns("column");
+            _dataRecord = new ColumnConstrainedDataRecord(_wrappedRecord.Object, 5, ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
+
+            // when
+            var columnIndex = _dataRecord.GetOrdinal(columnName);
+
+            // then
+            _wrappedRecord.Verify(r => r.GetName(It.IsAny<int>()), Times.Exactly(2));
             Assert.AreEqual(expectedColumnIndex, columnIndex);
         }
 

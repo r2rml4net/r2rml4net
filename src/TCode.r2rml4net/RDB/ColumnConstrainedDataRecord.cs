@@ -56,17 +56,19 @@ namespace TCode.r2rml4net.RDB
 
         public int GetOrdinal(string name)
         {
-            var ordinalOfUnderlyingRecord = _dataRecord.GetOrdinal(name);
-
             switch (LimitType)
             {
                 case ColumnLimitType.FirstNColumns:
-                    if(ordinalOfUnderlyingRecord < _columnLimit)
+                    var ordinalOfUnderlyingRecord = _dataRecord.GetOrdinal(name);
+                    if (ordinalOfUnderlyingRecord < _columnLimit)
                         return ordinalOfUnderlyingRecord;
                     break;
                 case ColumnLimitType.AllButFirstNColumns:
-                    if (ordinalOfUnderlyingRecord >= _columnLimit)
-                        return ordinalOfUnderlyingRecord - _columnLimit;
+                    for (int i = _columnLimit; i < _dataRecord.FieldCount; i++)
+                    {
+                        if (_dataRecord.GetName(i) == name)
+                            return i - _columnLimit;
+                    }
                     break;
             }
 
