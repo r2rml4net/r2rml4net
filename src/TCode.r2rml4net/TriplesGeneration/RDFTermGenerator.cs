@@ -25,7 +25,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new HashTable<string, IBlankNode>(256);
 
         public RDFTermGenerator()
-            : this(true)
+            : this(false)
         {
         }
 
