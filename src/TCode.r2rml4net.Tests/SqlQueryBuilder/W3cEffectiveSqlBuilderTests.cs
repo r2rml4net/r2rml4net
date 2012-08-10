@@ -91,7 +91,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                                                                        {
                                                                            new JoinCondition("colX", "colY"),
                                                                            new JoinCondition("foo", "bar"),
-                                                                           new JoinCondition("dlihc", "tnerap")
+                                                                           new JoinCondition("dlihc", "\"tnerap\"")
                                                                        });
             _refObjectMap.Setup(rom => rom.ChildEffectiveSqlQuery).Returns("SELECT * FROM A");
             _refObjectMap.Setup(rom => rom.ParentEffectiveSqlQuery).Returns("SELECT * FROM B");

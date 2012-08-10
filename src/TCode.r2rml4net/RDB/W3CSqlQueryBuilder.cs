@@ -53,7 +53,13 @@ namespace TCode.r2rml4net.RDB
             if (refObjectMap.JoinConditions.Any())
             {
                 var joinStatements =
-                    refObjectMap.JoinConditions.Select(join => string.Format("child.\"{0}\"=parent.\"{1}\"", join.ChildColumn, join.ParentColumn));
+                    refObjectMap.JoinConditions.Select(
+                        delegate(JoinCondition @join)
+                            {
+                                var childColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ChildColumn, _options);
+                                var parentColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ParentColumn, _options);
+                                return string.Format("child.{0}=parent.{1}", childColumn, parentColumn);
+                            });
 
                 return string.Format(@"SELECT * FROM ({0}) AS child, 
 ({1}) AS parent
