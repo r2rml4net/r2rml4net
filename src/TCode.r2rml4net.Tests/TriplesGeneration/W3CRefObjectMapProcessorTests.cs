@@ -120,7 +120,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         {
             // given
             _connection.Setup(c => c.CreateCommand()).Returns(() => CreateCommandWithNRowsResult(rowsCount));
-            _subjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(graphsCount));
+            _childSubjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(graphsCount));
 
             // when
             _processor.ProcessRefObjectMap(_refObjMap.Object, _childSubjectMap.Object, _connection.Object, 2, _rdfHandler.Object);
@@ -173,7 +173,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(c => c.CreateCommand()).Returns(() => CreateCommandWithNRowsResult(rowsCount));
             _predObjectMap.Setup(s => s.PredicateMaps).Returns(() => GenerateNMocks<IPredicateMap>(predicatesCount));
             _predObjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(predObjectGraphsCount));
-            _subjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(subjectGraphsCount));
+            _childSubjectMap.Setup(s => s.GraphMaps).Returns(() => GenerateNMocks<IGraphMap>(subjectGraphsCount));
             _termGenerator.Setup(gen => gen.GenerateTerm<INode>(It.IsAny<ITermMap>(), It.IsAny<IDataRecord>()))
                           .Returns(() => CreateMockedUriNode(new Uri("http://www.exampl.com/node")));
             _termGenerator.Setup(gen => gen.GenerateTerm<IUriNode>(It.IsAny<ITermMap>(), It.IsAny<IDataRecord>()))

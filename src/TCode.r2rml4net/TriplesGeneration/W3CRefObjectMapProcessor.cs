@@ -42,7 +42,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
                                      select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
                     var @object = TermGenerator.GenerateTerm<INode>(refObjectMap.SubjectMap, parentRow);
-                    var subjectGraphs = (from graphMap in refObjectMap.SubjectMap.GraphMaps
+                    var subjectGraphs = (from graphMap in subjectMap.GraphMaps
                                          select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
                     var predObjectGraphs = (from graphMap in refObjectMap.PredicateObjectMap.GraphMaps
                                             select TermGenerator.GenerateTerm<IUriNode>(graphMap, childRow)).ToList();
