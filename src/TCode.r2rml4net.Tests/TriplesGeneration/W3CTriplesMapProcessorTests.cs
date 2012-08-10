@@ -153,7 +153,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
-                    It.IsAny<IRefObjectMap>(),
+                    It.IsAny<IRefObjectMap>(), subjectMap.Object,
                     _connection.Object, 5, _rdfHandler.Object),
                 Times.Exactly(refObjectMapsCount));
         }
@@ -176,7 +176,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             _refObjectMapProcessor.Verify(proc =>
                 proc.ProcessRefObjectMap(
-                    It.IsAny<IRefObjectMap>(),
+                    It.IsAny<IRefObjectMap>(), subjectMap.Object,
                     _connection.Object, 5, _rdfHandler.Object),
                 Times.Never());
         }
