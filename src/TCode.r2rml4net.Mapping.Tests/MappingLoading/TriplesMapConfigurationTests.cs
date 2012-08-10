@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Moq;
 using NUnit.Framework;
 using VDS.RDF;
@@ -82,6 +84,26 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
 
             // then
             Assert.Throws<InvalidTriplesMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
+        }
+
+        [Test]
+        public void CanLoadMappingsWithManyPredicateObjectMaps()
+        {
+            // given
+            IGraph mappings = new Graph();
+            mappings.LoadFromEmbeddedResource("TCode.r2rml4net.Mapping.Tests.MappingLoading.RefObjectMap.ttl, TCode.r2rml4net.Mapping.Tests");
+            var referencedMap = new TriplesMapConfiguration(_configuration.Object, mappings, mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap2")));
+            var triplesMapConfiguration = new TriplesMapConfiguration(_configuration.Object, mappings, mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap1")));
+            referencedMap.RecursiveInitializeSubMapsFromCurrentGraph();
+            _configuration.Setup(c => c.TriplesMaps).Returns(new[] {referencedMap, triplesMapConfiguration});
+
+            // when
+            triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
+
+            // then
+            Assert.AreEqual(4, triplesMapConfiguration.PredicateObjectMaps.Count());
+            Assert.AreEqual(3, triplesMapConfiguration.PredicateObjectMaps.Count(pm => !pm.RefObjectMaps.Any()));
+            Assert.AreEqual(1, triplesMapConfiguration.PredicateObjectMaps.Count(pm => pm.RefObjectMaps.Any()));
         }
     }
 }

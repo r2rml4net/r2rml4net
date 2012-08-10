@@ -92,19 +92,17 @@ WHERE
         private void CreateRefObjectMaps()
         {
             var query = new SparqlParameterizedString(@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
-SELECT ?objectMap ?triplesMap 
+SELECT ?objectMap ?triplesMap ?predObjectMap
 WHERE 
 { 
-    @childTriplesMap rr:predicateObjectMap @predicateObjectMap .
-    @predicateObjectMap rr:objectMap ?objectMap . 
+    @childTriplesMap rr:predicateObjectMap ?predObjectMap .
+    ?predObjectMap rr:objectMap ?objectMap . 
     ?objectMap rr:parentTriplesMap ?triplesMap .
 }");
             query.SetParameter("childTriplesMap", TriplesMap.Node);
-            query.SetParameter("predicateObjectMap", Node);
-            query.SetParameter("predicateObjectMap", Node);
             var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
 
-            foreach (var result in resultSet)
+            foreach (var result in resultSet.Where(result => result["predObjectMap"].Equals(Node)))
             {
                 ITriplesMap referencedTriplesMap =
                     TriplesMap.R2RMLConfiguration.TriplesMaps.SingleOrDefault(tMap => result.Value("triplesMap").Equals(tMap.Node));
