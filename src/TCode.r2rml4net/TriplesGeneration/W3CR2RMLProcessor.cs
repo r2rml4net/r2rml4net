@@ -16,7 +16,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// <remarks>See http://www.w3.org/TR/r2rml/#generated-rdf</remarks>
     public class W3CR2RMLProcessor : IR2RMLProcessor, IDisposable
     {
-        private readonly DbConnection _connection;
+        private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
 
         public ITriplesGenerationLog Log { get; set; }
@@ -28,7 +28,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// and uses default RDF term generation and map processing algorithms
         /// </summary>
         /// <param name="connection">connection to datasource</param>
-        public W3CR2RMLProcessor(DbConnection connection)
+        public W3CR2RMLProcessor(IDbConnection connection)
             : this(connection, new RDFTermGenerator())
         {
         }
@@ -39,7 +39,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
-        public W3CR2RMLProcessor(DbConnection connection, IRDFTermGenerator rdfTermGenerator)
+        public W3CR2RMLProcessor(IDbConnection connection, IRDFTermGenerator rdfTermGenerator)
             : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator))
         {
         }
@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="triplesMapProcessor"></param>
-        protected internal W3CR2RMLProcessor(DbConnection connection, ITriplesMapProcessor triplesMapProcessor)
+        protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
             Log = NullLog.Instance;
 
