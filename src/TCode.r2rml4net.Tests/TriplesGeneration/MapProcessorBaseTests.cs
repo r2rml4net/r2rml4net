@@ -131,5 +131,23 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             _log.Verify(log => log.LogQueryExecutionError(It.IsAny<IQueryMap>(), It.IsAny<string>()));
         }
+
+        [Test]
+        public void ThrowsOnMultipleColumnsWithSameName()
+        {
+            // given
+            Mock<IDataReader> reader = new Mock<IDataReader>(MockBehavior.Strict);
+            reader.Setup(rdr => rdr.FieldCount).Returns(3);
+            reader.Setup(rdr => rdr.GetName(0)).Returns("Id");
+            reader.Setup(rdr => rdr.GetName(1)).Returns("Name");
+            reader.Setup(rdr => rdr.GetName(2)).Returns("Id");
+
+            // when
+            Assert.Throws<InvalidTriplesMapException>(() => _processor.Object.AssertNoDuplicateColumnNames(reader.Object));
+
+            // then
+            reader.Verify(rdr => rdr.GetName(It.IsAny<int>()), Times.Exactly(3));
+            reader.Verify(rdr => rdr.FieldCount, Times.Once());
+        }
     }
 }

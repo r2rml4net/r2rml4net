@@ -38,6 +38,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                         parentRow = WrapDataRecord(dataReader, childColumnsCount,
                                                    ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
 
+                    AssertNoDuplicateColumnNames(parentRow);
+                    AssertNoDuplicateColumnNames(childRow);
+
                     var subject = TermGenerator.GenerateTerm<INode>(subjectMap, childRow);
                     var predicates = from predicateMap in refObjectMap.PredicateObjectMap.PredicateMaps
                                      select TermGenerator.GenerateTerm<IUriNode>(predicateMap, childRow);
