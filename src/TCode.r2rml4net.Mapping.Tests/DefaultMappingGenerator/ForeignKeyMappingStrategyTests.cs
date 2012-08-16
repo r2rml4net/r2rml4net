@@ -168,5 +168,15 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // then
             Assert.AreEqual("http://example.com/base/Other/ID={\"FK\"}", template);
         }
+
+        [Test]
+        public void GeneratesTemplateWithUnicodeCharacters()
+        {
+            // when
+            var template = _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com/"), RelationalTestMappings.D017_I18NnoSpecialChars["成分"].ForeignKeys[0]);
+
+            // then
+            Assert.AreEqual("http://example.com/植物/名={\"植物名\"};使用部={\"使用部\"}", template);
+        }
     }
 }

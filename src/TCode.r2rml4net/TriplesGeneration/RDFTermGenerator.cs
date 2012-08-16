@@ -23,6 +23,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         private IRDFTermGenerationLog _log = NullLog.Instance;
         private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new HashTable<string, IBlankNode>(256);
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new HashTable<string, IBlankNode>(256);
+        private readonly MappingHelper _mappingHelper;
 
         public RDFTermGenerator()
             : this(false)
@@ -30,8 +31,14 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         public RDFTermGenerator(bool preserveDuplicateRows)
+            : this(preserveDuplicateRows, new MappingOptions())
+        {
+        }
+
+        public RDFTermGenerator(bool preserveDuplicateRows, MappingOptions options)
         {
             PreserveDuplicateRows = preserveDuplicateRows;
+            _mappingHelper = new MappingHelper(options);
         }
 
         public ISQLValuesMappingStrategy SqlValuesMappingStrategy
@@ -231,7 +238,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     blankNode = _blankNodeSubjects[value];
                 }
 
-                if(!_blankNodeObjects.ContainsKey(value))
+                if (!_blankNodeObjects.ContainsKey(value))
                     _blankNodeObjects.Add(value, blankNode);
             }
             else
@@ -253,7 +260,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return TemplateReplaceRegex.Replace(template, match =>
                     {
                         var replacement = ReplaceColumnReference(match, logicalRow);
-                        return replacement;
+                        return _mappingHelper.UrlEncode(replacement);
                     });
             }
             catch (ArgumentNullException)

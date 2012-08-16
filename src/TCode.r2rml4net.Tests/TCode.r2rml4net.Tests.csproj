@@ -72,6 +72,7 @@
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterCommonTests.cs" />
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTestsBase.cs" />
+    <Compile Include="MappingHelperTests.cs" />
     <Compile Include="MappingOptionsTests.cs" />
     <Compile Include="Metadata\TableCollectionTests.cs" />
     <Compile Include="Metadata\TableMetadataTests.cs" />

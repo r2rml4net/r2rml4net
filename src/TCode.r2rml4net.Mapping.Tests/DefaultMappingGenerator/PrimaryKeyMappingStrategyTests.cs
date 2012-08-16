@@ -201,5 +201,15 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // then
             Assert.AreEqual("Student_{\"ID\"}", template);
         }
+
+        [Test]
+        public void GeneratesTemplateWithUnicodeCharacters()
+        {
+            // when
+            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://example.com/"), RelationalTestMappings.D017_I18NnoSpecialChars["植物"]);
+
+            // then
+            Assert.AreEqual("http://example.com/植物/名={\"名\"};使用部={\"使用部\"}", template);
+        }
     }
 }

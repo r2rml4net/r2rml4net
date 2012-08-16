@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
             string uri = baseUri + MappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(";", foreignKey.ForeignKeyColumns.Select(MappingHelper.UrlEncode));
 
-            return new Uri(MappingHelper.UrlEncode(uri));
+            return new Uri(uri);
         }
 
         public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey)
@@ -60,7 +60,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 template.AppendFormat(";{0}={1}", MappingHelper.UrlEncode(referencedColumns[i]), MappingHelper.EncloseColumnName(foreignKeyColumns[i]));
             }
 
-            return MappingHelper.UrlEncode(template.ToString());
+            return template.ToString();
         }
 
         public string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey)
