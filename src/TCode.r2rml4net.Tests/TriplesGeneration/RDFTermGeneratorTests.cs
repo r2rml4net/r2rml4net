@@ -518,7 +518,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             Assert.IsNotNull(node);
             Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("http://www.example.com/person/5/Tomasz Pluskiewicz", (node as ILiteralNode).Value);
+            Assert.AreEqual("http://www.example.com/person/5/Tomasz%20Pluskiewicz", (node as ILiteralNode).Value);
             _logicalRow.VerifyAll();
             _logicalRow.Verify();
             _objectMap.VerifyAll();
