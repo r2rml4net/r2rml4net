@@ -36,6 +36,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Mock<IDataReader> reader = new Mock<IDataReader>();
             reader.Setup(r => r.FieldCount).Returns(fieldCount);
             command.Setup(cmd => cmd.ExecuteReader()).Returns(reader.Object);
+            for (int i = 0; i < fieldCount; i++)
+            {
+                int fieldIndex = i;
+                reader.Setup(r => r.GetName(fieldIndex)).Returns(string.Format("Column{0}", i));
+            }
 
             reader.Setup(rdr => rdr.Read()).Returns(() => rowsReturned++ < rowsCount);
 

@@ -111,6 +111,21 @@ namespace TCode.r2rml4net.TriplesGeneration
             return true;
         }
 
+        protected internal void AssertNoDuplicateColumnNames(IDataRecord reader)
+        {
+            var fieldCount = reader.FieldCount;
+            var columnNames = new List<string>(fieldCount);
+            for (int colIdx = 0; colIdx < fieldCount; colIdx++)
+            {
+                string name = reader.GetName(colIdx);
+                if(columnNames.Contains(name))
+                {
+                    throw new InvalidTriplesMapException("Sql query contains duplicate names");
+                }
+                columnNames.Add(name);
+            }
+        }
+
         private void LogSqlExecuteError(IQueryMap map, string message)
         {
             Log.LogQueryExecutionError(map, message);

@@ -51,6 +51,8 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                 using (logicalTable)
                 {
+                    AssertNoDuplicateColumnNames(logicalTable);
+
                     IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                     while (logicalTable.Read())
                     {
