@@ -131,18 +131,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             const string literal = "some text";
 
             // when
-            _objectMap.IsConstantValued(literal).HasLanguageTag("pl");
+            _objectMap.IsConstantValued(literal).HasLanguage("pl");
 
             // then
-            AssertLanguageTag("pl");
+            AssertLanguage("pl");
         }
 
-        private void AssertLanguageTag(string languagTagValue)
+        private void AssertLanguage(string languagTagValue)
         {
             Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.Node,
-                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageTagProperty)),
+                    _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
             Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
             Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
@@ -156,6 +156,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
         }
 
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void CannotSetInvalidLanguageTag()
+        {
+            _objectMap.HasLanguage("english");
+        }
+
         [Test]
         public void ObjectMapLiteralConstantLanguagTagCanBeSetUsingCultureInfo()
         {
@@ -163,25 +169,25 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             const string literal = "some text";
 
             // when
-            _objectMap.IsConstantValued(literal).HasLanguageTag(new CultureInfo("pl-PL"));
+            _objectMap.IsConstantValued(literal).HasLanguage(new CultureInfo("pl-PL"));
 
             // then
-            AssertLanguageTag("pl-pl");
+            AssertLanguage("pl-pl");
         }
 
         [Test]
-        public void CannotSetBothLanguageTagAndDataType()
+        public void CannotSetBothLanguageAndDataType()
         {
             // given
             const string literal = "some text";
             var literalConfiguration = _objectMap.IsConstantValued(literal);
 
             // when
-            literalConfiguration.HasLanguageTag(new CultureInfo("pl-PL"));
+            literalConfiguration.HasLanguage(new CultureInfo("pl-PL"));
 
             // then
             Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasDataType(UriConstants.RdfInteger));
-            Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasLanguageTag("pl-PL"));
+            Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasLanguage("pl-PL"));
         }
 
         [Test]

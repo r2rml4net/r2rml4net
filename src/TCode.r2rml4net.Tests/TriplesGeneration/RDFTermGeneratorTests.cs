@@ -379,7 +379,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
             _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
-            _objectMap.Setup(map => map.LanguageTag).Returns("pl").Verifiable();
+            _objectMap.Setup(map => map.Language).Returns("pl").Verifiable();
             _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
 
             // when
@@ -409,7 +409,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
             _objectMap.Setup(map => map.TermType).Returns(_termType.Object).Verifiable();
-            _objectMap.Setup(map => map.LanguageTag).Returns("pl").Verifiable();
+            _objectMap.Setup(map => map.Language).Returns("pl").Verifiable();
             _objectMap.Setup(map => map.DataTypeURI)
                       .Returns(new Uri("http://www.example.com/types/inch"))
                       .Verifiable();

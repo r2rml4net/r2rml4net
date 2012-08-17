@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSets\Languages.cs" />
     <Compile Include="DirectMapping\ColumnMappingStrategy.cs" />
     <Compile Include="DirectMapping\ForeignKeyMappingStrategy.cs" />
     <Compile Include="DirectMapping\DirectMappingStrategy.cs" />
@@ -102,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataSets\languages.ttl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

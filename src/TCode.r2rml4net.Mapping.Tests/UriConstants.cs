@@ -8,7 +8,7 @@
         internal const string RrConstantProperty = "http://www.w3.org/ns/r2rml#constant";
         internal const string RrLiteral = "http://www.w3.org/ns/r2rml#Literal";
         internal const string RrDataTypeProperty = "http://www.w3.org/ns/r2rml#datatype";
-        internal const string RrLanguageTagProperty = "http://www.w3.org/ns/r2rml#languageTag";
+        internal const string RrLanguageProperty = "http://www.w3.org/ns/r2rml#language";
         internal const string RrPredicateObjectMapProperty = "http://www.w3.org/ns/r2rml#predicateObjectMap";
         internal const string RrColumnProperty = "http://www.w3.org/ns/r2rml#column";
         internal const string RrGraphProperty = "http://www.w3.org/ns/r2rml#graph";

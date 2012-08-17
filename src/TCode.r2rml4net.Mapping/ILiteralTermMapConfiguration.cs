@@ -22,11 +22,11 @@ namespace TCode.r2rml4net.Mapping
         /// Sets the language tag of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
-        void HasLanguageTag(string languagTag);
+        void HasLanguage(string languageTag);
         /// <summary>
         /// Sets the language tag of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
-        void HasLanguageTag(CultureInfo cultureInfo);
+        void HasLanguage(CultureInfo cultureInfo);
     }
 }
