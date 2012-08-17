@@ -222,34 +222,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         #region IRI term type
 
         [Test]
-        public void AbsoluteUriValueCreatesUriNode()
-        {
-            // given
-            const string expected = "http://www.example.com/value";
-            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
-            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
-            Uri datatype;
-            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
-                                .Returns(expected)
-                                .Verifiable();
-            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
-            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
-
-            // when
-            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
-
-            // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IUriNode);
-            Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
-            _logicalRow.VerifyAll();
-            _termMap.VerifyAll();
-            _termType.VerifyAll();
-            _log.Verify(log => log.LogTermGenerated(node));
-        }
-
-        [Test]
         public void RelativeUriValueCreatesUriNode()
         {
             const string expected = "http://www.example.com/value";
@@ -301,6 +273,33 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _termType.VerifyAll();
+        }
+
+        [TestCase("http://example.com/company/Alice", "http://example.com/base/http%3A%2F%2Fexample.com%2Fcompany%2FAlice")]
+        [TestCase("path/../Danny", "http://example.com/base/path%2F..%2FDanny")]
+        [TestCase("Bob/Charles", "http://example.com/base/Bob%2FCharles")]
+        [TestCase("Bob Charles", "http://example.com/base/Bob%20Charles")]
+        public void EscapesColumnValueBeforeConstructingUri(string value, string expected)
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                                .Returns(value)
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.IsNotNull(node);
+            Assert.IsTrue(node is IUriNode);
+            Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
         }
 
         #endregion
