@@ -34,10 +34,6 @@ namespace TCode.r2rml4net.Log
             _writer.WriteLine("Term map {0} produced null term", termMap.Node);
         }
 
-        public void LogInvalidBlankNode(ITermMap termMap, string blankNodeIdentifier)
-        {
-        }
-
         public void LogNullValueForColumn(string columnName)
         {
         }

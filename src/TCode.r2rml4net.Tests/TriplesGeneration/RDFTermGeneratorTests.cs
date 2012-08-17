@@ -489,7 +489,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(true).Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}");
-            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
             _termType.Setup(tt => tt.IsURI).Returns(false);
 
             // when
@@ -513,7 +512,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(2)).Returns(true).Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
-            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
             _termType.Setup(tt => tt.IsURI).Returns(true);
             Uri typeUri;
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, It.IsAny<IDataRecord>(), out typeUri)).Returns("value");

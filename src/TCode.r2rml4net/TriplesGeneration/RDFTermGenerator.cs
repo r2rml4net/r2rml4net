@@ -18,7 +18,6 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     public class RDFTermGenerator : IRDFTermGenerator
     {
-        static readonly Regex ValidBlankNodeRegex = new Regex(@"^[a-zA-Z][a-zA-Z_0-9-]*$");
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\}.]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
@@ -105,7 +104,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             string value;
             try
             {
-                value = ReplaceColumnReferences(termMap.Template, logicalRow, termMap.TermType.IsURI);
+                value = ReplaceColumnReferences(termMap.Template, logicalRow);
             }
             catch (IndexOutOfRangeException)
             {
@@ -227,9 +226,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)
         {
-            if (!ValidBlankNodeRegex.IsMatch(value))
-                Log.LogInvalidBlankNode(termMap, value);
-
             IBlankNode blankNode;
             if (termMap is ISubjectMap)
             {
@@ -270,7 +266,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             return blankNode;
         }
 
-        private string ReplaceColumnReferences(string template, IDataRecord logicalRow, bool escapeValues)
+        private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
         {
             try
             {
