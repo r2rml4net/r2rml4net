@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSets\LangagesTests.cs" />
     <Compile Include="DefaultMappingGenerator\ColumnMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\DirectMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\PrimaryKeyMappingStrategyTests.cs" />

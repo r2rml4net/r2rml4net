@@ -433,7 +433,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
             get { throw new NotImplementedException(); }
         }
 
-        public string LanguageTag
+        public string Language
         {
             get { throw new NotImplementedException(); }
         }
@@ -492,7 +492,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// Sets the language tag of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
-        public void HasLanguageTag(string languagTag)
+        public void HasLanguage(string languageTag)
         {
         }
 
@@ -500,7 +500,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// Sets the language tag of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
-        public void HasLanguageTag(CultureInfo cultureInfo)
+        public void HasLanguage(CultureInfo cultureInfo)
         {
         }
 

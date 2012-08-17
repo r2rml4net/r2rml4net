@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using TCode.r2rml4net.Mapping.DataSets;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
@@ -95,16 +96,16 @@ namespace TCode.r2rml4net.Mapping
                 if (columnTriples.Any())
                     return true;
 
-                var languageTagNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety);
-                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, languageTagNode).ToArray();
+                var languageNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety);
+                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, languageNode).ToArray();
 
                 var datatypeNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety);
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, datatypeNode).ToArray();
 
-                if (languageTagTriples.Any() && datatypeTriples.Any())
-                    throw new InvalidTriplesMapException("Object map cannot have both a rr:languageTag and rr:datatype properties set");
+                if (languageTriples.Any() && datatypeTriples.Any())
+                    throw new InvalidTriplesMapException("Object map cannot have both a rr:language and rr:datatype properties set");
 
-                return datatypeTriples.Any() || languageTagTriples.Any();
+                return datatypeTriples.Any() || languageTriples.Any();
             }
         }
 
@@ -128,31 +129,33 @@ namespace TCode.r2rml4net.Mapping
 
         public void HasDataType(Uri dataTypeUri)
         {
-            EnsureOnlyLanguageTagOrDatatype();
+            EnsureOnlyLanguageOrDatatype();
 
             R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety), R2RMLMappings.CreateUriNode(dataTypeUri));
         }
 
-        public void HasLanguageTag(string languagTag)
+        public void HasLanguage(string languageTag)
         {
-            EnsureOnlyLanguageTagOrDatatype();
+            EnsureOnlyLanguageOrDatatype();
+            if(!Languages.LanguageTagIsValid(languageTag))
+                throw new ArgumentException(string.Format("Language tag '{0}' is invalid", languageTag), languageTag);
 
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety), R2RMLMappings.CreateLiteralNode(languagTag.ToLower()));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety), R2RMLMappings.CreateLiteralNode(languageTag.ToLower()));
         }
 
-        public void HasLanguageTag(CultureInfo cultureInfo)
+        public void HasLanguage(CultureInfo cultureInfo)
         {
-            HasLanguageTag(cultureInfo.Name);
+            HasLanguage(cultureInfo.Name);
         }
 
-        private void EnsureOnlyLanguageTagOrDatatype()
+        private void EnsureOnlyLanguageOrDatatype()
         {
             var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-            var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+            var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
 
             if (datatypeTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a datatype");
-            if (languageTagTriples.Any())
+            if (languageTriples.Any())
                 throw new InvalidTriplesMapException("Object map already has a language tag");
         }
 
@@ -188,12 +191,12 @@ namespace TCode.r2rml4net.Mapping
             get
             {
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
 
                 var datatypeTriple = datatypeTriples.SingleOrDefault();
                 if (datatypeTriple != null)
                 {
-                    if (languageTagTriples.Any())
+                    if (languageTriples.Any())
                         throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
 
                     IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
@@ -207,24 +210,28 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
-        public string LanguageTag
+        public string Language
         {
             get
             {
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-                var languageTagTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguageTagPropety));
+                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
 
-                var languagTagTriple = languageTagTriples.SingleOrDefault();
-                if (languagTagTriple != null)
+                var languagTriple = languageTriples.SingleOrDefault();
+                if (languagTriple != null)
                 {
                     if (datatypeTriples.Any())
-                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+                        throw new InvalidTermException(this, "Object map has both language tag and datatype set");
 
-                    ILiteralNode languageTagNode = languagTagTriple.Object as ILiteralNode;
-                    if (languageTagNode == null)
-                        throw new InvalidTriplesMapException("Object map has literal set but it is not a literal");
+                    ILiteralNode languageNode = languagTriple.Object as ILiteralNode;
+                    if (languageNode == null)
+                        throw new InvalidTermException(this, "Object map has literal set but it is not a literal");
 
-                    return languageTagNode.Value;
+                    var languageTag = languageNode.Value;
+                    if(!Languages.LanguageTagIsValid(languageTag))
+                        throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
+
+                    return languageTag;
                 }
 
                 return null;

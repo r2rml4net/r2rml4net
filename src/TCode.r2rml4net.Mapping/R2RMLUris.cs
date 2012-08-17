@@ -26,7 +26,7 @@
         internal const string RrGraphMapPropety = "rr:graphMap";
         internal const string RrColumnProperty = "rr:column";
         internal const string RrPredicateObjectMapPropety = "rr:predicateObjectMap";
-        internal const string RrLanguageTagPropety = "rr:languageTag";
+        internal const string RrLanguagePropety = "rr:language";
         internal const string RrDatatypePropety = "rr:datatype";
         internal const string RrJoinCondition = "rr:joinCondition";
         internal const string RrChild = "rr:child";

@@ -304,13 +304,13 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             var literalTermMap = termMap as ILiteralTermMap;
             Uri datatypeUri = literalTermMap.DataTypeURI ?? datatypeUriOverride;
-            string languageTag = literalTermMap.LanguageTag;
+            string language = literalTermMap.Language;
 
-            if (languageTag != null && datatypeUri != null)
+            if (language != null && datatypeUri != null)
                 throw new InvalidTermException(literalTermMap, "Literal term map cannot have both language tag and datatype set");
 
-            if (languageTag != null)
-                return NodeFactory.CreateLiteralNode(value, languageTag);
+            if (language != null)
+                return NodeFactory.CreateLiteralNode(value, language);
             if (datatypeUri != null)
                 return NodeFactory.CreateLiteralNode(value, datatypeUri);
 
