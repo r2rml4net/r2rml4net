@@ -69,6 +69,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         public void GenerateTriples(IR2RML r2RML, IRdfHandler rdfHandler)
         {
+            bool handlingOk = true;
             IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler);
 
             blankNodeReplaceHandler.StartRdf();
@@ -86,10 +87,11 @@ namespace TCode.r2rml4net.TriplesGeneration
                 catch(InvalidTriplesMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
+                    handlingOk = false;
                 }
             }
 
-            blankNodeReplaceHandler.EndRdf(true);
+            blankNodeReplaceHandler.EndRdf(handlingOk);
         }
 
         /// <summary>
