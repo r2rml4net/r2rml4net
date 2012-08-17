@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using TCode.r2rml4net.Log;
@@ -168,7 +169,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return GenerateTermForLiteral(termMap, value, implicitDatatype);
             }
 
-            return GenerateTermForValue(termMap, _mappingHelper.UrlEncode(value));
+            return GenerateTermForValue(termMap, value);
         }
 
         internal INode GenerateTermForValue(ITermMap termMap, string value)
@@ -183,7 +184,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                     var uri = new Uri(value, UriKind.RelativeOrAbsolute);
 
                     if (!uri.IsAbsoluteUri)
-                        uri = new Uri(termMap.BaseURI + value);
+                    {
+                        uri = ConstructAbsoluteUri(termMap, value);
+                    }
 
                     if (uri.IsAbsoluteUri)
                     {
@@ -209,6 +212,17 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
 
             throw new InvalidTermException(termMap, "Term map must be either IRI-, literal- or blank node-valued");
+        }
+
+        /// <summary>
+        /// Throws <see cref="InvalidTermException"/> is uri contains any . or .. segments
+        /// </summary>
+        private Uri ConstructAbsoluteUri(ITermMap termMap, string relativePart)
+        {
+            if (relativePart.Split('/').Any(seg => seg == "." || seg == ".."))
+                throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
+
+            return new Uri(termMap.BaseURI + relativePart);
         }
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)
@@ -293,7 +307,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 throw new InvalidTermException(termMap, "Term map cannot be of term type literal");
 
             var literalTermMap = termMap as ILiteralTermMap;
-            Uri datatypeUri = datatypeUriOverride ?? literalTermMap.DataTypeURI;
+            Uri datatypeUri = literalTermMap.DataTypeURI ?? datatypeUriOverride;
             string languageTag = literalTermMap.LanguageTag;
 
             if (languageTag != null && datatypeUri != null)
