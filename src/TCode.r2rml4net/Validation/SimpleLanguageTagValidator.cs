@@ -5,6 +5,11 @@ using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Validation
 {
+    /// <summary>
+    /// A simple implementation, which looks the language tag up
+    /// in a graph extracted from <a href="http://www.lexvo.org/">Lexvo.org</a>
+    /// </summary>
+    /// <remarks>the graph is an embedded turtle file located in TCode.r2rml4net.Mapping.DataSets.languages.ttl</remarks>
     public class SimpleLanguageTagValidator : ILanguageTagValidator
     {
         private static readonly object ClassLock = new object();
@@ -30,6 +35,10 @@ namespace TCode.r2rml4net.Validation
             }
         }
 
+        /// <summary>
+        /// Check wheather the <paramref name="languageTag"/> is valid
+        /// </summary>
+        /// <returns>true if language tag is valid</returns>
         public bool LanguageTagIsValid(string languageTag)
         {
             if (languageTag == null) throw new ArgumentNullException("languageTag");

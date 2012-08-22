@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using TCode.r2rml4net.Validation;
 
-namespace TCode.r2rml4net.Mapping.Tests.DataSets
+namespace TCode.r2rml4net.Tests.Validation
 {
     [TestFixture]
     public class SimpleLanguageTagValidatorTests : LanguageTagValidatorTestsBase<SimpleLanguageTagValidator>
