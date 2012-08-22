@@ -122,6 +122,8 @@
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CR2RMLProcessor.cs" />
+    <Compile Include="Validation\SimpleLanguageTagValidator.cs" />
+    <Compile Include="Validation\ILanguageTagValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
