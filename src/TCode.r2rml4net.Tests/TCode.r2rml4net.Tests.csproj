@@ -91,6 +91,7 @@
     <Compile Include="Validation\LanguageTagValidatorTestsBase.cs" />
     <Compile Include="Validation\Bcp47RegexLanguageTagValidatorTests.cs" />
     <Compile Include="Validation\SimpleLanguageTagValidatorTests.cs" />
+    <Compile Include="Validation\Wc3SqlVersionValidatorTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
     <Compile Include="RDB\DatabaseIdentifiersHelperTests.cs" />
   </ItemGroup>

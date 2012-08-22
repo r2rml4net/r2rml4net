@@ -9,7 +9,7 @@ namespace TCode.r2rml4net.Validation
     /// A simple implementation, which looks the language tag up
     /// in a graph extracted from <a href="http://www.lexvo.org/">Lexvo.org</a>
     /// </summary>
-    /// <remarks>the graph is an embedded turtle file located in TCode.r2rml4net.Mapping.DataSets.languages.ttl</remarks>
+    /// <remarks>the graph is an embedded turtle file located in TCode.r2rml4net.DataSets.languages.ttl</remarks>
     public class SimpleLanguageTagValidator : ILanguageTagValidator
     {
         private static readonly object ClassLock = new object();
@@ -26,7 +26,7 @@ namespace TCode.r2rml4net.Validation
                         lock (ClassLock)
                         {
                             _languagesGraph = new Graph();
-                            _languagesGraph.LoadFromEmbeddedResource("TCode.r2rml4net.Mapping.DataSets.languages.ttl, TCode.r2rml4net.Mapping");
+                            _languagesGraph.LoadFromEmbeddedResource("TCode.r2rml4net.DataSets.languages.ttl, TCode.r2rml4net");
                         }
                     } 
                 }
