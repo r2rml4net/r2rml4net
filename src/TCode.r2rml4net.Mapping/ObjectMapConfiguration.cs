@@ -1,12 +1,15 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
 {
     internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, ITermType
     {
+        public ILanguageTagValidator LanguageTagValidator { get; set; }
+
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
             : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())
         {
@@ -15,6 +18,7 @@ namespace TCode.r2rml4net.Mapping
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node)
             : base(parentTriplesMap, parentMap, r2RMLMappings, node)
         {
+            LanguageTagValidator = new Bcp47RegexLanguageTagValidator();
         }
 
         #region Implementation of ITermMap
@@ -136,7 +140,7 @@ namespace TCode.r2rml4net.Mapping
         public void HasLanguage(string languageTag)
         {
             EnsureOnlyLanguageOrDatatype();
-            if(!Languages.LanguageTagIsValid(languageTag))
+            if(!LanguageTagValidator.LanguageTagIsValid(languageTag))
                 throw new ArgumentException(string.Format("Language tag '{0}' is invalid", languageTag), languageTag);
 
             R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety), R2RMLMappings.CreateLiteralNode(languageTag.ToLower()));
@@ -227,7 +231,7 @@ namespace TCode.r2rml4net.Mapping
                         throw new InvalidTermException(this, "Object map has literal set but it is not a literal");
 
                     var languageTag = languageNode.Value;
-                    if(!Languages.LanguageTagIsValid(languageTag))
+                    if(!LanguageTagValidator.LanguageTagIsValid(languageTag))
                         throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
 
                     return languageTag;

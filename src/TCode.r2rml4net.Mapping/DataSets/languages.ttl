@@ -688,3 +688,4 @@
 <http://lexvo.org/id/iso639-5/wen> <urn:lang:code> "wen"^^xsd:string.
 <http://lexvo.org/id/iso639-5/ypk> <urn:lang:code> "ypk"^^xsd:string.
 <http://lexvo.org/id/iso639-5/znd> <urn:lang:code> "znd"^^xsd:string.
+<urn:lang:privateUse> <urn:lang:code> "x"^^xsd:string.

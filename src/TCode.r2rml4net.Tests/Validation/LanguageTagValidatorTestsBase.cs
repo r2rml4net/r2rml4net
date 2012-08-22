@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using TCode.r2rml4net.Validation;
 
-namespace TCode.r2rml4net.Mapping.Tests.DataSets
+namespace TCode.r2rml4net.Tests.Validation
 {
     public abstract class LanguageTagValidatorTestsBase<T> where T : ILanguageTagValidator
     {

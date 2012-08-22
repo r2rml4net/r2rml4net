@@ -88,6 +88,9 @@
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessorTests.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessorTests.cs" />
     <Compile Include="TriplesGeneration\W3CR2RMLProcessorTests.cs" />
+    <Compile Include="Validation\LanguageTagValidatorTestsBase.cs" />
+    <Compile Include="Validation\Bcp47RegexLanguageTagValidatorTests.cs" />
+    <Compile Include="Validation\SimpleLanguageTagValidatorTests.cs" />
     <Compile Include="XsdDatatypesTests.cs" />
     <Compile Include="RDB\DatabaseIdentifiersHelperTests.cs" />
   </ItemGroup>
