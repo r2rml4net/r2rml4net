@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSets\Languages.cs" />
     <Compile Include="DirectMapping\ColumnMappingStrategy.cs" />
     <Compile Include="DirectMapping\ForeignKeyMappingStrategy.cs" />
     <Compile Include="DirectMapping\DirectMappingStrategy.cs" />

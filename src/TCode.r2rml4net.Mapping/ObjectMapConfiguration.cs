@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using TCode.r2rml4net.Mapping.DataSets;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping

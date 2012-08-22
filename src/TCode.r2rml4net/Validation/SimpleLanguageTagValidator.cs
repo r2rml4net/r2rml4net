@@ -3,9 +3,9 @@ using System.Linq;
 using VDS.RDF;
 using VDS.RDF.Query;
 
-namespace TCode.r2rml4net.Mapping.DataSets
+namespace TCode.r2rml4net.Validation
 {
-    internal static class Languages
+    public class SimpleLanguageTagValidator : ILanguageTagValidator
     {
         private static readonly object ClassLock = new object();
         private static IGraph _languagesGraph;
@@ -30,7 +30,7 @@ namespace TCode.r2rml4net.Mapping.DataSets
             }
         }
 
-        public static bool LanguageTagIsValid(string languageTag)
+        public bool LanguageTagIsValid(string languageTag)
         {
             if (languageTag == null) throw new ArgumentNullException("languageTag");
             if (string.IsNullOrWhiteSpace(languageTag)) throw new ArgumentException("languageTag");
