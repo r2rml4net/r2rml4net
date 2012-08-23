@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
@@ -12,10 +11,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
     public class TriplesMapConfigurationTests
     {
         private Mock<IR2RMLConfiguration> _configuration;
+        private Mock<ISqlVersionValidator> _sqlVersionValidator;
 
         [SetUp]
         public void Setup()
         {
+            _sqlVersionValidator = new Mock<ISqlVersionValidator>();
             _configuration = new Mock<IR2RMLConfiguration>();
         }
 
@@ -31,7 +32,7 @@ ex:triplesMap rr:subjectMap ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
+            var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -55,7 +56,7 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
+            var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -80,7 +81,7 @@ ex:triplesMap rr:subject ex:subject .
 ex:triplesMap rr:subjectMap ex:subject1 .");
 
             // when
-            var triplesMap = new TriplesMapConfiguration(_configuration.Object, graph, graph.CreateUriNode("ex:triplesMap"));
+            var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
 
             // then
             Assert.Throws<InvalidTriplesMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
@@ -92,8 +93,8 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
             // given
             IGraph mappings = new Graph();
             mappings.LoadFromEmbeddedResource("TCode.r2rml4net.Mapping.Tests.MappingLoading.RefObjectMap.ttl, TCode.r2rml4net.Mapping.Tests");
-            var referencedMap = new TriplesMapConfiguration(_configuration.Object, mappings, mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap2")));
-            var triplesMapConfiguration = new TriplesMapConfiguration(_configuration.Object, mappings, mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap1")));
+            var referencedMap = new TriplesMapConfiguration(CreateStub(mappings), mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap2")));
+            var triplesMapConfiguration = new TriplesMapConfiguration(CreateStub(mappings), mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap1")));
             referencedMap.RecursiveInitializeSubMapsFromCurrentGraph();
             _configuration.Setup(c => c.TriplesMaps).Returns(new[] {referencedMap, triplesMapConfiguration});
 
@@ -104,6 +105,26 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
             Assert.AreEqual(4, triplesMapConfiguration.PredicateObjectMaps.Count());
             Assert.AreEqual(3, triplesMapConfiguration.PredicateObjectMaps.Count(pm => !pm.RefObjectMaps.Any()));
             Assert.AreEqual(1, triplesMapConfiguration.PredicateObjectMaps.Count(pm => pm.RefObjectMaps.Any()));
+        }
+
+        [Test]
+        public void CanBeCreatedFromTableName()
+        {
+            // given
+            const string tableName = "SomeTable";
+            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
+
+            // when
+            var triplesMap = TriplesMapConfiguration.FromTable(CreateStub(graph), tableName);
+
+            // then
+            Assert.AreEqual(tableName, triplesMap.TableName);
+        }
+
+        private TriplesMapConfigurationStub CreateStub(IGraph graph)
+        {
+            return new TriplesMapConfigurationStub(_configuration.Object,
+                graph, new MappingOptions(), _sqlVersionValidator.Object);
         }
     }
 }

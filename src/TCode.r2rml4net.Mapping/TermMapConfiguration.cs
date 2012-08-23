@@ -20,8 +20,8 @@ namespace TCode.r2rml4net.Mapping
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
 
-        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node) 
-            : base(parentTriplesMap, r2RMLMappings, node)
+        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node, MappingOptions mappingOptions) 
+            : base(parentTriplesMap, r2RMLMappings, node, mappingOptions)
         {
             ParentMapNode = parentMap.Node;
         }

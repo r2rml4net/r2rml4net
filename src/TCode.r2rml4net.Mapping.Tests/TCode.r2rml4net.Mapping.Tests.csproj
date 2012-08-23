@@ -79,6 +79,7 @@
     <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\TriplesMapConfigurationTests.cs" />
+    <Compile Include="Mapping\BaseConfigurationTests.cs" />
     <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
     <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
     <Compile Include="Mapping\ObjectMapConfigurationTests.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
     <Compile Include="GraphTestsExtensions.cs" />
     <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
+    <Compile Include="Mocks\MockBaseConfiguration.cs" />
     <Compile Include="Mocks\MockConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

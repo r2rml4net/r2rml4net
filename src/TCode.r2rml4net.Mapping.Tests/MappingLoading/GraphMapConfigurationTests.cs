@@ -35,7 +35,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _graphMapParent.Setup(map => map.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -62,7 +62,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -88,7 +88,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"));
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then

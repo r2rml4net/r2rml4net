@@ -38,13 +38,20 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         protected internal IGraph R2RMLMappings { get; private set; }
 
+        protected MappingOptions MappingOptions { get; private set; }
+
         /// <summary>
         /// Constructor used by <see cref="R2RMLConfiguration"/>
         /// </summary>
         /// <param name="graph">existing graph with mappings</param>
-        internal BaseConfiguration(IGraph graph)
+        /// <param name="existingMappingsGraph"> </param>
+        internal BaseConfiguration(IGraph graph, MappingOptions mappingOptions)
         {
+            if(mappingOptions == null)
+                throw new ArgumentNullException("mappingOptions");
+
             R2RMLMappings = graph;
+            MappingOptions = mappingOptions;
             EnsurePrefixes();
         }
 
@@ -52,30 +59,30 @@ WHERE { ?map rr:subject ?value }";
         /// Constructor used by <see cref="R2RMLConfiguration"/>
         /// </summary>
         /// <param name="baseUri">R2RML graph's base URI</param>
-        protected BaseConfiguration(Uri baseUri)
-            : this(new Graph { BaseUri = baseUri })
+        /// <param name="existingMappingsGraph"> </param>
+        protected BaseConfiguration(Uri baseUri, MappingOptions mappingOptions)
+            : this(new Graph { BaseUri = baseUri }, mappingOptions)
         {
         }
 
         /// <summary>
         /// Constructor used by <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(IGraph existingMappingsGraph, INode node)
+        protected BaseConfiguration(IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
+            : this(existingMappingsGraph, mappingOptions)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
 
             _node = node;
-            R2RMLMappings = existingMappingsGraph;
             EnsureNoShortcutSubmaps();
-            EnsurePrefixes();
         }
 
         /// <summary>
         /// Constructor used by implementations other than <see cref="R2RMLConfiguration"/> and <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node)
-            : this(existingMappingsGraph, node)
+        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
+            : this(existingMappingsGraph, node, mappingOptions)
         {
             _triplesMap = triplesMap;
         }

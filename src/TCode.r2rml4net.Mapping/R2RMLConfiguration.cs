@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.RDB;
+using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
@@ -19,7 +20,10 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        IGraph _graphCopy;
+        private ISqlVersionValidator _sqlVersionValidator = new Wc3SqlVersionValidator();
         ISqlQueryBuilder _sqlQueryBuilder = new W3CSqlQueryBuilder();
+
         readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
 
         /// <summary>
@@ -27,7 +31,17 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <param name="baseUri">base URI for mapping nodes</param>
         public R2RMLConfiguration(Uri baseUri)
-            : base(baseUri)
+            : base(baseUri, new MappingOptions())
+        {
+            R2RMLMappings.Changed += R2RMLMappingsChanged;
+        }
+
+        /// <summary>
+        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
+        /// </summary>
+        /// <param name="baseUri">base URI for mapping nodes</param>
+        public R2RMLConfiguration(Uri baseUri, MappingOptions mappingOptions)
+            : base(baseUri, mappingOptions)
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
@@ -37,12 +51,18 @@ namespace TCode.r2rml4net.Mapping
         /// and base URI set to <see cref="DefaultBaseUri"/>
         /// </summary>
         public R2RMLConfiguration()
-            : this(DefaultBaseUri)
+            : this(new MappingOptions())
         {
         }
 
-        internal R2RMLConfiguration(IGraph mappingsGraph)
-            : base(mappingsGraph)
+        public R2RMLConfiguration(MappingOptions mappingOptions)
+            : base(DefaultBaseUri, mappingOptions)
+        {
+
+        }
+
+        internal R2RMLConfiguration(IGraph mappingsGraph, MappingOptions mappingOptions)
+            : base(mappingsGraph, mappingOptions)
         {
 
         }
@@ -65,7 +85,7 @@ namespace TCode.r2rml4net.Mapping
 
             foreach (var triplesMapNode in triplesMapsTriples.Select(triple => triple.Subject))
             {
-                var triplesMapConfiguration = new TriplesMapConfiguration(this, R2RMLMappings, triplesMapNode);
+                var triplesMapConfiguration = new TriplesMapConfiguration(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), triplesMapNode);
                 triplesMaps.Add(triplesMapNode, triplesMapConfiguration);
                 _triplesMaps.Add(triplesMapConfiguration);
             }
@@ -96,9 +116,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
-            var triplesMapConfiguration = TriplesMapConfiguration.FromTable(this, R2RMLMappings, tablename);
-            _triplesMaps.Add(triplesMapConfiguration);
-            return triplesMapConfiguration;
+            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), tablename));
         }
 
         /// <summary>
@@ -106,7 +124,11 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
-            var triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(this, R2RMLMappings, sqlQuery);
+            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), sqlQuery));
+        }
+
+        private TriplesMapConfiguration SetupTriplesMap(TriplesMapConfiguration triplesMapConfiguration)
+        {
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
@@ -116,7 +138,6 @@ namespace TCode.r2rml4net.Mapping
             get { return R2RMLMappings.BaseUri; }
         }
 
-        IGraph _graphCopy;
         /// <summary>
         /// Returns copy of the mapping graph
         /// </summary>
@@ -142,6 +163,12 @@ namespace TCode.r2rml4net.Mapping
         {
             get { return _sqlQueryBuilder; }
             set { _sqlQueryBuilder = value; }
+        }
+
+        public ISqlVersionValidator SqlVersionValidator
+        {
+            get { return _sqlVersionValidator; }
+            set { _sqlVersionValidator = value; }
         }
 
         #region Implementation of IR2RML

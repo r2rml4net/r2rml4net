@@ -32,7 +32,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"));
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -56,7 +56,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"));
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -79,7 +79,7 @@ ex:PredicateObjectMap rr:predicate ex:Value .");
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph);
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, new MappingOptions());
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then

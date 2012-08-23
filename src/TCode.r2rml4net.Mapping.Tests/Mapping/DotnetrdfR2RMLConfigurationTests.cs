@@ -13,7 +13,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [SetUp]
         public void Setup()
         {
-            _configuration = new R2RMLConfiguration();// {R2RMLMappings = _graph.Object};
+            _configuration = new R2RMLConfiguration();
         }
 
         [TestCase(1)]
@@ -70,7 +70,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void SqlVersionUriCanBeChangedFromUriString()
         {
             ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
-                                                                   .SetSqlVersion("rr:SQL2008");
+                                                                   .SetSqlVersion("http://www.w3.org/ns/r2rml#SQL2008");
 
             Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
             Assert.IsNotNull(configuration);

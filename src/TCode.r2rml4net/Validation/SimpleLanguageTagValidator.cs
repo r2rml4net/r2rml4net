@@ -39,7 +39,7 @@ namespace TCode.r2rml4net.Validation
         /// Check wheather the <paramref name="languageTag"/> is valid
         /// </summary>
         /// <returns>true if language tag is valid</returns>
-        public bool LanguageTagIsValid(string languageTag)
+        public virtual bool LanguageTagIsValid(string languageTag)
         {
             if (languageTag == null) throw new ArgumentNullException("languageTag");
             if (string.IsNullOrWhiteSpace(languageTag)) throw new ArgumentException("languageTag");

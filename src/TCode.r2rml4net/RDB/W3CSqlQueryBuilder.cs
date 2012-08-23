@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Validation;
 
 namespace TCode.r2rml4net.RDB
 {
@@ -16,12 +18,15 @@ namespace TCode.r2rml4net.RDB
         public W3CSqlQueryBuilder(MappingOptions options)
         {
             _options = options;
+            SqlVersionValidator = new Wc3SqlVersionValidator();
         }
 
         public W3CSqlQueryBuilder()
             : this(new MappingOptions())
         {
         }
+
+        public ISqlVersionValidator SqlVersionValidator { get; set; }
 
         #region Implementation of ISqlQueryBuilder
 
@@ -32,6 +37,9 @@ namespace TCode.r2rml4net.RDB
         /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         public string GetEffectiveQueryForTriplesMap(ITriplesMap triplesMap)
         {
+            if (_options.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
+                throw new InvalidSqlVersionException(triplesMap.SqlVersions.First(version => !SqlVersionValidator.SqlVersionIsValid(version)));
+
             if (triplesMap.TableName != null && triplesMap.SqlQuery != null)
             {
                 throw new InvalidTriplesMapException("Triples map cannot have both table name and sql query set");
@@ -55,11 +63,11 @@ namespace TCode.r2rml4net.RDB
                 var joinStatements =
                     refObjectMap.JoinConditions.Select(
                         delegate(JoinCondition @join)
-                            {
-                                var childColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ChildColumn, _options);
-                                var parentColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ParentColumn, _options);
-                                return string.Format("child.{0}=parent.{1}", childColumn, parentColumn);
-                            });
+                        {
+                            var childColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ChildColumn, _options);
+                            var parentColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ParentColumn, _options);
+                            return string.Format("child.{0}=parent.{1}", childColumn, parentColumn);
+                        });
 
                 return string.Format(@"SELECT * FROM ({0}) AS child, 
 ({1}) AS parent

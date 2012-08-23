@@ -10,8 +10,13 @@ namespace TCode.r2rml4net.Mapping
         private readonly IPredicateObjectMap _predicateObjectMap;
         readonly ITriplesMapConfiguration _childTriplesMap;
 
-        internal RefObjectMapConfiguration(IPredicateObjectMap predicateObjectMap, ITriplesMapConfiguration childTriplesMap, ITriplesMap parentTriplesMap, IGraph mappings)
-            : this(predicateObjectMap, childTriplesMap, parentTriplesMap, mappings, mappings.CreateBlankNode())
+        internal RefObjectMapConfiguration(
+            IPredicateObjectMap predicateObjectMap, 
+            ITriplesMapConfiguration childTriplesMap, 
+            ITriplesMap parentTriplesMap, 
+            IGraph mappings,
+            MappingOptions mappingOptions)
+            : this(predicateObjectMap, childTriplesMap, parentTriplesMap, mappings, mappings.CreateBlankNode(), mappingOptions)
         {
         }
 
@@ -20,8 +25,9 @@ namespace TCode.r2rml4net.Mapping
             ITriplesMapConfiguration childTriplesMap,
             ITriplesMap parentTriplesMap,
             IGraph mappings,
-            INode node)
-            : base(childTriplesMap, mappings, node)
+            INode node,
+            MappingOptions mappingOptions)
+            : base(childTriplesMap, mappings, node, mappingOptions)
         {
             _predicateObjectMap = predicateObjectMap;
             _childTriplesMap = childTriplesMap;
