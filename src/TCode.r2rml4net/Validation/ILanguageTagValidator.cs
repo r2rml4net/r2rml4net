@@ -6,9 +6,9 @@ namespace TCode.r2rml4net.Validation
     public interface ILanguageTagValidator
     {
         /// <summary>
-        /// Check wheather the <paramref name="langugeTag"/> is valid
+        /// Check wheather the <paramref name="languageTag"/> is valid
         /// </summary>
         /// <returns>true if language tag is valid</returns>
-        bool LanguageTagIsValid(string langugeTag);
+        bool LanguageTagIsValid(string languageTag);
     }
 }

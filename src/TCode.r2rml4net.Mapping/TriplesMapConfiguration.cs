@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Validation;
 using VDS.RDF;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -18,26 +20,28 @@ namespace TCode.r2rml4net.Mapping
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
+        private readonly ISqlVersionValidator _sqlVersionValidator;
 
-        internal TriplesMapConfiguration(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, INode node)
-            : base(r2RMLMappings, node)
+        internal TriplesMapConfiguration(TriplesMapConfigurationStub triplesMapConfigurationStub, INode node)
+            : base(triplesMapConfigurationStub.R2RMLMappings, node, triplesMapConfigurationStub.Options)
         {
-            _r2RMLConfiguration = r2RMLConfiguration;
+            _r2RMLConfiguration = triplesMapConfigurationStub.R2RMLConfiguration;
+            _sqlVersionValidator = triplesMapConfigurationStub.SQLVersionValidator;
         }
 
-        internal static TriplesMapConfiguration FromSqlQuery(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string sqlQuery)
+        internal static TriplesMapConfiguration FromSqlQuery(TriplesMapConfigurationStub triplesMapConfigurationStub, string sqlQuery)
         {
             if (sqlQuery == null)
                 throw new ArgumentNullException("sqlQuery");
             if (string.IsNullOrWhiteSpace(sqlQuery))
                 throw new ArgumentOutOfRangeException("sqlQuery");
 
-            INode node = AssertSqlQueryTriples(r2RMLMappings, sqlQuery);
+            INode node = AssertSqlQueryTriples(triplesMapConfigurationStub.R2RMLMappings, sqlQuery);
 
-            return new TriplesMapConfiguration(r2RMLConfiguration, r2RMLMappings, node);
+            return new TriplesMapConfiguration(triplesMapConfigurationStub, node);
         }
 
-        internal static TriplesMapConfiguration FromTable(IR2RMLConfiguration r2RMLConfiguration, IGraph r2RMLMappings, string tableName)
+        internal static TriplesMapConfiguration FromTable(TriplesMapConfigurationStub triplesMapConfigurationStub, string tableName)
         {
             if (tableName == null)
                 throw new ArgumentNullException("tableName");
@@ -48,9 +52,9 @@ namespace TCode.r2rml4net.Mapping
             if (tablename == string.Empty)
                 throw new ArgumentOutOfRangeException("tableName", "The table name seems invalid");
 
-            INode node = AssertTableNameTriples(r2RMLMappings, tablename);
+            INode node = AssertTableNameTriples(triplesMapConfigurationStub.R2RMLMappings, tablename);
 
-            return new TriplesMapConfiguration(r2RMLConfiguration, r2RMLMappings, node);
+            return new TriplesMapConfiguration(triplesMapConfigurationStub, node);
         }
 
         #region Implementation of ITriplesMapConfiguration
@@ -199,7 +203,7 @@ WHERE
             get
             {
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings, MappingOptions);
 
                 return _subjectMapConfiguration;
             }
@@ -222,7 +226,7 @@ WHERE
         /// </summary>
         public IPredicateObjectMapConfiguration CreatePropertyObjectMap()
         {
-            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings);
+            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings, MappingOptions);
             _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
         }
@@ -244,6 +248,12 @@ WHERE
         {
             if (TableName != null)
                 throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", Uri);
+
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+
+            if (MappingOptions.ValidateSqlVersion && !_sqlVersionValidator.SqlVersionIsValid(uri))
+                throw new InvalidSqlVersionException(uri);
 
             R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrSqlVersionProperty), R2RMLMappings.CreateUriNode(uri));
 
@@ -281,10 +291,10 @@ WHERE
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, (graph, node) => new PredicateObjectMapConfiguration(this, graph, node), _predicateObjectMaps);
+            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, (graph, node) => new PredicateObjectMapConfiguration(this, graph, node, MappingOptions), _predicateObjectMaps);
 
             var subjectMaps = new List<SubjectMapConfiguration>();
-            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node), subjectMaps);
+            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node, MappingOptions), subjectMaps);
 
             if (subjectMaps.Count > 1)
                 throw new InvalidTriplesMapException("Triples map can only have one subject map");
@@ -310,7 +320,7 @@ WHERE
             get
             {
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings, MappingOptions);
 
                 return _subjectMapConfiguration;
             }
@@ -326,6 +336,9 @@ WHERE
                     Node,
                     R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty)
                     ).ToArray();
+
+                if (!logicalTables.Any())
+                    throw new InvalidTriplesMapException("Triples Map contains no logical tables!", Uri);
 
                 if (logicalTables.Count() > 1)
                     throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", Uri);

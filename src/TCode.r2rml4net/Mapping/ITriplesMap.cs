@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -29,5 +30,10 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         string SqlQuery { get; }
+
+        /// <summary>
+        /// Gets the URIs of SQL versions set for the logical table
+        /// </summary>
+        Uri[] SqlVersions { get; }
     }
 }

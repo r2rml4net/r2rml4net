@@ -32,7 +32,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"));
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"), new MappingOptions());
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"));
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"), new MappingOptions());
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -87,7 +87,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"));
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, graph.GetUriNode("ex:subject"), new MappingOptions());
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -111,7 +111,7 @@ ex:TriplesMap rr:subject ex:Value .");
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
-            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph);
+            var subjectMap = new SubjectMapConfiguration(_triplesMap.Object, graph, new MappingOptions());
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then

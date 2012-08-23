@@ -68,5 +68,24 @@ namespace TCode.r2rml4net.Tests
             // then
             Assert.AreEqual(false, _options.UseDelimitedIdentifiers);
         }
+
+        [Test]
+        public void ValidateSqlVersionByDefault()
+        {
+            Assert.IsTrue(_options.ValidateSqlVersion);
+        }
+
+        [Test]
+        public void CanDisableSqlVersionValidatioon()
+        {
+            // when
+            _options = new MappingOptions
+                {
+                    ValidateSqlVersion = false
+                };
+
+            // then
+            Assert.IsFalse(_options.ValidateSqlVersion);
+        }
     }
 }

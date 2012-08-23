@@ -24,7 +24,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(triplesMapNode);
 
-            _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph);
+            _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, new MappingOptions());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]

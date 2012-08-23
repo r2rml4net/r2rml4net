@@ -7,7 +7,7 @@ namespace TCode.r2rml4net.Validation
     /// to check if the language tag is valid accoring to <a href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt">BCP 47</a>
     /// </summary>
     /// <remarks>see <a href="http://schneegans.de/lv/">http://schneegans.de/lv/</a> for more info</remarks>
-    public class Bcp47RegexLanguageTagValidator : ILanguageTagValidator
+    public class Bcp47RegexLanguageTagValidator : SimpleLanguageTagValidator
     {
         private static readonly object ClassLock = new object();
         #region Regex string
@@ -138,12 +138,12 @@ $";
         #region Implementation of ILanguageTagValidator
 
         /// <summary>
-        /// Check wheather the <paramref name="langugeTag"/> is valid
+        /// Check wheather the <paramref name="languageTag"/> is valid
         /// </summary>
         /// <returns>true if language tag is valid</returns>
-        public bool LanguageTagIsValid(string langugeTag)
+        public override bool LanguageTagIsValid(string languageTag)
         {
-            return LanguageTagValidationRegex.IsMatch(langugeTag);
+            return base.LanguageTagIsValid(languageTag) && LanguageTagValidationRegex.IsMatch(languageTag);
         }
 
         #endregion

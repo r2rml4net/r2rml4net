@@ -335,5 +335,16 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 lastIndex = indexOfCurrent + seqElement.Length;
             }
         }
+
+        [Test, ExpectedException(typeof(Exceptions.InvalidSqlVersionException))]
+        public void ThrowsIfInvalidSqlViewHasSqlIdentifier()
+        {
+            _triplesMap.Setup(tm => tm.SqlVersions).Returns(new[]
+                {
+                    new Uri("http://no-such-identifier.com")
+                });
+
+            _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
+        }
     }
 }

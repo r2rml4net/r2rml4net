@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
@@ -15,6 +16,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         private Mock<ITriplesMapConfiguration> _triplesMap;
         private IGraph _graph;
         private Mock<IPredicateObjectMapConfiguration> _predicateObjectMap;
+        private Mock<ILanguageTagValidator> _languageTagValidator;
 
         [SetUp]
         public void Setup()
@@ -28,13 +30,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(triplesMapNode);
 
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph);
+            _languageTagValidator = new Mock<ILanguageTagValidator>(MockBehavior.Strict);
+
+            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, new MappingOptions())
+                {
+                    LanguageTagValidator = _languageTagValidator.Object
+                };
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void NodeCannotBeNull()
         {
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null);
+            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null, new MappingOptions());
         }
 
         [Test]
@@ -128,6 +135,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void ObjectMapLiteralConstantCanHaveLanguagTag()
         {
             // given
+            _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("pl")).Returns(true);
             const string literal = "some text";
 
             // when
@@ -159,6 +167,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test, ExpectedException(typeof(ArgumentException))]
         public void CannotSetInvalidLanguageTag()
         {
+            _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("english")).Returns(false);
             _objectMap.HasLanguage("english");
         }
 
@@ -166,6 +175,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void ObjectMapLiteralConstantLanguagTagCanBeSetUsingCultureInfo()
         {
             // given
+            _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("pl-PL")).Returns(true);
             const string literal = "some text";
 
             // when
@@ -180,6 +190,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             const string literal = "some text";
+            _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("pl-PL")).Returns(true);
             var literalConfiguration = _objectMap.IsConstantValued(literal);
 
             // when
