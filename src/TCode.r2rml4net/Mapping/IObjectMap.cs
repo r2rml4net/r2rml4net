@@ -1,4 +1,5 @@
 using System;
+using TCode.r2rml4net.Exceptions;
 
 namespace TCode.r2rml4net.Mapping
 {

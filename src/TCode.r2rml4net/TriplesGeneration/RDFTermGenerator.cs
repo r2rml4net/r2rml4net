@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB.ADO.NET;

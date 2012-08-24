@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.RDB;
 

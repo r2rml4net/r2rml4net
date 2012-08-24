@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDF;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;

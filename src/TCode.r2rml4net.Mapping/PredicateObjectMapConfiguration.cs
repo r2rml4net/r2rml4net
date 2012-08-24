@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
+using TCode.r2rml4net.Exceptions;
 using VDS.RDF;
 using VDS.RDF.Query;
 
