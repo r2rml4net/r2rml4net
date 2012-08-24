@@ -39,7 +39,7 @@ namespace TCode.r2rml4net.Mapping
         public ILiteralTermMapConfiguration IsConstantValued(string literal)
         {
             if (Literal != null)
-                throw new InvalidTriplesMapException("Term map can have at most one constant value");
+                throw new InvalidMapException("Term map can have at most one constant value");
 
             EnsureRelationWithParentMap();
 
@@ -107,7 +107,7 @@ namespace TCode.r2rml4net.Mapping
                 var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, datatypeNode).ToArray();
 
                 if (languageTriples.Any() && datatypeTriples.Any())
-                    throw new InvalidTriplesMapException("Object map cannot have both a rr:language and rr:datatype properties set");
+                    throw new InvalidMapException("Object map cannot have both a rr:language and rr:datatype properties set");
 
                 return datatypeTriples.Any() || languageTriples.Any();
             }
@@ -158,9 +158,9 @@ namespace TCode.r2rml4net.Mapping
             var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
 
             if (datatypeTriples.Any())
-                throw new InvalidTriplesMapException("Object map already has a datatype");
+                throw new InvalidMapException("Object map already has a datatype");
             if (languageTriples.Any())
-                throw new InvalidTriplesMapException("Object map already has a language tag");
+                throw new InvalidMapException("Object map already has a language tag");
         }
 
         #endregion
@@ -201,11 +201,11 @@ namespace TCode.r2rml4net.Mapping
                 if (datatypeTriple != null)
                 {
                     if (languageTriples.Any())
-                        throw new InvalidTriplesMapException("Object map has both language tag and datatype set");
+                        throw new InvalidMapException("Object map has both language tag and datatype set");
 
                     IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
                     if (dataTypeUriNode == null)
-                        throw new InvalidTriplesMapException("Object map has datatype set but it is not a URI");
+                        throw new InvalidMapException("Object map has datatype set but it is not a URI");
 
                     return dataTypeUriNode.Uri;
                 }

@@ -213,7 +213,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName);
 
             // when
-            Assert.Throws<InvalidTriplesMapException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
+            Assert.Throws<InvalidMapException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
 
             // then
             _logicalRow.VerifyAll();

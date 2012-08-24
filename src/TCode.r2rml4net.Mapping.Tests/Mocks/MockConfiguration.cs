@@ -134,7 +134,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// <summary>
         /// Gets template or null if absent
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         public string Template
         {
             get { return string.Empty; }
@@ -153,7 +153,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// <summary>
         /// Gets column or null if not set
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         public string ColumnName
         {
             get { return null; }
@@ -162,7 +162,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// <summary>
         /// Gets the inverse expression associated with this <see cref="ITermMap"/> or null if not set
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         /// <remarks>See http://www.w3.org/TR/r2rml/#inverse</remarks>
         public string InverseExpression
         {
@@ -249,7 +249,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// <summary>
         /// Gets constant object literal value or null if absent
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         string IObjectMap.Literal
         {
             get { throw new NotImplementedException(); }

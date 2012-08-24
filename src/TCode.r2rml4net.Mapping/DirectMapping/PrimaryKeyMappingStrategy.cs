@@ -57,7 +57,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             var columnsArray=columnsForTemplate.Select(c => c.Name).ToArray();
             var name = table.Name;
             if (!columnsArray.Any())
-                throw new InvalidTriplesMapException(string.Format("No columns for table {0}", name));
+                throw new InvalidMapException(string.Format("No columns for table {0}", name));
 
             return CreateBlankNodeTemplate(name, columnsArray);
         }

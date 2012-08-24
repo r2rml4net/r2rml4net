@@ -85,7 +85,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 {
                     Log.LogInvalidTermMap(e.TermMap, e.Message);
                 }
-                catch(InvalidTriplesMapException e)
+                catch(InvalidMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
                     handlingOk = false;

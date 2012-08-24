@@ -43,10 +43,10 @@ namespace TCode.r2rml4net.Mapping
         public ITermTypeConfiguration IsConstantValued(Uri uri)
         {
             if (ConstantValue != null)
-                throw new InvalidTriplesMapException("Term map can have at most one constant value");
+                throw new InvalidMapException("Term map can have at most one constant value");
 
             if (InverseExpression != null)
-                throw new InvalidTriplesMapException("Only column-valued term map or template-value term map can have an inverse expression");
+                throw new InvalidMapException("Only column-valued term map or template-value term map can have an inverse expression");
 
             EnsureRelationWithParentMap();
 
@@ -62,7 +62,7 @@ namespace TCode.r2rml4net.Mapping
         {
             IUriNode templateProperty = R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty);
             if (R2RMLMappings.GetTriplesWithSubjectPredicate(Node, templateProperty).Any())
-                throw new InvalidTriplesMapException("Term map can have at most one template");
+                throw new InvalidMapException("Term map can have at most one template");
 
             EnsureRelationWithParentMap();
 
@@ -76,7 +76,7 @@ namespace TCode.r2rml4net.Mapping
         public ITermMapConfiguration SetInverseExpression(string stringTemplate)
         {
             if (ConstantValue != null)
-                throw new InvalidTriplesMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
+                throw new InvalidMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
 
             R2RMLMappings.Assert(
                 Node, 
@@ -119,7 +119,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         public virtual ITermMapConfiguration IsLiteral()
         {
-            throw new InvalidTriplesMapException("Only object map can be of term type rr:Literal");
+            throw new InvalidMapException("Only object map can be of term type rr:Literal");
         }
 
         /// <summary>
@@ -144,13 +144,13 @@ namespace TCode.r2rml4net.Mapping
                                                                                  R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty)).ToArray();
 
                 if (termTypeNodes.Length > 1)
-                    throw new InvalidTriplesMapException(string.Format("TermMap has {0} (should be zero or one)", termTypeNodes.Length));
+                    throw new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", termTypeNodes.Length));
 
                 if (termTypeNodes.Length == 1)
                 {
                     IUriNode termTypeNode = termTypeNodes[0].Object as IUriNode;
                     if (termTypeNode == null)
-                        throw new InvalidTriplesMapException("Term type must be an IRI");
+                        throw new InvalidMapException("Term type must be an IRI");
 
                     return termTypeNode.Uri;
                 }
@@ -162,11 +162,11 @@ namespace TCode.r2rml4net.Mapping
         ///<summary>
         /// Checks wheather term type is already set
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException" />
+        /// <exception cref="InvalidMapException" />
         protected void AssertTermTypeNotSet()
         {
             if (ExplicitTermType != null)
-                throw new InvalidTriplesMapException("Term type already set");
+                throw new InvalidMapException("Term type already set");
         }
 
         #endregion
@@ -215,7 +215,7 @@ namespace TCode.r2rml4net.Mapping
                     return ((ILiteralNode)expressionTriples.Single().Object).Value;
                 }
 
-                throw new InvalidTriplesMapException("An inverse expression must be a literal node");
+                throw new InvalidMapException("An inverse expression must be a literal node");
             }
         }
 
@@ -301,7 +301,7 @@ namespace TCode.r2rml4net.Mapping
         public void IsColumnValued(string columnName)
         {
             if (ColumnName != null)
-                throw new InvalidTriplesMapException("Term map can have only one column name");
+                throw new InvalidMapException("Term map can have only one column name");
 
             EnsureRelationWithParentMap();
 
@@ -311,13 +311,13 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Gets a single literal object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a literal</exception>
+        /// <exception cref="InvalidMapException">if multiple values found or object is not a literal</exception>
         protected string GetSingleLiteralValueForPredicate(IUriNode predicate)
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
             if (triplesForPredicate.Length > 1)
-                throw new InvalidTriplesMapException(
+                throw new InvalidMapException(
                     string.Format("Term map {1} contains multiple constant values:\r\n{0}",
                                   string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
                                   Node));
@@ -331,13 +331,13 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Gets a single URI object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException">if multiple values found or object is not a URI</exception>
+        /// <exception cref="InvalidMapException">if multiple values found or object is not a URI</exception>
         protected Uri GetSingleUriValueForPredicate(IUriNode predicate)
         {
             var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
 
             if (triplesForPredicate.Length > 1)
-                throw new InvalidTriplesMapException(
+                throw new InvalidMapException(
                     string.Format("Term map {1} contains multiple values constant values:\r\n{0}",
                                   string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
                                   Node));

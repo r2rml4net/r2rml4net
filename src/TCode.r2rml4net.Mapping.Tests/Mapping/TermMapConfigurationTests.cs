@@ -46,7 +46,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsConstantValued(uri);
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(uri));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsConstantValued(uri));
         }
 
         public void CanBeConstantIRIValued()
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsColumnValued(columnName);
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
         }
 
         [Test]
@@ -131,8 +131,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsTemplateValued(template);
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued(template));
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsTemplateValued("something else"));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsTemplateValued(template));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsTemplateValued("something else"));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri"));
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.SetInverseExpression(expression));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.SetInverseExpression(expression));
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.SetInverseExpression(expression);
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
+            Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
         }
 
         [Test]

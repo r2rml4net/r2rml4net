@@ -64,7 +64,7 @@
     <Compile Include="MappingOptions.cs" />
     <Compile Include="Exceptions\InvalidTemplateException.cs" />
     <Compile Include="Exceptions\InvalidTermException.cs" />
-    <Compile Include="Exceptions\InvalidTriplesMapException.cs" />
+    <Compile Include="Exceptions\InvalidMapException.cs" />
     <Compile Include="IVistitable.cs" />
     <Compile Include="Log\IRDFTermGenerationLog.cs" />
     <Compile Include="Log\ITriplesGenerationLog.cs" />

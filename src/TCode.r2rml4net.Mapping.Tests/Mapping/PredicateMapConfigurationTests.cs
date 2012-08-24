@@ -57,13 +57,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(uri, _predicateMap.ConstantValue);
         }
 
-        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof(InvalidMapException))]
         public void PredicateMapCannotBeOfTypeLiteral()
         {
             _predicateMap.TermType.IsLiteral();
         }
 
-        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof(InvalidMapException))]
         public void PredicateMapCannotBeOfTypeBlankNode()
         {
             _predicateMap.TermType.IsBlankNode();

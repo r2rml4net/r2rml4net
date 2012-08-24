@@ -85,7 +85,7 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
             var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
+            Assert.Throws<InvalidMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
         }
 
         [Test]

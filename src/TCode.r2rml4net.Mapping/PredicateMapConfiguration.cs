@@ -29,7 +29,7 @@ namespace TCode.r2rml4net.Mapping
 
         public override ITermMapConfiguration IsBlankNode()
         {
-            throw new InvalidTriplesMapException("Only object map and subject map can be of term type rr:BlankNode");
+            throw new InvalidMapException("Only object map and subject map can be of term type rr:BlankNode");
         }
 
         #endregion

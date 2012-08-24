@@ -12,12 +12,12 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Gets constant object URI or null if absent
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         Uri URI { get; }
         /// <summary>
         /// Gets constant object literal value or null if absent
         /// </summary>
-        /// <exception cref="InvalidTriplesMapException"></exception>
+        /// <exception cref="InvalidMapException"></exception>
         string Literal { get; }
     }
 }
