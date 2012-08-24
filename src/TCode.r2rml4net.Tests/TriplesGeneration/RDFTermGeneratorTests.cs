@@ -491,6 +491,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}");
             _termType.Setup(tt => tt.IsURI).Returns(false);
+            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
             // when
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
@@ -514,6 +515,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.Setup(map => map.IsTemplateValued).Returns(true);
             _termMap.Setup(map => map.Template).Returns("http://www.example.com/person/{id}/{name}");
             _termType.Setup(tt => tt.IsURI).Returns(true);
+            _termMap.Setup(map => map.TermType).Returns(_termType.Object);
             Uri typeUri;
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(1, It.IsAny<IDataRecord>(), out typeUri)).Returns("value");
 
@@ -550,7 +552,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // then
             Assert.IsNotNull(node);
             Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("http://www.example.com/person/5/Tomasz%20Pluskiewicz", (node as ILiteralNode).Value);
+            Assert.AreEqual("http://www.example.com/person/5/Tomasz Pluskiewicz", (node as ILiteralNode).Value);
             _logicalRow.VerifyAll();
             _logicalRow.Verify();
             _objectMap.VerifyAll();
@@ -609,6 +611,29 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.IsNotNull(node);
             Assert.IsTrue(node is IUriNode);
             Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+        }
+
+        [Test]
+        public void GeneratesValueForTemplateWithManyBraces()
+        {
+            // given 
+            var termMap = new Mock<ILiteralTermMap>();
+            const string template = "\\{\\{\\{ {\"ISO 3166\"} \\}\\}\\}";
+            _logicalRow.Setup(rec => rec.GetOrdinal("ISO 3166")).Returns(ColumnIndex);
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false);
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                                .Returns("some value");
+            termMap.Setup(map => map.IsTemplateValued).Returns(true);
+            termMap.Setup(map => map.Template).Returns(template);
+            termMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(type => type.IsLiteral).Returns(true);
+
+            // when
+            var node = _termGenerator.GenerateTerm<ILiteralNode>(termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.AreEqual("{{{ some value }}}", node.Value);
         }
 
         #endregion
