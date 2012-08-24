@@ -11,22 +11,22 @@ namespace TCode.r2rml4net.Validation
     /// </summary>
     public class Wc3SqlVersionValidator : ISqlVersionValidator
     {
-        readonly ICollection<Uri> _identifiers = new Collection<Uri>
+        readonly ICollection<string> _identifiers = new Collection<string>
             {
-                new Uri("http://www.w3.org/ns/r2rml#SQL2008"),
-                new Uri("http://www.w3.org/ns/r2rml#Oracle"),
-                new Uri("http://www.w3.org/ns/r2rml#MySQL"),
-                new Uri("http://www.w3.org/ns/r2rml#MSSQLServer"),
-                new Uri("http://www.w3.org/ns/r2rml#HSQLDB"),
-                new Uri("http://www.w3.org/ns/r2rml#PostgreSQL"),
-                new Uri("http://www.w3.org/ns/r2rml#DB2"),
-                new Uri("http://www.w3.org/ns/r2rml#Informix"),
-                new Uri("http://www.w3.org/ns/r2rml#Ingres"),
-                new Uri("http://www.w3.org/ns/r2rml#Progress"),
-                new Uri("http://www.w3.org/ns/r2rml#SybaseASE"),
-                new Uri("http://www.w3.org/ns/r2rml#SybaseSQLAnywhere"),
-                new Uri("http://www.w3.org/ns/r2rml#Virtuoso"),
-                new Uri("http://www.w3.org/ns/r2rml#Firebird")
+                "http://www.w3.org/ns/r2rml#SQL2008",
+                "http://www.w3.org/ns/r2rml#Oracle",
+                "http://www.w3.org/ns/r2rml#MySQL",
+                "http://www.w3.org/ns/r2rml#MSSQLServer",
+                "http://www.w3.org/ns/r2rml#HSQLDB",
+                "http://www.w3.org/ns/r2rml#PostgreSQL",
+                "http://www.w3.org/ns/r2rml#DB2",
+                "http://www.w3.org/ns/r2rml#Informix",
+                "http://www.w3.org/ns/r2rml#Ingres",
+                "http://www.w3.org/ns/r2rml#Progress",
+                "http://www.w3.org/ns/r2rml#SybaseASE",
+                "http://www.w3.org/ns/r2rml#SybaseSQLAnywhere",
+                "http://www.w3.org/ns/r2rml#Virtuoso",
+                "http://www.w3.org/ns/r2rml#Firebird"
             };
 
         #region Implementation of ISqlVersionValidator
@@ -37,7 +37,7 @@ namespace TCode.r2rml4net.Validation
         /// <returns>true if sql version is valid</returns>
         public bool SqlVersionIsValid(Uri sqlVersion)
         {
-            return _identifiers.Contains(sqlVersion);
+            return _identifiers.Contains(sqlVersion.ToString());
         }
 
         #endregion
