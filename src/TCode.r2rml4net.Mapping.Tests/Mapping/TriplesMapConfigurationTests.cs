@@ -15,9 +15,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         TriplesMapConfiguration _triplesMapConfiguration;
         private Mock<IR2RMLConfiguration> _r2RMLConfiguration;
         private IGraph _r2RMLMappings;
+        private Mock<ISqlVersionValidator> _sqlValidator;
 
         private TriplesMapConfigurationStub CreatStub()
         {
+            _sqlValidator = new Mock<ISqlVersionValidator>();
+            _sqlValidator.Setup(v => v.SqlVersionIsValid(It.IsAny<Uri>())).Returns(true);
+            _r2RMLConfiguration.Setup(config => config.SqlVersionValidator).Returns(_sqlValidator.Object);
             return new TriplesMapConfigurationStub(_r2RMLConfiguration.Object, _r2RMLMappings, new MappingOptions(),
                                                    _sqlVersionValidator.Object);
         }
@@ -182,11 +186,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void ByDefaultCannotSetInvalidSqlVersion()
         {
+            // given
             var sqlVersion = new Uri("http://no-such-identifier.com");
             _sqlVersionValidator.Setup(v => v.SqlVersionIsValid(sqlVersion)).Returns(false);
+            TriplesMapConfigurationStub stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
+                                                                               _r2RMLMappings,
+                                                                               new MappingOptions(),
+                                                                               _sqlVersionValidator.Object);
+            _r2RMLConfiguration.Setup(config => config.SqlVersionValidator).Returns(_sqlVersionValidator.Object);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
 
+            // when
             Assert.Throws<InvalidSqlVersionException>(() => _triplesMapConfiguration.SetSqlVersion(sqlVersion));
 
+            // then
             _sqlVersionValidator.Verify(v => v.SqlVersionIsValid(sqlVersion), Times.Once());
         }
 
