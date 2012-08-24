@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TCode.r2rml4net.RDB;
+using TCode.r2rml4net.Validation;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -17,5 +18,7 @@ namespace TCode.r2rml4net.Mapping
         /// Gets or sets the <see cref="ISqlQueryBuilder"/>
         /// </summary>
         ISqlQueryBuilder SqlQueryBuilder { get; set; }
+
+        ISqlVersionValidator SqlVersionValidator { get; set; }
     }
 }

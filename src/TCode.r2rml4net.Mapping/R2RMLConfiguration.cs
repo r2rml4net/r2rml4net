@@ -156,6 +156,8 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        #region Implementation of IR2RML
+
         /// <summary>
         /// Gets or sets the <see cref="ISqlQueryBuilder"/>
         /// </summary>
@@ -170,8 +172,6 @@ namespace TCode.r2rml4net.Mapping
             get { return _sqlVersionValidator; }
             set { _sqlVersionValidator = value; }
         }
-
-        #region Implementation of IR2RML
 
         /// <summary>
         /// <see cref="IR2RML.TriplesMaps"/>

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Validation;
 using VDS.RDF;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -20,13 +19,11 @@ namespace TCode.r2rml4net.Mapping
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private SubjectMapConfiguration _subjectMapConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
-        private readonly ISqlVersionValidator _sqlVersionValidator;
 
         internal TriplesMapConfiguration(TriplesMapConfigurationStub triplesMapConfigurationStub, INode node)
             : base(triplesMapConfigurationStub.R2RMLMappings, node, triplesMapConfigurationStub.Options)
         {
             _r2RMLConfiguration = triplesMapConfigurationStub.R2RMLConfiguration;
-            _sqlVersionValidator = triplesMapConfigurationStub.SQLVersionValidator;
         }
 
         internal static TriplesMapConfiguration FromSqlQuery(TriplesMapConfigurationStub triplesMapConfigurationStub, string sqlQuery)
@@ -81,7 +78,7 @@ WHERE
                     .ToList();
 
                 if (result.Count > 1)
-                    throw new InvalidTriplesMapException("Triples map contains multiple table names", Uri);
+                    throw new InvalidTriplesMapException("Triples map contains multiple table names", this);
 
                 if (result.Count == 1)
                     return result[0].Value("tableName").ToString();
@@ -162,7 +159,7 @@ WHERE
                     .ToList();
 
                 if (result.Count > 1)
-                    throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", Uri);
+                    throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", this);
 
                 if (result.Count == 1)
                     return result[0].Value("sqlQuery").ToString();
@@ -247,12 +244,12 @@ WHERE
         public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(Uri uri)
         {
             if (TableName != null)
-                throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", Uri);
+                throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", this);
 
             if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            if (MappingOptions.ValidateSqlVersion && !_sqlVersionValidator.SqlVersionIsValid(uri))
+            if (MappingOptions.ValidateSqlVersion && !R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri))
                 throw new InvalidSqlVersionException(uri);
 
             R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrSqlVersionProperty), R2RMLMappings.CreateUriNode(uri));
@@ -338,10 +335,10 @@ WHERE
                     ).ToArray();
 
                 if (!logicalTables.Any())
-                    throw new InvalidTriplesMapException("Triples Map contains no logical tables!", Uri);
+                    throw new InvalidTriplesMapException("Triples Map contains no logical tables!", this);
 
                 if (logicalTables.Count() > 1)
-                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", Uri);
+                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", this);
 
                 return logicalTables.First().Object as IBlankNode;
             }
