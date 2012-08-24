@@ -19,7 +19,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     public class RDFTermGenerator : IRDFTermGenerator
     {
-        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\}.]+)(?<-N>\})(?(N)(?!))");
+        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\{\}.]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
@@ -102,17 +102,18 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (string.IsNullOrWhiteSpace(termMap.Template))
                 throw new InvalidTemplateException(termMap);
 
-            string value;
+            string value = null;
             try
             {
-                value = ReplaceColumnReferences(termMap.Template, logicalRow);
+                value = ReplaceColumnReferences(termMap.Template, logicalRow, termMap.TermType.IsURI);
             }
             catch (IndexOutOfRangeException)
             {
-                return null;
             }
 
-            return GenerateTermForValue(termMap, value);
+            if (value != null)
+                return GenerateTermForValue(termMap, value.Replace(@"\{", "{").Replace(@"\}", "}"));
+            return null;
         }
 
         protected INode CreateNodeFromConstant(ITermMap termMap)
@@ -267,14 +268,14 @@ namespace TCode.r2rml4net.TriplesGeneration
             return blankNode;
         }
 
-        private string ReplaceColumnReferences(string template, IDataRecord logicalRow)
+        private string ReplaceColumnReferences(string template, IDataRecord logicalRow, bool escape)
         {
             try
             {
                 return TemplateReplaceRegex.Replace(template, match =>
                     {
                         var replacement = ReplaceColumnReference(match, logicalRow);
-                        return _mappingHelper.UrlEncode(replacement);
+                        return escape ? _mappingHelper.UrlEncode(replacement) : replacement;
                     });
             }
             catch (ArgumentNullException)
