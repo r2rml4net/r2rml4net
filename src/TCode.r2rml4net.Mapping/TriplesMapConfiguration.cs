@@ -78,7 +78,7 @@ WHERE
                     .ToList();
 
                 if (result.Count > 1)
-                    throw new InvalidTriplesMapException("Triples map contains multiple table names", this);
+                    throw new InvalidMapException("Triples map contains multiple table names", this);
 
                 if (result.Count == 1)
                     return result[0].Value("tableName").ToString();
@@ -159,7 +159,7 @@ WHERE
                     .ToList();
 
                 if (result.Count > 1)
-                    throw new InvalidTriplesMapException("Triples map contains multiple SQL queries", this);
+                    throw new InvalidMapException("Triples map contains multiple SQL queries", this);
 
                 if (result.Count == 1)
                     return result[0].Value("sqlQuery").ToString();
@@ -244,7 +244,7 @@ WHERE
         public ITriplesMapFromR2RMLViewConfiguration SetSqlVersion(Uri uri)
         {
             if (TableName != null)
-                throw new InvalidTriplesMapException("Cannot set SQL version to a table-based logical table", this);
+                throw new InvalidMapException("Cannot set SQL version to a table-based logical table", this);
 
             if (uri == null)
                 throw new ArgumentNullException("uri");
@@ -294,7 +294,7 @@ WHERE
             CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node, MappingOptions), subjectMaps);
 
             if (subjectMaps.Count > 1)
-                throw new InvalidTriplesMapException("Triples map can only have one subject map");
+                throw new InvalidMapException("Triples map can only have one subject map");
             _subjectMapConfiguration = subjectMaps.SingleOrDefault();
         }
 
@@ -335,10 +335,10 @@ WHERE
                     ).ToArray();
 
                 if (!logicalTables.Any())
-                    throw new InvalidTriplesMapException("Triples Map contains no logical tables!", this);
+                    throw new InvalidMapException("Triples Map contains no logical tables!", this);
 
                 if (logicalTables.Count() > 1)
-                    throw new InvalidTriplesMapException("Triples Map contains multiple logical tables!", this);
+                    throw new InvalidMapException("Triples Map contains multiple logical tables!", this);
 
                 return logicalTables.First().Object as IBlankNode;
             }

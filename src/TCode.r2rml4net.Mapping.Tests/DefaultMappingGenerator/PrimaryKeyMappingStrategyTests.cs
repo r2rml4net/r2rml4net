@@ -19,7 +19,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
         }
 
-        [TestCase(0, "_", null, ExpectedException = typeof(InvalidTriplesMapException))]
+        [TestCase(0, "_", null, ExpectedException = typeof(InvalidMapException))]
         [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
         [TestCase(3, "_", "Table_{\"Column1\"}_{\"Column2\"}_{\"Column3\"}")]
         [TestCase(3, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}")]

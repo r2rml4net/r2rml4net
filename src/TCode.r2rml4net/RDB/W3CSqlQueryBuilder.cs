@@ -42,7 +42,7 @@ namespace TCode.r2rml4net.RDB
 
             if (triplesMap.TableName != null && triplesMap.SqlQuery != null)
             {
-                throw new InvalidTriplesMapException("Triples map cannot have both table name and sql query set");
+                throw new InvalidMapException("Triples map cannot have both table name and sql query set");
             }
 
             if (triplesMap.TableName != null)

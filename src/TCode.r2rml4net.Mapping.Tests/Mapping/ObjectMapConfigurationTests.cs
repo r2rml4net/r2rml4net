@@ -78,7 +78,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.IsConstantValued(literal);
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.IsConstantValued(literal));
+            Assert.Throws<InvalidMapException>(() => _objectMap.IsConstantValued(literal));
         }
 
         [Test]
@@ -198,8 +198,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             literalConfiguration.HasLanguage(new CultureInfo("pl-PL"));
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasDataType(UriConstants.RdfInteger));
-            Assert.Throws<InvalidTriplesMapException>(() => literalConfiguration.HasLanguage("pl-PL"));
+            Assert.Throws<InvalidMapException>(() => literalConfiguration.HasDataType(UriConstants.RdfInteger));
+            Assert.Throws<InvalidMapException>(() => literalConfiguration.HasLanguage("pl-PL"));
         }
 
         [Test]
@@ -229,9 +229,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.TermType.IsLiteral();
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsBlankNode());
-            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsIRI());
-            Assert.Throws<InvalidTriplesMapException>(() => _objectMap.TermType.IsLiteral());
+            Assert.Throws<InvalidMapException>(() => _objectMap.TermType.IsBlankNode());
+            Assert.Throws<InvalidMapException>(() => _objectMap.TermType.IsIRI());
+            Assert.Throws<InvalidMapException>(() => _objectMap.TermType.IsLiteral());
         }
 
         [Test]

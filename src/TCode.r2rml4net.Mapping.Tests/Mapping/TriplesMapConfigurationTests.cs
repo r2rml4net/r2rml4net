@@ -178,7 +178,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(
+            Assert.Throws<InvalidMapException>(
                 () => _triplesMapConfiguration.SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"))
             );
         }

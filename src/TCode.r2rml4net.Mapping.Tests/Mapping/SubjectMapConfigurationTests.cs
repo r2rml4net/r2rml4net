@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 
-        [Test, ExpectedException(typeof(InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof(InvalidMapException))]
         public void CannnotSetTermMapsTermTypeToLiteral()
         {
             // when
@@ -84,8 +84,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.TermType.IsIRI();
 
             // then
-            Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsIRI());
-            Assert.Throws<InvalidTriplesMapException>(() => _subjectMapConfiguration.TermType.IsBlankNode());
+            Assert.Throws<InvalidMapException>(() => _subjectMapConfiguration.TermType.IsIRI());
+            Assert.Throws<InvalidMapException>(() => _subjectMapConfiguration.TermType.IsBlankNode());
         }
 
         [Test]

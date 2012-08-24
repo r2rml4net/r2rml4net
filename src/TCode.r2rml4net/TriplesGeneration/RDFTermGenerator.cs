@@ -153,7 +153,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             catch (IndexOutOfRangeException)
             {
                 Log.LogColumnNotFound(termMap, termMap.ColumnName);
-                throw new InvalidTriplesMapException(string.Format("Column {0} not found", termMap.ColumnName));
+                throw new InvalidMapException(string.Format("Column {0} not found", termMap.ColumnName));
             }
             if (logicalRow.IsDBNull(columnIndex))
             {

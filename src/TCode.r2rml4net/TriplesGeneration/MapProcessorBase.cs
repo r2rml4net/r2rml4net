@@ -105,7 +105,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 catch (Exception e)
                 {
                     LogSqlExecuteError(map, e.Message);
-                    throw new InvalidTriplesMapException("Error executing query");
+                    throw new InvalidMapException("Error executing query");
                 }
             }
 
@@ -121,7 +121,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 string name = reader.GetName(colIdx);
                 if(columnNames.Contains(name))
                 {
-                    throw new InvalidTriplesMapException("Sql query contains duplicate names");
+                    throw new InvalidMapException("Sql query contains duplicate names");
                 }
                 columnNames.Add(name);
             }

@@ -127,7 +127,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // when
             IDataReader reader;
-            Assert.Throws<InvalidTriplesMapException>(() => _processor.Object.FetchLogicalRows(connection.Object, map.Object, out reader));
+            Assert.Throws<InvalidMapException>(() => _processor.Object.FetchLogicalRows(connection.Object, map.Object, out reader));
 
             // then
             _log.Verify(log => log.LogQueryExecutionError(It.IsAny<IQueryMap>(), It.IsAny<string>()));
@@ -144,7 +144,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             reader.Setup(rdr => rdr.GetName(2)).Returns("Id");
 
             // when
-            Assert.Throws<InvalidTriplesMapException>(() => _processor.Object.AssertNoDuplicateColumnNames(reader.Object));
+            Assert.Throws<InvalidMapException>(() => _processor.Object.AssertNoDuplicateColumnNames(reader.Object));
 
             // then
             reader.Verify(rdr => rdr.GetName(It.IsAny<int>()), Times.Exactly(3));

@@ -57,13 +57,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(uri, _graphMap.URI);
         }
 
-        [Test, ExpectedException(typeof (InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof (InvalidMapException))]
         public void GraphMapCannotBeOfTypeLiteral()
         {
             _graphMap.TermType.IsLiteral();
         }
 
-        [Test, ExpectedException(typeof (InvalidTriplesMapException))]
+        [Test, ExpectedException(typeof (InvalidMapException))]
         public void GraphMapCannotBeOfTypeBlankNode()
         {
             _graphMap.TermType.IsBlankNode();

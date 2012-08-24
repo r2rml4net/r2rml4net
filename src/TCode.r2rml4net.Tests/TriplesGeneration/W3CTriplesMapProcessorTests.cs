@@ -192,7 +192,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMap.Setup(map => map.SubjectMap).Returns(new Mock<ISubjectMap>().Object);
 
             // when
-            Assert.Throws<InvalidTriplesMapException>(() => _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object));
+            Assert.Throws<InvalidMapException>(() => _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object));
 
             // then
             _log.Verify(log => log.LogQueryExecutionError(_triplesMap.Object, "Error message"), Times.Once());

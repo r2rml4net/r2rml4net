@@ -196,7 +196,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(con => con.CreateCommand()).Returns(command.Object);
 
             // when
-            Assert.Throws<InvalidTriplesMapException>(() => _processor.ProcessRefObjectMap(_refObjMap.Object, _childSubjectMap.Object, _connection.Object, 2, _rdfHandler.Object));
+            Assert.Throws<InvalidMapException>(() => _processor.ProcessRefObjectMap(_refObjMap.Object, _childSubjectMap.Object, _connection.Object, 2, _rdfHandler.Object));
 
             // then
             _log.Verify(log => log.LogQueryExecutionError(_refObjMap.Object, "Error message"), Times.Once());

@@ -109,7 +109,7 @@ WHERE
                     TriplesMap.R2RMLConfiguration.TriplesMaps.SingleOrDefault(tMap => result.Value("triplesMap").Equals(tMap.Node));
 
                 if(referencedTriplesMap == null)
-                    throw new InvalidTriplesMapException(string.Format("Triples map {0} not found. It must be added before creating ref object map", result.Value("triplesMap")));
+                    throw new InvalidMapException(string.Format("Triples map {0} not found. It must be added before creating ref object map", result.Value("triplesMap")));
 
                 var subConfiguration = new RefObjectMapConfiguration(this, TriplesMap, referencedTriplesMap, R2RMLMappings, result["objectMap"], MappingOptions);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
