@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Exceptions;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping

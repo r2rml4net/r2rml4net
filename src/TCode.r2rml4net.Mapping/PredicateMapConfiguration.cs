@@ -1,3 +1,4 @@
+using TCode.r2rml4net.Exceptions;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping
