@@ -104,8 +104,8 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
                 catch (Exception e)
                 {
-                    LogSqlExecuteError(map, e.Message);
-                    throw new InvalidMapException("Error executing query");
+                    Log.LogQueryExecutionError(map, e.Message);
+                    throw new InvalidMapException("Error executing query:", map);
                 }
             }
 
@@ -125,11 +125,6 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
                 columnNames.Add(name);
             }
-        }
-
-        private void LogSqlExecuteError(IQueryMap map, string message)
-        {
-            Log.LogQueryExecutionError(map, message);
         }
     }
 }

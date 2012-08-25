@@ -87,5 +87,11 @@ namespace TCode.r2rml4net.Tests
             // then
             Assert.IsFalse(_options.ValidateSqlVersion);
         }
+
+        [Test]
+        public void ByDefaultContinueOnErrors()
+        {
+            Assert.IsTrue(_options.IgnoreMappingErrors);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
@@ -42,6 +43,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (triplesMap.SubjectMap == null)
             {
                 Log.LogMissingSubject(triplesMap);
+                throw new InvalidMapException("Subject is missing", triplesMap);
             }
             else
             {

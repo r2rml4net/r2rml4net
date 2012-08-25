@@ -66,6 +66,12 @@ namespace TCode.r2rml4net.RDF
             base.StartRdfInternal();
         }
 
+        protected override void EndRdfInternal(bool ok)
+        {
+            _wrapped.EndRdf(ok);
+            base.EndRdfInternal(ok);
+        }
+
         #endregion
     }
 }
