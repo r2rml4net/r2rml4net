@@ -19,6 +19,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     {
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
+        private readonly MappingOptions _mappingOptions;
 
         public ITriplesGenerationLog Log { get; set; }
 
@@ -26,22 +27,45 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         /// <summary>
         /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which stores the output triples in an in-memory dataset
-        /// and uses default RDF term generation and map processing algorithms
+        /// and uses default RDF term generation and map processing algorithms and default mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         public W3CR2RMLProcessor(IDbConnection connection)
-            : this(connection, new RDFTermGenerator())
+            : this(connection, new RDFTermGenerator(), new MappingOptions())
         {
         }
 
         /// <summary>
         /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
-        /// and uses default map processing algorithm
+        /// and uses default map processing algorithm and default mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
         public W3CR2RMLProcessor(IDbConnection connection, IRDFTermGenerator rdfTermGenerator)
-            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator))
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator), new MappingOptions())
+        {
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which stores the output triples in an in-memory dataset
+        /// and uses default RDF term generation and map processing algorithms and custom mapping options
+        /// </summary>
+        /// <param name="connection">connection to datasource</param>
+        /// <param name="mappingOptions">options for map processing</param>
+        public W3CR2RMLProcessor(IDbConnection connection, MappingOptions mappingOptions)
+            : this(connection, new RDFTermGenerator(), mappingOptions)
+        {
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
+        /// and uses default map processing algorithm and custom mapping options
+        /// </summary>
+        /// <param name="connection">connection to datasource</param>
+        /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
+        /// <param name="mappingOptions">options for map processing</param>
+        public W3CR2RMLProcessor(IDbConnection connection, IRDFTermGenerator rdfTermGenerator, MappingOptions mappingOptions)
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator), mappingOptions)
         {
         }
 
@@ -50,16 +74,18 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="triplesMapProcessor"></param>
-        protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor)
+        /// <param name="mappingOptions">options for map processing</param>
+        protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor, MappingOptions mappingOptions)
         {
             Log = NullLog.Instance;
 
             _triplesMapProcessor = triplesMapProcessor;
+            _mappingOptions = mappingOptions;
             _connection = connection;
 
             if (connection.State != ConnectionState.Open)
                 connection.Open();
-        } 
+        }
 
         #endregion
 
@@ -84,15 +110,21 @@ namespace TCode.r2rml4net.TriplesGeneration
                 catch (InvalidTermException e)
                 {
                     Log.LogInvalidTermMap(e.TermMap, e.Message);
+                    handlingOk = false;
+                    if (!_mappingOptions.IgnoreDataErrors)
+                        break;
                 }
-                catch(InvalidMapException e)
+                catch (InvalidMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
                     handlingOk = false;
+                    if (!_mappingOptions.IgnoreMappingErrors)
+                        break;
                 }
             }
 
             blankNodeReplaceHandler.EndRdf(handlingOk);
+            Success = handlingOk;
         }
 
         /// <summary>
@@ -114,6 +146,8 @@ namespace TCode.r2rml4net.TriplesGeneration
             GenerateTriples(r2RML, handler);
         }
 
+        public bool Success { get; private set; }
+
         #endregion
 
         #region Implementation of IDisposable
@@ -123,7 +157,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         public void Dispose()
         {
-            if(_connection.State == ConnectionState.Open)
+            if (_connection.State == ConnectionState.Open)
                 _connection.Close();
 
             _connection.Dispose();

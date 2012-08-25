@@ -15,6 +15,8 @@ namespace TCode.r2rml4net
             SqlIdentifierLeftDelimiter = DefaultIdentifierDelimiter;
             UseDelimitedIdentifiers = true;
             ValidateSqlVersion = true;
+            IgnoreMappingErrors = true;
+            IgnoreDataErrors = true;
         }
 
         public string TemplateSeparator
@@ -36,6 +38,10 @@ namespace TCode.r2rml4net
         public char SqlIdentifierLeftDelimiter { get; private set; }
 
         public bool ValidateSqlVersion { get; set; }
+
+        public bool IgnoreMappingErrors { get; set; }
+
+        public bool IgnoreDataErrors { get; set; }
 
         public void SetSqlIdentifierDelimiters(char newLeftDelimiter, char newRightDelimiter)
         {
