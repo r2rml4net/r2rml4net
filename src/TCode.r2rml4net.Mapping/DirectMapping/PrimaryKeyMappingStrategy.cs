@@ -18,7 +18,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #region Implementation of IPrimaryKeyMappingStrategy
 
-        public Uri CreateSubjectUri(Uri baseUri, string tableName)
+        public Uri CreateSubjectClassUri(Uri baseUri, string tableName)
         {
             if (baseUri == null)
                 throw new ArgumentNullException("baseUri");
@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if (!table.PrimaryKey.Any())
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
 
-            string template = CreateSubjectUri(baseUri, table.Name).OriginalString;
+            string template = CreateSubjectClassUri(baseUri, table.Name).OriginalString;
             template += "/" + string.Join(";", table.PrimaryKey.Select(pk => pk.Name).Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }

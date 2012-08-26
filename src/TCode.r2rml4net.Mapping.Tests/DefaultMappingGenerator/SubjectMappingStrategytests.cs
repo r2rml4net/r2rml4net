@@ -17,16 +17,16 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         [TestCase("http://example.com")]
         [TestCase("http://example.com/")]
-        public void CreatesSubjectUri(string baseUri)
+        public void CreatesSubjectClassUri(string baseUri)
         {
             // given
             TableMetadata table = new TableMetadata { Name = "TableXYZ" };
 
             // when
-            var subjectUri = _strategy.CreateSubjectUri(new Uri(baseUri), table.Name);
+            var classUri = _strategy.CreateSubjectClassUri(new Uri(baseUri), table.Name);
 
             // then
-            Assert.AreEqual("http://example.com/TableXYZ", subjectUri.AbsoluteUri);
+            Assert.AreEqual("http://example.com/TableXYZ", classUri.AbsoluteUri);
         }
     }
 }

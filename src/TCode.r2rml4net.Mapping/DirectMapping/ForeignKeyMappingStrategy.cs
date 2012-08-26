@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c.Name)).ToArray()
                 : foreignKey.ForeignKeyColumns;
 
-            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
+            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
             template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(referencedColumns[0]), MappingHelper.EncloseColumnName(foreignKeyColumns[0]));
             for (int i = 1; i < foreignKeyColumns.Length; i++)
             {
