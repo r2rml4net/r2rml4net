@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMap.Setup(proc => proc.SubjectMap).Returns((ISubjectMap)null);
 
             // when
-            _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object);
+            Assert.Throws<InvalidMapException>(() => _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object));
 
             // then
             _connection.Verify(conn => conn.CreateCommand(), Times.Never());
