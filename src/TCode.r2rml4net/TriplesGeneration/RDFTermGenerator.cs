@@ -19,6 +19,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     public class RDFTermGenerator : IRDFTermGenerator
     {
+        private readonly MappingOptions _options;
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\{\}.]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
@@ -28,18 +29,13 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly MappingHelper _mappingHelper;
 
         public RDFTermGenerator()
-            : this(false)
+            : this(new MappingOptions())
         {
         }
 
-        public RDFTermGenerator(bool preserveDuplicateRows)
-            : this(preserveDuplicateRows, new MappingOptions())
+        public RDFTermGenerator(MappingOptions options)
         {
-        }
-
-        public RDFTermGenerator(bool preserveDuplicateRows, MappingOptions options)
-        {
-            PreserveDuplicateRows = preserveDuplicateRows;
+            _options = options;
             _mappingHelper = new MappingHelper(options);
         }
 
@@ -60,8 +56,6 @@ namespace TCode.r2rml4net.TriplesGeneration
             get { return _nodeFactory; }
             set { _nodeFactory = value; }
         }
-
-        public bool PreserveDuplicateRows { get; set; }
 
         #region Implementation of IRDFTermGenerator
 
@@ -244,7 +238,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     }
                     _blankNodeSubjects.Add(value, blankNode);
                 }
-                else if (PreserveDuplicateRows)
+                else if (_options.PreserveDuplicateRows)
                 {
                     blankNode = _nodeFactory.CreateBlankNode();
                 }

@@ -93,5 +93,11 @@ namespace TCode.r2rml4net.Tests
         {
             Assert.IsTrue(_options.IgnoreMappingErrors);
         }
+
+        [Test]
+        public void ByDefaultDontPreserveDuplicateRows()
+        {
+            Assert.IsFalse(_options.PreserveDuplicateRows);
+        }
     }
 }
