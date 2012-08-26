@@ -681,16 +681,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void ByDefaultDoesntPreserveDuplicateRows()
-        {
-            Assert.IsFalse(_termGenerator.PreserveDuplicateRows);
-        }
-
-        [Test]
-        public void RetrunsDifferentSubjectBlankNodesForSameValues()
+        public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
             // given
-            _termGenerator = new RDFTermGenerator(true);
+            _termGenerator = new RDFTermGenerator(new MappingOptions { PreserveDuplicateRows = true });
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
@@ -703,12 +697,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
-        public void RetrunsSameSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
+        public void RetrunsSameSubjectBlankNodesForSameValuesWhenNotPreservingDuplicateRows()
         {
             // given
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
-            _termGenerator = new RDFTermGenerator(false);
+            _termGenerator = new RDFTermGenerator();
 
             // when
             var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);

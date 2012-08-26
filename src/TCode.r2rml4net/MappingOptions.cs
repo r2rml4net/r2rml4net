@@ -17,6 +17,7 @@ namespace TCode.r2rml4net
             ValidateSqlVersion = true;
             IgnoreMappingErrors = true;
             IgnoreDataErrors = true;
+            PreserveDuplicateRows = false;
         }
 
         public string TemplateSeparator
@@ -42,6 +43,8 @@ namespace TCode.r2rml4net
         public bool IgnoreMappingErrors { get; set; }
 
         public bool IgnoreDataErrors { get; set; }
+
+        public bool PreserveDuplicateRows { get; set; }
 
         public void SetSqlIdentifierDelimiters(char newLeftDelimiter, char newRightDelimiter)
         {
