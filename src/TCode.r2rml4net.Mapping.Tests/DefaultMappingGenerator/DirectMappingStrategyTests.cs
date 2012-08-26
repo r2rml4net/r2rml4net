@@ -40,7 +40,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             TableMetadata table = RelationalTestMappings.D006_1table1primarykey1column["Student"];
             var classIri = new Uri("http://example.com/Uri");
-            _pkStrategy.Setup(pk => pk.CreateSubjectUri(BaseUri, "Student")).Returns(classIri);
+            _pkStrategy.Setup(pk => pk.CreateSubjectClassUri(BaseUri, "Student")).Returns(classIri);
             const string template = "some template";
             _pkStrategy.Setup(pk => pk.CreateSubjectTemplateForPrimaryKey(BaseUri, table)).Returns(template);
             _subjectMap.Setup(sm => sm.AddClass(classIri)).Returns(_subjectMap.Object);
@@ -86,7 +86,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             // given
             TableMetadata table = RelationalTestMappings.D003_1table3columns["Student"];
             var classIri = new Uri("http://example.com/Uri");
-            _pkStrategy.Setup(pk => pk.CreateSubjectUri(BaseUri, "Student")).Returns(classIri);
+            _pkStrategy.Setup(pk => pk.CreateSubjectClassUri(BaseUri, "Student")).Returns(classIri);
             const string template = "some template";
             _pkStrategy.Setup(pk => pk.CreateSubjectTemplateForNoPrimaryKey(table)).Returns(template);
             _subjectMap.Setup(sm => sm.AddClass(classIri)).Returns(_subjectMap.Object);

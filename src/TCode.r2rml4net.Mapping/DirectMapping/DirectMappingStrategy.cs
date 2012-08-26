@@ -33,7 +33,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 throw new ArgumentException(string.Format("Table {0} has primay key. CreateSubjectMapForPrimaryKey method should be used", table.Name));
 
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table);
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode().IsTemplateValued(template);
@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             if(table.PrimaryKey.Length == 0)
                 throw new ArgumentException(string.Format("Table {0} has no primay key", table.Name));
 
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectUri(baseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
 
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(baseUri, table);
 
