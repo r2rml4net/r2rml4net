@@ -22,10 +22,9 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Primary key column (or columns in case of composite key)
         /// </summary>
-        /// todo: consider change type to string[]
-        public ColumnMetadata[] PrimaryKey
+        public string[] PrimaryKey
         {
-            get { return this.Where(c => c.IsPrimaryKey).ToArray(); }
+            get { return this.Where(c => c.IsPrimaryKey).Select(c => c.Name).ToArray(); }
         }
 
         /// <summary>

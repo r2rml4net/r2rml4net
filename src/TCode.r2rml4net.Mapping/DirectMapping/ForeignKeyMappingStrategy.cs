@@ -47,10 +47,10 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                         foreignKey.TableName, foreignKey.ReferencedTable.Name));
 
             string[] referencedColumns = foreignKey.IsCandidateKeyReference && foreignKey.ReferencedTableHasPrimaryKey
-                ? foreignKey.ReferencedTable.PrimaryKey.Select(c => c.Name).ToArray()
+                ? foreignKey.ReferencedTable.PrimaryKey.ToArray()
                 : foreignKey.ReferencedColumns;
             string[] foreignKeyColumns = foreignKey.IsCandidateKeyReference && foreignKey.ReferencedTableHasPrimaryKey
-                ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c.Name)).ToArray()
+                ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c)).ToArray()
                 : foreignKey.ForeignKeyColumns;
 
             StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, foreignKey.ReferencedTable.Name) + "/");

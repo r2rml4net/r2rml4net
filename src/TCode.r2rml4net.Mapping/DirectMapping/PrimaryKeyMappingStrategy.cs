@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
 
             string template = CreateSubjectClassUri(baseUri, table.Name).OriginalString;
-            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => pk.Name).Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
+            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }
 

@@ -20,11 +20,11 @@ namespace TCode.r2rml4net.Tests.Metadata
                                       };
 
             // when
-            ColumnMetadata[] primaryKey = table.PrimaryKey;
+            string[] primaryKey = table.PrimaryKey;
 
             // then
             Assert.AreEqual(1, primaryKey.Length);
-            Assert.Contains(primaryKeyColumn, primaryKey);
+            Assert.Contains(primaryKeyColumn.Name, primaryKey);
         }
 
         [Test]
@@ -42,13 +42,13 @@ namespace TCode.r2rml4net.Tests.Metadata
                                       };
 
             // when
-            ColumnMetadata[] primaryKey = table.PrimaryKey;
+            string[] primaryKey = table.PrimaryKey;
 
             // then
             Assert.AreEqual(3, primaryKey.Length);
-            Assert.Contains(primaryKeyColumn1, primaryKey);
-            Assert.Contains(primaryKeyColumn2, primaryKey);
-            Assert.Contains(primaryKeyColumn3, primaryKey);
+            Assert.Contains(primaryKeyColumn1.Name, primaryKey);
+            Assert.Contains(primaryKeyColumn2.Name, primaryKey);
+            Assert.Contains(primaryKeyColumn3.Name, primaryKey);
         }
 
         [Test]
