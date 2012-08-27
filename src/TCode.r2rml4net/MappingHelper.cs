@@ -59,7 +59,7 @@ namespace TCode.r2rml4net
             return encodedString.ToString();
         }
 
-        private static bool IsIUnreserved(char character)
+        public bool IsIUnreserved(char character)
         {
             return char.IsLetterOrDigit(character) ||
                    AllowedChars.Contains(character) ||

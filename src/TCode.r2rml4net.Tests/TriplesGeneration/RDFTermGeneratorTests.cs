@@ -279,7 +279,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [TestCase("http://example.com/company/Alice", "http://example.com/company/Alice", Description = "If value is already an absoulte URI, it is the result")]
         [TestCase("path/../Danny", null, ExpectedException = typeof(InvalidTermException), Description = "Data error on invalid column value")]
         [TestCase("Bob/Charles", "http://example.com/base/Bob/Charles")]
-        [TestCase("Bob Charles", "http://example.com/base/Bob%20Charles")]
+        [TestCase("Bob Charles", null, ExpectedException = typeof(InvalidTermException))]
         [TestCase("Bob", "http://example.com/base/Bob")]
         public void EscapesColumnValuesBeforeConstructingAbsoluteUri(string value, string expected)
         {
@@ -302,6 +302,25 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.IsNotNull(node);
             Assert.IsTrue(node is IUriNode);
             Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+        }
+
+        [Test]
+        public void DoesntPercentEncodeValueAndThrowsExceptionForInvalidURI()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                                .Returns("Juan Daniel")
+                                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable(); 
+            
+            // when
+            Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
         }
 
         #endregion
@@ -456,6 +475,28 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _objectMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
+        }
+
+        [Test]
+        public void DoesntPercentEncodeValue()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                                .Returns("Juan Daniel")
+                                .Verifiable();
+            _objectMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _objectMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _objectMap.Setup(map => map.TermType).Returns(_termType.Object);
+            _termType.Setup(type => type.IsLiteral).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<ILiteralNode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.AreEqual("Juan Daniel", node.Value);
         }
 
         #endregion

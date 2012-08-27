@@ -164,6 +164,8 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return GenerateTermForLiteral(termMap, value, implicitDatatype);
             }
 
+            AssertNoIllegalCharacters(termMap, new Uri(value, UriKind.RelativeOrAbsolute));
+
             return GenerateTermForValue(termMap, value);
         }
 
@@ -186,6 +188,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     if (uri.IsAbsoluteUri)
                     {
                         uri.LeaveDotsAndSlashesEscaped();
+
                         return NodeFactory.CreateUriNode(uri);
                     }
                 }
@@ -311,6 +314,30 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return NodeFactory.CreateLiteralNode(value, datatypeUri);
 
             return NodeFactory.CreateLiteralNode(value);
+        }
+
+        private void AssertNoIllegalCharacters(ITermMap termMap, Uri value)
+        {
+            IEnumerable<char> disallowedChars = string.Empty;
+            IEnumerable<string> segments = value.IsAbsoluteUri ? value.Segments : new[] {value.OriginalString};
+
+            foreach (var segment in segments)
+            {
+                if (segment.Any(chara => !_mappingHelper.IsIUnreserved(chara)))
+                {
+                    disallowedChars =
+                        disallowedChars.Union(
+                            segment.Where(chara => chara != '/' && !_mappingHelper.IsIUnreserved(chara)));
+                }
+            }
+
+            var joinedChars = string.Join(",", disallowedChars.Select(c => string.Format("'{0}'", c)));
+            if (joinedChars.Any())
+            {
+                const string format = "Column value is not escaped and thus cannot contain these disallowed characters: {0}";
+                var reason = string.Format(format, joinedChars);
+                throw new InvalidTermException(termMap, reason);
+            }
         }
     }
 }
