@@ -117,8 +117,8 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
                    from pkColumn in foreignKey.ReferencedTable.PrimaryKey
                    select string.Format("{0}.{1} as {2}",
                                         tableAlias,
-                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn.Name, _options),
-                                        DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name + pkColumn.Name, _options));
+                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn, _options),
+                                        DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name + pkColumn, _options));
         }
 
         private IEnumerable<string> GetJoinConditions(ForeignKeyMetadata foreignKey, string parent)
