@@ -38,13 +38,15 @@ WHERE { ?map rr:subject ?value }";
         /// </summary>
         protected internal IGraph R2RMLMappings { get; private set; }
 
+        /// <summary>
+        /// </summary>
         protected MappingOptions MappingOptions { get; private set; }
 
         /// <summary>
         /// Constructor used by <see cref="R2RMLConfiguration"/>
         /// </summary>
         /// <param name="graph">existing graph with mappings</param>
-        /// <param name="existingMappingsGraph"> </param>
+        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
         internal BaseConfiguration(IGraph graph, MappingOptions mappingOptions)
         {
             if(mappingOptions == null)
@@ -59,7 +61,7 @@ WHERE { ?map rr:subject ?value }";
         /// Constructor used by <see cref="R2RMLConfiguration"/>
         /// </summary>
         /// <param name="baseUri">R2RML graph's base URI</param>
-        /// <param name="existingMappingsGraph"> </param>
+        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
         protected BaseConfiguration(Uri baseUri, MappingOptions mappingOptions)
             : this(new Graph { BaseUri = baseUri }, mappingOptions)
         {
@@ -100,6 +102,9 @@ WHERE { ?map rr:subject ?value }";
             }
         }
 
+        /// <summary>
+        /// Base mapping URI. It will be used to resolve relative values when generating terms
+        /// </summary>
         public Uri BaseURI
         {
             get { return R2RMLMappings.BaseUri; }
@@ -122,6 +127,9 @@ WHERE { ?map rr:subject ?value }";
             InitializeSubMapsFromCurrentGraph();
         }
 
+        /// <summary>
+        /// Gets value indicating whether configuration class is represented by an RDF node
+        /// </summary>
         protected virtual bool UsesNode { get { return true; } }
 
         /// <summary>

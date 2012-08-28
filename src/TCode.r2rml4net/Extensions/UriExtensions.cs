@@ -3,14 +3,17 @@ using System.Reflection;
 
 namespace TCode.r2rml4net.Extensions
 {
+    /// <summary>
+    /// Extension methods for the <see cref="Uri"/> class
+    /// </summary>
     public static class UriExtensions
     {
         /// <summary>
-        /// A pretty dirty workaround to have slahses unescaped to avoid relative
-        /// Uri resolution and simmilar malfunctions
+        /// A pretty dirty workaround to have slashes unescaped to avoid relative
+        /// <see cref="Uri"/> resolution and simmilar malfunctions
         /// </summary>
         /// <remarks>See http://stackoverflow.com/questions/2320533/system-net-uri-with-urlencoded-characters</remarks>
-        public static void LeaveDotsAndSlashesEscaped(this System.Uri uri)
+        public static void LeaveDotsAndSlashesEscaped(this Uri uri)
         {
             const int unEscapeDotsAndSlashes = 0x2000000;
             if (uri == null)

@@ -1,8 +1,6 @@
-using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
-using VDS.RDF;
 
-namespace TCode.r2rml4net.Log
+namespace TCode.r2rml4net.Mapping.Log
 {
     class NullLog : IDefaultMappingGenerationLog
     {

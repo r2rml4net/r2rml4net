@@ -6,10 +6,17 @@ using TCode.r2rml4net.TriplesGeneration;
 
 namespace TCode.r2rml4net.RDF
 {
+    /// <summary>
+    /// Default implementation of <see cref="ISQLValuesMappingStrategy"/>, which conforms to the
+    /// <a href="http://www.w3.org/TR/r2rml/#datatype-conversions">Datatype Conversions section of R2RML specification</a>
+    /// </summary>
     public class DefaultSQLValuesMappingStrategy : ISQLValuesMappingStrategy
     {
         private readonly IDictionary<Type, string> _datatypeMappings = new Dictionary<Type, string>();
 
+        /// <summary>
+        /// Creates an instance of <see cref="DefaultSQLValuesMappingStrategy"/>
+        /// </summary>
         public DefaultSQLValuesMappingStrategy()
         {
             FillDefaultDatatypeMappings();
@@ -17,6 +24,9 @@ namespace TCode.r2rml4net.RDF
 
         #region Implementation of ISQLValuesMappingStrategy
 
+        /// <summary>
+        /// Gets the column value's lexical form and it's RDF datatype URI
+        /// </summary>
         public string GetLexicalForm(int columnIndex, IDataRecord logicalRow, out Uri naturalRdfDatatype)
         {
             Type type = logicalRow.GetFieldType(columnIndex);
@@ -30,6 +40,9 @@ namespace TCode.r2rml4net.RDF
 
         #endregion
 
+        /// <summary>
+        /// Gets a lexical form for column value and the given <paramref name="dataType"/>
+        /// </summary>
         protected internal virtual string GetMappedValue(int columnIndex, IDataRecord logicalRow, Uri dataType)
         {
             if (dataType != null)
@@ -63,6 +76,9 @@ namespace TCode.r2rml4net.RDF
             return logicalRow.GetValue(columnIndex).ToString();
         }
 
+        /// <summary>
+        /// Gets XSD datatype URI for the given .NET <see cref="Type"/> and <paramref name="sqlTypeName"/>
+        /// </summary>
         protected virtual Uri GetXsdUriForType(Type type, string sqlTypeName)
         {
             if (type == typeof(DateTime) && !string.IsNullOrWhiteSpace(sqlTypeName))
@@ -107,10 +123,9 @@ namespace TCode.r2rml4net.RDF
         static string ByteArrayToString(byte[] bytes)
         {
             char[] c = new char[bytes.Length * 2];
-            byte b;
             for (int i = 0; i < bytes.Length; i++)
             {
-                b = ((byte)(bytes[i] >> 4));
+                byte b = ((byte)(bytes[i] >> 4));
                 c[i * 2] = (char)(b > 9 ? b + 0x37 : b + 0x30);
                 b = ((byte)(bytes[i] & 0xF));
                 c[i * 2 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);

@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace TCode.r2rml4net
 {
+    /// <summary>
+    /// Utility helper class for generating and working with mappings
+    /// </summary>
     public class MappingHelper
     {
         private static readonly char[] AllowedChars = new[] {'-', '.', '_', '~'};
@@ -31,11 +34,17 @@ namespace TCode.r2rml4net
             };
         private readonly MappingOptions _options;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="MappingHelper"/> with <see cref="MappingOptions"/>
+        /// </summary>
         public MappingHelper(MappingOptions options)
         {
             _options = options;
         }
 
+        /// <summary>
+        /// Encodes a unescaped URI string as defined by <a href="http://www.w3.org/TR/r2rml/#RFC3987">RFC3987</a>
+        /// </summary>
         public string UrlEncode(string unescapedString)
         {
             StringBuilder encodedString = new StringBuilder();
@@ -59,6 +68,11 @@ namespace TCode.r2rml4net
             return encodedString.ToString();
         }
 
+        /// <summary>
+        /// Gets a velue indicating whether the <paramref name="character"/> is in the 
+        /// <a href="http://tools.ietf.org/html/rfc3987#section-2.2">iunreserved production</a> 
+        /// in <a href="http://www.w3.org/TR/r2rml/#RFC3987">RFC3987</a>
+        /// </summary>
         public bool IsIUnreserved(char character)
         {
             return char.IsLetterOrDigit(character) ||
@@ -66,6 +80,9 @@ namespace TCode.r2rml4net
                    UnicodeRanges.Any(range => character >= range.Item1 && character < range.Item2);
         }
 
+        /// <summary>
+        /// Encloses and delimits a column name with braces for use in <a href="http://www.w3.org/TR/r2rml/#from-template">templates</a>
+        /// </summary>
         public virtual string EncloseColumnName(string columnName)
         {
             return string.Format("{{{0}}}", DatabaseIdentifiersHelper.DelimitIdentifier(columnName, _options));

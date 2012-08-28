@@ -266,7 +266,7 @@ WHERE
         }
 
         /// <summary>
-        /// <see cref="ITriplesMapFromR2RMLViewConfiguration.SqlVersions"/>
+        /// <see cref="ITriplesMap.SqlVersions"/>
         /// </summary>
         public Uri[] SqlVersions
         {

@@ -30,6 +30,9 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         ISubjectMap SubjectMap { get; }
 
+        /// <summary>
+        /// Gets the parent predicate object map
+        /// </summary>
         IPredicateObjectMap PredicateObjectMap { get; }
     }
 }

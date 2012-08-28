@@ -9,12 +9,20 @@ namespace TCode.r2rml4net.Log
     public interface IRDFTermGenerationLog
     {
         /// <summary>
-        /// Logs an error of not found column in the SQL reuslts
+        /// Logs a column missing in the SQL reuslts
         /// </summary>
         void LogColumnNotFound(ITermMap termMap, string columnName);
-
+        /// <summary>
+        /// Logs an RDF term generated
+        /// </summary>
         void LogTermGenerated(INode node);
+        /// <summary>
+        /// Logs a null RDF term generated
+        /// </summary>
         void LogNullTermGenerated(ITermMap termMap);
+        /// <summary>
+        /// Logs a null value retrieved for column
+        /// </summary>
         void LogNullValueForColumn(string columnName);
     }
 }

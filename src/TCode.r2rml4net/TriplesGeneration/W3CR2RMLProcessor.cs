@@ -21,6 +21,9 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly ITriplesMapProcessor _triplesMapProcessor;
         private readonly MappingOptions _mappingOptions;
 
+        /// <summary>
+        /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
+        /// </summary>
         public ITriplesGenerationLog Log { get; set; }
 
         #region Constructors
@@ -146,6 +149,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             GenerateTriples(r2RML, handler);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether generating triples had no errors
+        /// </summary>
         public bool Success { get; private set; }
 
         #endregion

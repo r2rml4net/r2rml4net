@@ -18,7 +18,9 @@ namespace TCode.r2rml4net.Mapping
         /// Gets or sets the <see cref="ISqlQueryBuilder"/>
         /// </summary>
         ISqlQueryBuilder SqlQueryBuilder { get; set; }
-
+        /// <summary>
+        /// Gets or sets the SQL version validator implementation
+        /// </summary>
         ISqlVersionValidator SqlVersionValidator { get; set; }
     }
 }

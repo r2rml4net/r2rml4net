@@ -21,6 +21,9 @@ namespace TCode.r2rml4net.Mapping
         /// </remarks>
         protected internal INode ParentMapNode { get; private set; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="TermMapConfiguration"/>
+        /// </summary>
         protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node, MappingOptions mappingOptions) 
             : base(parentTriplesMap, r2RMLMappings, node, mappingOptions)
         {
@@ -243,16 +246,25 @@ namespace TCode.r2rml4net.Mapping
 
         #region Implementation of ITermType
 
+        /// <summary>
+        /// Gets value indicating whether the term map's term type is rr:IRI
+        /// </summary>
         public bool IsURI
         {
             get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
         }
 
+        /// <summary>
+        /// Gets value indicating whether the term map's term type is rr:BlankNode
+        /// </summary>
         bool ITermType.IsBlankNode
         {
             get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
         }
 
+        /// <summary>
+        /// Gets value indicating whether the term map's term type is rr:Literal
+        /// </summary>
         bool ITermType.IsLiteral
         {
             get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }

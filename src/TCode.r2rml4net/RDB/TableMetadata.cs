@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace TCode.r2rml4net.RDB
 {
@@ -8,6 +7,9 @@ namespace TCode.r2rml4net.RDB
     /// </summary>
     public class TableMetadata : ColumnCollection, IVistitable<IDatabaseMetadataVisitor>
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public TableMetadata()
         {
             ForeignKeys = new ForeignKeyMetadata[0];
@@ -49,12 +51,18 @@ namespace TCode.r2rml4net.RDB
                 }
         }
 
+        /// <summary>
+        /// Adds a column to table
+        /// </summary>
         protected internal override void Add(ColumnMetadata column)
         {
             base.Add(column);
             column.Table = this;
         }
 
+        /// <summary>
+        /// Gets the collection of table's unique keys
+        /// </summary>
         public UniqueKeyCollection UniqueKeys { get; internal set; }
     }
 }
