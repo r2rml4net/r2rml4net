@@ -15,17 +15,26 @@ namespace TCode.r2rml4net.RDB
     {
         private readonly MappingOptions _options;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="W3CSqlQueryBuilder"/> with custom mapping options
+        /// </summary>
         public W3CSqlQueryBuilder(MappingOptions options)
         {
             _options = options;
             SqlVersionValidator = new Wc3SqlVersionValidator();
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="W3CSqlQueryBuilder"/> with default mapping options
+        /// </summary>
         public W3CSqlQueryBuilder()
             : this(new MappingOptions())
         {
         }
 
+        /// <summary>
+        /// Validates SQL version of R2RML views
+        /// </summary>
         public ISqlVersionValidator SqlVersionValidator { get; set; }
 
         #region Implementation of ISqlQueryBuilder
@@ -77,6 +86,10 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
             return string.Format("SELECT * FROM ({0}) AS tmp", refObjectMap.ChildEffectiveSqlQuery);
         }
 
+        /// <summary>
+        /// Gets the SQL query for tables joined by candidate key where the parent table has a primary key
+        /// </summary>
+        /// <param name="table">child table</param>
         public string GetR2RMLViewForJoinedTables(TableMetadata table)
         {
             if (table == null)

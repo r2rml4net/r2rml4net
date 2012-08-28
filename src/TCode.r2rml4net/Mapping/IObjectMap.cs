@@ -14,10 +14,5 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <exception cref="InvalidMapException"></exception>
         Uri URI { get; }
-        /// <summary>
-        /// Gets constant object literal value or null if absent
-        /// </summary>
-        /// <exception cref="InvalidMapException"></exception>
-        string Literal { get; }
     }
 }

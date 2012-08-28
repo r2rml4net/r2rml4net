@@ -28,11 +28,17 @@ namespace TCode.r2rml4net.TriplesGeneration
             _termGenerator = termGenerator;
         }
 
+        /// <summary>
+        /// Generates RDF terms from term maps
+        /// </summary>
         protected IRDFTermGenerator TermGenerator
         {
             get { return _termGenerator; }
         }
 
+        /// <summary>
+        /// Generation log
+        /// </summary>
         public ITriplesGenerationLog Log { get; set; }
 
         /// <summary>
@@ -53,6 +59,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
         }
 
+        /// <summary>
+        /// Handle triple by inserting it to all <paramref name="graphs"/> using the <paramref name="rdfHandler"/>
+        /// </summary>
         protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode @object, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
         {
             IEnumerable<IUriNode> graphsLocal = graphs.ToList();
@@ -90,6 +99,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             rdfHandler.HandleTriple(triple);
         }
 
+        /// <summary>
+        /// Reads a row of data from a relational database
+        /// </summary>
         protected internal bool FetchLogicalRows(IDbConnection connection, IQueryMap map, out IDataReader dataReader)
         {
             dataReader = null;
@@ -112,6 +124,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             return true;
         }
 
+        /// <summary>
+        /// Ensure the data reader contains unique column names
+        /// </summary>
         protected internal void AssertNoDuplicateColumnNames(IDataRecord reader)
         {
             var fieldCount = reader.FieldCount;

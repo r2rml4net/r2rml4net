@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace TCode.r2rml4net.RDB
 {
+    /// <summary>
+    /// Represents a collection of columns
+    /// </summary>
     public class ColumnCollection : IEnumerable<ColumnMetadata>
     {
         private readonly IList<ColumnMetadata> _columns = new List<ColumnMetadata>();

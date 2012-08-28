@@ -17,7 +17,7 @@ namespace TCode.r2rml4net.Tests
         [Test]
         public void HasDefaultTemplateSeparator()
         {
-            Assert.AreEqual("_", _options.TemplateSeparator);
+            Assert.AreEqual("_", _options.BlankNodeTemplateSeparator);
         }
 
         [Test]
@@ -40,10 +40,10 @@ namespace TCode.r2rml4net.Tests
         public void DefaultTemplateSeparatorCanBeChanged(string newSeparator)
         {
             // when
-            _options.TemplateSeparator = newSeparator;
+            _options.BlankNodeTemplateSeparator = newSeparator;
 
             // then
-            Assert.AreEqual(newSeparator, _options.TemplateSeparator);
+            Assert.AreEqual(newSeparator, _options.BlankNodeTemplateSeparator);
         }
 
         [TestCase('\"', '\"')]

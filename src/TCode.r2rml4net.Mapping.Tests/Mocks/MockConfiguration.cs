@@ -246,15 +246,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
             get { throw new NotImplementedException(); }
         }
 
-        /// <summary>
-        /// Gets constant object literal value or null if absent
-        /// </summary>
-        /// <exception cref="InvalidMapException"></exception>
-        string IObjectMap.Literal
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         #endregion
 
         #region Implementation of ISubjectMap

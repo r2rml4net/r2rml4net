@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TCode.r2rml4net.RDB
 {
+    /// <summary>
+    /// Represents a collection of unique keys
+    /// </summary>
     public class UniqueKeyCollection : IEnumerable<UniqueKeyMetadata>
     {
         private readonly IList<UniqueKeyMetadata> _uniqueKeys = new List<UniqueKeyMetadata>();
@@ -37,6 +39,9 @@ namespace TCode.r2rml4net.RDB
 
         #endregion
 
+        /// <summary>
+        /// Adds a unique key to the collection
+        /// </summary>
         public void Add(UniqueKeyMetadata uniqueKey)
         {
             if(uniqueKey == null)

@@ -21,6 +21,9 @@ namespace TCode.r2rml4net.Mapping
         /// <param name="sqlQuery">a valid SQL query</param>
         ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery);
 
+        /// <summary>
+        /// Base mapping URI. It will be used to resolve relative values when generating terms
+        /// </summary>
         Uri BaseUri { get; }
     }
 }

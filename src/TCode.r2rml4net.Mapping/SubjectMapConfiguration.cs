@@ -82,7 +82,7 @@ namespace TCode.r2rml4net.Mapping
         #region Implementation of ISubjectMap
 
         /// <summary>
-        /// <see cref="ISubjectMap.URI"/>
+        /// <see cref="IUriValuedTermMap.URI"/>
         /// </summary>
         public Uri URI
         {

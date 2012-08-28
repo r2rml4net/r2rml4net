@@ -20,7 +20,9 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// Generates triples from <paramref name="r2RML"/> mappings and adds the generated triples to the given <see cref="ITripleStore"/>
         /// </summary>
         void GenerateTriples(IR2RML r2RML, ITripleStore tripleStore);
-
+        /// <summary>
+        /// Gets a value indicating whether generating triples had no errors
+        /// </summary>
         bool Success { get; }
     }
 }

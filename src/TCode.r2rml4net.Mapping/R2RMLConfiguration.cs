@@ -40,6 +40,7 @@ namespace TCode.r2rml4net.Mapping
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
         /// <param name="baseUri">base URI for mapping nodes</param>
+        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
         public R2RMLConfiguration(Uri baseUri, MappingOptions mappingOptions)
             : base(baseUri, mappingOptions)
         {
@@ -55,6 +56,7 @@ namespace TCode.r2rml4net.Mapping
         {
         }
 
+        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
         public R2RMLConfiguration(MappingOptions mappingOptions)
             : base(DefaultBaseUri, mappingOptions)
         {
@@ -96,6 +98,9 @@ namespace TCode.r2rml4net.Mapping
             }
         }
 
+        /// <summary>
+        /// Always returns false
+        /// </summary>
         protected override bool UsesNode
         {
             get
@@ -133,6 +138,9 @@ namespace TCode.r2rml4net.Mapping
             return triplesMapConfiguration;
         }
 
+        /// <summary>
+        /// Base mapping URI. It will be used to resolve relative values when generating terms
+        /// </summary>
         public Uri BaseUri
         {
             get { return R2RMLMappings.BaseUri; }
@@ -167,6 +175,9 @@ namespace TCode.r2rml4net.Mapping
             set { _sqlQueryBuilder = value; }
         }
 
+        /// <summary>
+        /// <see cref="ISqlVersionValidator"/>
+        /// </summary>
         public ISqlVersionValidator SqlVersionValidator
         {
             get { return _sqlVersionValidator; }

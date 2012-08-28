@@ -19,7 +19,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         private readonly MappingOptions _options;
 
         /// <summary>
-        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
+        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/> and custom mapping options
         /// </summary>
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, MappingOptions options)
         {
@@ -31,6 +31,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             SqlBuilder = new W3CSqlQueryBuilder(options);
         }
 
+        /// <summary>
+        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/> and default mapping options
+        /// </summary>
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
             : this(databaseMetadataProvider, r2RMLConfiguration, new MappingOptions())
         {
@@ -42,6 +45,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
         /// </summary>
         public Uri MappingBaseUri { get; set; }
 
+        /// <summary>
+        /// Implementation of <see cref="IDirectMappingStrategy"/>, which defines how to map relational database to RDF subject , predicate and object maps
+        /// </summary>
         public IDirectMappingStrategy MappingStrategy
         {
             get
@@ -53,6 +59,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             set { _mappingStrategy = value; }
         }
 
+        /// <summary>
+        /// Impementation of <see cref="IColumnMappingStrategy"/>, which defines how to map columns to RDF predicates
+        /// </summary>
         public IColumnMappingStrategy ColumnMappingStrategy
         {
             get
@@ -64,6 +73,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             set { _columnMappingStrategy = value; }
         }
 
+        /// <summary>
+        /// Implementation of <see cref="IPrimaryKeyMappingStrategy"/>, which defines how to map primary keys to RDF subjects
+        /// </summary>
         public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
         {
             get
@@ -75,6 +87,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             set { _primaryKeyMappingStrategy = value; }
         }
 
+        /// <summary>
+        /// Implementation of <see cref="ISqlQueryBuilder"/>, which builds queries used to retrieve data from relationalt database for genertaing triples
+        /// </summary>
         public ISqlQueryBuilder SqlBuilder { get; set; }
 
         /// <summary>
@@ -90,10 +105,16 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #region Implementation of IDatabaseMetadataVisitor
 
+        /// <summary>
+        /// Visits a <see cref="TableCollection"/> and it's tables
+        /// </summary>
         public void Visit(TableCollection tables)
         {
         }
 
+        /// <summary>
+        /// Visits a <see cref="TableMetadata"/> and it's columns
+        /// </summary>
         public void Visit(TableMetadata table)
         {
             if (table.ForeignKeys.Any(fk => fk.IsCandidateKeyReference && fk.ReferencedTableHasPrimaryKey))
@@ -114,6 +135,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             }
         }
 
+        /// <summary>
+        /// Visits a <see cref="ColumnMetadata"/>
+        /// </summary>
         public void Visit(ColumnMetadata column)
         {
             Uri predicateUri = ColumnMappingStrategy.CreatePredicateUri(MappingBaseUri, column);
@@ -127,6 +151,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
                 literalTermMap.HasDataType(dataTypeUri);
         }
 
+        /// <summary>
+        /// Visist a <see cref="ForeignKeyMetadata"/>
+        /// </summary>
         public void Visit(ForeignKeyMetadata foreignKey)
         {
             var foreignKeyMap = CurrentTriplesMapConfiguration.CreatePropertyObjectMap();

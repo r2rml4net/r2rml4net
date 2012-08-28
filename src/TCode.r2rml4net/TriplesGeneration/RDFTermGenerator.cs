@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
-using TCode.r2rml4net.RDB.ADO.NET;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.Extensions;
 using VDS.Common;
@@ -28,29 +28,44 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new HashTable<string, IBlankNode>(256);
         private readonly MappingHelper _mappingHelper;
 
+        /// <summary>
+        /// Creates a new <see cref="RDFTermGenerator"/> with default options
+        /// </summary>
         public RDFTermGenerator()
             : this(new MappingOptions())
         {
         }
 
+        /// <summary>
+        /// Creates a new <see cref="RDFTermGenerator"/> with customized options
+        /// </summary>
         public RDFTermGenerator(MappingOptions options)
         {
             _options = options;
             _mappingHelper = new MappingHelper(options);
         }
 
+        /// <summary>
+        /// <see cref="ISQLValuesMappingStrategy"/>
+        /// </summary>
         public ISQLValuesMappingStrategy SqlValuesMappingStrategy
         {
             get { return _sqlValuesMappingStrategy; }
             set { _sqlValuesMappingStrategy = value; }
         }
 
+        /// <summary>
+        /// <see cref="IRDFTermGenerationLog"/>
+        /// </summary>
         public IRDFTermGenerationLog Log
         {
             get { return _log; }
             set { _log = value; }
         }
 
+        /// <summary>
+        /// <see cref="INodeFactory"/>
+        /// </summary>
         public INodeFactory NodeFactory
         {
             get { return _nodeFactory; }
@@ -59,6 +74,11 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IRDFTermGenerator
 
+        /// <summary>
+        /// Generates RDF term for the given <see cref="ITermMap"/> by applying to the <paramref name="logicalRow"/>
+        /// </summary>
+        /// <remarks>see http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term</remarks>
+        /// <returns>an RDF term (<see cref="INode"/>)</returns>
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
             where TNodeType : class, INode
         {
@@ -91,6 +111,9 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #endregion
 
+        /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-template">template-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
         protected INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
         {
             if (string.IsNullOrWhiteSpace(termMap.Template))
@@ -110,6 +133,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             return null;
         }
 
+        /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#constant">constant-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
         protected INode CreateNodeFromConstant(ITermMap termMap)
         {
             var uriValuedTermMap = termMap as IUriValuedTermMap;
@@ -138,6 +164,9 @@ namespace TCode.r2rml4net.TriplesGeneration
             return null;
         }
 
+        /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-column">column-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
         protected INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
         {
             int columnIndex;

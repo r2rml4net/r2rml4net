@@ -5,10 +5,17 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.DirectMapping
 {
+    /// <summary>
+    /// Default implementation of <see cref="IForeignKeyMappingStrategy"/>, which creates mapping graph
+    /// consistent with the official <a href="www.w3.org/TR/rdb-direct-mapping/">Direct Mapping specfication</a>
+    /// </summary>
     public class ForeignKeyMappingStrategy : MappingStrategyBase, IForeignKeyMappingStrategy
     {
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
+        /// <summary>
+        /// Creates an instance of <see cref="ForeignKeyMappingStrategy"/>
+        /// </summary>
         public ForeignKeyMappingStrategy(MappingOptions options)
             : base(options)
         {
@@ -16,6 +23,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #region Implementation of IForeignKeyMappingStrategy
 
+        /// <summary>
+        /// Creates a predicate URI for foreign Key according to <a href="www.w3.org/TR/rdb-direct-mapping/">Direct Mapping specfication</a>
+        /// </summary>
+        /// <example>For referenced table "Student", foreign key columns "Last Name" and "SSN" and base URI "http://www.exmample.com/" it creates a 
+        /// URI "http://www.exmample.com/Student#ref-{\"Last Name\"};{\"SSN\"}"</example>
         public virtual Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
             if (baseUri == null)
@@ -32,6 +44,11 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             return new Uri(uri);
         }
 
+        /// <summary>
+        /// Creates an object template for a foreign key reference
+        /// </summary>
+        /// <remarks>The template contains both referenced and referencing columns. Different columns are used
+        /// if the referenced table has or hasn't got a primary key producing different templates</remarks>
         public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
             if (!foreignKey.ForeignKeyColumns.Any())
@@ -63,6 +80,10 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
             return template.ToString();
         }
 
+        /// <summary>
+        /// Creates a blank node object identifier template for foreign key, which references a candidate key.
+        /// See <see cref="MappingStrategyBase.CreateBlankNodeTemplate"/> for details on implementation
+        /// </summary>
         public string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey)
         {
             if (foreignKey == null)
@@ -78,6 +99,9 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
 
         #endregion
 
+        /// <summary>
+        /// Mapping strategy for primary keys
+        /// </summary>
         public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
         {
             get
