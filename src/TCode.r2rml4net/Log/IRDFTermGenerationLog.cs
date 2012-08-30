@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Log
     public interface IRDFTermGenerationLog
     {
         /// <summary>
-        /// Logs a column missing in the SQL reuslts
+        /// Logs a column missing in the SQL results
         /// </summary>
         void LogColumnNotFound(ITermMap termMap, string columnName);
         /// <summary>
