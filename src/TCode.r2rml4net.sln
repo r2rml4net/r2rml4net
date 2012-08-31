@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Query", "TC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Mapping.Tests", "TCode.r2rml4net.Mapping.Tests\TCode.r2rml4net.Mapping.Tests.csproj", "{B2B367CA-B338-4176-B97B-FB9B5558C4B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{F2EE94E6-037C-4FCE-8B3C-0C7FBB2966FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{695D020B-DEBC-4D08-BCEF-7DE9474F0681}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D9E50FF2-A9C9-4E9E-A3BE-19D250B23DE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +46,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C5D6099-CEA0-4D34-84C7-754A92E51798} = {F2EE94E6-037C-4FCE-8B3C-0C7FBB2966FC}
+		{1C96F7F6-32B6-4FD3-A12F-5BEE2FD068D9} = {F2EE94E6-037C-4FCE-8B3C-0C7FBB2966FC}
+		{3C3500A1-3E4A-4D0E-8902-715BE5461A17} = {F2EE94E6-037C-4FCE-8B3C-0C7FBB2966FC}
+		{B2B367CA-B338-4176-B97B-FB9B5558C4B0} = {695D020B-DEBC-4D08-BCEF-7DE9474F0681}
+		{A7938022-C641-4470-B22E-0CBBC2D11D5E} = {695D020B-DEBC-4D08-BCEF-7DE9474F0681}
 	EndGlobalSection
 EndGlobal
