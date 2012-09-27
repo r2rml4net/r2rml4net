@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("TCode.r2rml4net.Mapping")]
 [assembly: AssemblyCopyright("Copyright © Tomasz Pluskiewicz 2012")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.2.0.4624")]
+[assembly: AssemblyVersion("0.2.0.4653")]
 [assembly: AssemblyFileVersion("0.2.0.0")]
 [assembly: InternalsVisibleTo("TCode.r2rml4net.Mapping.Tests")]
 

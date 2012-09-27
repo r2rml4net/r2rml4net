@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Tomasz Pluskiewicz 2012")]
 [assembly: ComVisible(false)]
 [assembly: Guid("75adf600-efa6-4088-aac7-af2c7e4d74c4")]
-[assembly: AssemblyVersion("0.2.0.4624")]
+[assembly: AssemblyVersion("0.2.0.4653")]
 [assembly: AssemblyFileVersion("0.2.0.0")]
 [assembly: InternalsVisibleTo("TCode.r2rml4net.Mapping.Tests")]
 
