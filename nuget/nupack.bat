@@ -1,0 +1,1 @@
+..\src\.nuget\nuget.exe pack r2rml4net.dll.nuspec

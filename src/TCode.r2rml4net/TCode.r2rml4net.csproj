@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -144,13 +144,13 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-    <Version BuildType="Automatic" Revision="0" Major="0" Minor="2">
+    <Version BuildType="Automatic" Revision="0" Major="0" Minor="3">
       <Output TaskParameter="Major" PropertyName="Major" />
       <Output TaskParameter="Minor" PropertyName="Minor" />
       <Output TaskParameter="Build" PropertyName="Build" />
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </Version>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="$(SolutionDir)\TCode.r2rml4net\Properties\AssemblyInfo.cs" AssemblyTitle="r2rml.net Core Library" AssemblyDescription="Library for creating and loading of R2RML mappings" AssemblyCompany="http://r2rml.net/" AssemblyProduct="TCode.r2rml4net" AssemblyCopyright="Copyright © Tomasz Pluskiewicz 2012" ComVisible="false" Guid="75adf600-efa6-4088-aac7-af2c7e4d74c4" AssemblyVersion="$(Major).$(Minor).0.$(Build)" AssemblyFileVersion="$(Major).$(Minor).0.0" InternalsVisibleTo="TCode.r2rml4net.Mapping.Tests" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="$(SolutionDir)\TCode.r2rml4net\Properties\AssemblyInfo.cs" AssemblyTitle="r2rml.net Core Library" AssemblyDescription="Library for creating and loading of R2RML mappings" AssemblyCompany="http://r2rml.net/" AssemblyProduct="TCode.r2rml4net" AssemblyCopyright="Copyright © Tomasz Pluskiewicz 2012" ComVisible="false" Guid="75adf600-efa6-4088-aac7-af2c7e4d74c4" AssemblyVersion="$(Major).$(Minor).$(Revision).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Revision).0" InternalsVisibleTo="TCode.r2rml4net.Mapping.Tests" />
     <WriteLinesToFile File="$(SolutionDir)\TCode.r2rml4net\Properties\AssemblyInfo.cs" Lines="[assembly: InternalsVisibleTo(&quot;TCode.r2rml4net.Tests&quot;)]" />
     <FileUpdate Files="@(Compile)" Regex="^(\s\S)*(?=(using|namespace))" ReplacementText="#region Licence&#xD;&#xA;			&#xD;&#xA;/* &#xD;&#xA;Copyright (C) 2012 Tomasz Pluskiewicz&#xD;&#xA;http://r2rml.net/&#xD;&#xA;r2rml@r2rml.net&#xD;&#xA;	&#xD;&#xA;------------------------------------------------------------------------&#xD;&#xA;	&#xD;&#xA;This file is part of r2rml4net.&#xD;&#xA;	&#xD;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xD;&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal &#xD;&#xA;in the Software without restriction, including without limitation the rights &#xD;&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell &#xD;&#xA;copies of the Software, and to permit persons to whom the Software is &#xD;&#xA;furnished to do so, subject to the following conditions:&#xD;&#xA;&#xD;&#xA;The above copyright notice and this permission notice shall be included in all &#xD;&#xA;copies or substantial portions of the Software.&#xD;&#xA;&#xD;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS &#xD;&#xA;OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, &#xD;&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE &#xD;&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER &#xD;&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING &#xD;&#xA;FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE &#xD;&#xA;OR OTHER DEALINGS IN THE SOFTWARE.&#xD;&#xA;	&#xD;&#xA;------------------------------------------------------------------------&#xD;&#xA;&#xD;&#xA;r2rml4net may alternatively be used under the LGPL licence&#xD;&#xA;&#xD;&#xA;http://www.gnu.org/licenses/lgpl.html&#xD;&#xA;&#xD;&#xA;If these licenses are not suitable for your intended use please contact&#xD;&#xA;us at the above stated email address to discuss alternative&#xD;&#xA;terms. */&#xD;&#xA;			&#xD;&#xA;#endregion&#xD;&#xA;&#xD;&#xA;" />
   </Target>
