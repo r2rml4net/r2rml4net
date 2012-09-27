@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>r2rml.net</id>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
     <projectUrl>http://r2rml.net</projectUrl>
@@ -12,5 +12,8 @@
     <releaseNotes>Release now with dotNetRDF as a dependency and fixed the previously missing r2rml4net.dll binary (sic!)</releaseNotes>
     <copyright>Copyright 2012 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
+	<dependencies>
+		<dependency id="dotNetRDF" version="0.7.2" />
+	</dependencies>
   </metadata>
 </package>
