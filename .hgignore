@@ -1,6 +1,7 @@
 syntax: regexp
 [oO]bj/
 [Bb]in/
+nuget/lib/
 syntax: glob
 src/TCode.r2rml4net/packages/
 *.suo
