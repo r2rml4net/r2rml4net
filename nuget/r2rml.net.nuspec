@@ -9,7 +9,7 @@
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>Changed build settings</releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<dependencies>
