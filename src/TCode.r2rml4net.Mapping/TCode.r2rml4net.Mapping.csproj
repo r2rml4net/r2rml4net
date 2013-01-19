@@ -125,8 +125,4 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)\packages\ilmerge.2.12.0803\ilmerge.exe" "$(TargetDir)TCode.r2rml4net.dll"  "$(TargetDir)TCode.r2rml4net.Mapping.dll" /out:r2rml4net.dll /target:library /targetplatform:v4
-copy "$(TargetDir)r2rml4net.dll" "$(SolutionDir)..\nuget\lib\net40"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
