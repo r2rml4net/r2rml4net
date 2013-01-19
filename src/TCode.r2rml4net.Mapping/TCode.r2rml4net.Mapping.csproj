@@ -123,6 +123,7 @@
   </Target>
     <Target Name="AfterBuild">
         <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.Mapping.dll" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
+        <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.Mapping.pdb" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
         <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.Mapping.XML" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
     </Target>
 </Project>
