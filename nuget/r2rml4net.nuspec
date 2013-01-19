@@ -2,15 +2,15 @@
 <package >
   <metadata>
     <id>r2rml.net</id>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
     <projectUrl>http://r2rml.net</projectUrl>
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
-    <releaseNotes>Release now with dotNetRDF as a dependency and fixed the previously missing r2rml4net.dll binary (sic!)</releaseNotes>
-    <copyright>Copyright 2012 Tomasz Pluskiewicz</copyright>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<dependencies>
 		<dependency id="dotNetRDF" version="0.7.2" />

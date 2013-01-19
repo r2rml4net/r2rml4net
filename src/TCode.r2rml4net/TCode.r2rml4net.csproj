@@ -144,7 +144,7 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-      <Version BuildType="Increment" Revision="1" Major="0" Minor="3">
+    <Version BuildType="Increment" Revision="1" Major="0" Minor="3">
       <Output TaskParameter="Major" PropertyName="Major" />
       <Output TaskParameter="Minor" PropertyName="Minor" />
       <Output TaskParameter="Build" PropertyName="Build" />
@@ -156,4 +156,8 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)TCode.r2rml4net*.dll" "$(SolutionDir)..\nuget\lib\net40"
+copy "$(TargetDir)TCode.r2rml4net*.xml" "$(SolutionDir)..\nuget\lib\net40"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
