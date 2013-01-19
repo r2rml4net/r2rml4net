@@ -155,5 +155,6 @@
   <Target Name="AfterBuild">
       <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.dll" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
       <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.XML" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
+      <Copy SourceFiles="$(OutputPath)TCode.r2rml4net.pdb" DestinationFolder="$(SolutionDir)..\nuget\lib\net40" />
   </Target>
 </Project>
