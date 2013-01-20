@@ -12,6 +12,7 @@
     <releaseNotes>Changed build settings, assemblies are now not ILmerged, added XML doc files and pdbs</releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
+	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
 	<dependencies>
 		<dependency id="dotNetRDF" version="0.7.2" />
 	</dependencies>
