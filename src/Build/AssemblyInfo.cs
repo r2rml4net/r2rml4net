@@ -48,6 +48,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("TCode.r2rml4net")]
 [assembly: AssemblyCopyright("Copyright © Tomasz Pluskiewicz 2013")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("TCode.r2rml4net.Mapping.Tests")]
