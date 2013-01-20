@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>r2rml.net</id>
+    <id>r2rml.net-unstable</id>
     <version>0.3.2</version>
-	<title>Official releases of r2rml.net</title>
+	<title>Unstable version of r2rml.net</title>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
     <projectUrl>http://r2rml.net</projectUrl>
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
-    <releaseNotes>Changed build settings, assemblies are now not ILmerged, added XML doc files and pdbs</releaseNotes>
+    <description>This is developer channel of r2rml.net built automatically. Please be aware it may contain buggy and untested code.</description>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
