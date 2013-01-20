@@ -10,3 +10,4 @@ src/packages/
 src/_ReSharper.TCode.r2rml4net/*
 src/TCode.r2rml4net/Properties/AssemblyInfo.cs
 src/TCode.r2rml4net.Mapping/Properties/AssemblyInfo.cs
+AssemblyVersionInfo.cs
