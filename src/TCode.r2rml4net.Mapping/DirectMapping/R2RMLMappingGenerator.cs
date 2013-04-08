@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Mapping.DirectMapping
     /// <summary>
     /// Builds a R2RML graph from a relational database's schema
     /// </summary>
-    public class R2RMLMappingGenerator : IDatabaseMetadataVisitor
+    internal class R2RMLMappingGenerator : IDatabaseMetadataVisitor
     {
         private readonly IDatabaseMetadata _databaseMetadataProvider;
         private readonly IR2RMLConfiguration _r2RMLConfiguration;

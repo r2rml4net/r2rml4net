@@ -61,6 +61,7 @@
     <Compile Include="..\Build\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DirectMapping\DirectR2RMLMapping.cs" />
     <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="Properties\ProjectAssemblyInfo.cs" />
     <Compile Include="DirectMapping\ColumnMappingStrategy.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="ITermMapConfiguration.cs" />
     <Compile Include="ITermTypeConfiguration.cs" />
     <Compile Include="ITriplesMapConfiguration.cs" />
-    <Compile Include="R2RMLConfiguration.cs" />
+    <Compile Include="FluentR2RML.cs" />
     <Compile Include="ITriplesMapFromR2RMLViewConfiguration.cs" />
     <Compile Include="R2RMLUris.cs" />
     <Compile Include="TriplesMapConfigurationStub.cs" />

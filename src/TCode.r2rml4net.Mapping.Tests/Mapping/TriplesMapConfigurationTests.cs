@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void Setup()
         {
             // Initialize TriplesMapConfiguration with a default graph
-            var r2RMLConfiguration = new R2RMLConfiguration();
+            var r2RMLConfiguration = new FluentR2RML();
             _r2RMLConfiguration = new Mock<IR2RMLConfiguration>();
             _r2RMLMappings = r2RMLConfiguration.R2RMLMappings;
             _sqlVersionValidator = new Mock<ISqlVersionValidator>(MockBehavior.Strict);
