@@ -80,7 +80,7 @@ WHERE { ?map rr:subject ?value }";
         protected MappingOptions MappingOptions { get; private set; }
 
         /// <summary>
-        /// Constructor used by <see cref="R2RMLConfiguration"/>
+        /// Constructor used by <see cref="FluentR2RML"/>
         /// </summary>
         /// <param name="graph">existing graph with mappings</param>
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
@@ -95,7 +95,7 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Constructor used by <see cref="R2RMLConfiguration"/>
+        /// Constructor used by <see cref="FluentR2RML"/>
         /// </summary>
         /// <param name="baseUri">R2RML graph's base URI</param>
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
@@ -118,7 +118,7 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Constructor used by implementations other than <see cref="R2RMLConfiguration"/> and <see cref="TriplesMapConfiguration"/>
+        /// Constructor used by implementations other than <see cref="FluentR2RML"/> and <see cref="TriplesMapConfiguration"/>
         /// </summary>
         protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
             : this(existingMappingsGraph, node, mappingOptions)

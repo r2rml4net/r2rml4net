@@ -84,7 +84,7 @@ namespace TCode.r2rml4net.Mapping
 
         private static IR2RML InitializeMappings(IGraph graph, MappingOptions mappingOptions)
         {
-            var mappings = new R2RMLConfiguration(graph, mappingOptions);
+            var mappings = new FluentR2RML(graph, mappingOptions);
             mappings.RecursiveInitializeSubMapsFromCurrentGraph();
             return mappings;
         }

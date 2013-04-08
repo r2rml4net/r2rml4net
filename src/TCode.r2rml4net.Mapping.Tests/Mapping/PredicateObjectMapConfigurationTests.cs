@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [SetUp]
         public void Setup()
         {
-            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
+            IGraph graph = new FluentR2RML().R2RMLMappings;
             _triplesMapURI = new Uri("http://tests.example.com/TriplesMap");
             var triplesMapNode = graph.CreateUriNode(_triplesMapURI);
             _triplesMap = new Mock<ITriplesMapConfiguration>();

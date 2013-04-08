@@ -47,7 +47,7 @@ namespace TCode.r2rml4net.Mapping
     /// <summary>
     /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF
     /// </summary>
-    public class R2RMLConfiguration : BaseConfiguration, IR2RMLConfiguration
+    public class FluentR2RML : BaseConfiguration, IR2RMLConfiguration
     {
         internal static Uri DefaultBaseUri
         {
@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Mapping
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
         /// <param name="baseUri">base URI for mapping nodes</param>
-        public R2RMLConfiguration(Uri baseUri)
+        public FluentR2RML(Uri baseUri)
             : base(baseUri, new MappingOptions())
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
@@ -78,7 +78,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         /// <param name="baseUri">base URI for mapping nodes</param>
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        public R2RMLConfiguration(Uri baseUri, MappingOptions mappingOptions)
+        public FluentR2RML(Uri baseUri, MappingOptions mappingOptions)
             : base(baseUri, mappingOptions)
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
@@ -88,19 +88,19 @@ namespace TCode.r2rml4net.Mapping
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings 
         /// and base URI set to <see cref="DefaultBaseUri"/>
         /// </summary>
-        public R2RMLConfiguration()
+        public FluentR2RML()
             : this(new MappingOptions())
         {
         }
 
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        public R2RMLConfiguration(MappingOptions mappingOptions)
+        public FluentR2RML(MappingOptions mappingOptions)
             : base(DefaultBaseUri, mappingOptions)
         {
 
         }
 
-        internal R2RMLConfiguration(IGraph mappingsGraph, MappingOptions mappingOptions)
+        internal FluentR2RML(IGraph mappingsGraph, MappingOptions mappingOptions)
             : base(mappingsGraph, mappingOptions)
         {
 
