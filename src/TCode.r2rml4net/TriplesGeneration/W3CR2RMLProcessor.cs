@@ -66,7 +66,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         #region Constructors
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which stores the output triples in an in-memory dataset
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
         /// and uses default RDF term generation and map processing algorithms and default mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
@@ -76,7 +76,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
         /// and uses default map processing algorithm and default mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
@@ -87,7 +87,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which stores the output triples in an in-memory dataset
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
         /// and uses default RDF term generation and map processing algorithms and custom mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
@@ -98,7 +98,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which handles the generated triples to the supplied <see cref="IRdfHandler"/>
+        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
         /// and uses default map processing algorithm and custom mapping options
         /// </summary>
         /// <param name="connection">connection to datasource</param>
