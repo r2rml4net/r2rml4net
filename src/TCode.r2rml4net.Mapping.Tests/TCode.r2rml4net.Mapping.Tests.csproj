@@ -71,6 +71,7 @@
     <Compile Include="DefaultMappingGenerator\ForeignKeyMappingStrategyTests.cs" />
     <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorTests.cs" />
     <Compile Include="DefaultMappingGenerator\SubjectMappingStrategytests.cs" />
+    <Compile Include="Excel\ExcelSchemaProviderTests.cs" />
     <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
     <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
@@ -98,6 +99,14 @@
     <Compile Include="UriConstants.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Samples\SampleData.xls">
+      <Link>Excel\SampleData.xls</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Samples\SampleData.xlsx">
+      <Link>Excel\SampleData.xlsx</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

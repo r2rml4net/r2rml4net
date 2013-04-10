@@ -3,35 +3,33 @@ using System.Data;
 using System.Data.Odbc;
 using System.Data.OleDb;
 using System.Linq;
+using TCode.r2rml4net.Excel;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.Mapping.DirectMapping;
+using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 
 namespace Samples.Excel2010
 {
-    class Program : IDisposable
+    class Program
     {
-        private readonly OdbcConnection _excelConnection;
+        private readonly string _path;
 
         private Program(string excelPath)
         {
-            OleDbConnectionStringBuilder csbuilder = new OleDbConnectionStringBuilder();
-            csbuilder.Provider = "Microsoft.ACE.OLEDB.12.0";
-            csbuilder.DataSource = excelPath;
-            csbuilder.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES");
-
-            _excelConnection = new OdbcConnection(csbuilder.ConnectionString);
+            _path = excelPath;
         }
 
         static void Main(string[] args)
         {
             Program sample = new Program(args[0] ?? "Data\\SampleData.xlsx");
 
-            IR2RML mappings = sample.GetDefaultMappingForExcel();
+            var excelSchemaProvider = new ExcelSchemaProvider(sample._path, ExcelFormat.OpenXML);
+            IR2RML mappings = sample.GetDefaultMappingForExcel(excelSchemaProvider);
 
-            ITripleStore generatedTriples = sample.GetTriples(mappings);
+            ITripleStore generatedTriples = sample.GetTriples(mappings, excelSchemaProvider.Connection);
 
             Console.WriteLine("Extracted {0} triples", generatedTriples.Triples.Count());
             Console.WriteLine();
@@ -41,22 +39,17 @@ namespace Samples.Excel2010
             }
         }
 
-        private ITripleStore GetTriples(IR2RML mappings)
+        private ITripleStore GetTriples(IR2RML mappings, IDbConnection excelConnection)
         {
-            using (var r2RML = new W3CR2RMLProcessor(_excelConnection))
+            using (var r2RML = new W3CR2RMLProcessor(excelConnection))
             {
                 return r2RML.GenerateTriples(mappings);
             }
         }
 
-        private IR2RML GetDefaultMappingForExcel()
+        private IR2RML GetDefaultMappingForExcel(IDatabaseMetadata excelSchemaProvider)
         {
-            return new DirectR2RMLMapping(new ExcelSchemaProvider(_excelConnection));
-        }
-
-        public void Dispose()
-        {
-            _excelConnection.Dispose();
+            return new DirectR2RMLMapping(excelSchemaProvider);
         }
     }
 }

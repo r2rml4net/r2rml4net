@@ -64,6 +64,8 @@
     <Compile Include="..\Build\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Excel\ExcelFormat.cs" />
+    <Compile Include="Excel\ExcelSchemaProvider.cs" />
     <Compile Include="Exceptions\InvalidSqlVersionException.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="MappingHelper.cs" />
