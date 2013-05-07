@@ -35,6 +35,8 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using VDS.RDF;
@@ -70,13 +72,14 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/{JOB}", objectMap.Template);
             Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.Node);
+            Assert.AreEqual(blankNode, objectMap.Node);
         }
 
         [Test]
@@ -95,13 +98,14 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.Node);
+            Assert.AreEqual(blankNode, objectMap.Node);
         }
 
         [Test]
@@ -120,13 +124,14 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
             Assert.AreEqual("someObject", objectMap.Literal);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.Node);
+            Assert.AreEqual(blankNode, objectMap.Node);
         }
 
         [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
@@ -149,8 +154,9 @@ ex:PredicateObjectMap rr:object ex:someObject .");
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
             Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), objectMap.Node);
+            Assert.AreEqual(blankNode, objectMap.Node);
         }
     }
 }

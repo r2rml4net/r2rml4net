@@ -46,7 +46,6 @@ using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.Extensions;
-using VDS.Common;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -61,8 +60,8 @@ namespace TCode.r2rml4net.TriplesGeneration
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private IRDFTermGenerationLog _log = NullLog.Instance;
-        private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new HashTable<string, IBlankNode>(256);
-        private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new HashTable<string, IBlankNode>(256);
+        private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new Dictionary<string, IBlankNode>(256);
+        private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
         private readonly MappingHelper _mappingHelper;
 
         /// <summary>

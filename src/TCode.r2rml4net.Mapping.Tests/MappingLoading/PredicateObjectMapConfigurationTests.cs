@@ -84,8 +84,10 @@ ex:PredicateObjectMap
             Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(0).Template);
             Assert.AreEqual("http://data.example.com/user/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(1).Template);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]
@@ -109,8 +111,10 @@ ex:PredicateObjectMap rr:predicate ex:Employee, ex:Worker .");
             Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
             Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.PredicateMaps.ElementAt(0).URI);
             Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.PredicateMaps.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]
@@ -134,8 +138,10 @@ ex:PredicateObjectMap rr:graph ex:Employee, ex:Worker .");
             Assert.AreEqual(2, predicateObjectMap.GraphMaps.Count());
             Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.GraphMaps.ElementAt(0).URI);
             Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.GraphMaps.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode1, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode2, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]
@@ -170,8 +176,10 @@ ex:PredicateObjectMap rr:objectMap [
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => new Uri("http://www.example.com/Employee").Equals(map.URI)));
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => "http://data.example.com/user/{EMPNO}".Equals(map.Template)));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
         }
 
         [Test]
@@ -195,8 +203,10 @@ ex:PredicateObjectMap rr:object ex:Employee, ex:Worker .");
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
         }
 
         [Test]
@@ -219,8 +229,10 @@ _:blank rr:object ex:Employee, ex:Worker .");
             Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
             Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos1"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(graph.GetBlankNode("autos2"))));
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetBlankNode("blank"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetBlankNode("blank"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
+            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
         }
 
         [Test]
