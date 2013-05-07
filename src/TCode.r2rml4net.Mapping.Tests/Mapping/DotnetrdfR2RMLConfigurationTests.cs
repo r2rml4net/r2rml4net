@@ -45,12 +45,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests
     {
-        private R2RMLConfiguration _configuration;
+        private FluentR2RML _configuration;
 
         [SetUp]
         public void Setup()
         {
-            _configuration = new R2RMLConfiguration();
+            _configuration = new FluentR2RML();
         }
 
         [TestCase(1)]
@@ -164,7 +164,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void ConfigurationBuilderConstructedWithDefaultBaseUri()
         {
-            Assert.AreEqual(R2RMLConfiguration.DefaultBaseUri, _configuration.R2RMLMappings.BaseUri);
+            Assert.AreEqual(FluentR2RML.DefaultBaseUri, _configuration.R2RMLMappings.BaseUri);
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             Uri baseUri = new Uri("http://this.is.test.com/rdf/");
 
-            _configuration = new R2RMLConfiguration(baseUri);
+            _configuration = new FluentR2RML(baseUri);
 
             Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
         }

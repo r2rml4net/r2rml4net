@@ -151,7 +151,7 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
         {
             // given
             const string tableName = "SomeTable";
-            IGraph graph = new R2RMLConfiguration().R2RMLMappings;
+            IGraph graph = new FluentR2RML().R2RMLMappings;
 
             // when
             var triplesMap = TriplesMapConfiguration.FromTable(CreateStub(graph), tableName);

@@ -54,7 +54,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [SetUp]
         public void Setup()
         {
-            _graph = new R2RMLConfiguration().R2RMLMappings;
+            _graph = new FluentR2RML().R2RMLMappings;
             IUriNode triplesMapNode = _graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
             _predicateObjectMap = new Mock<IPredicateObjectMap>();
             _predicateObjectMap.Setup(map => map.Node).Returns(_graph.CreateBlankNode("predicateObjectMap"));
