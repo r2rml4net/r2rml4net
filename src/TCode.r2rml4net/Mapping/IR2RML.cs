@@ -52,7 +52,7 @@ namespace TCode.r2rml4net.Mapping
         /// </summary>
         IEnumerable<ITriplesMap> TriplesMaps { get; }
         /// <summary>
-        /// Gets or sets the <see cref="ISqlQueryBuilder"/>
+        /// Gets or sets the <see cref="ISqlQueryBuilder"/>, which is used during generating triples
         /// </summary>
         ISqlQueryBuilder SqlQueryBuilder { get; set; }
         /// <summary>

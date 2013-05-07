@@ -52,13 +52,13 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     {
         private R2RMLMappingGenerator _r2RMLMappingGenerator;
         private Mock<IDatabaseMetadata> _databaseMetedata;
-        private R2RMLConfiguration _configuration;
+        private FluentR2RML _configuration;
 
         [SetUp]
         public void Setup()
         {
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _configuration = new R2RMLConfiguration(new Uri("http://example.com/"));
+            _configuration = new FluentR2RML(new Uri("http://example.com/"));
             _r2RMLMappingGenerator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration);
         }
 
