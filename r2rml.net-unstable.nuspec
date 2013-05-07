@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>r2rml.net-unstable</id>
-    <version>0.3.2</version>
+    <version>$version$</version>
 	<title>Unstable version of r2rml.net</title>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
