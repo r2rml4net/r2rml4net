@@ -35,6 +35,8 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using VDS.RDF;
@@ -69,13 +71,14 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).Single().Object;
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, blankNode, new MappingOptions());
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateMap.Template);
             Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)predicateMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.Node);
+            Assert.AreEqual(blankNode, predicateMap.Node);
         }
 
         [Test]
@@ -93,12 +96,13 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).Single().Object;
+            var predicateMap = new PredicateMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, graph, blankNode, new MappingOptions());
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.Node);
+            Assert.AreEqual(blankNode, predicateMap.Node);
         }
 
         [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
@@ -120,8 +124,9 @@ ex:PredicateObjectMap rr:predicate ex:Value .");
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).Single().Object;
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), predicateMap.Node);
+            Assert.AreEqual(blankNode, predicateMap.Node);
         }
     }
 }

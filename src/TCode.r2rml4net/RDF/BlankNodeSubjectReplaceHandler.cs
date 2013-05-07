@@ -36,7 +36,6 @@
 // terms.
 #endregion
 using System.Collections.Generic;
-using VDS.Common;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
 
@@ -45,7 +44,7 @@ namespace TCode.r2rml4net.RDF
     internal class BlankNodeSubjectReplaceHandler : BaseRdfHandler
     {
         private readonly IRdfHandler _wrapped;
-        private readonly IDictionary<string, IBlankNode> _replacedNodes = new HashTable<string, IBlankNode>();
+        private readonly IDictionary<string, IBlankNode> _replacedNodes = new Dictionary<string, IBlankNode>();
 
         public BlankNodeSubjectReplaceHandler(IRdfHandler wrapped)
         {

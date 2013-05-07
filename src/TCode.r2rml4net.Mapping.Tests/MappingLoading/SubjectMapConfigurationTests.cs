@@ -103,8 +103,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(2, subjectMap.GraphMaps.Count());
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", subjectMap.GraphMaps.ElementAt(0).Template);
             Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test]
@@ -132,8 +134,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(2, subjectMap.GraphMaps.Count());
             Assert.AreEqual(new Uri("http://data.example.com/shortGraph/"), subjectMap.GraphMaps.ElementAt(0).URI);
             Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
         [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
@@ -153,7 +157,8 @@ ex:TriplesMap rr:subject ex:Value .");
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, subjectMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), subjectMap.Node);
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:TriplesMap"), graph.CreateUriNode("rr:subjectMap")).ElementAt(1).Object;
+            Assert.AreEqual(blankNode, subjectMap.Node);
         }
     }
 }
