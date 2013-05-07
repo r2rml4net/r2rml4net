@@ -35,9 +35,12 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using VDS.RDF;
+using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
@@ -72,13 +75,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _graphMapParent.Setup(map => map.Node).Returns(graph.GetUriNode("ex:subject"));
 
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).Single().Object;
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, blankNode, new MappingOptions());
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", graphMap.Template);
             Assert.AreEqual("http://www.example.com/subject", ((IUriNode) graphMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.Node);
+            Assert.AreEqual(blankNode, graphMap.Node);
         }
 
         [Test]
@@ -97,14 +101,15 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 	                                   rr:graphMap [ rr:constant ex:graph ].");
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
-
+            
             // when
-            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, graph.GetBlankNode("autos1"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).Single().Object;
+            var graphMap = new GraphMapConfiguration(_triplesMap.Object, _graphMapParent.Object, graph, blankNode, new MappingOptions());
             graphMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(graph.CreateUriNode("ex:graph").Uri, graphMap.ConstantValue);
-            Assert.AreEqual(graph.GetBlankNode("autos1"), graphMap.Node);
+            Assert.AreEqual(blankNode, graphMap.Node);
         }
 
         [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]

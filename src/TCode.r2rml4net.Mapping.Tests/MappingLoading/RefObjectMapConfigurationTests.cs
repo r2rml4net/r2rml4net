@@ -76,19 +76,21 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
                                            ];
                                        ];
                                    ].");
-            _predicateObjectMap.Setup(map => map.Node).Returns(graph.GetBlankNode("autos1"));
+            var predicateObjectMapNode = graph.GetTriplesWithPredicate(graph.CreateUriNode("rr:predicateObjectMap")).Single().Object;
+            _predicateObjectMap.Setup(map => map.Node).Returns(predicateObjectMapNode);
             _parentTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap"));
             _referencedTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap2"));
 
             // when
-            _refObjectMap = new RefObjectMapConfiguration(_predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph, graph.GetBlankNode("autos2"), new MappingOptions());
+            var blankNode = graph.GetTriplesWithPredicate(graph.CreateUriNode("rr:objectMap")).Single().Object;
+            _refObjectMap = new RefObjectMapConfiguration(_predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph, blankNode, new MappingOptions());
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
             Assert.AreEqual(1, _refObjectMap.JoinConditions.Count());
             Assert.AreEqual("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
             Assert.AreEqual("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
-            Assert.AreEqual(graph.GetBlankNode("autos2"), _refObjectMap.Node);
+            Assert.AreEqual(blankNode, _refObjectMap.Node);
         }
     }
 }
