@@ -3,6 +3,7 @@
   <metadata>
     <id>r2rml.net</id>
 	<title>Official releases of r2rml.net</title>
+    <version>$version$</version>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
     <projectUrl>http://r2rml.net</projectUrl>
