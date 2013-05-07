@@ -98,7 +98,8 @@ ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.GetBlankNode("autos1"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:triplesMap"), graph.CreateUriNode("rr:subjectMap")).ElementAt(0).Object;
+            Assert.AreEqual(blankNode, ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
             Assert.AreEqual(new Uri("http://www.example.com/subject"), triplesMap.SubjectMap.URI);
             Assert.AreEqual(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
             Assert.AreEqual(3, triplesMap.PredicateObjectMaps.Count());
