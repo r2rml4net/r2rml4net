@@ -17,6 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{695D020B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D9E50FF2-A9C9-4E9E-A3BE-19D250B23DE7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4EAAEB3C-B182-4E09-BEF1-576977F217BA}"
+	ProjectSection(SolutionItems) = preProject
+		..\r2rml.net-unstable.nuspec = ..\r2rml.net-unstable.nuspec
+		..\r2rml.net.nuspec = ..\r2rml.net.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
