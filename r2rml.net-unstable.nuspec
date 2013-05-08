@@ -10,11 +10,12 @@
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is developer channel of r2rml.net built automatically. Please be aware it may contain buggy and untested code.</description>
+    <releaseNotes>dotNetRDF updated to 1.0.0</releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
 	<dependencies>
-		<dependency id="dotNetRDF" version="0.7.2" />
+		<dependency id="dotNetRDF" version="1.0.0" />
 	</dependencies>
   </metadata>
   <files>
