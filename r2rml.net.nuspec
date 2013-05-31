@@ -23,8 +23,5 @@
 	<file src="src\bin\Release\TCode.r2rml4net.dll" target="lib\net40" />
 	<file src="src\bin\Release\TCode.r2rml4net.xml" target="lib\net40" />
 	<file src="src\bin\Release\TCode.r2rml4net.pdb" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.dll" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.xml" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.pdb" target="lib\net40" />
   </files>
 </package>
