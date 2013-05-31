@@ -53,9 +53,21 @@ namespace TCode.r2rml4net.Tests.Configuration
         }
 
         [Test]
-        public void Factory_should_allow_loading_R2RML_processors()
+        public void Factory_should_allow_loading_default_R2RML_processors()
         {
             Assert.That(_factory.CanLoadObject(typeof(r2rml4net.TriplesGeneration.W3CR2RMLProcessor)), Is.True);
+        }
+
+        [Test]
+        public void Factory_should_allow_loading_direct_R2RML_mapping()
+        {
+            Assert.That(_factory.CanLoadObject(typeof(Mapping.DirectMapping.DirectR2RMLMapping)), Is.True);
+        }
+
+        [Test]
+        public void Facroty_should_succesfully_load_MSSQL_processor()
+        {
+            
         }
     }
 }
