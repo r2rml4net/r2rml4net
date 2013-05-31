@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ObjectFactoryTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterCommonTests.cs" />
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTestsBase.cs" />

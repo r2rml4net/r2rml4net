@@ -67,6 +67,7 @@
     <Compile Include="..\Build\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ObjectFactory.cs" />
     <Compile Include="Exceptions\InvalidSqlVersionException.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="MappingHelper.cs" />
