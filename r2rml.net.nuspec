@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>r2rml.net</id>
-	<title>Official releases of r2rml.net</title>
+    <title>Official releases of r2rml.net</title>
     <version>$version$</version>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
@@ -10,7 +10,11 @@
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
-    <releaseNotes>dotNetRDF updated to 1.0.0</releaseNotes>
+    <releaseNotes>
+      <ol>
+        <li>Moved key classes to TCode.r2rmlnet namespace</li>
+      </ol>
+    </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
