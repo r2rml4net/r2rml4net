@@ -102,10 +102,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TCode.r2rml4net.Mapping\TCode.r2rml4net.Mapping.csproj">
-      <Project>{1C96F7F6-32B6-4FD3-A12F-5BEE2FD068D9}</Project>
-      <Name>TCode.r2rml4net.Mapping</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj">
       <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
       <Name>TCode.r2rml4net</Name>

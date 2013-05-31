@@ -3,14 +3,18 @@
   <metadata>
     <id>r2rml.net-unstable</id>
     <version>$version$</version>
-	<title>Unstable version of r2rml.net</title>
+    <title>Unstable version of r2rml.net</title>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
     <projectUrl>http://r2rml.net</projectUrl>
     <iconUrl>http://lab.linkeddata.deri.ie/2011/rdf-logos/png/r2rml-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is developer channel of r2rml.net built automatically. Please be aware it may contain buggy and untested code.</description>
-    <releaseNotes>dotNetRDF updated to 1.0.0</releaseNotes>
+    <releaseNotes>
+      <ol>
+        <li>Moved key classes to TCode.r2rmlnet namespace</li>
+      </ol>
+    </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
@@ -23,8 +27,5 @@
 	<file src="src\bin\Release\TCode.r2rml4net.dll" target="lib\net40" />
 	<file src="src\bin\Release\TCode.r2rml4net.xml" target="lib\net40" />
 	<file src="src\bin\Release\TCode.r2rml4net.pdb" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.dll" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.xml" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.Mapping.pdb" target="lib\net40" />
   </files>
 </package>
