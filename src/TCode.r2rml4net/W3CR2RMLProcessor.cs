@@ -35,17 +35,17 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
 using System;
 using System.Data;
-using System.Data.Common;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
-using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDF;
+using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
 
-namespace TCode.r2rml4net.TriplesGeneration
+namespace TCode.r2rml4net
 {
     /// <summary>
     /// Base implementation of the triple generation algorithm suggested by R2RML specification. 
