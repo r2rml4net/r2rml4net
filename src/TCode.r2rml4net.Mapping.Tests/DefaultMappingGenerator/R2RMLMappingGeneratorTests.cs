@@ -38,7 +38,8 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using TCode.r2rml4net.Mapping.DirectMapping;
+using TCode.r2rml4net.Mapping.Direct;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Tests.Mocks;
 using TCode.r2rml4net.RDB;
 

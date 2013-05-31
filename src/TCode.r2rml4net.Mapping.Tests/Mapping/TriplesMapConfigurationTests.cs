@@ -39,6 +39,7 @@ using System;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.Validation;
 using VDS.RDF;

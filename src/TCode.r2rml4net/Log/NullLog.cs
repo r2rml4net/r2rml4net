@@ -36,11 +36,12 @@
 // terms.
 #endregion
 using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.RDB;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
-    class NullLog : ITriplesGenerationLog, IRDFTermGenerationLog
+    class NullLog : ITriplesGenerationLog, IRDFTermGenerationLog, IDefaultMappingGenerationLog
     {
         static readonly object ClassLock = new object();
         private static NullLog _instance;
@@ -104,6 +105,15 @@ namespace TCode.r2rml4net.Log
 
         public void LogNullValueForColumn(string columnName)
         {
+        }
+
+        #endregion
+
+        #region Implementation of IDefaultMappingGenerationLog
+
+        public void LogMultipleCompositeKeyReferences(TableMetadata table)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

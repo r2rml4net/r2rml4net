@@ -39,7 +39,8 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using TCode.r2rml4net.Mapping.DirectMapping;
+using TCode.r2rml4net.Mapping.Direct;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
