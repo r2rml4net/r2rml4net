@@ -38,6 +38,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 using Moq;
 

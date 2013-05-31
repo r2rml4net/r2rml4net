@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System;
+using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mocks
