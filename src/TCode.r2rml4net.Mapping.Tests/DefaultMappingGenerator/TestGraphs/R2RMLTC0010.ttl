@@ -1,0 +1,33 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://example.com/> .
+
+<Country%20InfoTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Country Info"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/Country%20Info/Country%20Code={\"Country Code\"}";  
+	  rr:class <http://example.com/Country%20Info>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Country%20Info#Name> ] ; 
+      rr:objectMap [ rr:column "Name"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Country%20Info#ISO%203166> ] ; 
+      rr:objectMap [ rr:column "ISO 3166"; ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Country%20Info#Country%20Code> ] ; 
+      rr:objectMap [ rr:column "Country Code"; rr:datatype xsd:integer ]
+    ]
+    .
