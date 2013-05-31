@@ -39,6 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mocks

@@ -38,6 +38,7 @@
 using System;
 using Moq;
 using NUnit.Framework;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Tests.Mocks;
 using VDS.RDF;
 

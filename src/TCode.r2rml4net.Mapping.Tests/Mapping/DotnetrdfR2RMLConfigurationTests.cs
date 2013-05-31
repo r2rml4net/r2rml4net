@@ -39,6 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
