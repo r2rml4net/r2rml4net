@@ -35,10 +35,10 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using TCode.r2rml4net.Mapping;
+
 using VDS.RDF;
 
-namespace TCode.r2rml4net.TriplesGeneration
+namespace TCode.r2rml4net
 {
     /// <summary>
     /// Interface for generating triples from R2RML mappings

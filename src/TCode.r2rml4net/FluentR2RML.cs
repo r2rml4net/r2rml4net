@@ -39,11 +39,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
-namespace TCode.r2rml4net.Mapping.Fluent
+namespace TCode.r2rml4net
 {
     /// <summary>
     /// Entrypoint to fluent configuration of R2RML, backed by DotNetRDF

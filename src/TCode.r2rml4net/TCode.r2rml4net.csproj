@@ -82,7 +82,7 @@
     <Compile Include="Log\TextWriterLog.cs" />
     <Compile Include="Mapping\Direct\ColumnMappingStrategy.cs" />
     <Compile Include="Mapping\Direct\DirectMappingStrategy.cs" />
-    <Compile Include="Mapping\Direct\DirectR2RMLMapping.cs" />
+    <Compile Include="DirectR2RMLMapping.cs" />
     <Compile Include="Mapping\Direct\ForeignKeyMappingStrategy.cs" />
     <Compile Include="Mapping\Direct\IColumnMappingStrategy.cs" />
     <Compile Include="Mapping\Direct\IDirectMappingStrategy.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Mapping\Direct\PrimaryKeyMappingStrategy.cs" />
     <Compile Include="Mapping\Direct\R2RMLMappingGenerator.cs" />
     <Compile Include="Mapping\Fluent\BaseConfiguration.cs" />
-    <Compile Include="Mapping\Fluent\FluentR2RML.cs" />
+    <Compile Include="FluentR2RML.cs" />
     <Compile Include="Mapping\Fluent\GraphMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\IGraphMapParent.cs" />
     <Compile Include="Mapping\Fluent\ILiteralTermMapConfiguration.cs" />
@@ -126,7 +126,7 @@
     <Compile Include="Mapping\ITermType.cs" />
     <Compile Include="Mapping\IUriValuedTermMap.cs" />
     <Compile Include="Mapping\IPredicateObjectMap.cs" />
-    <Compile Include="Mapping\IR2RML.cs" />
+    <Compile Include="IR2RML.cs" />
     <Compile Include="Mapping\IRefObjectMap.cs" />
     <Compile Include="Mapping\ISubjectMap.cs" />
     <Compile Include="Mapping\ITermMap.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
-    <Compile Include="TriplesGeneration\IR2RMLProcessor.cs" />
+    <Compile Include="IR2RMLProcessor.cs" />
     <Compile Include="TriplesGeneration\IRefObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\ITriplesMapProcessor.cs" />
     <Compile Include="TriplesGeneration\MapProcessorBase.cs" />
@@ -170,7 +170,7 @@
     <Compile Include="TriplesGeneration\W3CPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CRefObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\W3CTriplesMapProcessor.cs" />
-    <Compile Include="TriplesGeneration\W3CR2RMLProcessor.cs" />
+    <Compile Include="W3CR2RMLProcessor.cs" />
     <Compile Include="Validation\Bcp47RegexLanguageTagValidator.cs" />
     <Compile Include="Validation\ISqlVersionValidator.cs" />
     <Compile Include="Validation\SimpleLanguageTagValidator.cs" />

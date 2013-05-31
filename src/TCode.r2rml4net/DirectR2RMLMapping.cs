@@ -38,11 +38,12 @@
 
 using System;
 using System.Collections.Generic;
-using TCode.r2rml4net.Mapping.Fluent;
+using TCode.r2rml4net.Mapping;
+using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.Validation;
 
-namespace TCode.r2rml4net.Mapping.Direct
+namespace TCode.r2rml4net
 {
     /// <summary>
     /// Provides default mapping by wrapping the <see cref="R2RMLMappingGenerator"/>
