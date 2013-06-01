@@ -37,6 +37,8 @@
 #endregion
 
 using System;
+using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Data.SqlClient;
 using NUnit.Framework;
 using TCode.r2rml4net.Configuration;
@@ -73,7 +75,7 @@ namespace TCode.r2rml4net.Tests.Configuration
         }
 
         [Test]
-        public void Factory_should_succesfully_load_processor_for_MSSQL()
+        public void Factory_should_succesfully_load_processor_with_complete_custom_options()
         {
             // given
             var configuration = LoadConfiguration("w3cprocessor.ttl");
@@ -81,12 +83,11 @@ namespace TCode.r2rml4net.Tests.Configuration
             // when
             object processor;
             var loadResult = _factory.TryLoadObject(configuration, configuration.GetUriNode("ex:fullyLoadedProcessorForMsSql"), typeof(W3CR2RMLProcessor), out processor);
-            
+
             // then
             var procesorTyped = processor as W3CR2RMLProcessor;
             Assert.That(loadResult, Is.True);
             Assert.That(procesorTyped, Is.Not.Null);
-            Assert.That(procesorTyped.Connection, Is.InstanceOf<SqlConnection>());
             Assert.That(procesorTyped.Options.BlankNodeTemplateSeparator, Is.EqualTo("x"));
             Assert.That(procesorTyped.Options.UseDelimitedIdentifiers, Is.EqualTo(false));
             Assert.That(procesorTyped.Options.SqlIdentifierRightDelimiter, Is.EqualTo('y'));
@@ -95,6 +96,25 @@ namespace TCode.r2rml4net.Tests.Configuration
             Assert.That(procesorTyped.Options.IgnoreDataErrors, Is.EqualTo(false));
             Assert.That(procesorTyped.Options.IgnoreMappingErrors, Is.EqualTo(false));
             Assert.That(procesorTyped.Options.PreserveDuplicateRows, Is.EqualTo(false));
+        }
+
+        [TestCase("ex:processorForOdbc", typeof(OdbcConnection))]
+        [TestCase("ex:processorForOleDb", typeof(OleDbConnection))]
+        [TestCase("ex:fullyLoadedProcessorForMsSql", typeof(SqlConnection))]
+        public void Factory_should_succesfully_load_processor_for_connection_type(string qname, Type connectionType)
+        {
+            // given
+            var configuration = LoadConfiguration("w3cprocessor.ttl");
+
+            // when
+            object processor;
+            var loadResult = _factory.TryLoadObject(configuration, configuration.GetUriNode(qname), typeof(W3CR2RMLProcessor), out processor);
+
+            // then
+            var procesorTyped = processor as W3CR2RMLProcessor;
+            Assert.That(loadResult, Is.True);
+            Assert.That(procesorTyped, Is.Not.Null);
+            Assert.That(procesorTyped.Connection, Is.InstanceOf(connectionType));
         }
     }
 }
