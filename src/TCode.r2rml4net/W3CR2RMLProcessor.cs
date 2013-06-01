@@ -38,6 +38,7 @@
 
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.RDF;
@@ -122,9 +123,6 @@ namespace TCode.r2rml4net
             _triplesMapProcessor = triplesMapProcessor;
             _mappingOptions = mappingOptions;
             _connection = connection;
-
-            if (connection.State != ConnectionState.Open)
-                connection.Open();
         }
 
         #endregion
@@ -145,20 +143,20 @@ namespace TCode.r2rml4net
             {
                 try
                 {
-                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, blankNodeReplaceHandler);
+                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, Connection, blankNodeReplaceHandler);
                 }
                 catch (InvalidTermException e)
                 {
                     Log.LogInvalidTermMap(e.TermMap, e.Message);
                     handlingOk = false;
-                    if (!_mappingOptions.IgnoreDataErrors)
+                    if (!Options.IgnoreDataErrors)
                         break;
                 }
                 catch (InvalidMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
                     handlingOk = false;
-                    if (!_mappingOptions.IgnoreMappingErrors)
+                    if (!Options.IgnoreMappingErrors)
                         break;
                 }
             }
@@ -191,6 +189,16 @@ namespace TCode.r2rml4net
         /// </summary>
         public bool Success { get; private set; }
 
+        internal IDbConnection Connection
+        {
+            get { return _connection; }
+        }
+
+        internal MappingOptions Options
+        {
+            get { return _mappingOptions; }
+        }
+
         #endregion
 
         #region Implementation of IDisposable
@@ -200,10 +208,10 @@ namespace TCode.r2rml4net
         /// </summary>
         public void Dispose()
         {
-            if (_connection.State == ConnectionState.Open)
-                _connection.Close();
+            if (Connection.State == ConnectionState.Open)
+                Connection.Close();
 
-            _connection.Dispose();
+            Connection.Dispose();
         }
 
         #endregion
