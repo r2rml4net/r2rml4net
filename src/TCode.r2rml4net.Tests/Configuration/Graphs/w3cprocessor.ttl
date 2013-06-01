@@ -7,6 +7,18 @@ ex:fullyLoadedProcessorForMsSql a rml:R2RMLProcessor ;
 	rml:connectionString "Data Source=(local);Initial Catalog=JustATest;Integrated Security=SSPI;" ;
 	rml:connectionType "System.Data.SqlClient.SqlConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
 
+ex:processorForOleDb a rml:R2RMLProcessor ;
+	rml:connectionString "Provider=SQLNCLI10;Server=myServerAddress;Database=myDataBase;Trusted_Connection=yes;" ;
+	rml:connectionType "System.Data.OleDb.OleDbConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+
+ex:processorForOdbc a rml:R2RMLProcessor ;
+	rml:connectionString "Driver={SQL Server Native Client 10.0};Server=myServerAddress;Database=myDataBase;Trusted_Connection=yes;" ;
+	rml:connectionType "System.Data.Odbc.OdbcConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+
+ex:processorForOracle a rml:R2RMLProcessor ;
+	rml:connectionString "Driver={SQL Server Native Client 10.0};Server=myServerAddress;Database=myDataBase;Trusted_Connection=yes;" ;
+	rml:connectionType "System.Data.Odbc.OdbcConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+
 ex:allOptionsSet a rml:MappingOptions ;
 	rml:blankNodeTemplateSeparator "x" ;
 	rml:useDelimitedIdentifiers false ;
