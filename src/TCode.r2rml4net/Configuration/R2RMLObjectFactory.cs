@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Configuration
                 throw new ArgumentException(string.Format("Cannot load type {0}", targetType), "targetType");
             }
 
-            Debug.WriteLine("Loading {0}", targetType);
+            Debug.WriteLine("Loading {0} from node {1}", targetType, objNode);
 
             try
             {
@@ -92,7 +92,7 @@ namespace TCode.r2rml4net.Configuration
 
             if (optionsNode != null)
             {
-                var mappingOptions = MappingOptionsLoader.Load(configGraph, objNode);
+                var mappingOptions = MappingOptionsLoader.Load(configGraph, optionsNode);
                 return new W3CR2RMLProcessor(connection, mappingOptions);
             }
             else
