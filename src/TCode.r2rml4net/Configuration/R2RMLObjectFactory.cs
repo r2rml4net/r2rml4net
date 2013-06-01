@@ -40,7 +40,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using VDS.RDF;
 using VDS.RDF.Configuration;
 using VDS.RDF.Nodes;
@@ -49,120 +48,78 @@ namespace TCode.r2rml4net.Configuration
 {
     public class R2RMLObjectFactory : IObjectFactory
     {
-        private static readonly IEnumerable<Type> TypeSupportedExternally;
+        private static readonly IDictionary<Type, Func<IGraph, INode, object>> TypeLoadMethods;
+
+        private static readonly MappingOptionsLoader MappingOptionsLoader;
 
         static R2RMLObjectFactory()
         {
-            TypeSupportedExternally = new[]
+            TypeLoadMethods = new Dictionary<Type, Func<IGraph, INode, object>>
                 {
-                    typeof (W3CR2RMLProcessor),
-                    typeof (DirectR2RMLMapping)
+                    {typeof (W3CR2RMLProcessor), LoadProcessor},
+                    {typeof (DirectR2RMLMapping), LoadDirectMapping}
                 };
+            MappingOptionsLoader = new MappingOptionsLoader();
         }
 
         public bool TryLoadObject(IGraph configGraph, INode objNode, Type targetType, out object loadedObject)
         {
+            if (!CanLoadObject(targetType))
+            {
+                throw new ArgumentException(string.Format("Cannot load type {0}", targetType), "targetType");
+            }
+
             Debug.WriteLine("Loading {0}", targetType);
 
             try
             {
-                if (targetType == typeof(W3CR2RMLProcessor))
-                {
-                    string connectionType =
-                        configGraph.GetTriplesWithSubjectPredicate(objNode,
-                                                                   configGraph.CreateUriNode(
-                                                                       UriFactory.Create(
-                                                                           "http://r2rml.net/configuration#connectionType")))
-                                   .Single()
-                                   .Object.ToString();
-
-
-                    IDbConnection connection =
-                        (IDbConnection)Activator.CreateInstance(Type.GetType(connectionType, true));
-                    connection.ConnectionString = configGraph.GetTriplesWithSubjectPredicate(objNode,
-                                                                                             configGraph.CreateUriNode(
-                                                                                                 UriFactory.Create(
-                                                                                                     "http://r2rml.net/configuration#connectionString")))
-                                                             .Single()
-                                                             .Object.ToString();
-
-                    var options = configGraph.GetTriplesWithSubjectPredicate(objNode,
-                                                                             configGraph.CreateUriNode(
-                                                                                 UriFactory.Create(
-                                                                                     "http://r2rml.net/configuration#mappingOptions")))
-                                             .SingleOrDefault();
-
-                    if (options != null)
-                    {
-                        object mappingOptions;
-                        if (TryLoadObject(configGraph, options.Object, typeof(MappingOptions), out mappingOptions))
-                        {
-                            loadedObject = new W3CR2RMLProcessor(connection, (MappingOptions)mappingOptions);
-                        }
-                        else
-                        {
-                            Debug.WriteLine("Failed loading MappingOptions");
-                            loadedObject = null;
-                        }
-                    }
-                    else
-                    {
-                        loadedObject = new W3CR2RMLProcessor(connection);
-                    }
-                }
-                else if (targetType == typeof(MappingOptions))
-                {
-                    var mappingOptions = new MappingOptions();
-
-                    foreach (var triple in configGraph.GetTriplesWithSubject(objNode))
-                    {
-                        switch (((IUriNode)triple.Predicate).Uri.ToString())
-                        {
-                            case "http://r2rml.net/configuration#blankNodeTemplateSeparator":
-                                mappingOptions.BlankNodeTemplateSeparator = triple.Object.AsValuedNode().AsString();
-                                break;
-                            case "http://r2rml.net/configuration#useDelimitedIdentifiers":
-                                mappingOptions.UseDelimitedIdentifiers = triple.Object.AsValuedNode().AsBoolean();
-                                break;
-                            case "http://r2rml.net/configuration#sqlIdentifierDelimiter":
-                                char delimiter = triple.Object.AsValuedNode().AsString().First();
-                                mappingOptions.SetSqlIdentifierDelimiters(delimiter, delimiter);
-                                break;
-                            case "http://r2rml.net/configuration#validateSqlVersion":
-                                mappingOptions.ValidateSqlVersion = triple.Object.AsValuedNode().AsBoolean();
-                                break;
-                            case "http://r2rml.net/configuration#ignoreMappingErrors":
-                                mappingOptions.IgnoreMappingErrors = triple.Object.AsValuedNode().AsBoolean();
-                                break;
-                            case "http://r2rml.net/configuration#ignoreDataErrors":
-                                mappingOptions.IgnoreDataErrors = triple.Object.AsValuedNode().AsBoolean();
-                                break;
-                            case "http://r2rml.net/configuration#preserveDuplicateRows":
-                                mappingOptions.PreserveDuplicateRows = triple.Object.AsValuedNode().AsBoolean();
-                                break;
-                        }
-                    }
-
-                    loadedObject = mappingOptions;
-                }
-                else
-                {
-                    loadedObject = null;
-                }
+                loadedObject = TypeLoadMethods[targetType](configGraph, objNode);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                loadedObject = null;
-                return false;
+                throw;
             }
 
-            return loadedObject != null;
+            return true;
+        }
+
+        private static W3CR2RMLProcessor LoadProcessor(IGraph configGraph, INode objNode)
+        {
+            var connection = LoadConnection(configGraph, objNode);
+
+            var optionsNode = configGraph.GetSingleOrDefaultTripleObject(objNode, Ontology.MappingOptions);
+
+            if (optionsNode != null)
+            {
+                var mappingOptions = MappingOptionsLoader.Load(configGraph, objNode);
+                return new W3CR2RMLProcessor(connection, mappingOptions);
+            }
+            else
+            {
+                return new W3CR2RMLProcessor(connection);
+            }
+        }
+
+        private static DirectR2RMLMapping LoadDirectMapping(IGraph configGraph, INode objNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static IDbConnection LoadConnection(IGraph configGraph, INode objNode)
+        {
+            string connectionType = configGraph.GetSingleTripleObject(objNode, Ontology.ConnectionType)
+                                               .AsValuedNode().AsString();
+
+            IDbConnection connection = (IDbConnection)Activator.CreateInstance(Type.GetType(connectionType, true));
+            connection.ConnectionString = configGraph.GetSingleTripleObject(objNode, Ontology.ConnectionString)
+                                                     .AsValuedNode().AsString();
+            return connection;
         }
 
         public bool CanLoadObject(Type typeToLoad)
         {
-            return TypeSupportedExternally.Contains(typeToLoad);
+            return TypeLoadMethods.ContainsKey(typeToLoad);
         }
     }
 }
