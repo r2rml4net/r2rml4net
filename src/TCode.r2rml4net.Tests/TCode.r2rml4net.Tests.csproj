@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IntegrationTests.cs" />
     <Compile Include="Configuration\R2rmlObjectFactoryTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterCommonTests.cs" />
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
@@ -107,7 +108,9 @@
       <Name>TCode.r2rml4net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Graphs\factories.ttl" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DatabaseSchemaReader\TestDbScripts\SqlServer.sql" />
   </ItemGroup>

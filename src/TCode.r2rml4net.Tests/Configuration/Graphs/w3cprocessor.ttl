@@ -1,13 +1,13 @@
-﻿@prefix dnr: <http://www.dotnetrdf.org/configuration#> .
+﻿@prefix ex: <http://example.com/mappings/> .
+@prefix dnr: <http://www.dotnetrdf.org/configuration#> .
 @prefix rml: <http://r2rml.net/configuration#> .
 
-_:fullyLoadedProcessorForMsSql a rml:R2RMLProcessor ;
-	dnr:type "TCode.r2rml4net.W3CR2RMLProcessor, TCode.r2rml4net" ;
-	rml:mappingOptions _:allOptionsSet ;
+ex:fullyLoadedProcessorForMsSql a rml:R2RMLProcessor ;
+	rml:mappingOptions ex:allOptionsSet ;
 	rml:connectionString "Data Source=(local);Initial Catalog=JustATest;Integrated Security=SSPI;" ;
 	rml:connectionType "System.Data.SqlClient.SqlConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
 
-_:allOptionsSet a rml:MappingOptions ;
+ex:allOptionsSet a rml:MappingOptions ;
 	rml:blankNodeTemplateSeparator "x" ;
 	rml:useDelimitedIdentifiers false ;
 	rml:sqlIdentifierDelimiter "y" ;

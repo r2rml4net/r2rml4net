@@ -44,8 +44,18 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.Configuration
 {
+    public class ConfigurationTestsBase
+    {
+        protected static IGraph LoadConfiguration(string filename)
+        {
+            var configuration = new Graph();
+            configuration.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.Configuration.Graphs.{0}, TCode.r2rml4net.Tests", filename));
+            return configuration;
+        }
+    }
+
     [TestFixture]
-    public class R2RMLObjectFactoryTests
+    public class R2RMLObjectFactoryTests : ConfigurationTestsBase
     {
         private R2RMLObjectFactory _factory;
 
@@ -70,7 +80,7 @@ namespace TCode.r2rml4net.Tests.Configuration
 
             // when
             object processor;
-            var loadResult = _factory.TryLoadObject(configuration, configuration.GetBlankNode("fullyLoadedProcessorForMsSql"), typeof(W3CR2RMLProcessor), out processor);
+            var loadResult = _factory.TryLoadObject(configuration, configuration.GetUriNode("ex:fullyLoadedProcessorForMsSql"), typeof(W3CR2RMLProcessor), out processor);
             
             // then
             var procesorTyped = processor as W3CR2RMLProcessor;
@@ -85,13 +95,6 @@ namespace TCode.r2rml4net.Tests.Configuration
             Assert.That(procesorTyped.Options.IgnoreDataErrors, Is.EqualTo(false));
             Assert.That(procesorTyped.Options.IgnoreMappingErrors, Is.EqualTo(false));
             Assert.That(procesorTyped.Options.PreserveDuplicateRows, Is.EqualTo(false));
-        }
-
-        private static IGraph LoadConfiguration(string filename)
-        {
-            var configuration = new Graph();
-            configuration.LoadFromEmbeddedResource(string.Format("TCode.r2rml4net.Tests.Configuration.Graphs.{0}, TCode.r2rml4net.Tests", filename));
-            return configuration;
         }
     }
 }

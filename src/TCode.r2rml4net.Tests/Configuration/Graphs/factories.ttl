@@ -1,0 +1,6 @@
+﻿@prefix ex: <http://example.com/mappings/> .
+@prefix dnr: <http://www.dotnetrdf.org/configuration#> .
+
+ex:factory a dnr:ObjectFactory ;
+  dnr:type "TCode.r2rml4net.Configuration.R2RMLObjectFactory, TCode.r2rml4net" .
+
