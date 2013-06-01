@@ -36,8 +36,9 @@
     <DocumentationFile>..\bin\Release\TCode.r2rml4net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DatabaseSchemaReader">
-      <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
+    <Reference Include="DatabaseSchemaReader, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DatabaseSchemaReader.1.2.8.0\lib\net40\DatabaseSchemaReader.dll</HintPath>
     </Reference>
     <Reference Include="dotNetRDF, Version=1.0.0.2473, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
