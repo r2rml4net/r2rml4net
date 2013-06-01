@@ -71,7 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ObjectFactoryTests.cs" />
+    <Compile Include="Configuration\R2rmlObjectFactoryTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterCommonTests.cs" />
     <Compile Include="DatabaseSchemaReader\SqlServerDatabaseSchemaAdapterTests.cs" />
     <Compile Include="DatabaseSchemaReader\DatabaseSchemaAdapterTestsBase.cs" />
@@ -110,6 +110,9 @@
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="DatabaseSchemaReader\TestDbScripts\SqlServer.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Graphs\w3cprocessor.ttl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
