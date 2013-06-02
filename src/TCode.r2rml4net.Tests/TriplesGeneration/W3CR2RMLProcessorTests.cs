@@ -41,6 +41,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.TriplesGeneration;
@@ -145,6 +146,19 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(), It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Once());
             Assert.IsTrue(_handlingResult.HasValue && !_handlingResult.Value);
             Assert.IsFalse(_triplesGenerator.Success);
+        }
+
+        [Test]
+        public void SettingLogFacadeShouldSetAllChildLoggers()
+        {
+            // given
+            Mock<LogFacadeBase> logger = new Mock<LogFacadeBase>();
+
+            // when
+            _triplesGenerator.Log = logger.Object;
+
+            // then
+            _triplesMapProcessor.VerifySet(t => t.Log = logger.Object, Times.Once());
         }
     }
 }

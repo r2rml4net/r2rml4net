@@ -51,5 +51,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// to transform that data to RDF triples
         /// </summary>
         void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler);
+
+        Log.ITriplesGenerationLog Log { get; set; }
     }
 }

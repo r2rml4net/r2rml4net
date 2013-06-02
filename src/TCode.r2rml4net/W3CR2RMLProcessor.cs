@@ -57,11 +57,20 @@ namespace TCode.r2rml4net
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
         private readonly MappingOptions _mappingOptions;
+        private LogFacadeBase _log;
 
         /// <summary>
         /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
         /// </summary>
-        public ITriplesGenerationLog Log { get; set; }
+        public LogFacadeBase Log
+        {
+            get { return _log; }
+            set
+            {
+                _log = value;
+                _triplesMapProcessor.Log = _log;
+            }
+        }
 
         #region Constructors
 
@@ -117,11 +126,11 @@ namespace TCode.r2rml4net
         /// <param name="mappingOptions">options for map processing</param>
         protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor, MappingOptions mappingOptions)
         {
-            Log = NullLog.Instance;
-
             _triplesMapProcessor = triplesMapProcessor;
             _mappingOptions = mappingOptions;
             _connection = connection;
+
+            Log = NullLog.Instance;
 
             if (connection.State != ConnectionState.Open)
                 connection.Open();
