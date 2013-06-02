@@ -64,6 +64,7 @@ namespace TCode.r2rml4net
             IgnoreMappingErrors = true;
             IgnoreDataErrors = true;
             PreserveDuplicateRows = false;
+            AllowAutomaticBlankNodeSubjects = false;
         }
 
         /// <summary>
@@ -120,6 +121,15 @@ namespace TCode.r2rml4net
         /// Default value is false
         /// </summary>
         public bool PreserveDuplicateRows { get; set; }
+
+        /// <summary>
+        /// Gets or set value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-template-valued-term-map">template-valued</a> nor 
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-constant-valued-term-map">constant-valued</a> nor 
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-column-valued-term-map">column-valued</a>. In such case a distinct automatic blank node
+        /// will be created for each logical row.
+        /// </summary>
+        public bool AllowAutomaticBlankNodeSubjects { get; set; }
 
         /// <summary>
         /// Sets the SQL identifier delimiters
