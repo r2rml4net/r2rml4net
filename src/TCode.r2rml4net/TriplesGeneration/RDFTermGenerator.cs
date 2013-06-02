@@ -123,7 +123,16 @@ namespace TCode.r2rml4net.TriplesGeneration
             var logicalRowWrapped = new UndelimitedColumnsDataRecordWrapper(logicalRow);
 
             if (!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
-                throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
+            {
+                if (termMap is ISubjectMap && _options.AllowAutomaticBlankNodeSubjects)
+                {
+                    node = NodeFactory.CreateBlankNode();
+                }
+                else
+                {
+                    throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
+                }
+            }
 
             if (termMap.IsConstantValued)
             {
