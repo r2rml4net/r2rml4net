@@ -76,7 +76,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
-            _termGenerator = new RDFTermGenerator
+            _termGenerator = new RDFTermGenerator(_options)
                                  {
                                      SqlValuesMappingStrategy = _lexicalFormProvider.Object,
                                      Log = _log.Object
@@ -736,7 +736,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
         {
             // given
-            //_options.
+            _options.AllowAutomaticBlankNodeSubjects = true;
             _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
 
             // when
