@@ -58,8 +58,6 @@ namespace TCode.r2rml4net.Log
             _writer = writer;
         }
 
-        #region Implementation of IRDFTermGenerationLog
-        
         /// <summary>
         /// Logs an error of not found column in the SQL reuslts
         /// </summary>
@@ -90,10 +88,6 @@ namespace TCode.r2rml4net.Log
         public override void LogNullValueForColumn(string columnName)
         {
         }
-
-        #endregion
-
-        #region Implementation of ITriplesGenerationLog
 
         /// <summary>
         /// Logs an error of missing <see cref="ITriplesMap"/>'s <see cref="ITriplesMap.SubjectMap"/>
@@ -131,7 +125,5 @@ namespace TCode.r2rml4net.Log
         {
             _writer.WriteLine("Multiple Composite Key references to table {0}", table.Name);
         }
-
-        #endregion
     }
 }
