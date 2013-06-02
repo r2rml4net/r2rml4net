@@ -59,12 +59,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
-        private Mock<IRDFTermGenerationLog> _log;
+        private Mock<LogFacadeBase> _log;
 
         [SetUp]
         public void Setup()
         {
-            _log = new Mock<IRDFTermGenerationLog>();
+            _log = new Mock<LogFacadeBase>();
             _objectMap = new Mock<IObjectMap>();
             _termMap = new Mock<ITermMap>();
             _termType = new Mock<ITermType>();
