@@ -69,9 +69,9 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
-        /// <param name="baseUri">base URI for mapping nodes</param>
-        public FluentR2RML(Uri baseUri)
-            : base(baseUri, new MappingOptions())
+        /// <param name="BaseUri">base URI for mapping nodes</param>
+        public FluentR2RML(Uri BaseUri)
+            : base(BaseUri, new MappingOptions())
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
@@ -79,10 +79,10 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
-        /// <param name="baseUri">base URI for mapping nodes</param>
+        /// <param name="BaseUri">base URI for mapping nodes</param>
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        public FluentR2RML(Uri baseUri, MappingOptions mappingOptions)
-            : base(baseUri, mappingOptions)
+        public FluentR2RML(Uri BaseUri, MappingOptions mappingOptions)
+            : base(BaseUri, mappingOptions)
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
@@ -176,14 +176,6 @@ namespace TCode.r2rml4net
         {
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
-        }
-
-        /// <summary>
-        /// Base mapping URI. It will be used to resolve relative values when generating terms
-        /// </summary>
-        public Uri BaseUri
-        {
-            get { return R2RMLMappings.BaseUri; }
         }
 
         /// <summary>

@@ -285,7 +285,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (relativePart.Split('/').Any(seg => seg == "." || seg == ".."))
                 throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
 
-            return new Uri(termMap.BaseURI + relativePart);
+            return new Uri(termMap.BaseUri + relativePart);
         }
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)

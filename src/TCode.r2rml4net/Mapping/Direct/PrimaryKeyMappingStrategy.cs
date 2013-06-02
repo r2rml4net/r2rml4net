@@ -67,18 +67,18 @@ namespace TCode.r2rml4net.Mapping.Direct
         #region Implementation of IPrimaryKeyMappingStrategy
 
         /// <summary>
-        /// Creates a URI for subject class by joining <paramref name="baseUri"/> and <paramref name="tableName"/>
+        /// Creates a URI for subject class by joining <paramref name="BaseUri"/> and <paramref name="tableName"/>
         /// </summary>
-        public Uri CreateSubjectClassUri(Uri baseUri, string tableName)
+        public Uri CreateSubjectClassUri(Uri BaseUri, string tableName)
         {
-            if (baseUri == null)
-                throw new ArgumentNullException("baseUri");
+            if (BaseUri == null)
+                throw new ArgumentNullException("BaseUri");
             if (tableName == null)
                 throw new ArgumentNullException("tableName");
             if (string.IsNullOrWhiteSpace(tableName))
                 throw new ArgumentException("Invalid table name");
 
-            return new Uri(baseUri, MappingHelper.UrlEncode(tableName));
+            return new Uri(BaseUri, MappingHelper.UrlEncode(tableName));
         }
 
         /// <summary>
@@ -122,17 +122,17 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Creates a blank node identifier subject template for referenced table with primary key
         /// </summary>
-        public virtual string CreateSubjectTemplateForPrimaryKey(Uri baseUri, TableMetadata table)
+        public virtual string CreateSubjectTemplateForPrimaryKey(Uri BaseUri, TableMetadata table)
         {
             if (table == null)
                 throw new ArgumentNullException("table");
-            if (baseUri == null)
-                throw new ArgumentNullException("baseUri");
+            if (BaseUri == null)
+                throw new ArgumentNullException("BaseUri");
 
             if (!table.PrimaryKey.Any())
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
 
-            string template = CreateSubjectClassUri(baseUri, table.Name).OriginalString;
+            string template = CreateSubjectClassUri(BaseUri, table.Name).OriginalString;
             template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }
