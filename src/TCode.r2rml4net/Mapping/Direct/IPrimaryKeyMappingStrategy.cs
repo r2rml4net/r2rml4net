@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Create an absolute URI subject for a table
         /// </summary>
-        Uri CreateSubjectClassUri(Uri baseUri, string tableName);
+        Uri CreateSubjectClassUri(Uri BaseUri, string tableName);
         /// <summary>
         /// Creates a blank node identifier template for a table without primary key
         /// </summary>
@@ -57,6 +57,6 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Creates a URI template for table with primary key
         /// </summary>
-        string CreateSubjectTemplateForPrimaryKey(Uri baseUri, TableMetadata table);
+        string CreateSubjectTemplateForPrimaryKey(Uri BaseUri, TableMetadata table);
     }
 }

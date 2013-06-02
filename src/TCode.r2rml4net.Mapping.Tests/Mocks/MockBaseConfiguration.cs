@@ -48,8 +48,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         {
         }
 
-        public MockBaseConfiguration(Uri baseUri, MappingOptions mappingOptions)
-            : base(baseUri, mappingOptions)
+        public MockBaseConfiguration(Uri BaseUri, MappingOptions mappingOptions)
+            : base(BaseUri, mappingOptions)
         {
         }
 

@@ -56,10 +56,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         ILiteralTermMapConfiguration,
         ITermMapConfiguration
     {
-        public MockConfiguration(Uri baseURI, IR2RMLConfiguration r2RMLConfiguration)
+        public MockConfiguration(Uri baseUri, IR2RMLConfiguration r2RMLConfiguration)
         {
             R2RMLConfiguration = r2RMLConfiguration;
-            BaseURI = baseURI;
+            BaseUri = baseUri;
         }
 
         #region Implementation of IMapBase
@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
             get { return null; }
         }
 
-        public Uri BaseURI { get; private set; }
+        public Uri BaseUri { get; private set; }
 
         /// <summary>
         /// Creates an attached <see cref="IGraphMap"/>

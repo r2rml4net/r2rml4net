@@ -104,7 +104,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         [TestCase("http://www.example.com/", new[] { "Id" }, "http://www.example.com/Table/Id={\"Id\"}")]
         [TestCase("http://www.example.com/", new[] { "PK 1", "PK2" }, "http://www.example.com/Table/PK%201={\"PK 1\"};PK2={\"PK2\"}")]
-        public void GeneratesSubjectTemplateFromPrimaryKey(string baseUriString, string[] columns, string expected)
+        public void GeneratesSubjectTemplateFromPrimaryKey(string BaseUriString, string[] columns, string expected)
         {
             // given
             var table = new TableMetadata { Name = "Table" };
@@ -114,7 +114,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             }
 
             // when
-            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), table);
+            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(BaseUriString), table);
 
             // then
             Assert.AreEqual(expected, template);

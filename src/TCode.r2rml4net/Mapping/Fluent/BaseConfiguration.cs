@@ -98,10 +98,10 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Constructor used by <see cref="FluentR2RML"/>
         /// </summary>
-        /// <param name="baseUri">R2RML graph's base URI</param>
+        /// <param name="BaseUri">R2RML graph's base URI</param>
         /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        protected BaseConfiguration(Uri baseUri, MappingOptions mappingOptions)
-            : this(new Graph { BaseUri = baseUri }, mappingOptions)
+        protected BaseConfiguration(Uri BaseUri, MappingOptions mappingOptions)
+            : this(new Graph { BaseUri = BaseUri }, mappingOptions)
         {
         }
 
@@ -143,7 +143,7 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Base mapping URI. It will be used to resolve relative values when generating terms
         /// </summary>
-        public Uri BaseURI
+        public Uri BaseUri
         {
             get { return R2RMLMappings.BaseUri; }
         }

@@ -273,7 +273,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -301,7 +301,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -329,7 +329,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -353,7 +353,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable(); 
             
             // when
@@ -679,7 +679,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.Template).Returns(string.Format("{{{0}}}", ColumnName)).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
