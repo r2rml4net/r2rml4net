@@ -69,8 +69,6 @@ namespace TCode.r2rml4net.Log
             }
         }
 
-        #region Implementation of ITriplesGenerationLog
-
         public override void LogMissingSubject(ITriplesMap triplesMap)
         {
         }
@@ -86,10 +84,6 @@ namespace TCode.r2rml4net.Log
         public override void LogInvaldTriplesMap(ITriplesMap triplesMap, string message)
         {
         }
-
-        #endregion
-
-        #region Implementation of IRDFTermGenerationLog
 
         public override void LogColumnNotFound(ITermMap termMap, string columnName)
         {
@@ -107,15 +101,8 @@ namespace TCode.r2rml4net.Log
         {
         }
 
-        #endregion
-
-        #region Implementation of IDefaultMappingGenerationLog
-
         public override void LogMultipleCompositeKeyReferences(TableMetadata table)
         {
-            throw new System.NotImplementedException();
         }
-
-        #endregion
     }
 }
