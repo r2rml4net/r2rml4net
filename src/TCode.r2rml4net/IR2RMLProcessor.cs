@@ -36,6 +36,7 @@
 // terms.
 #endregion
 
+using TCode.r2rml4net.Log;
 using VDS.RDF;
 
 namespace TCode.r2rml4net
@@ -61,5 +62,10 @@ namespace TCode.r2rml4net
         /// Gets a value indicating whether generating triples had no errors
         /// </summary>
         bool Success { get; }
+
+        /// <summary>
+        /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
+        /// </summary>
+        LogFacadeBase Log { get; set; }
     }
 }
