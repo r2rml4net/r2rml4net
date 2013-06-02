@@ -60,6 +60,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
         private Mock<LogFacadeBase> _log;
+        private MappingOptions _options;
 
         [SetUp]
         public void Setup()
@@ -71,6 +72,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _subjectMap = new Mock<ISubjectMap>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
             _lexicalFormProvider = new Mock<ISQLValuesMappingStrategy>();
+            _options = new MappingOptions();
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
@@ -728,6 +730,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_subjectMap.Object, _logicalRow.Object));
+        }
+
+        [Test]
+        public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
+        {
+            // given
+            //_options.
+            _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+
+            // when
+            var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.That(node, Is.Not.Null);
         }
 
         [Test]
