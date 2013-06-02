@@ -1,0 +1,48 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=UseObjectOrCollectionInitializer/@EntryIndexedValue">HINT</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Update_0020licence/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Update licence"&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;/Profile&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue">Licence</s:String>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright (C) $CREATED_YEAR$ Tomasz Pluskiewicz&#xD;
+http://r2rml.net/&#xD;
+r2rml@r2rml.net&#xD;
+	&#xD;
+------------------------------------------------------------------------&#xD;
+	&#xD;
+This file is part of r2rml4net.&#xD;
+	&#xD;
+Permission is hereby granted, free of charge, to any person obtaining a copy&#xD;
+of this software and associated documentation files (the "Software"), to deal &#xD;
+in the Software without restriction, including without limitation the rights &#xD;
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell &#xD;
+copies of the Software, and to permit persons to whom the Software is &#xD;
+furnished to do so, subject to the following conditions:&#xD;
+&#xD;
+The above copyright notice and this permission notice shall be included in all &#xD;
+copies or substantial portions of the Software.&#xD;
+&#xD;
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS &#xD;
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, &#xD;
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE &#xD;
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER &#xD;
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING &#xD;
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE &#xD;
+OR OTHER DEALINGS IN THE SOFTWARE.&#xD;
+	&#xD;
+------------------------------------------------------------------------&#xD;
+&#xD;
+r2rml4net may alternatively be used under the LGPL licence&#xD;
+&#xD;
+http://www.gnu.org/licenses/lgpl.html&#xD;
+&#xD;
+If these licenses are not suitable for your intended use please contact&#xD;
+us at the above stated email address to discuss alternative&#xD;
+terms.</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/AbsolutePath/@EntryValue">e:\Piskorz\Projekty\Semantic web\r2rml4net\src\TCode.r2rml4net.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/RelativePath/@EntryValue">..\TCode.r2rml4net.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED9D62A6124B864BBA0D016F3B4B0BF8/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED9D62A6124B864BBA0D016F3B4B0BF8/RelativePriority/@EntryValue">3</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_002Dtest_002Drunner_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_002Dtest_002Drunner_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/RelativePriority/@EntryValue">2</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/RelativePriority/@EntryValue">1</s:Double></wpf:ResourceDictionary>

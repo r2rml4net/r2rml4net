@@ -1,0 +1,34 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://example.com/> .
+
+<StudentTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Student"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "Student_{\"ID\"}_{\"Name\"}_{\"LastName\"}";
+	  rr:termType rr:BlankNode;  
+	  rr:class <http://example.com/Student>
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#ID> ] ; 
+      rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#Name> ] ; 
+      rr:objectMap [ rr:column "Name" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Student#LastName> ] ; 
+      rr:objectMap [ rr:column "LastName" ]
+    ]
+    .

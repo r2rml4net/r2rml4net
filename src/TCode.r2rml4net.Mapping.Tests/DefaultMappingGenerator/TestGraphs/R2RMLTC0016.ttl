@@ -1,0 +1,75 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://example.com/> .
+
+<PatientTriplesMap>
+     a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Patient"; ];
+
+    rr:subjectMap 
+	[ 
+	  rr:template "http://example.com/Patient/ID={\"ID\"}";
+	  rr:class <http://example.com/Patient>;
+	];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#ID> ] ; 
+      rr:objectMap [ rr:column "ID"; rr:datatype xsd:integer ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#FirstName> ] ; 
+      rr:objectMap [ rr:column "FirstName" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#LastName> ] ; 
+      rr:objectMap [ rr:column "LastName" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#Sex> ] ; 
+      rr:objectMap [ rr:column "Sex" ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#Weight> ] ; 
+      rr:objectMap [ rr:column "Weight"; rr:datatype xsd:double ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#Height> ] ; 
+      rr:objectMap [ rr:column "Height"; rr:datatype xsd:double ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#BirthDate> ] ; 
+      rr:objectMap [ rr:column "BirthDate"; rr:datatype xsd:date ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#EntranceDate> ] ; 
+      rr:objectMap [ rr:column "EntranceDate"; rr:datatype xsd:dateTime ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#PaidInAdvance> ] ; 
+      rr:objectMap [ rr:column "PaidInAdvance"; rr:datatype xsd:boolean ]
+    ];
+
+    rr:predicateObjectMap
+    [ 
+      rr:predicateMap [ rr:constant <http://example.com/Patient#Photo> ] ; 
+      rr:objectMap [ rr:column "Photo"; rr:datatype xsd:hexBinary ]
+    ]
+    .
