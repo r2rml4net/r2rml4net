@@ -12,6 +12,8 @@
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
     <releaseNotes>
       1. Moved key classes to TCode.r2rmlnet namespace and merged into one assembly
+      2. Small imporvements in logging (LogFacadeBase)
+      3. Non-standard behaviour for subject maps (Issue 13)
     </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
