@@ -52,6 +52,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler);
 
-        Log.ITriplesGenerationLog Log { get; set; }
+        Log.LogFacadeBase Log { get; set; }
     }
 }

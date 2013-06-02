@@ -136,7 +136,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         {
             // given
             var table = RelationalTestMappings.NoPrimaryKeyThreeUniqueKeys["Student"];
-            Mock<IDefaultMappingGenerationLog> log = new Mock<IDefaultMappingGenerationLog>();
+            Mock<LogFacadeBase> log = new Mock<LogFacadeBase>();
             _strategy.Log = log.Object;
 
             // when

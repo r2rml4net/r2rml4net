@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Default mapping log
         /// </summary>
-        public IDefaultMappingGenerationLog Log { get; set; }
+        public LogFacadeBase Log { get; set; }
 
         /// <summary>
         /// Creates an instance of <see cref="PrimaryKeyMappingStrategy"/>

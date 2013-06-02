@@ -45,7 +45,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
-    public abstract class LogFacadeBase : IRDFTermGenerationLog, ITriplesGenerationLog, IDefaultMappingGenerationLog
+    public abstract class LogFacadeBase
     {
         /// <summary>
         /// Logs an error of not found column in the SQL reuslts
