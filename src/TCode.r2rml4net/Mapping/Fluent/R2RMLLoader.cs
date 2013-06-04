@@ -51,7 +51,10 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         public static IR2RML Load(string r2RMLGraph)
         {
-            return Load(r2RMLGraph, new MappingOptions());
+            IGraph graph = new Graph();
+            graph.LoadFromString(r2RMLGraph);
+
+            return InitializeMappings(graph);
         }
 
         /// <summary>
@@ -59,33 +62,15 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         public static IR2RML Load(Stream r2RMLGraph)
         {
-            return Load(r2RMLGraph, new MappingOptions());
-        }
-        /// <summary>
-        /// Loads R2RML mappings from a string
-        /// </summary>
-        public static IR2RML Load(string r2RMLGraph, MappingOptions mappingOptions)
-        {
-            IGraph graph = new Graph();
-            graph.LoadFromString(r2RMLGraph);
-
-            return InitializeMappings(graph, mappingOptions);
-        }
-
-        /// <summary>
-        /// Loads R2RML mappings from a stream
-        /// </summary>
-        public static IR2RML Load(Stream r2RMLGraph, MappingOptions mappingOptions)
-        {
             using (var reader = new StreamReader(r2RMLGraph))
             {
-                return Load(reader.ReadToEnd(), mappingOptions);
+                return Load(reader.ReadToEnd());
             }
         }
 
-        private static IR2RML InitializeMappings(IGraph graph, MappingOptions mappingOptions)
+        private static IR2RML InitializeMappings(IGraph graph)
         {
-            var mappings = new FluentR2RML(graph, mappingOptions);
+            var mappings = new FluentR2RML(graph);
             mappings.RecursiveInitializeSubMapsFromCurrentGraph();
             return mappings;
         }

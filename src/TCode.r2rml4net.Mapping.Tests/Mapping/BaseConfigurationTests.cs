@@ -53,19 +53,19 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             ArgumentNullException exception;
 
             var uri = new Uri("http://some.uri");
-            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(uri, null));
+            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(uri));
             Assert.AreEqual("mappingOptions", exception.ParamName);
 
             var graph = new Mock<IGraph>().Object;
             var node = new Mock<INode>().Object;
-            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(graph, node, null));
+            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(graph, node));
             Assert.AreEqual("mappingOptions", exception.ParamName);
 
             exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(graph, null));
             Assert.AreEqual("mappingOptions", exception.ParamName);
 
             ITriplesMapConfiguration triplesMap = new Mock<ITriplesMapConfiguration>().Object;
-            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(triplesMap, graph, node, null));
+            exception = Assert.Throws<ArgumentNullException>(() => new MockBaseConfiguration(triplesMap, graph, node));
             Assert.AreEqual("mappingOptions", exception.ParamName);
         }
     }

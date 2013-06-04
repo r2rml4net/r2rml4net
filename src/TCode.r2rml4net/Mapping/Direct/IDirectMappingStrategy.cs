@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#subject-map">subject map</a> for table without primary key
         /// </summary>
-        void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table);
+        void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table);
         /// <summary>
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#subject-map">subject map</a> for table with primary key
         /// </summary>

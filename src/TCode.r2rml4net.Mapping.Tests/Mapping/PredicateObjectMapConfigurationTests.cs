@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var triplesMapNode = graph.CreateUriNode(_triplesMapURI);
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(triplesMapNode);
-            _predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph, new MappingOptions());
+            _predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
         }
 
         [Test]

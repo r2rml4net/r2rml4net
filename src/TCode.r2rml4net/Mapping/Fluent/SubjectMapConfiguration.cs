@@ -50,13 +50,13 @@ namespace TCode.r2rml4net.Mapping.Fluent
     {
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
 
-        internal SubjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraph r2RMLMappings, MappingOptions mappingOptions)
-            : this(parentTriplesMap, r2RMLMappings, r2RMLMappings.CreateBlankNode(), mappingOptions)
+        internal SubjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraph r2RMLMappings)
+            : this(parentTriplesMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())
         {
         }
 
-        internal SubjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraph r2RMLMappings, INode node, MappingOptions mappingOptions)
-            : base(parentTriplesMap, parentTriplesMap, r2RMLMappings, node, mappingOptions)
+        internal SubjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraph r2RMLMappings, INode node)
+            : base(parentTriplesMap, parentTriplesMap, r2RMLMappings, node)
         {
         }
 
@@ -93,7 +93,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public IGraphMap CreateGraphMap()
         {
-            var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings, MappingOptions);
+            var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings);
             _graphMaps.Add(graphMap);
             return graphMap;
         }
@@ -138,7 +138,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(R2RMLUris.RrGraphMapPropety, (graph, node) => new GraphMapConfiguration(TriplesMap, this, graph, node, MappingOptions), _graphMaps);
+            CreateSubMaps(R2RMLUris.RrGraphMapPropety, (graph, node) => new GraphMapConfiguration(TriplesMap, this, graph, node), _graphMaps);
         }
 
         #endregion

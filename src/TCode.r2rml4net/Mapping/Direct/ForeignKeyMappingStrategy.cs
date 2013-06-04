@@ -51,14 +51,6 @@ namespace TCode.r2rml4net.Mapping.Direct
     {
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
-        /// <summary>
-        /// Creates an instance of <see cref="ForeignKeyMappingStrategy"/>
-        /// </summary>
-        public ForeignKeyMappingStrategy(MappingOptions options)
-            : base(options)
-        {
-        }
-
         #region Implementation of IForeignKeyMappingStrategy
 
         /// <summary>
@@ -145,7 +137,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(Options);
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
 
                 return _primaryKeyMappingStrategy;
             }

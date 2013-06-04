@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
 
         internal TriplesMapConfiguration(TriplesMapConfigurationStub triplesMapConfigurationStub, INode node)
-            : base(triplesMapConfigurationStub.R2RMLMappings, node, triplesMapConfigurationStub.Options)
+            : base(triplesMapConfigurationStub.R2RMLMappings, node)
         {
             _r2RMLConfiguration = triplesMapConfigurationStub.R2RMLConfiguration;
         }
@@ -238,7 +238,7 @@ WHERE
             get
             {
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings, MappingOptions);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }
@@ -261,7 +261,7 @@ WHERE
         /// </summary>
         public IPredicateObjectMapConfiguration CreatePropertyObjectMap()
         {
-            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings, MappingOptions);
+            var propertyObjectMap = new PredicateObjectMapConfiguration(this, R2RMLMappings);
             _predicateObjectMaps.Add(propertyObjectMap);
             return propertyObjectMap;
         }
@@ -326,10 +326,10 @@ WHERE
 
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, (graph, node) => new PredicateObjectMapConfiguration(this, graph, node, MappingOptions), _predicateObjectMaps);
+            CreateSubMaps(R2RMLUris.RrPredicateObjectMapPropety, (graph, node) => new PredicateObjectMapConfiguration(this, graph, node), _predicateObjectMaps);
 
             var subjectMaps = new List<SubjectMapConfiguration>();
-            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node, MappingOptions), subjectMaps);
+            CreateSubMaps(R2RMLUris.RrSubjectMapProperty, (graph, node) => new SubjectMapConfiguration(this, graph, node), subjectMaps);
 
             if (subjectMaps.Count > 1)
                 throw new InvalidMapException("Triples map can only have one subject map");
@@ -355,7 +355,7 @@ WHERE
             get
             {
                 if (_subjectMapConfiguration == null)
-                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings, MappingOptions);
+                    _subjectMapConfiguration = new SubjectMapConfiguration(this, R2RMLMappings);
 
                 return _subjectMapConfiguration;
             }

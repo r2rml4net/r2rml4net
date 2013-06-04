@@ -74,7 +74,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
 
             // when
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -100,7 +100,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
 
             // when
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -126,7 +126,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
 
             // when
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode, new MappingOptions());
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
@@ -151,7 +151,7 @@ ex:PredicateObjectMap rr:object ex:someObject .");
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
             // when
-            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, new MappingOptions());
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph);
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then

@@ -67,7 +67,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             _options = options;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
-            SqlBuilder = new W3CSqlQueryBuilder(options);
+            SqlBuilder = new W3CSqlQueryBuilder();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(_options);
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
                 return _primaryKeyMappingStrategy;
             }
             set { _primaryKeyMappingStrategy = value; }

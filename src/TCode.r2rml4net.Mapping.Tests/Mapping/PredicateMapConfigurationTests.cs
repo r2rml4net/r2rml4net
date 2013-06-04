@@ -63,13 +63,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapNode = new Mock<ITriplesMapConfiguration>();
             _triplesMapNode.Setup(tm => tm.Node).Returns(triplesMapNode);
 
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, new MappingOptions());
+            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void NodeCannotBeNull()
         {
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null);
+            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph);
         }
 
         [Test]

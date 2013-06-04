@@ -51,22 +51,6 @@ namespace TCode.r2rml4net.Mapping.Direct
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
 
-        /// <summary>
-        /// Creates a new instance of <see cref="DirectMappingStrategy"/> with default options
-        /// </summary>
-        public DirectMappingStrategy()
-            : this(new MappingOptions())
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="DirectMappingStrategy"/> with custom options
-        /// </summary>
-        public DirectMappingStrategy(MappingOptions options)
-            : base(options)
-        {
-        }
-
         #region Implementation of IDirectMappingStrategy
 
         /// <summary>
@@ -74,12 +58,12 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectTemplateForNoPrimaryKey"/>
         /// and class returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectClassUri"/>
         /// </summary>
-        public virtual void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table)
+        public virtual void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
             if (subjectMap == null)
                 throw new ArgumentNullException("subjectMap");
-            if (BaseUri == null)
-                throw new ArgumentNullException("BaseUri");
+            if (baseUri == null)
+                throw new ArgumentNullException("baseUri");
             if (table == null)
                 throw new ArgumentNullException("table");
 
@@ -87,7 +71,7 @@ namespace TCode.r2rml4net.Mapping.Direct
                 throw new ArgumentException(string.Format("Table {0} has primay key. CreateSubjectMapForPrimaryKey method should be used", table.Name));
 
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table);
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode().IsTemplateValued(template);
@@ -158,7 +142,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(Options);
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
 
                 return _primaryKeyMappingStrategy;
             }
@@ -173,7 +157,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_foreignKeyMappingStrategy == null)
-                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy(Options);
+                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy();
 
                 return _foreignKeyMappingStrategy;
             }

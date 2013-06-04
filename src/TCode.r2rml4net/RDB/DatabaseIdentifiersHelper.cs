@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.RDB
             return columnName.TrimStart(StartDelimiters).TrimEnd(EndDelimiters);
         }
 
-        internal static string DelimitIdentifier(string identifier, MappingOptions options)
+        internal static string DelimitIdentifier(string identifier)
         {
             if (options.UseDelimitedIdentifiers && !ColumnNameRegex.IsMatch(identifier))
                 return string.Format("{0}{1}{2}", options.SqlIdentifierLeftDelimiter, identifier, options.SqlIdentifierRightDelimiter);
