@@ -55,28 +55,17 @@ namespace TCode.r2rml4net.Mapping.Direct
         private IDirectMappingStrategy _mappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
-        private readonly MappingOptions _options;
 
         /// <summary>
-        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/> and custom mapping options
+        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
-        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration, MappingOptions options)
+        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
         {
             this._databaseMetadataProvider = databaseMetadataProvider;
             this._r2RMLConfiguration = r2RMLConfiguration;
-            _options = options;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
             SqlBuilder = new W3CSqlQueryBuilder();
-        }
-
-        /// <summary>
-        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/> and default mapping options
-        /// </summary>
-        public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
-            : this(databaseMetadataProvider, r2RMLConfiguration, new MappingOptions())
-        {
-
         }
 
         /// <summary>
@@ -92,7 +81,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_mappingStrategy == null)
-                    _mappingStrategy = new DirectMappingStrategy(_options);
+                    _mappingStrategy = new DirectMappingStrategy();
                 return _mappingStrategy;
             }
             set { _mappingStrategy = value; }

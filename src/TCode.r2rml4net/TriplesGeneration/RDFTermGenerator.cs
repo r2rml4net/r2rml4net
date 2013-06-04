@@ -105,7 +105,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             if (!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
             {
-                if (termMap is ISubjectMap && _options.AllowAutomaticBlankNodeSubjects)
+                if (termMap is ISubjectMap && MappingOptions.Current.AllowAutomaticBlankNodeSubjects)
                 {
                     node = NodeFactory.CreateBlankNode();
                 }
@@ -296,7 +296,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     }
                     _blankNodeSubjects.Add(value, blankNode);
                 }
-                else if (_options.PreserveDuplicateRows)
+                else if (MappingOptions.Current.PreserveDuplicateRows)
                 {
                     blankNode = _nodeFactory.CreateBlankNode();
                 }

@@ -287,7 +287,7 @@ WHERE
             if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            if (MappingOptions.ValidateSqlVersion && !R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri))
+            if (MappingOptions.Current.ValidateSqlVersion && !R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri))
                 throw new InvalidSqlVersionException(uri);
 
             R2RMLMappings.Assert(LogicalTableNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrSqlVersionProperty), R2RMLMappings.CreateUriNode(uri));

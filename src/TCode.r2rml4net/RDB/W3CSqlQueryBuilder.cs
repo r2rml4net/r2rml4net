@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.RDB
         /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         public string GetEffectiveQueryForTriplesMap(ITriplesMap triplesMap)
         {
-            if (_options.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
+            if (MappingOptions.Current.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
                 throw new InvalidSqlVersionException(triplesMap.SqlVersions.First(version => !SqlVersionValidator.SqlVersionIsValid(version)));
 
             if (triplesMap.TableName != null && triplesMap.SqlQuery != null)
