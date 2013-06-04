@@ -47,9 +47,33 @@ namespace TCode.r2rml4net
     /// </summary>
     public sealed class MappingOptions
     {
+        private static readonly object Locker = new object();
+        private static MappingOptions _defaultInstance;
+
         private string _blankNodeTemplateSeparator;
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
+
+        public static MappingOptions Default
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    if (_defaultInstance == null)
+                    {
+                        _defaultInstance = new MappingOptions();
+                    }
+                }
+
+                return _defaultInstance;
+            }
+        }
+
+        public static MappingOptions Current
+        {
+            get { return Scope<MappingOptions>.Current ?? Default; }
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="MappingOptions"/> with default options' values
@@ -76,7 +100,7 @@ namespace TCode.r2rml4net
             get { return _blankNodeTemplateSeparator; }
             set
             {
-                if(value == null)
+                if (value == null)
                     throw new ArgumentNullException("value");
 
                 _blankNodeTemplateSeparator = value;

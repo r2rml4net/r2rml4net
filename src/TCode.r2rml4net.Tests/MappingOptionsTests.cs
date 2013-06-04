@@ -136,5 +136,48 @@ namespace TCode.r2rml4net.Tests
         {
             Assert.IsFalse(_options.PreserveDuplicateRows);
         }
+
+        [Test]
+        public void Accessing_scope_without_inizializing_should_return_instance()
+        {
+            // when
+            var mappingOptions = MappingOptions.Current;
+            var mappingOptions2 = MappingOptions.Current;
+
+            // then
+            Assert.That(mappingOptions, Is.Not.Null);
+            Assert.That(mappingOptions, Is.SameAs(mappingOptions2));
+        }
+
+        [Test]
+        public void Creating_scope_should_change_current_mapping_options()
+        {
+            // when
+            using (new Scope<MappingOptions>(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+            }
+
+            // then
+            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+        }
+
+        [Test]
+        public void Should_allow_changing_default_mapping_options()
+        {
+            // given
+            MappingOptions.Default.BlankNodeTemplateSeparator = "y";
+
+            // when
+            using (new Scope<MappingOptions>(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+            }
+
+            // then
+            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+        }
     }
 }

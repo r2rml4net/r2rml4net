@@ -157,6 +157,7 @@
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
     <Compile Include="RDF\BlankNodeSubjectReplaceHandler.cs" />
+    <Compile Include="Scope.cs" />
     <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />
