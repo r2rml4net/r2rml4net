@@ -77,39 +77,29 @@ WHERE { ?map rr:subject ?value }";
         protected internal IGraph R2RMLMappings { get; private set; }
 
         /// <summary>
-        /// </summary>
-        protected MappingOptions MappingOptions { get; private set; }
-
-        /// <summary>
         /// Constructor used by <see cref="FluentR2RML"/>
         /// </summary>
         /// <param name="graph">existing graph with mappings</param>
-        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        internal BaseConfiguration(IGraph graph, MappingOptions mappingOptions)
+        internal BaseConfiguration(IGraph graph)
         {
-            if(mappingOptions == null)
-                throw new ArgumentNullException("mappingOptions");
-
             R2RMLMappings = graph;
-            MappingOptions = mappingOptions;
             EnsurePrefixes();
         }
 
         /// <summary>
         /// Constructor used by <see cref="FluentR2RML"/>
         /// </summary>
-        /// <param name="BaseUri">R2RML graph's base URI</param>
-        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        protected BaseConfiguration(Uri BaseUri, MappingOptions mappingOptions)
-            : this(new Graph { BaseUri = BaseUri }, mappingOptions)
+        /// <param name="baseUri">R2RML graph's base URI</param>
+        protected BaseConfiguration(Uri baseUri)
+            : this(new Graph { BaseUri = baseUri })
         {
         }
 
         /// <summary>
         /// Constructor used by <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
-            : this(existingMappingsGraph, mappingOptions)
+        protected BaseConfiguration(IGraph existingMappingsGraph, INode node)
+            : this(existingMappingsGraph)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -121,8 +111,8 @@ WHERE { ?map rr:subject ?value }";
         /// <summary>
         /// Constructor used by implementations other than <see cref="FluentR2RML"/> and <see cref="TriplesMapConfiguration"/>
         /// </summary>
-        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
-            : this(existingMappingsGraph, node, mappingOptions)
+        protected BaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node)
+            : this(existingMappingsGraph, node)
         {
             _triplesMap = triplesMap;
         }

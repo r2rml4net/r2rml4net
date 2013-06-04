@@ -65,7 +65,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
             _referencedTriplesMap.Setup(tm => tm.Node).Returns(graph.CreateUriNode(new Uri("http://test.example.com/OtherTriplesMap")));
 
-            _refObjectMap = new RefObjectMapConfiguration(predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph, new MappingOptions());
+            _refObjectMap = new RefObjectMapConfiguration(predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph);
         }
 
         [Test]

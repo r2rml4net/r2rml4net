@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy();
         }
 
         [TestCase("http://example.com")]

@@ -43,23 +43,23 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
 {
     class MockBaseConfiguration : BaseConfiguration
     {
-        public MockBaseConfiguration(IGraph graph, MappingOptions mappingOptions)
-            : base(graph, mappingOptions)
+        public MockBaseConfiguration(IGraph graph)
+            : base(graph)
         {
         }
 
-        public MockBaseConfiguration(Uri BaseUri, MappingOptions mappingOptions)
-            : base(BaseUri, mappingOptions)
+        public MockBaseConfiguration(Uri baseUri)
+            : base(baseUri)
         {
         }
 
-        public MockBaseConfiguration(IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
-            : base(existingMappingsGraph, node, mappingOptions)
+        public MockBaseConfiguration(IGraph existingMappingsGraph, INode node)
+            : base(existingMappingsGraph, node)
         {
         }
 
-        public MockBaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node, MappingOptions mappingOptions)
-            : base(triplesMap, existingMappingsGraph, node, mappingOptions)
+        public MockBaseConfiguration(ITriplesMapConfiguration triplesMap, IGraph existingMappingsGraph, INode node)
+            : base(triplesMap, existingMappingsGraph, node)
         {
         }
 

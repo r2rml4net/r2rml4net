@@ -58,8 +58,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Creates an instance of <see cref="PrimaryKeyMappingStrategy"/>
         /// </summary>
-        public PrimaryKeyMappingStrategy(MappingOptions options)
-            : base(options)
+        public PrimaryKeyMappingStrategy()
         {
             Log = NullLog.Instance;
         }

@@ -78,7 +78,7 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Creates a new instance of <see cref="MappingOptions"/> with default options' values
         /// </summary>
-        public MappingOptions()
+        private MappingOptions()
         {
             BlankNodeTemplateSeparator = DefaultTemplateSeparator;
             SqlIdentifierRightDelimiter = DefaultIdentifierDelimiter;
@@ -163,5 +163,7 @@ namespace TCode.r2rml4net
             SqlIdentifierLeftDelimiter = newLeftDelimiter;
             SqlIdentifierRightDelimiter = newRightDelimiter;
         }
+
+
     }
 }

@@ -62,8 +62,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <summary>
         /// Creates a new instance of <see cref="TermMapConfiguration"/>
         /// </summary>
-        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node, MappingOptions mappingOptions) 
-            : base(parentTriplesMap, r2RMLMappings, node, mappingOptions)
+        protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node) 
+            : base(parentTriplesMap, r2RMLMappings, node)
         {
             ParentMapNode = parentMap.Node;
         }

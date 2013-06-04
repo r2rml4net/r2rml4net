@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy();
         }
 
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidMapException))]
@@ -69,10 +69,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = "Column" + i });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
-                {
-                    BlankNodeTemplateSeparator = columnSeparator
-                });
+            _strategy = new PrimaryKeyMappingStrategy();
 
             // when
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
@@ -90,10 +87,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = column });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
-            {
-                UseDelimitedIdentifiers = false
-            });
+            _strategy = new PrimaryKeyMappingStrategy();
 
             // when
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);

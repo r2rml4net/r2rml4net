@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Tests.RDB
             string sqlId = string.Format("{0}some idenfifier{1}", delimitLeft, delimitRight);
 
             // when
-            var delimited = DatabaseIdentifiersHelper.DelimitIdentifier(sqlId, new MappingOptions());
+            var delimited = DatabaseIdentifiersHelper.DelimitIdentifier(sqlId);
 
             // then
             Assert.AreEqual(sqlId, delimited);

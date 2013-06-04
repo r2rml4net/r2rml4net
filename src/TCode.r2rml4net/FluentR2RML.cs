@@ -69,9 +69,9 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
-        /// <param name="BaseUri">base URI for mapping nodes</param>
-        public FluentR2RML(Uri BaseUri)
-            : base(BaseUri, new MappingOptions())
+        /// <param name="baseUri">base URI for mapping nodes</param>
+        public FluentR2RML(Uri baseUri)
+            : base(baseUri)
         {
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
@@ -79,32 +79,14 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
         /// </summary>
-        /// <param name="BaseUri">base URI for mapping nodes</param>
-        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        public FluentR2RML(Uri BaseUri, MappingOptions mappingOptions)
-            : base(BaseUri, mappingOptions)
-        {
-            R2RMLMappings.Changed += R2RMLMappingsChanged;
-        }
-
-        /// <summary>
-        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings 
-        /// and base URI set to <see cref="DefaultBaseUri"/>
-        /// </summary>
         public FluentR2RML()
-            : this(new MappingOptions())
-        {
-        }
-
-        /// <param name="mappingOptions"><see cref="MappingOptions"/></param>
-        public FluentR2RML(MappingOptions mappingOptions)
-            : base(DefaultBaseUri, mappingOptions)
+            : base(DefaultBaseUri)
         {
 
         }
 
-        internal FluentR2RML(IGraph mappingsGraph, MappingOptions mappingOptions)
-            : base(mappingsGraph, mappingOptions)
+        internal FluentR2RML(IGraph mappingsGraph)
+            : base(mappingsGraph)
         {
 
         }
@@ -127,7 +109,7 @@ namespace TCode.r2rml4net
 
             foreach (var triplesMapNode in triplesMapsTriples.Select(triple => triple.Subject))
             {
-                var triplesMapConfiguration = new TriplesMapConfiguration(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), triplesMapNode);
+                var triplesMapConfiguration = new TriplesMapConfiguration(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), triplesMapNode);
                 triplesMaps.Add(triplesMapNode, triplesMapConfiguration);
                 _triplesMaps.Add(triplesMapConfiguration);
             }
@@ -161,7 +143,7 @@ namespace TCode.r2rml4net
         /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
-            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), tablename));
+            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), tablename));
         }
 
         /// <summary>
@@ -169,7 +151,7 @@ namespace TCode.r2rml4net
         /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
-            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, MappingOptions, SqlVersionValidator), sqlQuery));
+            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), sqlQuery));
         }
 
         private TriplesMapConfiguration SetupTriplesMap(TriplesMapConfiguration triplesMapConfiguration)

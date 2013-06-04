@@ -52,17 +52,8 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// 
         /// </summary>
         public NewBlankNodeForDuplicateRows()
-            : this(new MappingOptions())
         {
 
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="options"></param>
-        public NewBlankNodeForDuplicateRows(MappingOptions options)
-            : base(options)
-        {
         }
 
         #region Overrides of DirectMappingStrategy
@@ -70,11 +61,11 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// 
         /// </summary>
         /// <param name="subjectMap"></param>
-        /// <param name="BaseUri"></param>
+        /// <param name="baseUri"></param>
         /// <param name="table"></param>
-        public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table)
+        public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
 
             // empty primary key generates blank node subjects
             subjectMap.AddClass(classIri).TermType.IsBlankNode();
