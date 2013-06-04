@@ -53,8 +53,8 @@ namespace TCode.r2rml4net.RDB
 
         internal static string DelimitIdentifier(string identifier)
         {
-            if (options.UseDelimitedIdentifiers && !ColumnNameRegex.IsMatch(identifier))
-                return string.Format("{0}{1}{2}", options.SqlIdentifierLeftDelimiter, identifier, options.SqlIdentifierRightDelimiter);
+            if (MappingOptions.Current.UseDelimitedIdentifiers && !ColumnNameRegex.IsMatch(identifier))
+                return string.Format("{0}{1}{2}", MappingOptions.Current.SqlIdentifierLeftDelimiter, identifier, MappingOptions.Current.SqlIdentifierRightDelimiter);
 
             return identifier; 
         }
