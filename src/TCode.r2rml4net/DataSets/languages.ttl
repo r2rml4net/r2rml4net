@@ -1,0 +1,691 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix lvont: <http://lexvo.org/ontology#>.
+
+<http://lexvo.org/id/iso639-3/aar> <urn:lang:code> "aa"^^xsd:string,
+                                                   "aar"^^xsd:string.
+<http://lexvo.org/id/iso639-3/abk> <urn:lang:code> "ab"^^xsd:string,
+                                                   "abk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ace> <urn:lang:code> "ace"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ach> <urn:lang:code> "ach"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ada> <urn:lang:code> "ada"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ady> <urn:lang:code> "ady"^^xsd:string.
+<http://lexvo.org/id/iso639-3/afh> <urn:lang:code> "afh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/afr> <urn:lang:code> "af"^^xsd:string,
+                                                   "afr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ain> <urn:lang:code> "ain"^^xsd:string.
+<http://lexvo.org/id/iso639-3/aka> <urn:lang:code> "ak"^^xsd:string,
+                                                   "aka"^^xsd:string.
+<http://lexvo.org/id/iso639-3/akk> <urn:lang:code> "akk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ale> <urn:lang:code> "ale"^^xsd:string.
+<http://lexvo.org/id/iso639-3/alt> <urn:lang:code> "alt"^^xsd:string.
+<http://lexvo.org/id/iso639-3/amh> <urn:lang:code> "am"^^xsd:string,
+                                                   "amh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ang> <urn:lang:code> "ang"^^xsd:string.
+<http://lexvo.org/id/iso639-3/anp> <urn:lang:code> "anp"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ara> <urn:lang:code> "ar"^^xsd:string,
+                                                   "ara"^^xsd:string.
+<http://lexvo.org/id/iso639-3/arc> <urn:lang:code> "arc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/arg> <urn:lang:code> "an"^^xsd:string,
+                                                   "arg"^^xsd:string.
+<http://lexvo.org/id/iso639-3/arn> <urn:lang:code> "arn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/arp> <urn:lang:code> "arp"^^xsd:string.
+<http://lexvo.org/id/iso639-3/arw> <urn:lang:code> "arw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/asm> <urn:lang:code> "as"^^xsd:string,
+                                                   "asm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ast> <urn:lang:code> "ast"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ava> <urn:lang:code> "av"^^xsd:string,
+                                                   "ava"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ave> <urn:lang:code> "ae"^^xsd:string,
+                                                   "ave"^^xsd:string.
+<http://lexvo.org/id/iso639-3/awa> <urn:lang:code> "awa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/aym> <urn:lang:code> "ay"^^xsd:string,
+                                                   "aym"^^xsd:string.
+<http://lexvo.org/id/iso639-3/aze> <urn:lang:code> "az"^^xsd:string,
+                                                   "aze"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bak> <urn:lang:code> "ba"^^xsd:string,
+                                                   "bak"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bal> <urn:lang:code> "bal"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bam> <urn:lang:code> "bam"^^xsd:string,
+                                                   "bm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ban> <urn:lang:code> "ban"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bas> <urn:lang:code> "bas"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bej> <urn:lang:code> "bej"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bel> <urn:lang:code> "be"^^xsd:string,
+                                                   "bel"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bem> <urn:lang:code> "bem"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ben> <urn:lang:code> "ben"^^xsd:string,
+                                                   "bn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bho> <urn:lang:code> "bho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bik> <urn:lang:code> "bik"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bin> <urn:lang:code> "bin"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bis> <urn:lang:code> "bi"^^xsd:string,
+                                                   "bis"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bla> <urn:lang:code> "bla"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bod> <urn:lang:code> "bo"^^xsd:string,
+                                                   "bod"^^xsd:string,
+                                                   "tib"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bos> <urn:lang:code> "bos"^^xsd:string,
+                                                   "bs"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bra> <urn:lang:code> "bra"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bre> <urn:lang:code> "br"^^xsd:string,
+                                                   "bre"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bua> <urn:lang:code> "bua"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bug> <urn:lang:code> "bug"^^xsd:string.
+<http://lexvo.org/id/iso639-3/bul> <urn:lang:code> "bg"^^xsd:string,
+                                                   "bul"^^xsd:string.
+<http://lexvo.org/id/iso639-3/byn> <urn:lang:code> "byn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cad> <urn:lang:code> "cad"^^xsd:string.
+<http://lexvo.org/id/iso639-3/car> <urn:lang:code> "car"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cat> <urn:lang:code> "ca"^^xsd:string,
+                                                   "cat"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ceb> <urn:lang:code> "ceb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ces> <urn:lang:code> "ces"^^xsd:string,
+                                                   "cs"^^xsd:string,
+                                                   "cze"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cha> <urn:lang:code> "ch"^^xsd:string,
+                                                   "cha"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chb> <urn:lang:code> "chb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/che> <urn:lang:code> "ce"^^xsd:string,
+                                                   "che"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chg> <urn:lang:code> "chg"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chk> <urn:lang:code> "chk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chm> <urn:lang:code> "chm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chn> <urn:lang:code> "chn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cho> <urn:lang:code> "cho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chp> <urn:lang:code> "chp"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chr> <urn:lang:code> "chr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chu> <urn:lang:code> "chu"^^xsd:string,
+                                                   "cu"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chv> <urn:lang:code> "chv"^^xsd:string,
+                                                   "cv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/chy> <urn:lang:code> "chy"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cop> <urn:lang:code> "cop"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cor> <urn:lang:code> "cor"^^xsd:string,
+                                                   "kw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cos> <urn:lang:code> "co"^^xsd:string,
+                                                   "cos"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cre> <urn:lang:code> "cr"^^xsd:string,
+                                                   "cre"^^xsd:string.
+<http://lexvo.org/id/iso639-3/crh> <urn:lang:code> "crh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/csb> <urn:lang:code> "csb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/cym> <urn:lang:code> "cy"^^xsd:string,
+                                                   "cym"^^xsd:string,
+                                                   "wel"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dak> <urn:lang:code> "dak"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dan> <urn:lang:code> "da"^^xsd:string,
+                                                   "dan"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dar> <urn:lang:code> "dar"^^xsd:string.
+<http://lexvo.org/id/iso639-3/del> <urn:lang:code> "del"^^xsd:string.
+<http://lexvo.org/id/iso639-3/den> <urn:lang:code> "den"^^xsd:string.
+<http://lexvo.org/id/iso639-3/deu> <urn:lang:code> "de"^^xsd:string,
+                                                   "deu"^^xsd:string,
+                                                   "ger"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dgr> <urn:lang:code> "dgr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/din> <urn:lang:code> "din"^^xsd:string.
+<http://lexvo.org/id/iso639-3/div> <urn:lang:code> "div"^^xsd:string,
+                                                   "dv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/doi> <urn:lang:code> "doi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dsb> <urn:lang:code> "dsb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dua> <urn:lang:code> "dua"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dum> <urn:lang:code> "dum"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dyu> <urn:lang:code> "dyu"^^xsd:string.
+<http://lexvo.org/id/iso639-3/dzo> <urn:lang:code> "dz"^^xsd:string,
+                                                   "dzo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/efi> <urn:lang:code> "efi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/egy> <urn:lang:code> "egy"^^xsd:string.
+<http://lexvo.org/id/iso639-3/eka> <urn:lang:code> "eka"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ell> <urn:lang:code> "el"^^xsd:string,
+                                                   "ell"^^xsd:string,
+                                                   "gre"^^xsd:string.
+<http://lexvo.org/id/iso639-3/elx> <urn:lang:code> "elx"^^xsd:string.
+<http://lexvo.org/id/iso639-3/eng> <urn:lang:code> "en"^^xsd:string,
+                                                   "eng"^^xsd:string.
+<http://lexvo.org/id/iso639-3/enm> <urn:lang:code> "enm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/epo> <urn:lang:code> "eo"^^xsd:string,
+                                                   "epo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/est> <urn:lang:code> "est"^^xsd:string,
+                                                   "et"^^xsd:string.
+<http://lexvo.org/id/iso639-3/eus> <urn:lang:code> "baq"^^xsd:string,
+                                                   "eu"^^xsd:string,
+                                                   "eus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ewe> <urn:lang:code> "ee"^^xsd:string,
+                                                   "ewe"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ewo> <urn:lang:code> "ewo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fan> <urn:lang:code> "fan"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fao> <urn:lang:code> "fao"^^xsd:string,
+                                                   "fo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fas> <urn:lang:code> "fa"^^xsd:string,
+                                                   "fas"^^xsd:string,
+                                                   "per"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fat> <urn:lang:code> "fat"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fij> <urn:lang:code> "fij"^^xsd:string,
+                                                   "fj"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fil> <urn:lang:code> "fil"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fin> <urn:lang:code> "fi"^^xsd:string,
+                                                   "fin"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fon> <urn:lang:code> "fon"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fra> <urn:lang:code> "fr"^^xsd:string,
+                                                   "fra"^^xsd:string,
+                                                   "fre"^^xsd:string.
+<http://lexvo.org/id/iso639-3/frm> <urn:lang:code> "frm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fro> <urn:lang:code> "fro"^^xsd:string.
+<http://lexvo.org/id/iso639-3/frr> <urn:lang:code> "frr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/frs> <urn:lang:code> "frs"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fry> <urn:lang:code> "fry"^^xsd:string,
+                                                   "fy"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ful> <urn:lang:code> "ff"^^xsd:string,
+                                                   "ful"^^xsd:string.
+<http://lexvo.org/id/iso639-3/fur> <urn:lang:code> "fur"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gaa> <urn:lang:code> "gaa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gay> <urn:lang:code> "gay"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gba> <urn:lang:code> "gba"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gez> <urn:lang:code> "gez"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gil> <urn:lang:code> "gil"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gla> <urn:lang:code> "gd"^^xsd:string,
+                                                   "gla"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gle> <urn:lang:code> "ga"^^xsd:string,
+                                                   "gle"^^xsd:string.
+<http://lexvo.org/id/iso639-3/glg> <urn:lang:code> "gl"^^xsd:string,
+                                                   "glg"^^xsd:string.
+<http://lexvo.org/id/iso639-3/glv> <urn:lang:code> "glv"^^xsd:string,
+                                                   "gv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gmh> <urn:lang:code> "gmh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/goh> <urn:lang:code> "goh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gon> <urn:lang:code> "gon"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gor> <urn:lang:code> "gor"^^xsd:string.
+<http://lexvo.org/id/iso639-3/got> <urn:lang:code> "got"^^xsd:string.
+<http://lexvo.org/id/iso639-3/grb> <urn:lang:code> "grb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/grc> <urn:lang:code> "grc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/grn> <urn:lang:code> "gn"^^xsd:string,
+                                                   "grn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gsw> <urn:lang:code> "gsw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/guj> <urn:lang:code> "gu"^^xsd:string,
+                                                   "guj"^^xsd:string.
+<http://lexvo.org/id/iso639-3/gwi> <urn:lang:code> "gwi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hai> <urn:lang:code> "hai"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hat> <urn:lang:code> "hat"^^xsd:string,
+                                                   "ht"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hau> <urn:lang:code> "ha"^^xsd:string,
+                                                   "hau"^^xsd:string.
+<http://lexvo.org/id/iso639-3/haw> <urn:lang:code> "haw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hbs> <urn:lang:code> "sh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/heb> <urn:lang:code> "he"^^xsd:string,
+                                                   "heb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/her> <urn:lang:code> "her"^^xsd:string,
+                                                   "hz"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hil> <urn:lang:code> "hil"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hin> <urn:lang:code> "hi"^^xsd:string,
+                                                   "hin"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hit> <urn:lang:code> "hit"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hmn> <urn:lang:code> "hmn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hmo> <urn:lang:code> "hmo"^^xsd:string,
+                                                   "ho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hrv> <urn:lang:code> "hr"^^xsd:string,
+                                                   "hrv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hsb> <urn:lang:code> "hsb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hun> <urn:lang:code> "hu"^^xsd:string,
+                                                   "hun"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hup> <urn:lang:code> "hup"^^xsd:string.
+<http://lexvo.org/id/iso639-3/hye> <urn:lang:code> "arm"^^xsd:string,
+                                                   "hy"^^xsd:string,
+                                                   "hye"^^xsd:string.
+<http://lexvo.org/id/iso639-3/iba> <urn:lang:code> "iba"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ibo> <urn:lang:code> "ibo"^^xsd:string,
+                                                   "ig"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ido> <urn:lang:code> "ido"^^xsd:string,
+                                                   "io"^^xsd:string.
+<http://lexvo.org/id/iso639-3/iii> <urn:lang:code> "ii"^^xsd:string,
+                                                   "iii"^^xsd:string.
+<http://lexvo.org/id/iso639-3/iku> <urn:lang:code> "iku"^^xsd:string,
+                                                   "iu"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ile> <urn:lang:code> "ie"^^xsd:string,
+                                                   "ile"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ilo> <urn:lang:code> "ilo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ina> <urn:lang:code> "ia"^^xsd:string,
+                                                   "ina"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ind> <urn:lang:code> "id"^^xsd:string,
+                                                   "ind"^^xsd:string.
+<http://lexvo.org/id/iso639-3/inh> <urn:lang:code> "inh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ipk> <urn:lang:code> "ik"^^xsd:string,
+                                                   "ipk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/isl> <urn:lang:code> "ice"^^xsd:string,
+                                                   "is"^^xsd:string,
+                                                   "isl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ita> <urn:lang:code> "it"^^xsd:string,
+                                                   "ita"^^xsd:string.
+<http://lexvo.org/id/iso639-3/jav> <urn:lang:code> "jav"^^xsd:string,
+                                                   "jv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/jbo> <urn:lang:code> "jbo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/jpn> <urn:lang:code> "ja"^^xsd:string,
+                                                   "jpn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/jpr> <urn:lang:code> "jpr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/jrb> <urn:lang:code> "jrb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kaa> <urn:lang:code> "kaa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kab> <urn:lang:code> "kab"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kac> <urn:lang:code> "kac"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kal> <urn:lang:code> "kal"^^xsd:string,
+                                                   "kl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kam> <urn:lang:code> "kam"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kan> <urn:lang:code> "kan"^^xsd:string,
+                                                   "kn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kas> <urn:lang:code> "kas"^^xsd:string,
+                                                   "ks"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kat> <urn:lang:code> "geo"^^xsd:string,
+                                                   "ka"^^xsd:string,
+                                                   "kat"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kau> <urn:lang:code> "kau"^^xsd:string,
+                                                   "kr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kaw> <urn:lang:code> "kaw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kaz> <urn:lang:code> "kaz"^^xsd:string,
+                                                   "kk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kbd> <urn:lang:code> "kbd"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kha> <urn:lang:code> "kha"^^xsd:string.
+<http://lexvo.org/id/iso639-3/khm> <urn:lang:code> "khm"^^xsd:string,
+                                                   "km"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kho> <urn:lang:code> "kho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kik> <urn:lang:code> "ki"^^xsd:string,
+                                                   "kik"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kin> <urn:lang:code> "kin"^^xsd:string,
+                                                   "rw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kir> <urn:lang:code> "kir"^^xsd:string,
+                                                   "ky"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kmb> <urn:lang:code> "kmb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kok> <urn:lang:code> "kok"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kom> <urn:lang:code> "kom"^^xsd:string,
+                                                   "kv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kon> <urn:lang:code> "kg"^^xsd:string,
+                                                   "kon"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kor> <urn:lang:code> "ko"^^xsd:string,
+                                                   "kor"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kos> <urn:lang:code> "kos"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kpe> <urn:lang:code> "kpe"^^xsd:string.
+<http://lexvo.org/id/iso639-3/krc> <urn:lang:code> "krc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/krl> <urn:lang:code> "krl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kru> <urn:lang:code> "kru"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kua> <urn:lang:code> "kj"^^xsd:string,
+                                                   "kua"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kum> <urn:lang:code> "kum"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kur> <urn:lang:code> "ku"^^xsd:string,
+                                                   "kur"^^xsd:string.
+<http://lexvo.org/id/iso639-3/kut> <urn:lang:code> "kut"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lad> <urn:lang:code> "lad"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lah> <urn:lang:code> "lah"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lam> <urn:lang:code> "lam"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lao> <urn:lang:code> "lao"^^xsd:string,
+                                                   "lo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lat> <urn:lang:code> "la"^^xsd:string,
+                                                   "lat"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lav> <urn:lang:code> "lav"^^xsd:string,
+                                                   "lv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lez> <urn:lang:code> "lez"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lim> <urn:lang:code> "li"^^xsd:string,
+                                                   "lim"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lin> <urn:lang:code> "lin"^^xsd:string,
+                                                   "ln"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lit> <urn:lang:code> "lit"^^xsd:string,
+                                                   "lt"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lol> <urn:lang:code> "lol"^^xsd:string.
+<http://lexvo.org/id/iso639-3/loz> <urn:lang:code> "loz"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ltz> <urn:lang:code> "lb"^^xsd:string,
+                                                   "ltz"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lua> <urn:lang:code> "lua"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lub> <urn:lang:code> "lu"^^xsd:string,
+                                                   "lub"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lug> <urn:lang:code> "lg"^^xsd:string,
+                                                   "lug"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lui> <urn:lang:code> "lui"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lun> <urn:lang:code> "lun"^^xsd:string.
+<http://lexvo.org/id/iso639-3/luo> <urn:lang:code> "luo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/lus> <urn:lang:code> "lus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mad> <urn:lang:code> "mad"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mag> <urn:lang:code> "mag"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mah> <urn:lang:code> "mah"^^xsd:string,
+                                                   "mh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mai> <urn:lang:code> "mai"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mak> <urn:lang:code> "mak"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mal> <urn:lang:code> "mal"^^xsd:string,
+                                                   "ml"^^xsd:string.
+<http://lexvo.org/id/iso639-3/man> <urn:lang:code> "man"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mar> <urn:lang:code> "mar"^^xsd:string,
+                                                   "mr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mas> <urn:lang:code> "mas"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mdf> <urn:lang:code> "mdf"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mdr> <urn:lang:code> "mdr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/men> <urn:lang:code> "men"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mga> <urn:lang:code> "mga"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mic> <urn:lang:code> "mic"^^xsd:string.
+<http://lexvo.org/id/iso639-3/min> <urn:lang:code> "min"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mis> <urn:lang:code> "mis"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mkd> <urn:lang:code> "mac"^^xsd:string,
+                                                   "mk"^^xsd:string,
+                                                   "mkd"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mlg> <urn:lang:code> "mg"^^xsd:string,
+                                                   "mlg"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mlt> <urn:lang:code> "mlt"^^xsd:string,
+                                                   "mt"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mnc> <urn:lang:code> "mnc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mni> <urn:lang:code> "mni"^^xsd:string.
+<http://lexvo.org/id/iso639-3/moh> <urn:lang:code> "moh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mon> <urn:lang:code> "mn"^^xsd:string,
+                                                   "mon"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mos> <urn:lang:code> "mos"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mri> <urn:lang:code> "mao"^^xsd:string,
+                                                   "mi"^^xsd:string,
+                                                   "mri"^^xsd:string.
+<http://lexvo.org/id/iso639-3/msa> <urn:lang:code> "may"^^xsd:string,
+                                                   "ms"^^xsd:string,
+                                                   "msa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mul> <urn:lang:code> "mul"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mus> <urn:lang:code> "mus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mwl> <urn:lang:code> "mwl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mwr> <urn:lang:code> "mwr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/mya> <urn:lang:code> "bur"^^xsd:string,
+                                                   "my"^^xsd:string,
+                                                   "mya"^^xsd:string.
+<http://lexvo.org/id/iso639-3/myv> <urn:lang:code> "myv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nap> <urn:lang:code> "nap"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nau> <urn:lang:code> "na"^^xsd:string,
+                                                   "nau"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nav> <urn:lang:code> "nav"^^xsd:string,
+                                                   "nv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nbl> <urn:lang:code> "nbl"^^xsd:string,
+                                                   "nr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nde> <urn:lang:code> "nd"^^xsd:string,
+                                                   "nde"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ndo> <urn:lang:code> "ndo"^^xsd:string,
+                                                   "ng"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nds> <urn:lang:code> "nds"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nep> <urn:lang:code> "ne"^^xsd:string,
+                                                   "nep"^^xsd:string.
+<http://lexvo.org/id/iso639-3/new> <urn:lang:code> "new"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nia> <urn:lang:code> "nia"^^xsd:string.
+<http://lexvo.org/id/iso639-3/niu> <urn:lang:code> "niu"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nld> <urn:lang:code> "dut"^^xsd:string,
+                                                   "nl"^^xsd:string,
+                                                   "nld"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nno> <urn:lang:code> "nn"^^xsd:string,
+                                                   "nno"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nob> <urn:lang:code> "nb"^^xsd:string,
+                                                   "nob"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nog> <urn:lang:code> "nog"^^xsd:string.
+<http://lexvo.org/id/iso639-3/non> <urn:lang:code> "non"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nor> <urn:lang:code> "no"^^xsd:string,
+                                                   "nor"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nqo> <urn:lang:code> "nqo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nso> <urn:lang:code> "nso"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nwc> <urn:lang:code> "nwc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nya> <urn:lang:code> "ny"^^xsd:string,
+                                                   "nya"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nym> <urn:lang:code> "nym"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nyn> <urn:lang:code> "nyn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nyo> <urn:lang:code> "nyo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/nzi> <urn:lang:code> "nzi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/oci> <urn:lang:code> "oc"^^xsd:string,
+                                                   "oci"^^xsd:string.
+<http://lexvo.org/id/iso639-3/oji> <urn:lang:code> "oj"^^xsd:string,
+                                                   "oji"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ori> <urn:lang:code> "or"^^xsd:string,
+                                                   "ori"^^xsd:string.
+<http://lexvo.org/id/iso639-3/orm> <urn:lang:code> "om"^^xsd:string,
+                                                   "orm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/osa> <urn:lang:code> "osa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/oss> <urn:lang:code> "os"^^xsd:string,
+                                                   "oss"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ota> <urn:lang:code> "ota"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pag> <urn:lang:code> "pag"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pal> <urn:lang:code> "pal"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pam> <urn:lang:code> "pam"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pan> <urn:lang:code> "pa"^^xsd:string,
+                                                   "pan"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pap> <urn:lang:code> "pap"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pau> <urn:lang:code> "pau"^^xsd:string.
+<http://lexvo.org/id/iso639-3/peo> <urn:lang:code> "peo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/phn> <urn:lang:code> "phn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pli> <urn:lang:code> "pi"^^xsd:string,
+                                                   "pli"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pol> <urn:lang:code> "pl"^^xsd:string,
+                                                   "pol"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pon> <urn:lang:code> "pon"^^xsd:string.
+<http://lexvo.org/id/iso639-3/por> <urn:lang:code> "por"^^xsd:string,
+                                                   "pt"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pro> <urn:lang:code> "pro"^^xsd:string.
+<http://lexvo.org/id/iso639-3/pus> <urn:lang:code> "ps"^^xsd:string,
+                                                   "pus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/que> <urn:lang:code> "qu"^^xsd:string,
+                                                   "que"^^xsd:string.
+<http://lexvo.org/id/iso639-3/raj> <urn:lang:code> "raj"^^xsd:string.
+<http://lexvo.org/id/iso639-3/rap> <urn:lang:code> "rap"^^xsd:string.
+<http://lexvo.org/id/iso639-3/rar> <urn:lang:code> "rar"^^xsd:string.
+<http://lexvo.org/id/iso639-3/roh> <urn:lang:code> "rm"^^xsd:string,
+                                                   "roh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/rom> <urn:lang:code> "rom"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ron> <urn:lang:code> "ro"^^xsd:string,
+                                                   "ron"^^xsd:string,
+                                                   "rum"^^xsd:string.
+<http://lexvo.org/id/iso639-3/run> <urn:lang:code> "rn"^^xsd:string,
+                                                   "run"^^xsd:string.
+<http://lexvo.org/id/iso639-3/rup> <urn:lang:code> "rup"^^xsd:string.
+<http://lexvo.org/id/iso639-3/rus> <urn:lang:code> "ru"^^xsd:string,
+                                                   "rus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sad> <urn:lang:code> "sad"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sag> <urn:lang:code> "sag"^^xsd:string,
+                                                   "sg"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sah> <urn:lang:code> "sah"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sam> <urn:lang:code> "sam"^^xsd:string.
+<http://lexvo.org/id/iso639-3/san> <urn:lang:code> "sa"^^xsd:string,
+                                                   "san"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sas> <urn:lang:code> "sas"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sat> <urn:lang:code> "sat"^^xsd:string.
+<http://lexvo.org/id/iso639-3/scn> <urn:lang:code> "scn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sco> <urn:lang:code> "sco"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sel> <urn:lang:code> "sel"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sga> <urn:lang:code> "sga"^^xsd:string.
+<http://lexvo.org/id/iso639-3/shn> <urn:lang:code> "shn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sid> <urn:lang:code> "sid"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sin> <urn:lang:code> "si"^^xsd:string,
+                                                   "sin"^^xsd:string.
+<http://lexvo.org/id/iso639-3/slk> <urn:lang:code> "sk"^^xsd:string,
+                                                   "slk"^^xsd:string,
+                                                   "slo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/slv> <urn:lang:code> "sl"^^xsd:string,
+                                                   "slv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sma> <urn:lang:code> "sma"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sme> <urn:lang:code> "se"^^xsd:string,
+                                                   "sme"^^xsd:string.
+<http://lexvo.org/id/iso639-3/smj> <urn:lang:code> "smj"^^xsd:string.
+<http://lexvo.org/id/iso639-3/smn> <urn:lang:code> "smn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/smo> <urn:lang:code> "sm"^^xsd:string,
+                                                   "smo"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sms> <urn:lang:code> "sms"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sna> <urn:lang:code> "sn"^^xsd:string,
+                                                   "sna"^^xsd:string.
+<http://lexvo.org/id/iso639-3/snd> <urn:lang:code> "sd"^^xsd:string,
+                                                   "snd"^^xsd:string.
+<http://lexvo.org/id/iso639-3/snk> <urn:lang:code> "snk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sog> <urn:lang:code> "sog"^^xsd:string.
+<http://lexvo.org/id/iso639-3/som> <urn:lang:code> "so"^^xsd:string,
+                                                   "som"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sot> <urn:lang:code> "sot"^^xsd:string,
+                                                   "st"^^xsd:string.
+<http://lexvo.org/id/iso639-3/spa> <urn:lang:code> "es"^^xsd:string,
+                                                   "spa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sqi> <urn:lang:code> "alb"^^xsd:string,
+                                                   "sq"^^xsd:string,
+                                                   "sqi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/srd> <urn:lang:code> "sc"^^xsd:string,
+                                                   "srd"^^xsd:string.
+<http://lexvo.org/id/iso639-3/srn> <urn:lang:code> "srn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/srp> <urn:lang:code> "sr"^^xsd:string,
+                                                   "srp"^^xsd:string.
+<http://lexvo.org/id/iso639-3/srr> <urn:lang:code> "srr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ssw> <urn:lang:code> "ss"^^xsd:string,
+                                                   "ssw"^^xsd:string.
+<http://lexvo.org/id/iso639-3/suk> <urn:lang:code> "suk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sun> <urn:lang:code> "su"^^xsd:string,
+                                                   "sun"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sus> <urn:lang:code> "sus"^^xsd:string.
+<http://lexvo.org/id/iso639-3/sux> <urn:lang:code> "sux"^^xsd:string.
+<http://lexvo.org/id/iso639-3/swa> <urn:lang:code> "sw"^^xsd:string,
+                                                   "swa"^^xsd:string.
+<http://lexvo.org/id/iso639-3/swe> <urn:lang:code> "sv"^^xsd:string,
+                                                   "swe"^^xsd:string.
+<http://lexvo.org/id/iso639-3/syc> <urn:lang:code> "syc"^^xsd:string.
+<http://lexvo.org/id/iso639-3/syr> <urn:lang:code> "syr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tah> <urn:lang:code> "tah"^^xsd:string,
+                                                   "ty"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tam> <urn:lang:code> "ta"^^xsd:string,
+                                                   "tam"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tat> <urn:lang:code> "tat"^^xsd:string,
+                                                   "tt"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tel> <urn:lang:code> "te"^^xsd:string,
+                                                   "tel"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tem> <urn:lang:code> "tem"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ter> <urn:lang:code> "ter"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tet> <urn:lang:code> "tet"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tgk> <urn:lang:code> "tg"^^xsd:string,
+                                                   "tgk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tgl> <urn:lang:code> "tgl"^^xsd:string,
+                                                   "tl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tha> <urn:lang:code> "th"^^xsd:string,
+                                                   "tha"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tig> <urn:lang:code> "tig"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tir> <urn:lang:code> "ti"^^xsd:string,
+                                                   "tir"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tiv> <urn:lang:code> "tiv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tkl> <urn:lang:code> "tkl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tlh> <urn:lang:code> "tlh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tli> <urn:lang:code> "tli"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tmh> <urn:lang:code> "tmh"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tog> <urn:lang:code> "tog"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ton> <urn:lang:code> "to"^^xsd:string,
+                                                   "ton"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tpi> <urn:lang:code> "tpi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tsi> <urn:lang:code> "tsi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tsn> <urn:lang:code> "tn"^^xsd:string,
+                                                   "tsn"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tso> <urn:lang:code> "ts"^^xsd:string,
+                                                   "tso"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tuk> <urn:lang:code> "tk"^^xsd:string,
+                                                   "tuk"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tum> <urn:lang:code> "tum"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tur> <urn:lang:code> "tr"^^xsd:string,
+                                                   "tur"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tvl> <urn:lang:code> "tvl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/twi> <urn:lang:code> "tw"^^xsd:string,
+                                                   "twi"^^xsd:string.
+<http://lexvo.org/id/iso639-3/tyv> <urn:lang:code> "tyv"^^xsd:string.
+<http://lexvo.org/id/iso639-3/udm> <urn:lang:code> "udm"^^xsd:string.
+<http://lexvo.org/id/iso639-3/uga> <urn:lang:code> "uga"^^xsd:string.
+<http://lexvo.org/id/iso639-3/uig> <urn:lang:code> "ug"^^xsd:string,
+                                                   "uig"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ukr> <urn:lang:code> "uk"^^xsd:string,
+                                                   "ukr"^^xsd:string.
+<http://lexvo.org/id/iso639-3/umb> <urn:lang:code> "umb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/und> <urn:lang:code> "und"^^xsd:string.
+<http://lexvo.org/id/iso639-3/urd> <urn:lang:code> "ur"^^xsd:string,
+                                                   "urd"^^xsd:string.
+<http://lexvo.org/id/iso639-3/uzb> <urn:lang:code> "uz"^^xsd:string,
+                                                   "uzb"^^xsd:string.
+<http://lexvo.org/id/iso639-3/vai> <urn:lang:code> "vai"^^xsd:string.
+<http://lexvo.org/id/iso639-3/ven> <urn:lang:code> "ve"^^xsd:string,
+                                                   "ven"^^xsd:string.
+<http://lexvo.org/id/iso639-3/vie> <urn:lang:code> "vi"^^xsd:string,
+                                                   "vie"^^xsd:string.
+<http://lexvo.org/id/iso639-3/vol> <urn:lang:code> "vo"^^xsd:string,
+                                                   "vol"^^xsd:string.
+<http://lexvo.org/id/iso639-3/vot> <urn:lang:code> "vot"^^xsd:string.
+<http://lexvo.org/id/iso639-3/wal> <urn:lang:code> "wal"^^xsd:string.
+<http://lexvo.org/id/iso639-3/war> <urn:lang:code> "war"^^xsd:string.
+<http://lexvo.org/id/iso639-3/was> <urn:lang:code> "was"^^xsd:string.
+<http://lexvo.org/id/iso639-3/wln> <urn:lang:code> "wa"^^xsd:string,
+                                                   "wln"^^xsd:string.
+<http://lexvo.org/id/iso639-3/wol> <urn:lang:code> "wo"^^xsd:string,
+                                                   "wol"^^xsd:string.
+<http://lexvo.org/id/iso639-3/xal> <urn:lang:code> "xal"^^xsd:string.
+<http://lexvo.org/id/iso639-3/xho> <urn:lang:code> "xh"^^xsd:string,
+                                                   "xho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/yao> <urn:lang:code> "yao"^^xsd:string.
+<http://lexvo.org/id/iso639-3/yap> <urn:lang:code> "yap"^^xsd:string.
+<http://lexvo.org/id/iso639-3/yid> <urn:lang:code> "yi"^^xsd:string,
+                                                   "yid"^^xsd:string.
+<http://lexvo.org/id/iso639-3/yor> <urn:lang:code> "yo"^^xsd:string,
+                                                   "yor"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zap> <urn:lang:code> "zap"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zbl> <urn:lang:code> "zbl"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zen> <urn:lang:code> "zen"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zha> <urn:lang:code> "za"^^xsd:string,
+                                                   "zha"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zho> <urn:lang:code> "chi"^^xsd:string,
+                                                   "zh"^^xsd:string,
+                                                   "zho"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zul> <urn:lang:code> "zu"^^xsd:string,
+                                                   "zul"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zun> <urn:lang:code> "zun"^^xsd:string.
+<http://lexvo.org/id/iso639-3/zza> <urn:lang:code> "zza"^^xsd:string.
+<http://lexvo.org/id/iso639-5/afa> <urn:lang:code> "afa"^^xsd:string.
+<http://lexvo.org/id/iso639-5/alg> <urn:lang:code> "alg"^^xsd:string.
+<http://lexvo.org/id/iso639-5/apa> <urn:lang:code> "apa"^^xsd:string.
+<http://lexvo.org/id/iso639-5/art> <urn:lang:code> "art"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ath> <urn:lang:code> "ath"^^xsd:string.
+<http://lexvo.org/id/iso639-5/aus> <urn:lang:code> "aus"^^xsd:string.
+<http://lexvo.org/id/iso639-5/bad> <urn:lang:code> "bad"^^xsd:string.
+<http://lexvo.org/id/iso639-5/bai> <urn:lang:code> "bai"^^xsd:string.
+<http://lexvo.org/id/iso639-5/bat> <urn:lang:code> "bat"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ber> <urn:lang:code> "ber"^^xsd:string.
+<http://lexvo.org/id/iso639-5/bnt> <urn:lang:code> "bnt"^^xsd:string.
+<http://lexvo.org/id/iso639-5/btk> <urn:lang:code> "btk"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cai> <urn:lang:code> "cai"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cau> <urn:lang:code> "cau"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cel> <urn:lang:code> "cel"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cmc> <urn:lang:code> "cmc"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cpe> <urn:lang:code> "cpe"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cpf> <urn:lang:code> "cpf"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cpp> <urn:lang:code> "cpp"^^xsd:string.
+<http://lexvo.org/id/iso639-5/crp> <urn:lang:code> "crp"^^xsd:string.
+<http://lexvo.org/id/iso639-5/cus> <urn:lang:code> "cus"^^xsd:string.
+<http://lexvo.org/id/iso639-5/day> <urn:lang:code> "day"^^xsd:string.
+<http://lexvo.org/id/iso639-5/dra> <urn:lang:code> "dra"^^xsd:string.
+<http://lexvo.org/id/iso639-5/fiu> <urn:lang:code> "fiu"^^xsd:string.
+<http://lexvo.org/id/iso639-5/gem> <urn:lang:code> "gem"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ijo> <urn:lang:code> "ijo"^^xsd:string.
+<http://lexvo.org/id/iso639-5/inc> <urn:lang:code> "inc"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ine> <urn:lang:code> "ine"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ira> <urn:lang:code> "ira"^^xsd:string.
+<http://lexvo.org/id/iso639-5/iro> <urn:lang:code> "iro"^^xsd:string.
+<http://lexvo.org/id/iso639-5/kar> <urn:lang:code> "kar"^^xsd:string.
+<http://lexvo.org/id/iso639-5/khi> <urn:lang:code> "khi"^^xsd:string.
+<http://lexvo.org/id/iso639-5/kro> <urn:lang:code> "kro"^^xsd:string.
+<http://lexvo.org/id/iso639-5/map> <urn:lang:code> "map"^^xsd:string.
+<http://lexvo.org/id/iso639-5/mkh> <urn:lang:code> "mkh"^^xsd:string.
+<http://lexvo.org/id/iso639-5/mno> <urn:lang:code> "mno"^^xsd:string.
+<http://lexvo.org/id/iso639-5/mun> <urn:lang:code> "mun"^^xsd:string.
+<http://lexvo.org/id/iso639-5/myn> <urn:lang:code> "myn"^^xsd:string.
+<http://lexvo.org/id/iso639-5/nah> <urn:lang:code> "nah"^^xsd:string.
+<http://lexvo.org/id/iso639-5/nai> <urn:lang:code> "nai"^^xsd:string.
+<http://lexvo.org/id/iso639-5/nic> <urn:lang:code> "nic"^^xsd:string.
+<http://lexvo.org/id/iso639-5/nub> <urn:lang:code> "nub"^^xsd:string.
+<http://lexvo.org/id/iso639-5/oto> <urn:lang:code> "oto"^^xsd:string.
+<http://lexvo.org/id/iso639-5/paa> <urn:lang:code> "paa"^^xsd:string.
+<http://lexvo.org/id/iso639-5/phi> <urn:lang:code> "phi"^^xsd:string.
+<http://lexvo.org/id/iso639-5/pra> <urn:lang:code> "pra"^^xsd:string.
+<http://lexvo.org/id/iso639-5/roa> <urn:lang:code> "roa"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sai> <urn:lang:code> "sai"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sal> <urn:lang:code> "sal"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sem> <urn:lang:code> "sem"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sgn> <urn:lang:code> "sgn"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sio> <urn:lang:code> "sio"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sit> <urn:lang:code> "sit"^^xsd:string.
+<http://lexvo.org/id/iso639-5/sla> <urn:lang:code> "sla"^^xsd:string.
+<http://lexvo.org/id/iso639-5/smi> <urn:lang:code> "smi"^^xsd:string.
+<http://lexvo.org/id/iso639-5/son> <urn:lang:code> "son"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ssa> <urn:lang:code> "ssa"^^xsd:string.
+<http://lexvo.org/id/iso639-5/tai> <urn:lang:code> "tai"^^xsd:string.
+<http://lexvo.org/id/iso639-5/tup> <urn:lang:code> "tup"^^xsd:string.
+<http://lexvo.org/id/iso639-5/tut> <urn:lang:code> "tut"^^xsd:string.
+<http://lexvo.org/id/iso639-5/wak> <urn:lang:code> "wak"^^xsd:string.
+<http://lexvo.org/id/iso639-5/wen> <urn:lang:code> "wen"^^xsd:string.
+<http://lexvo.org/id/iso639-5/ypk> <urn:lang:code> "ypk"^^xsd:string.
+<http://lexvo.org/id/iso639-5/znd> <urn:lang:code> "znd"^^xsd:string.
+<urn:lang:privateUse> <urn:lang:code> "x"^^xsd:string.
