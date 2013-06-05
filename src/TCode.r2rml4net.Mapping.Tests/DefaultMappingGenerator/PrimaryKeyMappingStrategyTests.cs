@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // when
             string template;
-            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = columnSeparator }))
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator)))
             {
                 template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
             }
@@ -95,7 +95,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // when
             string template;
-            using (new MappingScope(new MappingOptions { UseDelimitedIdentifiers = false }))
+            using (new MappingScope(new MappingOptions().UsingDelimitedIdentifiers(false)))
             {
                 template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
             }

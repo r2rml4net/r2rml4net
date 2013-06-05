@@ -39,58 +39,17 @@ terms. */
 			
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Threading;
-
 namespace TCode.r2rml4net
 {
     /// <summary>
-    /// A thread-static scope, which allow changing mapping options for a given time
+    /// Interface for the freezeable pattern
     /// </summary>
-    /// <remarks>See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx</remarks>
-    public sealed class MappingScope : IDisposable
+    /// <remarks>See http://blogs.msdn.com/b/ericlippert/archive/2007/11/13/immutability-in-c-part-one-kinds-of-immutability.aspx</remarks>
+    public interface IFreezable
     {
-        private bool _disposed;
-        private readonly MappingOptions _instance;
-        private readonly MappingScope _parent;
-        [ThreadStatic]
-        private static MappingScope _head;
-
         /// <summary>
-        /// Creates a new instance of <see cref="MappingScope"/> with a given set of options
+        /// Makes a freezable object immutable
         /// </summary>
-        /// <param name="instance"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public MappingScope(MappingOptions instance)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-            _instance = instance;
-            _instance.Freeze();
-
-            Thread.BeginThreadAffinity();
-            _parent = _head;
-            _head = this;
-        }
-
-        internal static MappingOptions Current
-        {
-            get { return _head != null ? _head._instance : null; }
-        }
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _disposed = true;
-
-                Debug.Assert(this == _head, "Disposed out of order.");
-                _head = _parent;
-                Thread.EndThreadAffinity();
-            }
-        }
+        MappingOptions Freeze();
     }
 }

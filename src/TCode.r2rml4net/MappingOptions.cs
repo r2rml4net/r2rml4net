@@ -45,11 +45,12 @@ namespace TCode.r2rml4net
     /// Represents a set of options for <a href="http://www.w3.org/TR/r2rml/#default-mappings">default mapping generation</a> 
     /// and <a href="http://www.w3.org/TR/r2rml/#generated-rdf">triples generation</a>
     /// </summary>
-    public sealed class MappingOptions
+    public sealed class MappingOptions : IFreezable
     {
         private static readonly object Locker = new object();
         private static MappingOptions _defaultInstance;
 
+        private bool _isFrozen;
         private string _blankNodeTemplateSeparator;
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
@@ -66,6 +67,7 @@ namespace TCode.r2rml4net
                     if (_defaultInstance == null)
                     {
                         _defaultInstance = new MappingOptions();
+                        _defaultInstance.Freeze();
                     }
                 }
 
@@ -104,7 +106,7 @@ namespace TCode.r2rml4net
         public string BlankNodeTemplateSeparator
         {
             get { return _blankNodeTemplateSeparator; }
-            set
+            internal set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
@@ -116,41 +118,41 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Gets or sets value indicating whether delimited SQL identifiers should be used in mapping graphs
         /// </summary>
-        public bool UseDelimitedIdentifiers { get; set; }
+        public bool UseDelimitedIdentifiers { get; internal set; }
 
         /// <summary>
         /// Gets the right SQL identifier delimiter. Default value is '\"'
         /// </summary>
-        public char SqlIdentifierRightDelimiter { get; private set; }
+        public char SqlIdentifierRightDelimiter { get; internal set; }
 
         /// <summary>
         /// Gets the left SQL identifier delimiter. Default value is '\"'
         /// </summary>
-        public char SqlIdentifierLeftDelimiter { get; private set; }
+        public char SqlIdentifierLeftDelimiter { get; internal set; }
 
         /// <summary>
         /// Gets or sets value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-sql-version-identifier">SQL version identifier</a> should be validated.
         /// Default value is true
         /// </summary>
-        public bool ValidateSqlVersion { get; set; }
+        public bool ValidateSqlVersion { get; internal set; }
 
         /// <summary>
         /// Gets or sets value indicating whether mapping errors should be ignored.
         /// Default value is true
         /// </summary>
-        public bool IgnoreMappingErrors { get; set; }
+        public bool IgnoreMappingErrors { get; internal set; }
 
         /// <summary>
         /// Gets or sets value indicating whether data errors should be ignored.
         /// Default value is true
         /// </summary>
-        public bool IgnoreDataErrors { get; set; }
+        public bool IgnoreDataErrors { get; internal set; }
 
         /// <summary>
         /// Gets or sets value indicating whether duplicate rows in tables without primary key <a href="http://www.w3.org/TR/r2rml/#default-mappings">should be preserved</a>.
         /// Default value is false
         /// </summary>
-        public bool PreserveDuplicateRows { get; set; }
+        public bool PreserveDuplicateRows { get; internal set; }
 
         /// <summary>
         /// Gets or set value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither
@@ -159,17 +161,105 @@ namespace TCode.r2rml4net
         /// a <a href="http://www.w3.org/TR/r2rml/#dfn-column-valued-term-map">column-valued</a>. In such case a distinct automatic blank node
         /// will be created for each logical row.
         /// </summary>
-        public bool AllowAutomaticBlankNodeSubjects { get; set; }
+        public bool AllowAutomaticBlankNodeSubjects { get; internal set; }
 
         /// <summary>
         /// Sets the SQL identifier delimiters
         /// </summary>
-        public void SetSqlIdentifierDelimiters(char newLeftDelimiter, char newRightDelimiter)
+        public MappingOptions WithSqlIdentifierDelimiters(char newLeftDelimiter, char newRightDelimiter)
         {
             SqlIdentifierLeftDelimiter = newLeftDelimiter;
             SqlIdentifierRightDelimiter = newRightDelimiter;
+
+            return this;
         }
 
+        /// <summary>
+        /// Sets the SQL identifier delimiters
+        /// </summary>
+        public MappingOptions WithSqlIdentifierDelimiters(char newDelimiter)
+        {
+            SqlIdentifierLeftDelimiter = newDelimiter;
+            SqlIdentifierRightDelimiter = newDelimiter;
 
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="ValidateSqlVersion"/> setting
+        /// </summary>
+        public MappingOptions WithSqlVersionValidation(bool validateSqlVersion)
+        {
+            ValidateSqlVersion = validateSqlVersion;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="UseDelimitedIdentifiers"/> setting
+        /// </summary>
+        public MappingOptions UsingDelimitedIdentifiers(bool useDelimitedIdentifiers)
+        {
+            UseDelimitedIdentifiers = useDelimitedIdentifiers;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="BlankNodeTemplateSeparator"/> setting
+        /// </summary>
+        public MappingOptions WithBlankNodeTemplateSeparator(string blankNodeTemplateSeparator)
+        {
+            BlankNodeTemplateSeparator = blankNodeTemplateSeparator;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="IgnoreDataErrors"/> setting
+        /// </summary>
+        public MappingOptions IgnoringDataErrors(bool ignoreDataErrors)
+        {
+            IgnoreDataErrors = ignoreDataErrors;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="AllowAutomaticBlankNodeSubjects"/> setting
+        /// </summary>
+        public MappingOptions WithAutomaticBlankNodeSubjects(bool allowAutomaticBlankNodeSubjects)
+        {
+            AllowAutomaticBlankNodeSubjects = allowAutomaticBlankNodeSubjects;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="PreserveDuplicateRows"/> setting
+        /// </summary>
+        public MappingOptions WithDuplicateRowsPreserved(bool preserveDulicateRows)
+        {
+            PreserveDuplicateRows = preserveDulicateRows;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="IgnoreMappingErrors"/> setting
+        /// </summary>
+        public MappingOptions IgnoringMappingErrors(bool ignoreMappingErrors)
+        {
+            IgnoreMappingErrors = ignoreMappingErrors;
+            return this;
+        }
+
+        /// <summary>
+        /// Makes this <see cref="MappingOptions"/> object read-only
+        /// </summary>
+        public MappingOptions Freeze()
+        {
+            _isFrozen = true;
+            return this;
+        }
+
+        internal bool IsFrozen
+        {
+            get { return _isFrozen; }
+        }
     }
 }

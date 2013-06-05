@@ -78,7 +78,7 @@ namespace TCode.r2rml4net.Tests
         public void DefaultTemplateSeparatorCanBeChanged(string newSeparator)
         {
             // when
-            _options.BlankNodeTemplateSeparator = newSeparator;
+            _options.WithBlankNodeTemplateSeparator(newSeparator);
 
             // then
             Assert.AreEqual(newSeparator, _options.BlankNodeTemplateSeparator);
@@ -90,7 +90,7 @@ namespace TCode.r2rml4net.Tests
         public void DefaultIdentifierDelimiterCanBeChanged(char newLeftDelimiter, char newRightDelimiter)
         {
             // when
-            _options.SetSqlIdentifierDelimiters(newLeftDelimiter, newRightDelimiter);
+            _options.WithSqlIdentifierDelimiters(newLeftDelimiter, newRightDelimiter);
 
             // then
             Assert.AreEqual(newLeftDelimiter, _options.SqlIdentifierLeftDelimiter);
@@ -98,10 +98,21 @@ namespace TCode.r2rml4net.Tests
         }
 
         [Test]
+        public void DefaultIdentifierDelimiterCanBeChangedToSameValue()
+        {
+            // when
+            _options.WithSqlIdentifierDelimiters('-');
+
+            // then
+            Assert.AreEqual('-', _options.SqlIdentifierLeftDelimiter);
+            Assert.AreEqual('-', _options.SqlIdentifierRightDelimiter);
+        }
+
+        [Test]
         public void CanTurnOffIdentifierDelimiting()
         {
             // when
-            _options.UseDelimitedIdentifiers = false;
+            _options.UsingDelimitedIdentifiers(false);
 
             // then
             Assert.AreEqual(false, _options.UseDelimitedIdentifiers);
@@ -117,10 +128,7 @@ namespace TCode.r2rml4net.Tests
         public void CanDisableSqlVersionValidatioon()
         {
             // when
-            _options = new MappingOptions
-                {
-                    ValidateSqlVersion = false
-                };
+            _options = _options.WithSqlVersionValidation(false);
 
             // then
             Assert.IsFalse(_options.ValidateSqlVersion);
@@ -154,7 +162,7 @@ namespace TCode.r2rml4net.Tests
         public void Creating_scope_should_change_current_mapping_options()
         {
             // when
-            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("x")))
             {
                 Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
             }
@@ -165,29 +173,12 @@ namespace TCode.r2rml4net.Tests
         }
 
         [Test]
-        public void Should_allow_changing_default_mapping_options()
-        {
-            // given
-            MappingOptions.Default.BlankNodeTemplateSeparator = "y";
-
-            // when
-            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
-            {
-                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
-            }
-
-            // then
-            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
-            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("y"));
-        }
-
-        [Test]
         public void Should_allow_nesting_scopes()
         {
             // when
-            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("x")))
             {
-                using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "y" }))
+                using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("y")))
                 {
                     Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
                 }
@@ -206,7 +197,7 @@ namespace TCode.r2rml4net.Tests
             string inThreadSeparator = null;
 
             // when
-            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("x")))
             {
                 var thread = new Thread(() =>
                     {
@@ -218,6 +209,38 @@ namespace TCode.r2rml4net.Tests
 
             // then
             Assert.That(inThreadSeparator, Is.EqualTo("_"));
+        }
+
+        [Test]
+        public void When_added_to_scope_should_be_frozen()
+        {
+             using (new MappingScope(new MappingOptions()))
+             {
+                 Assert.That(MappingOptions.Current.IsFrozen, Is.True);
+             }
+        }
+
+        [Test]
+        public void Default_options_should_be_frozen()
+        {
+            Assert.That(MappingOptions.Default.IsFrozen, Is.True);
+        }
+
+        [Test]
+        public void Frozen_options_cannot_be_changed()
+        {
+            // when
+            _options.Freeze();
+
+            // then
+            Assert.Throws<InvalidOperationException>(() => _options.IgnoringDataErrors(true));
+            Assert.Throws<InvalidOperationException>(() => _options.UsingDelimitedIdentifiers(true));
+            Assert.Throws<InvalidOperationException>(() => _options.WithAutomaticBlankNodeSubjects(true));
+            Assert.Throws<InvalidOperationException>(() => _options.WithBlankNodeTemplateSeparator("_"));
+            Assert.Throws<InvalidOperationException>(() => _options.WithDuplicateRowsPreserved(true));
+            Assert.Throws<InvalidOperationException>(() => _options.WithSqlIdentifierDelimiters('[', ']'));
+            Assert.Throws<InvalidOperationException>(() => _options.WithSqlVersionValidation(false));
+            Assert.Throws<InvalidOperationException>(() => _options.IgnoringMappingErrors(false));
         }
     }
 }
