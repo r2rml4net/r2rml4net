@@ -11,9 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is developer channel of r2rml.net built automatically. Please be aware it may contain buggy and untested code.</description>
     <releaseNotes>
-      1.Moved key classes to TCode.r2rmlnet namespace and merged into one assembly
+      1. Moved key classes to TCode.r2rmlnet namespace and merged into one assembly
       2. Small imporvements in logging (LogFacadeBase)
       3. Non-standard behaviour for subject maps (Issue 13)
+      4. Changes in MappingOptions usage
     </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
