@@ -171,11 +171,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test]
         public void ConfigurationBuilderCanBeConstructedWithChangedDefaultBaseUri()
         {
-            Uri baseUri = new Uri("http://this.is.test.com/rdf/");
+            Uri BaseUri = new Uri("http://this.is.test.com/rdf/");
 
-            _configuration = new FluentR2RML(baseUri);
+            _configuration = new FluentR2RML(BaseUri);
 
-            Assert.AreEqual(baseUri, _configuration.R2RMLMappings.BaseUri);
+            Assert.AreEqual(BaseUri, _configuration.R2RMLMappings.BaseUri);
         }
     }
 }

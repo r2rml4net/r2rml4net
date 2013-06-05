@@ -49,6 +49,6 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Creates a predicate URI for a column
         /// </summary>
-        Uri CreatePredicateUri(Uri baseUri, ColumnMetadata column);
+        Uri CreatePredicateUri(Uri BaseUri, ColumnMetadata column);
     }
 }

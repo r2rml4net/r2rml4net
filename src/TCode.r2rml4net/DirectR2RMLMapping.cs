@@ -54,35 +54,19 @@ namespace TCode.r2rml4net
         private IR2RML _generatedMappings;
 
         /// <summary>
-        /// Create a new default R2RML mapping with no base URI
+        /// Creates a default mapping with no base URI
         /// </summary>
         public DirectR2RMLMapping(IDatabaseMetadata provider)
-            : this(provider, new MappingOptions())
         {
-        }
-
-        /// <summary>
-        /// Creates a default mapping with custom options and no base URI
-        /// </summary>
-        public DirectR2RMLMapping(IDatabaseMetadata provider, MappingOptions options)
-        {
-            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(), options);
+            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML());
         }
 
         /// <summary>
         /// Creates a default mapping with a base URI set
         /// </summary>
         public DirectR2RMLMapping(IDatabaseMetadata provider, Uri baseMappingUri)
-            : this(provider, baseMappingUri, new MappingOptions())
         {
-        }
-
-        /// <summary>
-        /// Creates a default mapping with custom options and a base URI set
-        /// </summary>
-        public DirectR2RMLMapping(IDatabaseMetadata provider, Uri baseMappingUri, MappingOptions options)
-        {
-            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(baseMappingUri), options);
+            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(baseMappingUri));
         }
 
         public ISqlVersionValidator SqlVersionValidator

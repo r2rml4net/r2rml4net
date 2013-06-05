@@ -51,22 +51,6 @@ namespace TCode.r2rml4net.Mapping.Direct
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
 
-        /// <summary>
-        /// Creates a new instance of <see cref="DirectMappingStrategy"/> with default options
-        /// </summary>
-        public DirectMappingStrategy()
-            : this(new MappingOptions())
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="DirectMappingStrategy"/> with custom options
-        /// </summary>
-        public DirectMappingStrategy(MappingOptions options)
-            : base(options)
-        {
-        }
-
         #region Implementation of IDirectMappingStrategy
 
         /// <summary>
@@ -98,21 +82,21 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey"/>
         /// and class returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectClassUri"/>
         /// </summary>
-        public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
+        public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table)
         {
             if (subjectMap == null)
                 throw new ArgumentNullException("subjectMap");
-            if (baseUri == null)
-                throw new ArgumentNullException("baseUri");
+            if (BaseUri == null)
+                throw new ArgumentNullException("BaseUri");
             if (table == null)
                 throw new ArgumentNullException("table");
 
             if(table.PrimaryKey.Length == 0)
                 throw new ArgumentException(string.Format("Table {0} has no primay key", table.Name));
 
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, table.Name);
 
-            string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(baseUri, table);
+            string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(BaseUri, table);
 
             subjectMap.AddClass(classIri).IsTemplateValued(template);
         }
@@ -121,9 +105,9 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#dfn-predicate-map">predicate map</a> as constant valued with URI returned by
         /// <see cref="IForeignKeyMappingStrategy.CreateReferencePredicateUri"/>
         /// </summary>
-        public virtual void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri BaseUri, ForeignKeyMetadata foreignKey)
         {
-            Uri foreignKeyRefUri = ForeignKeyMappingStrategy.CreateReferencePredicateUri(baseUri, foreignKey);
+            Uri foreignKeyRefUri = ForeignKeyMappingStrategy.CreateReferencePredicateUri(BaseUri, foreignKey);
             predicateMap.IsConstantValued(foreignKeyRefUri);
         }
 
@@ -142,9 +126,9 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// Sets up an <a href="http://www.w3.org/TR/r2rml/#dfn-object-map">object map</a> as template valued node with template returned by
         /// <see cref="IForeignKeyMappingStrategy.CreateReferenceObjectTemplate"/>
         /// </summary>
-        public virtual void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri BaseUri, ForeignKeyMetadata foreignKey)
         {
-            var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(baseUri, foreignKey);
+            var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(BaseUri, foreignKey);
             objectMap.IsTemplateValued(templateForForeignKey);
         }
 
@@ -158,7 +142,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(Options);
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
 
                 return _primaryKeyMappingStrategy;
             }
@@ -173,7 +157,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_foreignKeyMappingStrategy == null)
-                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy(Options);
+                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy();
 
                 return _foreignKeyMappingStrategy;
             }

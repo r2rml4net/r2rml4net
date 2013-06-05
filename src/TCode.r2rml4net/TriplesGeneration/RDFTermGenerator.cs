@@ -55,31 +55,12 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     public class RDFTermGenerator : IRDFTermGenerator
     {
-        private readonly MappingOptions _options;
         static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\{\}.]+)(?<-N>\})(?(N)(?!))");
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
-        private IRDFTermGenerationLog _log = NullLog.Instance;
+        private LogFacadeBase _log = NullLog.Instance;
         private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new Dictionary<string, IBlankNode>(256);
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
-        private readonly MappingHelper _mappingHelper;
-
-        /// <summary>
-        /// Creates a new <see cref="RDFTermGenerator"/> with default options
-        /// </summary>
-        public RDFTermGenerator()
-            : this(new MappingOptions())
-        {
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="RDFTermGenerator"/> with customized options
-        /// </summary>
-        public RDFTermGenerator(MappingOptions options)
-        {
-            _options = options;
-            _mappingHelper = new MappingHelper(options);
-        }
 
         /// <summary>
         /// <see cref="ISQLValuesMappingStrategy"/>
@@ -91,9 +72,9 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// <see cref="IRDFTermGenerationLog"/>
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
-        public IRDFTermGenerationLog Log
+        public LogFacadeBase Log
         {
             get { return _log; }
             set { _log = value; }
@@ -123,7 +104,16 @@ namespace TCode.r2rml4net.TriplesGeneration
             var logicalRowWrapped = new UndelimitedColumnsDataRecordWrapper(logicalRow);
 
             if (!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
-                throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
+            {
+                if (termMap is ISubjectMap && MappingOptions.Current.AllowAutomaticBlankNodeSubjects)
+                {
+                    node = NodeFactory.CreateBlankNode();
+                }
+                else
+                {
+                    throw new InvalidTermException(termMap, "Term map must be either constant, column or template valued");
+                }
+            }
 
             if (termMap.IsConstantValued)
             {
@@ -285,7 +275,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (relativePart.Split('/').Any(seg => seg == "." || seg == ".."))
                 throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
 
-            return new Uri(termMap.BaseURI + relativePart);
+            return new Uri(termMap.BaseUri + relativePart);
         }
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)
@@ -306,7 +296,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     }
                     _blankNodeSubjects.Add(value, blankNode);
                 }
-                else if (_options.PreserveDuplicateRows)
+                else if (MappingOptions.Current.PreserveDuplicateRows)
                 {
                     blankNode = _nodeFactory.CreateBlankNode();
                 }
@@ -337,7 +327,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 return TemplateReplaceRegex.Replace(template, match =>
                     {
                         var replacement = ReplaceColumnReference(match, logicalRow);
-                        return escape ? _mappingHelper.UrlEncode(replacement) : replacement;
+                        return escape ? MappingHelper.UrlEncode(replacement) : replacement;
                     });
             }
             catch (ArgumentNullException)
@@ -388,11 +378,11 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             foreach (var segment in segments)
             {
-                if (segment.Any(chara => !_mappingHelper.IsIUnreserved(chara)))
+                if (segment.Any(chara => !MappingHelper.IsIUnreserved(chara)))
                 {
                     disallowedChars =
                         disallowedChars.Union(
-                            segment.Where(chara => chara != '/' && !_mappingHelper.IsIUnreserved(chara)));
+                            segment.Where(chara => chara != '/' && !MappingHelper.IsIUnreserved(chara)));
                 }
             }
 

@@ -55,7 +55,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private W3CTriplesMapProcessor _triplesMapProcessor;
         private Mock<ITriplesMap> _triplesMap;
         private Mock<IDbConnection> _connection;
-        private Mock<ITriplesGenerationLog> _log;
+        private Mock<LogFacadeBase> _log;
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<IRdfHandler> _rdfHandler;
         private Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [SetUp]
         public void Setup()
         {
-            _log = new Mock<ITriplesGenerationLog>();
+            _log = new Mock<LogFacadeBase>();
             _triplesMap = new Mock<ITriplesMap>();
             _connection = new Mock<IDbConnection>();
             _termGenerator = new Mock<IRDFTermGenerator>();
@@ -233,6 +233,19 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _log.Verify(log => log.LogQueryExecutionError(_triplesMap.Object, "Error message"), Times.Once());
+        }
+
+        [Test]
+        public void SettingLogShouldSetLogToRdfTermGenerator()
+        {
+            // given
+            Mock<LogFacadeBase> log = new Mock<LogFacadeBase>();
+
+            // when
+            _triplesMapProcessor.Log = log.Object;
+
+            // then
+            _termGenerator.VerifySet(g => g.Log = log.Object, Times.Once());
         }
     }
 }

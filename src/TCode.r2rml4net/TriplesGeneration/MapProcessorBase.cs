@@ -56,6 +56,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         protected const string RrDefaultgraph = "http://www.w3.org/ns/r2rml#defaultGraph";
         private readonly IRDFTermGenerator _termGenerator;
+        private LogFacadeBase _log;
 
         /// <summary>
         /// Creates an instance
@@ -76,7 +77,15 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// <summary>
         /// Generation log
         /// </summary>
-        public ITriplesGenerationLog Log { get; set; }
+        public LogFacadeBase Log
+        {
+            get { return _log; }
+            set
+            {
+                _log = value;
+                TermGenerator.Log = value;
+            }
+        }
 
         /// <summary>
         /// Adds zero or more triples to the output dataset

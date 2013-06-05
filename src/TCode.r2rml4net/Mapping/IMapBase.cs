@@ -52,6 +52,6 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Base mapping URI. It will be used to resolve relative values when generating terms
         /// </summary>
-        Uri BaseURI { get; }
+        Uri BaseUri { get; }
     }
 }

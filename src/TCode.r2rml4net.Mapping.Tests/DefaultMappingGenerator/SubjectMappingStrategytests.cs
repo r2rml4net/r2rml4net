@@ -49,18 +49,18 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy();
         }
 
         [TestCase("http://example.com")]
         [TestCase("http://example.com/")]
-        public void CreatesSubjectClassUri(string baseUri)
+        public void CreatesSubjectClassUri(string BaseUri)
         {
             // given
             TableMetadata table = new TableMetadata { Name = "TableXYZ" };
 
             // when
-            var classUri = _strategy.CreateSubjectClassUri(new Uri(baseUri), table.Name);
+            var classUri = _strategy.CreateSubjectClassUri(new Uri(BaseUri), table.Name);
 
             // then
             Assert.AreEqual("http://example.com/TableXYZ", classUri.AbsoluteUri);

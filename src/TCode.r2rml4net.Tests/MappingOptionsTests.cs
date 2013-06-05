@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System;
+using System.Threading;
 using NUnit.Framework;
 
 namespace TCode.r2rml4net.Tests
@@ -135,6 +136,88 @@ namespace TCode.r2rml4net.Tests
         public void ByDefaultDontPreserveDuplicateRows()
         {
             Assert.IsFalse(_options.PreserveDuplicateRows);
+        }
+
+        [Test]
+        public void Accessing_scope_without_inizializing_should_return_instance()
+        {
+            // when
+            var mappingOptions = MappingOptions.Current;
+            var mappingOptions2 = MappingOptions.Current;
+
+            // then
+            Assert.That(mappingOptions, Is.Not.Null);
+            Assert.That(mappingOptions, Is.SameAs(mappingOptions2));
+        }
+
+        [Test]
+        public void Creating_scope_should_change_current_mapping_options()
+        {
+            // when
+            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+            }
+
+            // then
+            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+        }
+
+        [Test]
+        public void Should_allow_changing_default_mapping_options()
+        {
+            // given
+            MappingOptions.Default.BlankNodeTemplateSeparator = "y";
+
+            // when
+            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+            }
+
+            // then
+            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+        }
+
+        [Test]
+        public void Should_allow_nesting_scopes()
+        {
+            // when
+            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "y" }))
+                {
+                    Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+                }
+                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+            }
+
+            // then
+            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+        }
+
+        [Test]
+        public void Changed_options_should_not_affect_other_threads()
+        {
+            // given
+            string inThreadSeparator = null;
+
+            // when
+            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = "x" }))
+            {
+                var thread = new Thread(() =>
+                    {
+                        inThreadSeparator = MappingOptions.Current.BlankNodeTemplateSeparator;
+                    });
+                thread.Start();
+                thread.Join();
+            }
+
+            // then
+            Assert.That(inThreadSeparator, Is.EqualTo("_"));
         }
     }
 }

@@ -57,56 +57,41 @@ namespace TCode.r2rml4net
     {
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
-        private readonly MappingOptions _mappingOptions;
+        private LogFacadeBase _log;
 
         /// <summary>
-        /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
-        public ITriplesGenerationLog Log { get; set; }
+        public LogFacadeBase Log
+        {
+            get { return _log; }
+            set
+            {
+                _log = value;
+                _triplesMapProcessor.Log = _log;
+            }
+        }
 
         #region Constructors
 
         /// <summary>
         /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
-        /// and uses default RDF term generation and map processing algorithms and default mapping options
+        /// and uses default RDF term generation and map processing algorithms
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         public W3CR2RMLProcessor(IDbConnection connection)
-            : this(connection, new RDFTermGenerator(), new MappingOptions())
+            : this(connection, new RDFTermGenerator())
         {
         }
 
         /// <summary>
         /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
-        /// and uses default map processing algorithm and default mapping options
+        /// and uses default map processing algorithm
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
         public W3CR2RMLProcessor(IDbConnection connection, IRDFTermGenerator rdfTermGenerator)
-            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator), new MappingOptions())
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
-        /// and uses default RDF term generation and map processing algorithms and custom mapping options
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="mappingOptions">options for map processing</param>
-        public W3CR2RMLProcessor(IDbConnection connection, MappingOptions mappingOptions)
-            : this(connection, new RDFTermGenerator(), mappingOptions)
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
-        /// and uses default map processing algorithm and custom mapping options
-        /// </summary>
-        /// <param name="connection">connection to datasource</param>
-        /// <param name="rdfTermGenerator">generator of <see cref="INode"/>s for subject maps, predicate maps, object maps and graph maps</param>
-        /// <param name="mappingOptions">options for map processing</param>
-        public W3CR2RMLProcessor(IDbConnection connection, IRDFTermGenerator rdfTermGenerator, MappingOptions mappingOptions)
-            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator), mappingOptions)
+            : this(connection, new W3CTriplesMapProcessor(rdfTermGenerator))
         {
         }
 
@@ -115,14 +100,12 @@ namespace TCode.r2rml4net
         /// </summary>
         /// <param name="connection">connection to datasource</param>
         /// <param name="triplesMapProcessor"></param>
-        /// <param name="mappingOptions">options for map processing</param>
-        protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor, MappingOptions mappingOptions)
+        protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
+            _triplesMapProcessor = triplesMapProcessor;
+            _connection = connection;
             Log = NullLog.Instance;
 
-            _triplesMapProcessor = triplesMapProcessor;
-            _mappingOptions = mappingOptions;
-            _connection = connection;
         }
 
         #endregion
@@ -149,14 +132,14 @@ namespace TCode.r2rml4net
                 {
                     Log.LogInvalidTermMap(e.TermMap, e.Message);
                     handlingOk = false;
-                    if (!Options.IgnoreDataErrors)
+                    if (!MappingOptions.Current.IgnoreDataErrors)
                         break;
                 }
                 catch (InvalidMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
                     handlingOk = false;
-                    if (!Options.IgnoreMappingErrors)
+                    if (!MappingOptions.Current.IgnoreMappingErrors)
                         break;
                 }
             }

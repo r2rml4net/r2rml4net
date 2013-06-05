@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private IEnumerable<IUriNode> _graphs;
         private IEnumerable<INode> _objects;
         private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<ITriplesGenerationLog> _log;
+        private Mock<LogFacadeBase> _log;
 
         [SetUp]
         public void Setup()
@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _graphs = new IUriNode[0];
 
             _termGenerator = new Mock<IRDFTermGenerator>();
-            _log = new Mock<ITriplesGenerationLog>();
+            _log = new Mock<LogFacadeBase>();
 
             _rdfHandler = new Mock<IRdfHandler>();
             _rdfHandler.Setup(writer => writer.CreateUriNode(It.IsAny<Uri>())).Returns((Uri uri) => CreateMockedUriNode(uri));
