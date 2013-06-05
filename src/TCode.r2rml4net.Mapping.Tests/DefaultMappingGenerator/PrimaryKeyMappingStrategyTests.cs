@@ -72,7 +72,11 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _strategy = new PrimaryKeyMappingStrategy();
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            string template;
+            using (new Scope<MappingOptions>(new MappingOptions { BlankNodeTemplateSeparator = columnSeparator }))
+            {
+                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            }
 
             // then
             Assert.AreEqual(expectedTemplate, template);
@@ -90,7 +94,11 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _strategy = new PrimaryKeyMappingStrategy();
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            string template;
+            using (new Scope<MappingOptions>(new MappingOptions { UseDelimitedIdentifiers = false }))
+            {
+                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            }
 
             // then
             Assert.AreEqual("Table_{ColumnA}_{Column B}_{Yet another column}", template);
