@@ -49,7 +49,7 @@ namespace TCode.r2rml4net.Tests
             const string unescaped = "some, text; with: illegal/ characters";
 
             // when
-            string escaped = new MappingHelper(new MappingOptions()).UrlEncode(unescaped);
+            string escaped = MappingHelper.UrlEncode(unescaped);
 
             // then
             Assert.AreEqual("some%2C%20text%3B%20with%3A%20illegal%2F%20characters", escaped);
@@ -61,7 +61,7 @@ namespace TCode.r2rml4net.Tests
         [TestCase("0123654789")]
         public void DoesntEncodeAllowedCharcters(string character)
         {
-            Assert.AreEqual(character, new MappingHelper(new MappingOptions()).UrlEncode(character));
+            Assert.AreEqual(character, MappingHelper.UrlEncode(character));
         }
 
         [TestCase(" ", "%20")]
@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Tests
         [TestCase("/(..)/", "%2F%28..%29%2F")]
         public void EncodesCharactersCaseSensitive(string character, string expectedEncoded)
         {
-            Assert.AreEqual(expectedEncoded, new MappingHelper(new MappingOptions()).UrlEncode(character));
+            Assert.AreEqual(expectedEncoded, MappingHelper.UrlEncode(character));
         }
 
         [TestCase("成")]
@@ -80,7 +80,7 @@ namespace TCode.r2rml4net.Tests
         [TestCase("カタカ")]
         public void DoesntEscapeEasterScript(string character)
         {
-            Assert.AreEqual(character, new MappingHelper(new MappingOptions()).UrlEncode(character));
+            Assert.AreEqual(character, MappingHelper.UrlEncode(character));
             
         }
     }

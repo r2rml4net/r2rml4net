@@ -163,8 +163,7 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
 
         private TriplesMapConfigurationStub CreateStub(IGraph graph)
         {
-            return new TriplesMapConfigurationStub(_configuration.Object,
-                graph, new MappingOptions(), _sqlVersionValidator.Object);
+            return new TriplesMapConfigurationStub(_configuration.Object, graph, _sqlVersionValidator.Object);
         }
     }
 }
