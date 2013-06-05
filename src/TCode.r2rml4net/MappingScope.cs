@@ -39,10 +39,57 @@ terms. */
 			
 #endregion
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
-[assembly: Guid("1C96F7F6-32B6-4FD3-A12F-5BEE2FD068D9")]
-[assembly: AssemblyTitle("r2rml.net Mapping Library")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2,PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")]
+namespace TCode.r2rml4net
+{
+    /// <summary>
+    /// A thread-static scope, which allow changing mapping options for a given time
+    /// </summary>
+    /// <remarks>See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx</remarks>
+    public sealed class MappingScope : IDisposable
+    {
+        private bool _disposed;
+        private readonly MappingOptions _instance;
+        private readonly MappingScope _parent;
+        [ThreadStatic]
+        private static MappingScope _head;
+
+        /// <summary>
+        /// Creates a new instance of <see cref="MappingScope"/> with a given set of options
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public MappingScope(MappingOptions instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+            _instance = instance;
+
+            Thread.BeginThreadAffinity();
+            _parent = _head;
+            _head = this;
+        }
+
+        internal static MappingOptions Current
+        {
+            get { return _head != null ? _head._instance : null; }
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+
+                Debug.Assert(this == _head, "Disposed out of order.");
+                _head = _parent;
+                Thread.EndThreadAffinity();
+            }
+        }
+    }
+}

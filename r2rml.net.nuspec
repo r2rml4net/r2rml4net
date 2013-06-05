@@ -11,21 +11,21 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
     <releaseNotes>
-      <ol>
-        <li>Moved key classes to TCode.r2rmlnet namespace</li>
-      </ol>
+      1. Moved key classes to TCode.r2rmlnet namespace and merged into one assembly
+      2. Small imporvements in logging (LogFacadeBase)
+      3. Non-standard behaviour for subject maps (Issue 13)
     </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
 	<dependencies>
 		<dependency id="dotNetRDF" version="1.0.0" />
+    <dependency id="DatabaseSchemaReader" version="1.2.8" />
 	</dependencies>
   </metadata>
   <files>
-	<file src="src\bin\Release\DatabaseSchemaReader.dll" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.dll" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.xml" target="lib\net40" />
-	<file src="src\bin\Release\TCode.r2rml4net.pdb" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.dll" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.xml" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.pdb" target="lib\net40" />
   </files>
 </package>

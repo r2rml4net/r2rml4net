@@ -52,9 +52,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
             IPredicateObjectMap predicateObjectMap, 
             ITriplesMapConfiguration childTriplesMap, 
             ITriplesMap parentTriplesMap, 
-            IGraph mappings,
-            MappingOptions mappingOptions)
-            : this(predicateObjectMap, childTriplesMap, parentTriplesMap, mappings, mappings.CreateBlankNode(), mappingOptions)
+            IGraph mappings)
+            : this(predicateObjectMap, childTriplesMap, parentTriplesMap, mappings, mappings.CreateBlankNode())
         {
         }
 
@@ -63,9 +62,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
             ITriplesMapConfiguration childTriplesMap,
             ITriplesMap parentTriplesMap,
             IGraph mappings,
-            INode node,
-            MappingOptions mappingOptions)
-            : base(childTriplesMap, mappings, node, mappingOptions)
+            INode node)
+            : base(childTriplesMap, mappings, node)
         {
             _predicateObjectMap = predicateObjectMap;
             _childTriplesMap = childTriplesMap;

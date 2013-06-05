@@ -47,9 +47,39 @@ namespace TCode.r2rml4net
     /// </summary>
     public sealed class MappingOptions
     {
+        private static readonly object Locker = new object();
+        private static MappingOptions _defaultInstance;
+
         private string _blankNodeTemplateSeparator;
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
+
+        /// <summary>
+        /// Gets a singleton instance with default values of <see cref="MappingOptions" />
+        /// </summary>
+        public static MappingOptions Default
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    if (_defaultInstance == null)
+                    {
+                        _defaultInstance = new MappingOptions();
+                    }
+                }
+
+                return _defaultInstance;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MappingOptions"/> from the current <see cref="MappingScope"/> or the <see cref="Default"/> options
+        /// </summary>
+        public static MappingOptions Current
+        {
+            get { return MappingScope.Current ?? Default; }
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="MappingOptions"/> with default options' values
@@ -64,6 +94,7 @@ namespace TCode.r2rml4net
             IgnoreMappingErrors = true;
             IgnoreDataErrors = true;
             PreserveDuplicateRows = false;
+            AllowAutomaticBlankNodeSubjects = false;
         }
 
         /// <summary>
@@ -75,7 +106,7 @@ namespace TCode.r2rml4net
             get { return _blankNodeTemplateSeparator; }
             set
             {
-                if(value == null)
+                if (value == null)
                     throw new ArgumentNullException("value");
 
                 _blankNodeTemplateSeparator = value;
@@ -122,6 +153,15 @@ namespace TCode.r2rml4net
         public bool PreserveDuplicateRows { get; set; }
 
         /// <summary>
+        /// Gets or set value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-template-valued-term-map">template-valued</a> nor 
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-constant-valued-term-map">constant-valued</a> nor 
+        /// a <a href="http://www.w3.org/TR/r2rml/#dfn-column-valued-term-map">column-valued</a>. In such case a distinct automatic blank node
+        /// will be created for each logical row.
+        /// </summary>
+        public bool AllowAutomaticBlankNodeSubjects { get; set; }
+
+        /// <summary>
         /// Sets the SQL identifier delimiters
         /// </summary>
         public void SetSqlIdentifierDelimiters(char newLeftDelimiter, char newRightDelimiter)
@@ -129,5 +169,7 @@ namespace TCode.r2rml4net
             SqlIdentifierLeftDelimiter = newLeftDelimiter;
             SqlIdentifierRightDelimiter = newRightDelimiter;
         }
+
+
     }
 }

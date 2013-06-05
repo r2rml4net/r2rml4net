@@ -59,12 +59,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
-        private Mock<IRDFTermGenerationLog> _log;
+        private Mock<LogFacadeBase> _log;
 
         [SetUp]
         public void Setup()
         {
-            _log = new Mock<IRDFTermGenerationLog>();
+            _log = new Mock<LogFacadeBase>();
             _objectMap = new Mock<IObjectMap>();
             _termMap = new Mock<ITermMap>();
             _termType = new Mock<ITermType>();
@@ -74,7 +74,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
-            _termGenerator = new RDFTermGenerator
+            _termGenerator = new RDFTermGenerator()
                                  {
                                      SqlValuesMappingStrategy = _lexicalFormProvider.Object,
                                      Log = _log.Object
@@ -273,7 +273,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -301,7 +301,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://www.example.com/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -329,7 +329,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -353,7 +353,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable(); 
             
             // when
@@ -679,7 +679,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.Template).Returns(string.Format("{{{0}}}", ColumnName)).Verifiable();
-            _termMap.Setup(map => map.BaseURI).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -731,6 +731,22 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [Test]
+        public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
+        {
+            using (new MappingScope(new MappingOptions {AllowAutomaticBlankNodeSubjects = true}))
+            {
+                // given
+                _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+
+                // when
+                var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
+
+                // then
+                Assert.That(node, Is.Not.Null);
+            }
+        }
+
+        [Test]
         public void ThrowsWhenGraphMapIsNonIri()
         {
             // given
@@ -761,17 +777,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
-            // given
-            _termGenerator = new RDFTermGenerator(new MappingOptions { PreserveDuplicateRows = true });
-            const string nodeId = "node id";
-            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            using (new MappingScope(new MappingOptions {PreserveDuplicateRows = true}))
+            {
+                // given
+                _termGenerator = new RDFTermGenerator();
+                const string nodeId = "node id";
+                _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
-            // when
-            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-            var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                // when
+                var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
-            // then
-            Assert.AreNotSame(node, node2);
+                // then
+                Assert.AreNotSame(node, node2);
+            }
         }
 
         [Test]

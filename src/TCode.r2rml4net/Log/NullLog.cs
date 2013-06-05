@@ -41,7 +41,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
-    class NullLog : ITriplesGenerationLog, IRDFTermGenerationLog, IDefaultMappingGenerationLog
+    class NullLog : LogFacadeBase
     {
         static readonly object ClassLock = new object();
         private static NullLog _instance;
@@ -69,53 +69,40 @@ namespace TCode.r2rml4net.Log
             }
         }
 
-        #region Implementation of ITriplesGenerationLog
-
-        public void LogMissingSubject(ITriplesMap triplesMap)
+        public override void LogMissingSubject(ITriplesMap triplesMap)
         {
         }
 
-        public void LogQueryExecutionError(IQueryMap map, string errorMessage)
+        public override void LogQueryExecutionError(IQueryMap map, string errorMessage)
         {
         }
 
-        public void LogInvalidTermMap(ITermMap termMap, string message)
+        public override void LogInvalidTermMap(ITermMap termMap, string message)
         {
         }
 
-        public void LogInvaldTriplesMap(ITriplesMap triplesMap, string message)
+        public override void LogInvaldTriplesMap(ITriplesMap triplesMap, string message)
         {
         }
 
-        #endregion
-
-        #region Implementation of IRDFTermGenerationLog
-
-        public void LogColumnNotFound(ITermMap termMap, string columnName)
+        public override void LogColumnNotFound(ITermMap termMap, string columnName)
         {
         }
 
-        public void LogTermGenerated(INode node)
+        public override void LogTermGenerated(INode node)
         {
         }
 
-        public void LogNullTermGenerated(ITermMap termMap)
+        public override void LogNullTermGenerated(ITermMap termMap)
         {
         }
 
-        public void LogNullValueForColumn(string columnName)
+        public override void LogNullValueForColumn(string columnName)
         {
         }
 
-        #endregion
-
-        #region Implementation of IDefaultMappingGenerationLog
-
-        public void LogMultipleCompositeKeyReferences(TableMetadata table)
+        public override void LogMultipleCompositeKeyReferences(TableMetadata table)
         {
-            throw new System.NotImplementedException();
         }
-
-        #endregion
     }
 }

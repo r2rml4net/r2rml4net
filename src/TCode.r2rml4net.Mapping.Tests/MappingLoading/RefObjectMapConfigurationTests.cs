@@ -84,7 +84,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // when
             var blankNode = graph.GetTriplesWithPredicate(graph.CreateUriNode("rr:objectMap")).Single().Object;
-            _refObjectMap = new RefObjectMapConfiguration(_predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph, blankNode, new MappingOptions());
+            _refObjectMap = new RefObjectMapConfiguration(_predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph, blankNode);
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then

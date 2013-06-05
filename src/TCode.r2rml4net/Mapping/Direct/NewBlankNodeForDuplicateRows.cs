@@ -52,17 +52,8 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// 
         /// </summary>
         public NewBlankNodeForDuplicateRows()
-            : this(new MappingOptions())
         {
 
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="options"></param>
-        public NewBlankNodeForDuplicateRows(MappingOptions options)
-            : base(options)
-        {
         }
 
         #region Overrides of DirectMappingStrategy

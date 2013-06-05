@@ -49,13 +49,13 @@ namespace TCode.r2rml4net.Mapping.Fluent
     {
         public ILanguageTagValidator LanguageTagValidator { get; set; }
 
-        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, MappingOptions mappingOptions)
-            : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode(), mappingOptions)
+        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
+            : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())
         {
         }
 
-        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node, MappingOptions mappingOptions)
-            : base(parentTriplesMap, parentMap, r2RMLMappings, node, mappingOptions)
+        internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings, INode node)
+            : base(parentTriplesMap, parentMap, r2RMLMappings, node)
         {
             LanguageTagValidator = new Bcp47RegexLanguageTagValidator();
         }

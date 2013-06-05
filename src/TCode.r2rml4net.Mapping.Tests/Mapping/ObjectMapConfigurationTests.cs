@@ -71,7 +71,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             _languageTagValidator = new Mock<ILanguageTagValidator>(MockBehavior.Strict);
 
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, new MappingOptions())
+            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph)
                 {
                     LanguageTagValidator = _languageTagValidator.Object
                 };
@@ -80,7 +80,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void NodeCannotBeNull()
         {
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null, new MappingOptions());
+            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, (INode) null);
         }
 
         [Test]

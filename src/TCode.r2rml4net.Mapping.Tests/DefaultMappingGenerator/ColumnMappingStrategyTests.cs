@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         [TestCase("http://example.com/")]
         [TestCase("http://example.com")]
-        public void CreatesATemplateForColumn(string baseUri)
+        public void CreatesATemplateForColumn(string BaseUri)
         {
             // given
             var columnMetadata = new ColumnMetadata
@@ -61,7 +61,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 };
 
             // when
-            var uri = _strategy.CreatePredicateUri(new Uri(baseUri), columnMetadata);
+            var uri = _strategy.CreatePredicateUri(new Uri(BaseUri), columnMetadata);
 
             // then
             Assert.AreEqual("http://example.com/TableABC#ColumnXYZ", uri.AbsoluteUri);

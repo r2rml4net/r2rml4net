@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
          
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, new MappingOptions());
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph);
         }
 
         [Test]
@@ -192,7 +192,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void NodeCannotBeNull()
         {
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, null, new MappingOptions());
+            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, (INode) null);
         }
     }
 }

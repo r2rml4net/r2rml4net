@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System.Data;
+using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
@@ -51,5 +52,10 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// to transform that data to RDF triples
         /// </summary>
         void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler);
+
+        /// <summary>
+        /// Gets or sets the <see cref="LogFacadeBase"/>
+        /// </summary>
+        LogFacadeBase Log { get; set; }
     }
 }

@@ -36,8 +36,9 @@
     <DocumentationFile>..\bin\Release\TCode.r2rml4net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DatabaseSchemaReader">
-      <HintPath>..\..\lib\DatabaseSchemaReader.dll</HintPath>
+    <Reference Include="DatabaseSchemaReader, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DatabaseSchemaReader.1.2.8.0\lib\net40\DatabaseSchemaReader.dll</HintPath>
     </Reference>
     <Reference Include="dotNetRDF, Version=1.0.0.2473, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,15 +74,13 @@
     <Compile Include="Configuration\R2RMLObjectFactory.cs" />
     <Compile Include="Exceptions\InvalidSqlVersionException.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
-    <Compile Include="Log\IDefaultMappingGenerationLog.cs" />
+    <Compile Include="Log\LogFacadeBase.cs" />
     <Compile Include="MappingHelper.cs" />
     <Compile Include="MappingOptions.cs" />
     <Compile Include="Exceptions\InvalidTemplateException.cs" />
     <Compile Include="Exceptions\InvalidTermException.cs" />
     <Compile Include="Exceptions\InvalidMapException.cs" />
     <Compile Include="IVistitable.cs" />
-    <Compile Include="Log\IRDFTermGenerationLog.cs" />
-    <Compile Include="Log\ITriplesGenerationLog.cs" />
     <Compile Include="Log\NullLog.cs" />
     <Compile Include="Log\TextWriterLog.cs" />
     <Compile Include="Mapping\Direct\ColumnMappingStrategy.cs" />
@@ -162,6 +161,7 @@
     <Compile Include="RDF\XsdDatatypes.cs" />
     <Compile Include="RDB\ColumnConstrainedDataRecord.cs" />
     <Compile Include="RDF\BlankNodeSubjectReplaceHandler.cs" />
+    <Compile Include="MappingScope.cs" />
     <Compile Include="TriplesGeneration\ISQLValuesMappingStrategy.cs" />
     <Compile Include="TriplesGeneration\IPredicateObjectMapProcessor.cs" />
     <Compile Include="TriplesGeneration\IRDFTermGenerator.cs" />

@@ -53,7 +53,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         [SetUp]
         public void Setup()
         {
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
+            _strategy = new PrimaryKeyMappingStrategy();
         }
 
         [TestCase(0, "_", null, ExpectedException = typeof(InvalidMapException))]
@@ -69,13 +69,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = "Column" + i });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
-                {
-                    BlankNodeTemplateSeparator = columnSeparator
-                });
+            _strategy = new PrimaryKeyMappingStrategy();
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            string template;
+            using (new MappingScope(new MappingOptions { BlankNodeTemplateSeparator = columnSeparator }))
+            {
+                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            }
 
             // then
             Assert.AreEqual(expectedTemplate, template);
@@ -90,13 +91,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = column });
             }
-            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions
-            {
-                UseDelimitedIdentifiers = false
-            });
+            _strategy = new PrimaryKeyMappingStrategy();
 
             // when
-            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            string template;
+            using (new MappingScope(new MappingOptions { UseDelimitedIdentifiers = false }))
+            {
+                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
+            }
 
             // then
             Assert.AreEqual("Table_{ColumnA}_{Column B}_{Yet another column}", template);
@@ -104,7 +106,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         [TestCase("http://www.example.com/", new[] { "Id" }, "http://www.example.com/Table/Id={\"Id\"}")]
         [TestCase("http://www.example.com/", new[] { "PK 1", "PK2" }, "http://www.example.com/Table/PK%201={\"PK 1\"};PK2={\"PK2\"}")]
-        public void GeneratesSubjectTemplateFromPrimaryKey(string baseUriString, string[] columns, string expected)
+        public void GeneratesSubjectTemplateFromPrimaryKey(string BaseUriString, string[] columns, string expected)
         {
             // given
             var table = new TableMetadata { Name = "Table" };
@@ -114,7 +116,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             }
 
             // when
-            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(baseUriString), table);
+            var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(BaseUriString), table);
 
             // then
             Assert.AreEqual(expected, template);
@@ -136,7 +138,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         {
             // given
             var table = RelationalTestMappings.NoPrimaryKeyThreeUniqueKeys["Student"];
-            Mock<IDefaultMappingGenerationLog> log = new Mock<IDefaultMappingGenerationLog>();
+            Mock<LogFacadeBase> log = new Mock<LogFacadeBase>();
             _strategy.Log = log.Object;
 
             // when

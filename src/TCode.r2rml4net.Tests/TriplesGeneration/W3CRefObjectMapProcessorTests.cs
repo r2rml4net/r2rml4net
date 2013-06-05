@@ -58,7 +58,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IDbConnection> _connection;
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<IPredicateObjectMap> _predObjectMap;
-        private Mock<ITriplesGenerationLog> _log;
+        private Mock<LogFacadeBase> _log;
         private Mock<ISubjectMap> _childSubjectMap;
 
         [SetUp]
@@ -70,7 +70,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler = new Mock<IRdfHandler>();
             _subjectMap = new Mock<ISubjectMap>();
             _predObjectMap = new Mock<IPredicateObjectMap>();
-            _log = new Mock<ITriplesGenerationLog>();
+            _log = new Mock<LogFacadeBase>();
             _childSubjectMap = new Mock<ISubjectMap>();
 
             _rdfHandler.Setup(handler => handler.CreateUriNode(It.IsAny<Uri>()))

@@ -51,14 +51,6 @@ namespace TCode.r2rml4net.Mapping.Direct
     {
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
-        /// <summary>
-        /// Creates an instance of <see cref="ForeignKeyMappingStrategy"/>
-        /// </summary>
-        public ForeignKeyMappingStrategy(MappingOptions options)
-            : base(options)
-        {
-        }
-
         #region Implementation of IForeignKeyMappingStrategy
 
         /// <summary>
@@ -66,10 +58,10 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         /// <example>For referenced table "Student", foreign key columns "Last Name" and "SSN" and base URI "http://www.exmample.com/" it creates a 
         /// URI "http://www.exmample.com/Student#ref-{\"Last Name\"};{\"SSN\"}"</example>
-        public virtual Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual Uri CreateReferencePredicateUri(Uri BaseUri, ForeignKeyMetadata foreignKey)
         {
-            if (baseUri == null)
-                throw new ArgumentNullException("baseUri");
+            if (BaseUri == null)
+                throw new ArgumentNullException("BaseUri");
             if (foreignKey == null)
                 throw new ArgumentNullException("foreignKey");
             if (string.IsNullOrWhiteSpace(foreignKey.TableName))
@@ -77,7 +69,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             if (!foreignKey.ForeignKeyColumns.Any())
                 throw new ArgumentException("Empty foreign key", "foreignKey");
 
-            string uri = baseUri + MappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(";", foreignKey.ForeignKeyColumns.Select(MappingHelper.UrlEncode));
+            string uri = BaseUri + MappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(";", foreignKey.ForeignKeyColumns.Select(MappingHelper.UrlEncode));
 
             return new Uri(uri);
         }
@@ -87,7 +79,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         /// <remarks>The template contains both referenced and referencing columns. Different columns are used
         /// if the referenced table has or hasn't got a primary key producing different templates</remarks>
-        public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey)
+        public virtual string CreateReferenceObjectTemplate(Uri BaseUri, ForeignKeyMetadata foreignKey)
         {
             if (!foreignKey.ForeignKeyColumns.Any())
                 throw new ArgumentException("Empty foreign key", "foreignKey");
@@ -108,7 +100,7 @@ namespace TCode.r2rml4net.Mapping.Direct
                 ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c)).ToArray()
                 : foreignKey.ForeignKeyColumns;
 
-            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
+            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, foreignKey.ReferencedTable.Name) + "/");
             template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(referencedColumns[0]), MappingHelper.EncloseColumnName(foreignKeyColumns[0]));
             for (int i = 1; i < foreignKeyColumns.Length; i++)
             {
@@ -145,7 +137,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             get
             {
                 if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(Options);
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
 
                 return _primaryKeyMappingStrategy;
             }
