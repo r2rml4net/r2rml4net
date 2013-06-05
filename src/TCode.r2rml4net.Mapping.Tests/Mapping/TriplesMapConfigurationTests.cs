@@ -244,7 +244,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             var sqlVersion = new Uri("http://no-such-identifier.com");
-            using (new Scope<MappingOptions>(new MappingOptions { ValidateSqlVersion = false }))
+            using (new MappingScope(new MappingOptions { ValidateSqlVersion = false }))
             {
 
                 var stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,

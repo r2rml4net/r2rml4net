@@ -107,7 +107,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void CanStopProcessingIfDataErrorOccurs()
         {
-            using (new Scope<MappingOptions>(new MappingOptions {IgnoreDataErrors = false}))
+            using (new MappingScope(new MappingOptions {IgnoreDataErrors = false}))
             {
                 // given
                 var triplesMaps = GenerateTriplesMaps(3).ToList();
@@ -135,7 +135,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void CanStopProcessingIfMappingErrorOccurs()
         {
-            using (new Scope<MappingOptions>(new MappingOptions { IgnoreMappingErrors = false }))
+            using (new MappingScope(new MappingOptions { IgnoreMappingErrors = false }))
             {
                 // given
                 var triplesMaps = GenerateTriplesMaps(3).ToList();
