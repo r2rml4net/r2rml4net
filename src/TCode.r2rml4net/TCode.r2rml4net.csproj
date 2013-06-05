@@ -15,6 +15,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <MSBuildCommunityTasksPath>$(SolutionDir)\Build</MSBuildCommunityTasksPath>
+    <FodyPath>..\packages\Fody.1.13.8.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +71,7 @@
     </Compile>
     <Compile Include="Exceptions\InvalidSqlVersionException.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
+    <Compile Include="IFreezable.cs" />
     <Compile Include="Log\LogFacadeBase.cs" />
     <Compile Include="MappingHelper.cs" />
     <Compile Include="MappingOptions.cs" />
@@ -178,12 +180,15 @@
     <Compile Include="Validation\Wc3SqlVersionValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DataSets\languages.ttl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.targets" />
@@ -196,4 +201,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+  <Import Project="Fody.targets" />
 </Project>
