@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void NodeCannotBeNull()
         {
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph);
+            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null);
         }
 
         [Test]
