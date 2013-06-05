@@ -93,7 +93,7 @@ namespace TCode.r2rml4net.Configuration
             if (optionsNode != null)
             {
                 var mappingOptions = MappingOptionsLoader.Load(configGraph, optionsNode);
-                return new W3CR2RMLProcessor(connection, mappingOptions);
+                return new W3CR2RMLProcessor(connection);
             }
             else
             {

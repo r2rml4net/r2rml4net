@@ -177,11 +177,6 @@ namespace TCode.r2rml4net
             get { return _connection; }
         }
 
-        internal MappingOptions Options
-        {
-            get { return _mappingOptions; }
-        }
-
         #endregion
 
         #region Implementation of IDisposable
