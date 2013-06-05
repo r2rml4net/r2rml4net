@@ -60,7 +60,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
         private Mock<LogFacadeBase> _log;
-        private MappingOptions _options;
 
         [SetUp]
         public void Setup()
@@ -734,15 +733,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
         {
-            // given
-            _options.AllowAutomaticBlankNodeSubjects = true;
-            _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+            using (new Scope<MappingOptions>(new MappingOptions {AllowAutomaticBlankNodeSubjects = true}))
+            {
+                // given
+                _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
 
-            // when
-            var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
+                // when
+                var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
 
-            // then
-            Assert.That(node, Is.Not.Null);
+                // then
+                Assert.That(node, Is.Not.Null);
+            }
         }
 
         [Test]
