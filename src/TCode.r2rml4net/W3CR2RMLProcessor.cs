@@ -59,7 +59,7 @@ namespace TCode.r2rml4net
         private LogFacadeBase _log;
 
         /// <summary>
-        /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
         public LogFacadeBase Log
         {

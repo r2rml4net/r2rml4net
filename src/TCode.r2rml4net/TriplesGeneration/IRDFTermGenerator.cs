@@ -56,7 +56,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : class, INode;
 
         /// <summary>
-        /// <see cref="IRDFTermGenerationLog"/>
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
         LogFacadeBase Log { get; set; }
     }

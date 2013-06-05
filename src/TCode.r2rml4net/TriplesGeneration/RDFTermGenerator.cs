@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// <see cref="IRDFTermGenerationLog"/>
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
         public LogFacadeBase Log
         {

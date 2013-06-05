@@ -54,6 +54,9 @@ namespace TCode.r2rml4net
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
 
+        /// <summary>
+        /// Gets a singleton instance with default values of <see cref="MappingOptions" />
+        /// </summary>
         public static MappingOptions Default
         {
             get
@@ -70,6 +73,9 @@ namespace TCode.r2rml4net
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="MappingOptions"/> from the current <see cref="MappingScope"/> or the <see cref="Default"/> options
+        /// </summary>
         public static MappingOptions Current
         {
             get { return MappingScope.Current ?? Default; }
