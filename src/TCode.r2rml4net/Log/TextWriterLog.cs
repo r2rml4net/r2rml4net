@@ -43,8 +43,7 @@ using VDS.RDF;
 namespace TCode.r2rml4net.Log
 {
     /// <summary>
-    /// Simple implementation of the <see cref="IRDFTermGenerationLog"/> and <see cref="ITriplesGenerationLog"/>
-    /// interfaces, which writes messages to a <see cref="TextWriter"/>
+    /// Simple implementation of the <see cref="LogFacadeBase"/>, which writes messages to a <see cref="TextWriter"/>
     /// </summary>
     public class TextWriterLog : LogFacadeBase
     {
@@ -121,6 +120,10 @@ namespace TCode.r2rml4net.Log
             _writer.WriteLine("Triples map {0} was invalid: {1}", triplesMap.Node, message);
         }
 
+        /// <summary>
+        /// Logs multiple references to a compisote key in a table
+        /// </summary>
+        /// <param name="table">Table with multiple composite keys referenced</param>
         public override void LogMultipleCompositeKeyReferences(TableMetadata table)
         {
             _writer.WriteLine("Multiple Composite Key references to table {0}", table.Name);

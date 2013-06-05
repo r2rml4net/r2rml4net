@@ -45,6 +45,9 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
+    /// <summary>
+    /// Facade for all logging methods used throught the code
+    /// </summary>
     public abstract class LogFacadeBase
     {
         /// <summary>
@@ -87,6 +90,10 @@ namespace TCode.r2rml4net.Log
         /// </summary>
         public abstract void LogInvaldTriplesMap(ITriplesMap triplesMap, string message);
 
+        /// <summary>
+        /// Logs multiple references to a compisote key in a table
+        /// </summary>
+        /// <param name="table">Table with multiple composite keys referenced</param>
         public abstract void LogMultipleCompositeKeyReferences(TableMetadata table);
     }
 }

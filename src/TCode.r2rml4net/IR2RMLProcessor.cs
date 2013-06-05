@@ -64,7 +64,7 @@ namespace TCode.r2rml4net
         bool Success { get; }
 
         /// <summary>
-        /// Implementation of <see cref="ITriplesGenerationLog"/> logging interface
+        /// Gets the <see cref="LogFacadeBase"/>
         /// </summary>
         LogFacadeBase Log { get; set; }
     }

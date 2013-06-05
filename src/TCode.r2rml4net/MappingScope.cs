@@ -45,6 +45,10 @@ using System.Threading;
 
 namespace TCode.r2rml4net
 {
+    /// <summary>
+    /// A thread-static scope, which allow changing mapping options for a given time
+    /// </summary>
+    /// <remarks>See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx</remarks>
     public sealed class MappingScope : IDisposable
     {
         private bool _disposed;
@@ -53,6 +57,11 @@ namespace TCode.r2rml4net
         [ThreadStatic]
         private static MappingScope _head;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="MappingScope"/> with a given set of options
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public MappingScope(MappingOptions instance)
         {
             if (instance == null)
