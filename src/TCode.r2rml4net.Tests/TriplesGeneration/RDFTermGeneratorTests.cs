@@ -733,7 +733,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
         {
-            using (new Scope<MappingOptions>(new MappingOptions {AllowAutomaticBlankNodeSubjects = true}))
+            using (new MappingScope(new MappingOptions {AllowAutomaticBlankNodeSubjects = true}))
             {
                 // given
                 _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
@@ -777,7 +777,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
-            using (new Scope<MappingOptions>(new MappingOptions {PreserveDuplicateRows = true}))
+            using (new MappingScope(new MappingOptions {PreserveDuplicateRows = true}))
             {
                 // given
                 _termGenerator = new RDFTermGenerator();

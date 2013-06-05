@@ -72,7 +72,7 @@ namespace TCode.r2rml4net
 
         public static MappingOptions Current
         {
-            get { return Scope<MappingOptions>.Current ?? Default; }
+            get { return MappingScope.Current ?? Default; }
         }
 
         /// <summary>
