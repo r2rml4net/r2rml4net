@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Mock<IMapBase> parentMap = new Mock<IMapBase>();
             parentMap.Setup(map => map.Node).Returns(_graph.CreateBlankNode());
 
-            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_parentTriplesMap.Object, parentMap.Object, _graph, _graph.CreateBlankNode(), new MappingOptions())
+            _termMapConfigurationMock = new Mock<TermMapConfiguration>(_parentTriplesMap.Object, parentMap.Object, _graph, _graph.CreateBlankNode())
                                             {
                                                 CallBase = true
                                             };

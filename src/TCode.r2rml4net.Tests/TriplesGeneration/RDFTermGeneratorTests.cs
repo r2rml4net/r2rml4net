@@ -72,11 +72,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _subjectMap = new Mock<ISubjectMap>();
             _logicalRow = new Mock<IDataRecord>(MockBehavior.Strict);
             _lexicalFormProvider = new Mock<ISQLValuesMappingStrategy>();
-            _options = new MappingOptions();
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
-            _termGenerator = new RDFTermGenerator(_options)
+            _termGenerator = new RDFTermGenerator()
                                  {
                                      SqlValuesMappingStrategy = _lexicalFormProvider.Object,
                                      Log = _log.Object
@@ -777,17 +776,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Test]
         public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
-            // given
-            _termGenerator = new RDFTermGenerator(new MappingOptions { PreserveDuplicateRows = true });
-            const string nodeId = "node id";
-            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            using (new Scope<MappingOptions>(new MappingOptions {PreserveDuplicateRows = true}))
+            {
+                // given
+                _termGenerator = new RDFTermGenerator();
+                const string nodeId = "node id";
+                _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
-            // when
-            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-            var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                // when
+                var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
-            // then
-            Assert.AreNotSame(node, node2);
+                // then
+                Assert.AreNotSame(node, node2);
+            }
         }
 
         [Test]

@@ -60,8 +60,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _sqlValidator = new Mock<ISqlVersionValidator>();
             _sqlValidator.Setup(v => v.SqlVersionIsValid(It.IsAny<Uri>())).Returns(true);
             _r2RMLConfiguration.Setup(config => config.SqlVersionValidator).Returns(_sqlValidator.Object);
-            return new TriplesMapConfigurationStub(_r2RMLConfiguration.Object, _r2RMLMappings, new MappingOptions(),
-                                                   _sqlVersionValidator.Object);
+            return new TriplesMapConfigurationStub(_r2RMLConfiguration.Object, _r2RMLMappings, _sqlVersionValidator.Object);
         }
 
         [SetUp]
@@ -229,7 +228,6 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _sqlVersionValidator.Setup(v => v.SqlVersionIsValid(sqlVersion)).Returns(false);
             TriplesMapConfigurationStub stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
                                                                                _r2RMLMappings,
-                                                                               new MappingOptions(),
                                                                                _sqlVersionValidator.Object);
             _r2RMLConfiguration.Setup(config => config.SqlVersionValidator).Returns(_sqlVersionValidator.Object);
             _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
@@ -246,15 +244,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             var sqlVersion = new Uri("http://no-such-identifier.com");
-            TriplesMapConfigurationStub stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
-                                                                               _r2RMLMappings,
-                                                                               new MappingOptions
-                                                                                   {
-                                                                                       ValidateSqlVersion = false
-                                                                                   },
-                                                                               _sqlVersionValidator.Object);
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
+            using (new Scope<MappingOptions>(new MappingOptions { ValidateSqlVersion = false }))
+            {
 
+                var stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
+                                                                                   _r2RMLMappings,
+                                                                                   _sqlVersionValidator.Object);
+                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
+
+            }
             // when
             Assert.DoesNotThrow(() => _triplesMapConfiguration.SetSqlVersion(sqlVersion));
 
