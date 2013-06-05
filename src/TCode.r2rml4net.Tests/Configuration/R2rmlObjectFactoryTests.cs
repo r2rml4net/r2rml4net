@@ -88,14 +88,6 @@ namespace TCode.r2rml4net.Tests.Configuration
             var procesorTyped = processor as W3CR2RMLProcessor;
             Assert.That(loadResult, Is.True);
             Assert.That(procesorTyped, Is.Not.Null);
-            Assert.That(procesorTyped.Options.BlankNodeTemplateSeparator, Is.EqualTo("x"));
-            Assert.That(procesorTyped.Options.UseDelimitedIdentifiers, Is.EqualTo(false));
-            Assert.That(procesorTyped.Options.SqlIdentifierRightDelimiter, Is.EqualTo('y'));
-            Assert.That(procesorTyped.Options.SqlIdentifierLeftDelimiter, Is.EqualTo('y'));
-            Assert.That(procesorTyped.Options.ValidateSqlVersion, Is.EqualTo(true));
-            Assert.That(procesorTyped.Options.IgnoreDataErrors, Is.EqualTo(false));
-            Assert.That(procesorTyped.Options.IgnoreMappingErrors, Is.EqualTo(false));
-            Assert.That(procesorTyped.Options.PreserveDuplicateRows, Is.EqualTo(false));
         }
 
         [TestCase("ex:processorForOdbc", typeof(OdbcConnection))]
