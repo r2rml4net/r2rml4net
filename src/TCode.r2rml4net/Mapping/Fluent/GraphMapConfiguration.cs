@@ -42,7 +42,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
-    internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMap
+    internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMapConfiguration
     {
         internal GraphMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraphMapParent parentMap, IGraph r2RMLMappings)
             : this(parentTriplesMap, parentMap, r2RMLMappings, r2RMLMappings.CreateBlankNode())

@@ -78,7 +78,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return propertyMap;
         }
 
-        public IGraphMap CreateGraphMap()
+        public IGraphMapConfiguration CreateGraphMap()
         {
             var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings);
             _graphMaps.Add(graphMap);

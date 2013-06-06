@@ -72,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
                 CreateParentMapRelation();
 
             R2RMLMappings.Assert(
-                ((BaseConfiguration) this).Node,
+                Node,
                 R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty),
                 R2RMLMappings.CreateUriNode(classIri));
 
@@ -86,12 +86,12 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(((BaseConfiguration) this).Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
+                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
                 return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
             }
         }
 
-        public IGraphMap CreateGraphMap()
+        public IGraphMapConfiguration CreateGraphMap()
         {
             var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings);
             _graphMaps.Add(graphMap);

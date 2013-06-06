@@ -46,6 +46,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <summary>
         /// Creates an attached <see cref="IGraphMap"/>
         /// </summary>
-        IGraphMap CreateGraphMap();
+        IGraphMapConfiguration CreateGraphMap();
     }
 }
