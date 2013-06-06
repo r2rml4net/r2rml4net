@@ -15,6 +15,7 @@
       2. Small imporvements in logging (LogFacadeBase)
       3. Non-standard behaviour for subject maps (Issue 13)
       4. Changes in MappingOptions usage
+      5. Added IGraphMapConfiguration
     </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
