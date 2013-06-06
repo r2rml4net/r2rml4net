@@ -46,15 +46,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
 {
     internal class MockConfiguration :
         ITriplesMapFromR2RMLViewConfiguration,
-        ITriplesMapConfiguration, 
         ISubjectMapConfiguration, 
         IPredicateObjectMapConfiguration, 
-        IGraphMap, 
         ITermTypeConfiguration, 
         ITermType, 
         IObjectMapConfiguration,
         ILiteralTermMapConfiguration,
-        ITermMapConfiguration
+        IGraphMapConfiguration
     {
         public MockConfiguration(Uri baseUri, IR2RMLConfiguration r2RMLConfiguration)
         {
@@ -77,7 +75,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
         /// <summary>
         /// Creates an attached <see cref="IGraphMap"/>
         /// </summary>
-        public IGraphMap CreateGraphMap()
+        public IGraphMapConfiguration CreateGraphMap()
         {
             return this;
         }
