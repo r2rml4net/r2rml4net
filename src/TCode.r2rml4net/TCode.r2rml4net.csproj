@@ -42,8 +42,9 @@
       <HintPath>..\packages\DatabaseSchemaReader.1.2.8.0\lib\net40\DatabaseSchemaReader.dll</HintPath>
     </Reference>
     <Reference Include="dotNetRDF, Version=1.0.0.2473, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotNetRDF.1.0.0.2473\lib\net40\dotNetRDF.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,6 +97,7 @@
     <Compile Include="Mapping\Fluent\BaseConfiguration.cs" />
     <Compile Include="FluentR2RML.cs" />
     <Compile Include="Mapping\Fluent\GraphMapConfiguration.cs" />
+    <Compile Include="Mapping\Fluent\IGraphMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\IGraphMapParent.cs" />
     <Compile Include="Mapping\Fluent\ILiteralTermMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\INonLiteralTermMapConfigutarion.cs" />
