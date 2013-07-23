@@ -141,7 +141,6 @@
     <Compile Include="RDB\DatabaseIdentifiersHelper.cs" />
     <Compile Include="RDB\ColumnMetadata.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\MSSQLServerColumTypeMapper.cs" />
-    <Compile Include="RDB\DatabaseSchemaReader\CoreSQL2008ColumTypeMapper.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\DatabaseSchemaAdapter.cs" />
     <Compile Include="RDB\DatabaseSchemaReader\IColumnTypeMapper.cs" />
     <Compile Include="RDB\ISqlQueryBuilder.cs" />
