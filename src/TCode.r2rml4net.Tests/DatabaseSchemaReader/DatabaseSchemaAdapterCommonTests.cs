@@ -59,20 +59,10 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             _adapter = new DatabaseSchemaAdapter(_databaseReader.Object, _columnTypeMapper.Object);
         }
 
-        [Test]
-        public void UsesCoreSQL2008MapperByDefault()
-        {
-            // when
-            _adapter = new DatabaseSchemaAdapter(_databaseReader.Object);
-
-            // then
-            Assert.AreEqual(typeof(CoreSQL2008ColumTypeMapper), _adapter.ColumnTypeMapper.GetType());
-        }
-
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void CannotBeInitializedWithNullReader()
         {
-            new DatabaseSchemaAdapter(null);
+            new DatabaseSchemaAdapter(null, _columnTypeMapper.Object);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
