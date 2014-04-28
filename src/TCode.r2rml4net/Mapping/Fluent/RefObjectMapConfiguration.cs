@@ -39,6 +39,7 @@
 using System.Collections.Generic;
 using VDS.RDF;
 using VDS.RDF.Query;
+using System.Linq;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
@@ -111,19 +112,23 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                SparqlParameterizedString sparql = new SparqlParameterizedString(
-@"PREFIX rr: <http://www.w3.org/ns/r2rml#>
-SELECT ?child ?parent
-WHERE {
-    @refObjectMap rr:joinCondition ?join .
-    ?join rr:child ?child; rr:parent ?parent .
-}");
-                sparql.SetParameter("refObjectMap", Node);
-                SparqlResultSet result = (SparqlResultSet)R2RMLMappings.ExecuteQuery(sparql);
+                const string rrPrefix = "http://www.w3.org/ns/r2rml#";
+                const string rrJoinCondition = rrPrefix + "joinCondition";
+                const string rrChild = rrPrefix + "child";
+                const string rrParent = rrPrefix + "parent";
 
-                foreach (var bindings in result)
+                var joinConditions = R2RMLMappings
+                    .GetTriplesWithSubject(Node)
+                    .WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrJoinCondition)))
+                    .Select(x => x.Object);
+
+                foreach (var joinCondition in joinConditions)
                 {
-                    yield return new JoinCondition(bindings["child"].ToString(), bindings["parent"].ToString());
+                    var inner = R2RMLMappings.GetTriplesWithSubject(joinCondition);
+                    var child = inner.WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrChild))).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
+                    var parent = inner.WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrParent))).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
+
+                    yield return new JoinCondition(child, parent);
                 }
             }
         }
