@@ -35,6 +35,7 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -92,6 +93,99 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
             Assert.AreEqual("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
             Assert.AreEqual(blankNode, _refObjectMap.Node);
+        }
+
+        private const string MultipleJoinConditionsLoading_TestGraph =
+@"
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix odcz:    <http://linked.opendata.cz/ontology/coi.cz/> .
+@base <http://example.com/base/> .
+
+<LawTriples> a rr:TriplesMap;	
+    rr:logicalTable [ rr:tableName ""Laws"" ];
+        rr:subjectMap [
+            rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/law/{LawId}"";
+        ];
+.
+
+<CheckActionSubjectTriples> a rr:TriplesMap;
+    rr:logicalTable [ rr:tableName ""CheckActionSubjects""; ];
+    rr:subjectMap [
+        rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/check-action/{CheckActionId}/subject"";
+    ];
+    rr:predicateObjectMap [
+        rr:predicate odcz:zakon;
+        rr:objectMap [
+            rr:parentTriplesMap <LawTriples>;
+            rr:joinCondition [
+                rr:child ""LawChild1"";
+                rr:parent ""LawParent1"";
+            ];
+        ];
+    ];
+.
+
+<SanctionReasonTriples> a rr:TriplesMap;
+    rr:logicalTable [ rr:tableName ""SanctionReasons""; ];
+    rr:subjectMap [
+        rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/sanction/{SanctionId}/reason/{SanctionReasonId}"";
+    ];
+    rr:predicateObjectMap [
+        rr:predicate odcz:zakon;
+        rr:objectMap [
+            rr:parentTriplesMap <LawTriples>;
+            rr:joinCondition [
+                rr:child ""LawChild2"";
+                rr:parent ""LawParent2"";
+            ];
+        ];
+    ];
+.
+";
+
+        [Test]
+        public void MultipleJoinConditionsLoading()
+        {
+            IR2RML mappings = R2RMLLoader.Load(MultipleJoinConditionsLoading_TestGraph);
+            Assert.IsNotNull(mappings);
+            Assert.AreEqual(3, mappings.TriplesMaps.Count());
+
+            var checkActionTriples = mappings.TriplesMaps.ElementAt(1);
+            Assert.AreEqual(
+                    new Uri("http://example.com/base/CheckActionSubjectTriples"),
+                    ((IUriNode)checkActionTriples.Node).Uri);
+
+            var sanctionTriples = mappings.TriplesMaps.ElementAt(2);
+            Assert.AreEqual(
+                    new Uri("http://example.com/base/SanctionReasonTriples"),
+                    ((IUriNode)sanctionTriples.Node).Uri);
+
+            Assert.AreEqual(1, checkActionTriples.PredicateObjectMaps.Count());
+            Assert.AreEqual(1, sanctionTriples.PredicateObjectMaps.Count());
+
+            var checkActionTriplesPOM = checkActionTriples.PredicateObjectMaps.First();
+            var sanctionTriplesPOM = sanctionTriples.PredicateObjectMaps.First();
+
+            Assert.AreEqual(0, checkActionTriplesPOM.ObjectMaps.Count());
+            Assert.AreEqual(1, checkActionTriplesPOM.RefObjectMaps.Count());
+
+            Assert.AreEqual(0, sanctionTriplesPOM.ObjectMaps.Count());
+            Assert.AreEqual(1, sanctionTriplesPOM.RefObjectMaps.Count());
+
+            var checkActionTriplesROM = checkActionTriplesPOM.RefObjectMaps.First();
+            var sanctionTriplesROM = sanctionTriplesPOM.RefObjectMaps.First();
+
+            Assert.AreEqual(1, checkActionTriplesROM.JoinConditions.Count());
+            Assert.AreEqual(1, sanctionTriplesROM.JoinConditions.Count());
+
+            var checkActionTriplesJoinCond = checkActionTriplesROM.JoinConditions.First();
+            var sanctionTriplesJoinCond = sanctionTriplesROM.JoinConditions.First();
+
+            Assert.AreEqual("LawChild1", checkActionTriplesJoinCond.ChildColumn);
+            Assert.AreEqual("LawParent1", checkActionTriplesJoinCond.ParentColumn);
+
+            Assert.AreEqual("LawChild2", sanctionTriplesJoinCond.ChildColumn);
+            Assert.AreEqual("LawParent2", sanctionTriplesJoinCond.ParentColumn);
         }
     }
 }
