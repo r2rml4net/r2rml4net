@@ -117,16 +117,16 @@ namespace TCode.r2rml4net.Mapping.Fluent
                 const string rrChild = rrPrefix + "child";
                 const string rrParent = rrPrefix + "parent";
 
-                var joinConditions = R2RMLMappings
-                    .GetTriplesWithSubject(Node)
-                    .WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrJoinCondition)))
-                    .Select(x => x.Object);
+                var joinConditionNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrJoinCondition));
+                var childNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrChild));
+                var parentNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrParent));
+
+                var joinConditions = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, joinConditionNode).Select(x => x.Object);
 
                 foreach (var joinCondition in joinConditions)
                 {
-                    var inner = R2RMLMappings.GetTriplesWithSubject(joinCondition);
-                    var child = inner.WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrChild))).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
-                    var parent = inner.WithPredicate(R2RMLMappings.CreateUriNode(UriFactory.Create(rrParent))).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
+                    var child = R2RMLMappings.GetTriplesWithSubjectPredicate(joinCondition, childNode).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
+                    var parent = R2RMLMappings.GetTriplesWithSubjectPredicate(joinCondition, parentNode).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
 
                     yield return new JoinCondition(child, parent);
                 }
