@@ -71,5 +71,10 @@ namespace TCode.r2rml4net.Mapping
         /// Gets the parent predicate object map
         /// </summary>
         IPredicateObjectMap PredicateObjectMap { get; }
+
+        /// <summary>
+        /// Gets the parent triples map.
+        /// </summary>
+        ITriplesMap ParentTriplesMap { get; }
     }
 }
