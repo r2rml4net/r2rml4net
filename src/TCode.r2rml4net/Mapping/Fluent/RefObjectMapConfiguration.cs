@@ -161,6 +161,14 @@ namespace TCode.r2rml4net.Mapping.Fluent
             }
         }
 
+        public ITriplesMap ParentTriplesMap
+        {
+            get
+            {
+                return _parentTriplesMap;
+            }
+        }
+
         #endregion
 
         private void AssertObjectMapSubgraph()
