@@ -4,11 +4,14 @@
     <TeamCityBuild>true</TeamCityBuild>
   </PropertyGroup>
   
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\FileVersionExtractor\bin\Release\FileVersionExtractor.dll" 
+             TaskName="GetAssemblyFileVersion"/>
+
   <Target Name="Update TeamCity Version" AfterTargets="Build">
-    <GetAssemblyIdentity AssemblyFiles="$(MSBuildProjectDirectory)\..\bin\Release\TCode.r2rml4net.dll">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyIdentities"/>
-    </GetAssemblyIdentity>
-    <Message Text="##teamcity[buildNumber '%(AssemblyIdentities.Version)']" />
+    <GetAssemblyFileVersion FilePathAssemblyInfo="$(MSBuildProjectDirectory)\TCode.r2rml4net\Properties\VersionAssemblyInfo.cs">
+      <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
+    </GetAssemblyFileVersion>
+    <Message Condition="$(TeamCityBuild) == 'true'" Text="##teamcity[buildNumber '$(AssemblyFileVersion)']" />
   </Target>
 
   <Target Name="GitHubLink" AfterTargets="Build">

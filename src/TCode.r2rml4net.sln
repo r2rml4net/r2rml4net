@@ -18,9 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4EAAEB3C-B182-4E09-BEF1-576977F217BA}"
 	ProjectSection(SolutionItems) = preProject
 		after.TCode.r2rml4net.sln.targets = after.TCode.r2rml4net.sln.targets
-		Build\GetAssemblyFileVersion.cs = Build\GetAssemblyFileVersion.cs
 		..\r2rml.net.nuspec = ..\r2rml.net.nuspec
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileVersionExtractor", "FileVersionExtractor\FileVersionExtractor.csproj", "{893216AC-D571-401F-8A5A-726448693552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +45,10 @@ Global
 		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2B367CA-B338-4176-B97B-FB9B5558C4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893216AC-D571-401F-8A5A-726448693552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893216AC-D571-401F-8A5A-726448693552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893216AC-D571-401F-8A5A-726448693552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893216AC-D571-401F-8A5A-726448693552}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
