@@ -133,7 +133,6 @@
     <Compile Include="Mapping\ITermMap.cs" />
     <Compile Include="Mapping\ITriplesMap.cs" />
     <Compile Include="Mapping\JoinCondition.cs" />
-    <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="Properties\ProjectAssemblyInfo.cs" />
     <Compile Include="RDB\ColumnCollection.cs" />
     <Compile Include="RDB\UndelimitedColumnsDataRecordWrapper.cs" />
@@ -204,5 +203,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.25.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.25.0\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets'))" />
   </Target>
+  <Import Project="..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets" Condition="Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" />
 </Project>
