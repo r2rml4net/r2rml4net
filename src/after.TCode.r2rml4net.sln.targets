@@ -8,7 +8,7 @@
     <GetAssemblyIdentity AssemblyFiles="$(MSBuildProjectDirectory)\..\bin\Release\TCode.r2rml4net.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyIdentities"/>
     </GetAssemblyIdentity>
-    <Message Condition="$(TeamCityBuild) == 'true'" Text="##teamcity[buildNumber '$(AssemblyFileVersion)']" />
+    <Message Text="##teamcity[buildNumber '$(AssemblyFileVersion)']" />
   </Target>
 
   <Target Name="GitHubLink" AfterTargets="Build">
