@@ -7,7 +7,7 @@ namespace FileVersionExtractor
 {
     public class GetAssemblyFileVersion : ITask
     {
-        private const string Pattern = @"(?:AssemblyFileVersion\("")(?<ver>(\d*)\.(\d*)(\.(\d*)(\.(\d*))?)?)(?:""\))";
+        private const string Pattern = @"(?:AssemblyInformationalVersion\("")(?<ver>.+)(?:""\))";
 
         [Required]
         public string FilePathAssemblyInfo { get; set; }

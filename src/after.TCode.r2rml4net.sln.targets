@@ -11,7 +11,7 @@
     <GetAssemblyFileVersion FilePathAssemblyInfo="$(MSBuildProjectDirectory)\TCode.r2rml4net\Properties\VersionAssemblyInfo.cs">
       <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
     </GetAssemblyFileVersion>
-    <Message Condition="$(TeamCityBuild) == 'true'" Text="##teamcity[buildNumber '$(AssemblyFileVersion)']" />
+    <Message Text="##teamcity[buildNumber '$(AssemblyFileVersion)']" />
   </Target>
 
   <Target Name="GitHubLink" AfterTargets="Build">
