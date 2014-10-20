@@ -18,10 +18,4 @@
     <Exec Command='"$(MSBuildProjectDirectory)\Build\GitLink.exe" "$(MSBuildProjectDirectory)"\.. -u https://github.com/r2rml4net/core'
           ContinueOnError="false" IgnoreExitCode="false"></Exec>
   </Target>
-
-  <!--<Target Name="PepitaPackage" AfterTargets="GitHubLink">
-    <MSBuild Projects="$(MSBuildProjectDirectory)\NuGetBuild\NugetBuild.targets"
-             Targets="CopyNugetBinaries;PepitaPackage"
-             Properties="AssemblyName=RomanticWeb" />
-  </Target>-->
 </Project>
