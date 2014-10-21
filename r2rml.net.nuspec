@@ -11,11 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
     <releaseNotes>
-      1. Moved key classes to TCode.r2rmlnet namespace and merged into one assembly
-      2. Small imporvements in logging (LogFacadeBase)
-      3. Non-standard behaviour for subject maps (Issue 13)
-      4. Changes in MappingOptions usage
-      5. Added IGraphMapConfiguration
+      1. Small changes required by R2RML Store
     </releaseNotes>
     <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
@@ -29,5 +25,8 @@
     <file src="bin\Release\TCode.r2rml4net.dll" target="lib\net40" />
     <file src="bin\Release\TCode.r2rml4net.xml" target="lib\net40" />
     <file src="bin\Release\TCode.r2rml4net.pdb" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.Mapping.dll" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.Mapping.xml" target="lib\net40" />
+    <file src="bin\Release\TCode.r2rml4net.Mapping.pdb" target="lib\net40" />
   </files>
 </package>
