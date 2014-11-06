@@ -38,6 +38,7 @@
 using System;
 using System.Linq;
 using DatabaseSchemaReader.DataSchema;
+using NullGuard;
 
 namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 {
@@ -51,7 +52,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
         /// <summary>
         /// Gets a member of <see cref="R2RMLType"/> enumeration for a given MS SQL Server <see cref="DataType"/>
         /// </summary>
-        public R2RMLType GetColumnTypeFromColumn(DataType dataType)
+        public R2RMLType GetColumnTypeFromColumn([AllowNull] DataType dataType)
         {
             if (dataType != null)
             {

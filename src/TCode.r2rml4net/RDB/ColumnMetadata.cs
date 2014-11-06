@@ -35,7 +35,7 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System;
+using NullGuard;
 
 namespace TCode.r2rml4net.RDB
 {
@@ -47,7 +47,7 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Column name
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { [return: AllowNull] get; internal set; }
         /// <summary>
         /// Gets the .NET column <see cref="Type"/> as mapped in ADO.NET
         /// </summary>

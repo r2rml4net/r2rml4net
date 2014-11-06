@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System;
+using NullGuard;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.RDF
@@ -90,6 +91,7 @@ namespace TCode.r2rml4net.RDF
         /// </summary>
         /// <returns>a URI or null for string/undefined type</returns>
         /// <remarks>Read more on http://www.w3.org/TR/r2rml/#natural-mapping</remarks>
+        [return: AllowNull]
         public static Uri GetDataType(R2RMLType columnType)
         {
             switch (columnType)

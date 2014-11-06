@@ -40,6 +40,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -96,6 +97,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <remarks>see http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term</remarks>
         /// <returns>an RDF term (<see cref="INode"/>)</returns>
+        [return: AllowNull]
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
             where TNodeType : class, INode
         {

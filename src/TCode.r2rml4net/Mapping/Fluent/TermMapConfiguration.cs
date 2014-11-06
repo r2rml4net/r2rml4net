@@ -38,6 +38,7 @@
 
 using System;
 using System.Linq;
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using VDS.RDF;
 
@@ -220,6 +221,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         public string ColumnName
         {
+            [return: AllowNull]
             get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty)); }
         }
 
@@ -228,6 +230,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         public string Template
         {
+            [return: AllowNull]
             get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty)); }
         }
 
@@ -237,6 +240,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <remarks>Read more on http://www.w3.org/TR/r2rml/#constant</remarks>
         protected internal Uri ConstantValue
         {
+            [return: AllowNull]
             get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)); }
         }
 
@@ -245,6 +249,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         public string InverseExpression
         {
+            [return: AllowNull]
             get 
             {
                 var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty)).ToArray();
@@ -398,6 +403,5 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
             return null;
         }
-
     }
 }
