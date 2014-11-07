@@ -36,6 +36,7 @@
 // terms.
 #endregion
 
+using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -132,6 +133,60 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
             // then
             Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
             Assert.AreEqual("someObject", objectMap.Literal);
+            Assert.AreEqual(blankNode, objectMap.Node);
+        }
+
+        [Test]
+        public void CanBeInitializedWithTypedLiteralValue()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+  
+ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""^^<http://example.org/some#datatype> ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
+
+            // when
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
+
+            // then
+            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
+            Assert.AreEqual("someObject", objectMap.Literal);
+            Assert.AreEqual(new Uri("http://example.org/some#datatype"), objectMap.DataTypeURI);
+            Assert.AreEqual(blankNode, objectMap.Node);
+        }
+
+        [Test]
+        public void CanBeInitializedWithLiteralValueWithLanguageTag()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+  
+ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""@pl ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
+
+            // when
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
+
+            // then
+            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
+            Assert.AreEqual("someObject", objectMap.Literal);
+            Assert.AreEqual("pl", objectMap.Language);
             Assert.AreEqual(blankNode, objectMap.Node);
         }
 
