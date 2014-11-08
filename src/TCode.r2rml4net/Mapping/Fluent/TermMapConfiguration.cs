@@ -378,8 +378,14 @@ namespace TCode.r2rml4net.Mapping.Fluent
                                   string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
                                   Node));
 
-            if (triplesForPredicate.Length == 1 && triplesForPredicate[0].Object is ILiteralNode)
-                    return triplesForPredicate[0].Object.ToString();
+            if (triplesForPredicate.Length == 1)
+            {
+                var node = triplesForPredicate[0].Object as ILiteralNode;
+                if (node != null)
+                {
+                    return node.Value;
+                }
+            }
 
             return null;
         }

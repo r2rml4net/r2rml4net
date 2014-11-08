@@ -228,26 +228,21 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         #endregion
 
-        #region Implementation of ILiteralTermMap
-
         public Uri DataTypeURI
         {
             get
             {
-                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
+                var datatypeTriple = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety)).SingleOrDefault();
 
-                var datatypeTriple = datatypeTriples.SingleOrDefault();
                 if (datatypeTriple != null)
                 {
-                    if (languageTriples.Any())
-                        throw new InvalidMapException("Object map has both language tag and datatype set");
+                    return GetRrDatatypeUri(datatypeTriple);
+                }
 
-                    IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
-                    if (dataTypeUriNode == null)
-                        throw new InvalidMapException("Object map has datatype set but it is not a URI");
-
-                    return dataTypeUriNode.Uri;
+                var constantTriple = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)).SingleOrDefault();
+                if (constantTriple != null)
+                {
+                    return GetDatatypeFromConstant(constantTriple);
                 }
 
                 return null;
@@ -258,30 +253,77 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
+                string languageTag = null;
 
-                var languagTriple = languageTriples.SingleOrDefault();
-                if (languagTriple != null)
+                var languageTriple = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety)).SingleOrDefault();
+                if (languageTriple != null)
                 {
-                    if (datatypeTriples.Any())
-                        throw new InvalidTermException(this, "Object map has both language tag and datatype set");
+                    languageTag = GetLanguageFromNode(languageTriple);
+                }
 
-                    ILiteralNode languageNode = languagTriple.Object as ILiteralNode;
-                    if (languageNode == null)
-                        throw new InvalidTermException(this, "Object map has literal set but it is not a literal");
+                var constantTriple = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)).SingleOrDefault();
+                if (constantTriple != null)
+                {
+                    languageTag = GetLanguageFromConstant(constantTriple);
+                }
 
-                    var languageTag = languageNode.Value;
-                    if(!LanguageTagValidator.LanguageTagIsValid(languageTag))
-                        throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
-
+                if (languageTag != null && LanguageTagValidator.LanguageTagIsValid(languageTag))
+                {
                     return languageTag;
                 }
 
-                return null;
+                throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
             }
         }
 
-        #endregion
+        private Uri GetDatatypeFromConstant(Triple constantTriple)
+        {
+            ILiteralNode languageNode = constantTriple.Object as ILiteralNode;
+            if (languageNode != null)
+            {
+                return languageNode.DataType;
+            }
+
+            return null;
+        }
+
+        private string GetLanguageFromConstant(Triple constantTriple)
+        {
+            ILiteralNode languageNode = constantTriple.Object as ILiteralNode;
+            if (languageNode != null)
+            {
+                return languageNode.Language;
+            }
+
+            return null;
+        }
+
+        private string GetLanguageFromNode(Triple languageTriple)
+        {
+            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
+
+            if (datatypeTriples.Any())
+                throw new InvalidTermException(this, "Object map has both language tag and datatype set");
+
+            ILiteralNode languageNode = languageTriple.Object as ILiteralNode;
+            if (languageNode == null)
+                throw new InvalidTermException(this, "Object map has literal set but it is not a literal");
+
+            return languageNode.Value;
+        }
+
+        private Uri GetRrDatatypeUri(Triple datatypeTriple)
+        {
+            var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
+
+            if (languageTriples.Any())
+                throw new InvalidMapException("Object map has both language tag and datatype set");
+
+            IUriNode dataTypeUriNode = datatypeTriple.Object as IUriNode;
+            if (dataTypeUriNode == null)
+                throw new InvalidMapException("Object map has datatype set but it is not a URI");
+
+            return dataTypeUriNode.Uri;
+        }
     }
 }
