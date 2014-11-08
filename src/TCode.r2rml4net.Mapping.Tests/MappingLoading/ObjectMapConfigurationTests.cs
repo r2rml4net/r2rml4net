@@ -42,6 +42,7 @@ using Moq;
 using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
+using VDS.RDF.Parsing;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
@@ -160,6 +161,33 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""^^<http://example
             Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
             Assert.AreEqual("someObject", objectMap.Literal);
             Assert.AreEqual(new Uri("http://example.org/some#datatype"), objectMap.DataTypeURI);
+            Assert.AreEqual(blankNode, objectMap.Node);
+        }
+
+        [Test]
+        public void CanBeInitializedWithImplictlyTypedLiteralValue()
+        {
+            // given
+            IGraph graph = new Graph();
+            graph.LoadFromString(
+                @"@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
+  
+ex:PredicateObjectMap rr:objectMap [ rr:constant 2 ].");
+            _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
+            _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
+
+            // when
+            var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
+            var objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predictaObjectMap.Object, graph, blankNode);
+            objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
+
+            // then
+            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
+            Assert.AreEqual("2", objectMap.Literal);
+            Assert.AreEqual(new Uri(XmlSpecsHelper.XmlSchemaDataTypeInteger), objectMap.DataTypeURI);
             Assert.AreEqual(blankNode, objectMap.Node);
         }
 
