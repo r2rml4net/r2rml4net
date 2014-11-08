@@ -15,7 +15,7 @@
   </Target>
 
   <Target Name="GitHubLink" AfterTargets="Build">
-    <Exec Command='"$(MSBuildProjectDirectory)\Build\GitLink.exe" "$(MSBuildProjectDirectory)\.." -u https://github.com/r2rml4net/core'
+    <Exec Command='"$(MSBuildProjectDirectory)\Build\GitLink.exe" "$(MSBuildProjectDirectory)" -u https://github.com/r2rml4net/core'
           ContinueOnError="false" IgnoreExitCode="false"></Exec>
   </Target>
 </Project>
