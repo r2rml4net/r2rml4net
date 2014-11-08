@@ -39,6 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using NullGuard;
 using TCode.r2rml4net.TriplesGeneration;
 
 namespace TCode.r2rml4net.RDF
@@ -47,6 +48,7 @@ namespace TCode.r2rml4net.RDF
     /// Default implementation of <see cref="ISQLValuesMappingStrategy"/>, which conforms to the
     /// <a href="http://www.w3.org/TR/r2rml/#datatype-conversions">Datatype Conversions section of R2RML specification</a>
     /// </summary>
+    [NullGuard(ValidationFlags.OutValues)]
     public class DefaultSQLValuesMappingStrategy : ISQLValuesMappingStrategy
     {
         private readonly IDictionary<Type, string> _datatypeMappings = new Dictionary<Type, string>();

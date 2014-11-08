@@ -230,6 +230,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public Uri DataTypeURI
         {
+            [return: AllowNull]
             get
             {
                 var datatypeTriple = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety)).SingleOrDefault();
