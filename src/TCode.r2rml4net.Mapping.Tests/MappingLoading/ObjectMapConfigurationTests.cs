@@ -134,6 +134,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
             // then
             Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
             Assert.AreEqual("someObject", objectMap.Literal);
+            Assert.IsNull(objectMap.Language);
             Assert.AreEqual(blankNode, objectMap.Node);
         }
 

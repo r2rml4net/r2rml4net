@@ -268,12 +268,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
                     languageTag = GetLanguageFromConstant(constantTriple);
                 }
 
-                if (languageTag != null && LanguageTagValidator.LanguageTagIsValid(languageTag))
+                if (languageTag != null)
                 {
-                    return languageTag;
+                    if (LanguageTagValidator.LanguageTagIsValid(languageTag))
+                    {
+                        return languageTag;
+                    }
+
+                    throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
                 }
 
-                throw new InvalidTermException(this, string.Format("Language tag '{0}' is invalid", languageTag));
+                return null;
             }
         }
 
@@ -291,7 +296,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         private string GetLanguageFromConstant(Triple constantTriple)
         {
             ILiteralNode languageNode = constantTriple.Object as ILiteralNode;
-            if (languageNode != null)
+            if (languageNode != null && string.IsNullOrWhiteSpace(languageNode.Language) == false)
             {
                 return languageNode.Language;
             }
