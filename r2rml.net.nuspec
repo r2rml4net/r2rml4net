@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>r2rml.net</id>
-    <title>Official releases of r2rml.net</title>
+    <title>r2rml.net</title>
     <version>$version$</version>
     <authors>Tomasz Pluskiewicz</authors>
     <owners>Tomasz Pluskiewicz</owners>
@@ -11,9 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</description>
     <releaseNotes>
-      1. Small changes required by R2RML Store
+      1. Fix handling literal constants with datatype or language tag
     </releaseNotes>
-    <copyright>Copyright 2013 Tomasz Pluskiewicz</copyright>
+    <copyright>Copyright 2012-2014 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
 	<dependencies>
