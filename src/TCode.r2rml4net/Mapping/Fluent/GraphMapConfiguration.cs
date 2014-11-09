@@ -36,12 +36,14 @@
 // terms.
 #endregion
 using System;
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
+    [NullGuard(ValidationFlags.All)]
     internal class GraphMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IGraphMapConfiguration
     {
         internal GraphMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IGraphMapParent parentMap, IGraph r2RMLMappings)
@@ -56,6 +58,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public Uri URI
         {
+            [return: AllowNull]
             get { return ConstantValue; }
         }
 

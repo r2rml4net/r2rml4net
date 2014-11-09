@@ -35,12 +35,15 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
+    [NullGuard(ValidationFlags.All)]
     internal class PredicateMapConfiguration : TermMapConfiguration, INonLiteralTermMapConfigutarion, IPredicateMap
     {
         internal PredicateMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings)
@@ -55,6 +58,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public System.Uri URI
         {
+            [return: AllowNull]
             get { return ConstantValue; }
         }
 

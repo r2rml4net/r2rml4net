@@ -47,6 +47,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
+    [NullGuard(ValidationFlags.All)]
     internal class ObjectMapConfiguration : TermMapConfiguration, IObjectMapConfiguration, ILiteralTermMapConfiguration, ITermType
     {
         internal ObjectMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IPredicateObjectMapConfiguration parentMap, IGraph r2RMLMappings)
@@ -72,6 +73,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public Uri URI
         {
+            [return: AllowNull]
             get { return ConstantValue; }
         }
 
@@ -100,6 +102,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         public string Language
         {
+            [return: AllowNull]
             get
             {
                 string languageTag;

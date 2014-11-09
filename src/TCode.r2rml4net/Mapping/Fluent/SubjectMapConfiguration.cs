@@ -38,6 +38,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NullGuard;
 using TCode.r2rml4net.Extensions;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
@@ -47,6 +48,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
     /// <summary>
     /// Fluent configuration of subject map backed by a DotNetRDF graph (see <see cref="ISubjectMapConfiguration"/>)
     /// </summary>
+    [NullGuard(ValidationFlags.All)]
     internal class SubjectMapConfiguration : TermMapConfiguration, ISubjectMapConfiguration, INonLiteralTermMapConfigutarion
     {
         private readonly IList<GraphMapConfiguration> _graphMaps = new List<GraphMapConfiguration>();
@@ -74,6 +76,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <inheritdoc/>
         public Uri URI
         {
+            [return: AllowNull]
             get { return ConstantValue; }
         }
 
