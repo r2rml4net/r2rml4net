@@ -184,7 +184,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                return Node.GetSingleObject(R2RMLUris.RrTermTypeProperty, nodes => new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", nodes.Count())))
+                return Node.GetObjects(R2RMLUris.RrTermTypeProperty)
+                           .GetSingleOrDefault(nodes => new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", nodes.Count())))
                            .GetUri(() => new InvalidMapException("Term type must be an IRI"));
             }
         }
@@ -209,7 +210,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string ColumnName
         {
             [return: AllowNull]
-            get { return Node.GetSingleObject(R2RMLUris.RrColumnProperty).GetLiteral(); }
+            get { return Node.GetObjects(R2RMLUris.RrColumnProperty).GetSingleOrDefault().GetLiteral(); }
         }
 
         /// <summary>
@@ -218,7 +219,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string Template
         {
             [return: AllowNull]
-            get { return Node.GetSingleObject(R2RMLUris.RrTemplateProperty).GetLiteral(); }
+            get { return Node.GetObjects(R2RMLUris.RrTemplateProperty).GetSingleOrDefault().GetLiteral(); }
         }
 
         /// <summary>
@@ -228,7 +229,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         protected internal Uri ConstantValue
         {
             [return: AllowNull]
-            get { return Node.GetSingleObject(R2RMLUris.RrConstantProperty).GetUri(); }
+            get { return Node.GetObjects(R2RMLUris.RrConstantProperty).GetSingleOrDefault().GetUri(); }
         }
 
         /// <summary>
@@ -239,7 +240,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
             [return: AllowNull]
             get
             {
-                return Node.GetSingleObject(R2RMLUris.RrInverseExpressionProperty)
+                return Node.GetObjects(R2RMLUris.RrInverseExpressionProperty)
+                           .GetSingleOrDefault()
                            .GetLiteral(() => new InvalidMapException("An inverse expression must be a literal node"));
             }
         }

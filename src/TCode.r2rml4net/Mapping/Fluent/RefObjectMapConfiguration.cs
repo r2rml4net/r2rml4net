@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System.Collections.Generic;
+using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 using VDS.RDF.Query;
 using System.Linq;
@@ -111,21 +112,12 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                const string rrPrefix = "http://www.w3.org/ns/r2rml#";
-                const string rrJoinCondition = rrPrefix + "joinCondition";
-                const string rrChild = rrPrefix + "child";
-                const string rrParent = rrPrefix + "parent";
-
-                var joinConditionNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrJoinCondition));
-                var childNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrChild));
-                var parentNode = R2RMLMappings.CreateUriNode(UriFactory.Create(rrParent));
-
-                var joinConditions = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, joinConditionNode).Select(x => x.Object);
+                var joinConditions = Node.GetObjects(R2RMLUris.RrJoinCondition);
 
                 foreach (var joinCondition in joinConditions)
                 {
-                    var child = R2RMLMappings.GetTriplesWithSubjectPredicate(joinCondition, childNode).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
-                    var parent = R2RMLMappings.GetTriplesWithSubjectPredicate(joinCondition, parentNode).Select(x => x.Object).OfType<ILiteralNode>().Select(x => x.Value).First();
+                    var child = joinCondition.GetObjects(R2RMLUris.RrChild).GetSingleOrDefault().GetLiteral();
+                    var parent = joinCondition.GetObjects(R2RMLUris.RrParent).GetSingleOrDefault().GetLiteral();
 
                     yield return new JoinCondition(child, parent);
                 }

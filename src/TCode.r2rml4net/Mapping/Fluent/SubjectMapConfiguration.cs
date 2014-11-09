@@ -38,7 +38,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.Extensions;
 using VDS.RDF;
+using GraphExtensions = TCode.r2rml4net.Extensions.GraphExtensions;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
@@ -85,8 +87,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                var classes = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty));
-                return classes.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
+                return (from obj in Node.GetObjects(R2RMLUris.RrClassProperty)
+                        select obj.GetUri()).ToArray();
             }
         }
 

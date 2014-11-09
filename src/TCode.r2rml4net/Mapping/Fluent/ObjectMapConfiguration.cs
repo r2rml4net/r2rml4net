@@ -133,22 +133,19 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                var columnPropertyNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty);
-                var columnTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, columnPropertyNode).ToArray();
-
-                if (columnTriples.Any())
+                var columnObjects = Node.GetObjects(R2RMLUris.RrColumnProperty);
+                if (columnObjects.Any())
+                {
                     return true;
+                }
 
-                var languageNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety);
-                var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, languageNode).ToArray();
+                var hasLanguages = Node.GetObjects(R2RMLUris.RrLanguagePropety).Any();
+                var hasDatatypes = Node.GetObjects(R2RMLUris.RrDatatypePropety).Any();
 
-                var datatypeNode = R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety);
-                var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, datatypeNode).ToArray();
-
-                if (languageTriples.Any() && datatypeTriples.Any())
+                if (hasLanguages && hasDatatypes)
                     throw new InvalidMapException("Object map cannot have both a rr:language and rr:datatype properties set");
 
-                return datatypeTriples.Any() || languageTriples.Any();
+                return hasLanguages || hasDatatypes;
             }
         }
 
@@ -193,13 +190,18 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         private void EnsureOnlyLanguageOrDatatype()
         {
-            var datatypeTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrDatatypePropety));
-            var languageTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrLanguagePropety));
+            var datatypeNodes = Node.GetObjects(R2RMLUris.RrDatatypePropety);
+            var languageNodes = Node.GetObjects(R2RMLUris.RrLanguagePropety);
 
-            if (datatypeTriples.Any())
+            if (datatypeNodes.Any())
+            {
                 throw new InvalidMapException("Object map already has a datatype");
-            if (languageTriples.Any())
+            }
+
+            if (languageNodes.Any())
+            {
                 throw new InvalidMapException("Object map already has a language tag");
+            }
         }
 
         #endregion
@@ -214,7 +216,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string Literal
         {
             [return: AllowNull]
-            get { return Node.GetSingleObject(R2RMLUris.RrConstantProperty).GetLiteral(); }
+            get { return Node.GetObjects(R2RMLUris.RrConstantProperty).GetSingleOrDefault().GetLiteral(); }
         }
 
         #endregion
@@ -233,13 +235,14 @@ namespace TCode.r2rml4net.Mapping.Fluent
             [return: AllowNull]
             get
             {
-                var datatypeObject = Node.GetSingleObject(R2RMLUris.RrDatatypePropety);
+                var datatypeObject = Node.GetObjects(R2RMLUris.RrDatatypePropety).GetSingleOrDefault();
                 if (datatypeObject != null)
                 {
                     return GetRrDatatypeUri(datatypeObject);
                 }
 
-                return Node.GetSingleObject(R2RMLUris.RrConstantProperty)
+                return Node.GetObjects(R2RMLUris.RrConstantProperty)
+                           .GetSingleOrDefault()
                            .GetDatatype();
             }
         }
@@ -248,16 +251,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                string languageTag = null;
+                string languageTag;
 
-                var languageObject = Node.GetSingleObject(R2RMLUris.RrLanguagePropety);
+                var languageObject = Node.GetObjects(R2RMLUris.RrLanguagePropety).GetSingleOrDefault();
                 if (languageObject != null)
                 {
                     languageTag = GetLanguageFromNode(languageObject);
                 }
                 else
                 {
-                    languageTag = Node.GetSingleObject(R2RMLUris.RrConstantProperty)
+                    languageTag = Node.GetObjects(R2RMLUris.RrConstantProperty)
+                                      .GetSingleOrDefault()
                                       .GetLanguageTag();
                 }
 
@@ -288,9 +292,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         private string GetLanguageFromNode(INode languageObject)
         {
-            var datatypeTriple = Node.GetSingleObject(R2RMLUris.RrDatatypePropety);
+            var datatypeTriple = Node.GetObjects(R2RMLUris.RrDatatypePropety);
 
-            if (datatypeTriple != null)
+            if (datatypeTriple.Any())
                 throw new InvalidTermException(this, "Object map has both language tag and datatype set");
 
             return languageObject.GetLiteral(() => new InvalidMapException("Object map has language set but it is not a literal"));
@@ -298,9 +302,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         private Uri GetRrDatatypeUri(INode datatypeObject)
         {
-            var languageTriples = Node.GetSingleObject(R2RMLUris.RrLanguagePropety);
+            var languageTriples = Node.GetObjects(R2RMLUris.RrLanguagePropety);
 
-            if (languageTriples != null)
+            if (languageTriples.Any())
                 throw new InvalidMapException("Object map has both language tag and datatype set");
 
             return datatypeObject.GetUri(() => new InvalidMapException("Object map has datatype set but it is not a URI"));

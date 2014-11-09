@@ -38,6 +38,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query.Datasets;
@@ -185,12 +186,9 @@ WHERE { ?map rr:subject ?value }";
         protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, INode, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
             where TConfiguration : BaseConfiguration
         {
-            var mapPropety = R2RMLMappings.CreateUriNode(property);
-            var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(this.Node, mapPropety);
-
-            foreach (var triple in triples.ToArray())
+            foreach (var obj in Node.GetObjects(property))
             {
-                var subConfiguration = createSubConfiguration(R2RMLMappings, triple.Object);
+                var subConfiguration = createSubConfiguration(R2RMLMappings, obj);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
                 subMaps.Add(subConfiguration);
             }

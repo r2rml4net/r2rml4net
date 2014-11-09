@@ -39,10 +39,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 using System.Text.RegularExpressions;
 using System.Text;
 using VDS.RDF.Query;
+using GraphExtensions = TCode.r2rml4net.Extensions.GraphExtensions;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
@@ -309,13 +311,8 @@ WHERE
         {
             get
             {
-                IBlankNode logicalTableNode = LogicalTableNode;
-
-                if (logicalTableNode == null)
-                    return new Uri[0];
-
-                var triples = R2RMLMappings.GetTriplesWithSubjectPredicate(logicalTableNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrSqlVersionProperty));
-                return triples.Select(triple => ((IUriNode)triple.Object).Uri).ToArray();
+                return (from obj in LogicalTableNode.GetObjects(R2RMLUris.RrSqlVersionProperty)
+                        select obj.GetUri()).ToArray();
             }
         }
 
@@ -366,18 +363,13 @@ WHERE
         {
             get
             {
-                var logicalTables = R2RMLMappings.GetTriplesWithSubjectPredicate(
-                    Node,
-                    R2RMLMappings.CreateUriNode(R2RMLUris.RrLogicalTableProperty)
-                    ).ToArray();
+                var logicalTable = Node.GetObjects(R2RMLUris.RrLogicalTableProperty)
+                                      .GetSingleOrDefault(nodes => new InvalidMapException("Triples Map contains multiple logical tables!", this));
 
-                if (!logicalTables.Any())
+                if (logicalTable == null)
                     throw new InvalidMapException("Triples Map contains no logical tables!", this);
 
-                if (logicalTables.Count() > 1)
-                    throw new InvalidMapException("Triples Map contains multiple logical tables!", this);
-
-                return logicalTables.First().Object as IBlankNode;
+                return logicalTable as IBlankNode;
             }
         }
     }

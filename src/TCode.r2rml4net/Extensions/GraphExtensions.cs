@@ -41,27 +41,52 @@ using System.Collections.Generic;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Extensions
 {
+    /// <summary>
+    /// Extension methods for accessing nodes' values
+    /// </summary>
     public static class GraphExtensions
     {
-        [return: AllowNull]
-        public static INode GetSingleObject(this INode termMapNode, string predicate, [AllowNull] Func<IEnumerable<INode>, Exception> multipleObjectError = null)
+        /// <summary>
+        /// Gets the objects for given subject <paramref name="termMapNode"/> and <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="termMapNode">The subject node.</param>
+        /// <param name="predicate">The predicate QName.</param>
+        public static IEnumerable<INode> GetObjects(this INode termMapNode, string predicate)
         {
             var predicateNode = termMapNode.Graph.CreateUriNode(predicate);
-            var triples = termMapNode.Graph.GetTriplesWithSubjectPredicate(termMapNode, predicateNode).ToArray();
 
-            multipleObjectError = multipleObjectError ?? (nodes => MultipleResultsException(termMapNode, nodes, predicateNode));
-
-            if (triples.Length > 1)
-                throw multipleObjectError(triples.Select(GetObject));
-
-            return triples.SingleOrDefault().GetObject();
+            return termMapNode.Graph.GetTriplesWithSubjectPredicate(termMapNode, predicateNode).Select(triple => triple.Object);
         }
 
+        /// <summary>
+        /// Gets the single node or null.
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <param name="multipleObjectError">Exception to throw if there are multiple nodes.</param>
+        [return: AllowNull]
+        public static INode GetSingleOrDefault(this IEnumerable<INode> nodes, [AllowNull] Func<IEnumerable<INode>, Exception> multipleObjectError = null)
+        {
+            multipleObjectError = multipleObjectError ?? MultipleResultsException;
+
+            var enumerable = nodes as INode[] ?? nodes.ToArray();
+            if (enumerable.Length > 1)
+            {
+                throw multipleObjectError(enumerable);
+            }
+
+            return enumerable.SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the literal value of a node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="getError">[Optional] Exception to throw if <paramref name="node"/> is not literal.</param>
+        /// <returns>literal value or null is <paramref name="node"/> is not literal</returns>
         [return: AllowNull]
         public static string GetLiteral([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
@@ -80,6 +105,12 @@ namespace TCode.r2rml4net.Extensions
             return null;
         }
 
+        /// <summary>
+        /// Gets the URI value of a node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="getError">[Optional] Exception to throw if <paramref name="node"/> is not literal.</param>
+        /// <returns>URI value or null is <paramref name="node"/> is not literal</returns>
         [return: AllowNull]
         public static Uri GetUri([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
@@ -98,6 +129,12 @@ namespace TCode.r2rml4net.Extensions
             return null;
         }
 
+        /// <summary>
+        /// Gets the datatype URI of a node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="getError">[Optional] Exception to throw if <paramref name="node"/> is not literal.</param>
+        /// <returns>literal datatype or null is <paramref name="node"/> is not literal</returns>
         [return: AllowNull]
         public static Uri GetDatatype([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
@@ -116,6 +153,12 @@ namespace TCode.r2rml4net.Extensions
             return null;
         }
 
+        /// <summary>
+        /// Gets the language value of a node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="getError">[Optional] Exception to throw if <paramref name="node"/> is not literal.</param>
+        /// <returns>literal language or null is <paramref name="node"/> is not literal</returns>
         [return: AllowNull]
         public static string GetLanguageTag([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
@@ -134,23 +177,11 @@ namespace TCode.r2rml4net.Extensions
             return null;
         }
 
-        private static INode GetObject([AllowNull] this Triple node)
-        {
-            if (node == null)
-            {
-                return null;
-            }
-
-            return node.Object;
-        }
-
-        private static InvalidMapException MultipleResultsException(INode termMapNode, IEnumerable<INode> nodes, IUriNode predicateNode)
+        private static InvalidMapException MultipleResultsException(IEnumerable<INode> nodes)
         {
             return new InvalidMapException(
-                string.Format("Term map {1} contains multiple values for predicate {2}:\r\n{0}",
-                              string.Join("\r\n", nodes.Select(node => node.ToString())),
-                              termMapNode,
-                              predicateNode.Uri));
+                string.Format("Expected at most on values for predicate but got:\r\n{0}",
+                              string.Join("\r\n", nodes.Select(node => node.ToString()))));
         }
     }
 }
