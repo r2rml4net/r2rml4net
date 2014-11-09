@@ -73,6 +73,7 @@
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Exceptions\InvalidSqlVersionException.cs" />
+    <Compile Include="Extensions\GraphExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="IFreezable.cs" />
     <Compile Include="Log\LogFacadeBase.cs" />

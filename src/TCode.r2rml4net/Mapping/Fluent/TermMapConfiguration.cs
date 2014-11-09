@@ -39,6 +39,7 @@ using System;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
@@ -221,7 +222,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string ColumnName
         {
             [return: AllowNull]
-            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty)); }
+            get { return this.GetObjectNode(R2RMLUris.RrColumnProperty).GetLiteral(); }
         }
 
         /// <summary>
@@ -230,7 +231,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string Template
         {
             [return: AllowNull]
-            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty)); }
+            get { return this.GetObjectNode(R2RMLUris.RrTemplateProperty).GetLiteral(); }
         }
 
         /// <summary>
@@ -240,7 +241,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         protected internal Uri ConstantValue
         {
             [return: AllowNull]
-            get { return GetSingleUriValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)); }
+            get { return this.GetObjectNode(R2RMLUris.RrConstantProperty).GetIri(); }
         }
 
         /// <summary>
@@ -361,52 +362,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
             EnsureRelationWithParentMap();
 
             R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
-        }
-
-        /// <summary>
-        /// Gets a single literal object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
-        /// </summary>
-        /// <exception cref="InvalidMapException">if multiple values found or object is not a literal</exception>
-        protected string GetSingleLiteralValueForPredicate(IUriNode predicate)
-        {
-            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
-
-            if (triplesForPredicate.Length > 1)
-                throw new InvalidMapException(
-                    string.Format("Term map {1} contains multiple constant values:\r\n{0}",
-                                  string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
-                                  Node));
-
-            if (triplesForPredicate.Length == 1)
-            {
-                var node = triplesForPredicate[0].Object as ILiteralNode;
-                if (node != null)
-                {
-                    return node.Value;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets a single URI object value for <see cref="BaseConfiguration.Node"/> ans <paramref name="predicate"/> predicate
-        /// </summary>
-        /// <exception cref="InvalidMapException">if multiple values found or object is not a URI</exception>
-        protected Uri GetSingleUriValueForPredicate(IUriNode predicate)
-        {
-            var triplesForPredicate = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, predicate).ToArray();
-
-            if (triplesForPredicate.Length > 1)
-                throw new InvalidMapException(
-                    string.Format("Term map {1} contains multiple values constant values:\r\n{0}",
-                                  string.Join("\r\n", triplesForPredicate.Select(triple => triple.Object.ToString())),
-                                  Node));
-
-            if (triplesForPredicate.Length == 1 && triplesForPredicate[0].Object is IUriNode)
-                return ((IUriNode)triplesForPredicate[0].Object).Uri;
-
-            return null;
         }
     }
 }

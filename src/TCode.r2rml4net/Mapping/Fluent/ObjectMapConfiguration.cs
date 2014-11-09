@@ -40,6 +40,7 @@ using System.Globalization;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Extensions;
 using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
@@ -213,7 +214,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string Literal
         {
             [return: AllowNull]
-            get { return GetSingleLiteralValueForPredicate(R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)); }
+            get { return this.GetObjectNode(R2RMLUris.RrConstantProperty).GetLiteral(); }
         }
 
         #endregion
