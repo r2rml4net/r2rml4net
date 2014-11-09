@@ -2,9 +2,9 @@
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=UseObjectOrCollectionInitializer/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Update_0020licence/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Update licence"&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;/Profile&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue">Licence</s:String>
-	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright (C) $CREATED_YEAR$ Tomasz Pluskiewicz&#xD;
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright (C) 2012-$CURRENT_YEAR$ Tomasz Pluskiewicz&#xD;
 http://r2rml.net/&#xD;
-r2rml@r2rml.net&#xD;
+r2rml@t-code.pl&#xD;
 	&#xD;
 ------------------------------------------------------------------------&#xD;
 	&#xD;
