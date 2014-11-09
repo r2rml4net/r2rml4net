@@ -1,6 +1,6 @@
-# R2RML.net [![teamcity build status](http://ci.t-code.pl/app/rest/builds/buildType:bt12/statusIcon)](http://ci.t-code.pl/viewType.html?buildTypeId=bt12)
+# r2rml4net [![teamcity build status](http://ci.t-code.pl/app/rest/builds/buildType:bt12/statusIcon)](http://ci.t-code.pl/viewType.html?buildTypeId=bt12)
 
-Welcome to r2rml.net, a project which brings [R2RML](http://www.w3.org/TR/r2rml/) to the .NET world.
+Welcome to r2rml4net, a project which brings [R2RML](http://www.w3.org/TR/r2rml/) to the .NET world.
 
 ## Getting
 
