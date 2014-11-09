@@ -40,6 +40,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Extensions;
 using TCode.r2rml4net.RDF;
@@ -51,6 +52,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
     /// <summary>
     /// Implementation of fluent configuration interface for <a href="http://www.w3.org/TR/r2rml/#triples-map">Triples Maps</a>
     /// </summary>
+    [NullGuard(ValidationFlags.All)]
     internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -66,7 +68,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
 
         /// <inheritdoc/>
         public string TableName
-        {
+        {   
+            [return: AllowNull]
             get
             {
                 var sparqlQuery = new SparqlParameterizedString(
@@ -100,6 +103,7 @@ WHERE
         /// <inheritdoc/>
         public string SqlQuery
         {
+            [return: AllowNull]
             get
             {
                 var sparqlQuery = new SparqlParameterizedString(
@@ -244,7 +248,7 @@ WHERE
                 throw new InvalidMapException("Cannot set SQL version to a table-based logical table", this);
             }
 
-            if (MappingOptions.Current.ValidateSqlVersion && R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri))
+            if (MappingOptions.Current.ValidateSqlVersion && R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri) == false)
             {
                 throw new InvalidSqlVersionException(uri);
             }
