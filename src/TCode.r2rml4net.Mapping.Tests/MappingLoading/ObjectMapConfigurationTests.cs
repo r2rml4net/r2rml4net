@@ -126,7 +126,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteralWithDatatypeImplicit.ttl"));
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteralWithDatatype.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 

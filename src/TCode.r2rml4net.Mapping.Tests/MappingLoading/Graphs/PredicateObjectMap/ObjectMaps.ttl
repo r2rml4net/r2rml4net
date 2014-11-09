@@ -5,11 +5,11 @@ ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap, ex:PredicateObjectMap
   
 ex:PredicateObjectMap rr:objectMap 
     [ rr:constant ex:Employee ], 
-    [ rr:template ""http://data.example.com/user/{EMPNO}"" ] .
+    [ rr:template "http://data.example.com/user/{EMPNO}" ] .
   
 ex:PredicateObjectMap1 rr:objectMap 
     [ rr:constant ex:Xxx ], 
-    [ rr:template ""http://data.example.com/user/{xxx}"" ] .
+    [ rr:template "http://data.example.com/user/{xxx}" ] .
 
 ex:PredicateObjectMap rr:objectMap [
     rr:parentTriplesMap ex:TriplesMap2
