@@ -39,6 +39,7 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
@@ -65,19 +66,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:TriplesMap rr:predicateObjectMap [
-                                       rr:predicate ex:department;
-                                       rr:objectMap [
-                                           rr:parentTriplesMap ex:TriplesMap2;
-                                           rr:joinCondition [
-                                               rr:child ""DEPTNO"";
-                                               rr:parent ""ID"";
-                                           ];
-                                       ];
-                                   ].");
+            graph.LoadFromString(Resource.AsString("Graphs.RefObjectMap.JoinCondition.ttl"));
             var predicateObjectMapNode = graph.GetTriplesWithPredicate(graph.CreateUriNode("rr:predicateObjectMap")).Single().Object;
             _predicateObjectMap.Setup(map => map.Node).Returns(predicateObjectMapNode);
             _parentTriplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:TriplesMap"));
@@ -95,58 +84,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             Assert.AreEqual(blankNode, _refObjectMap.Node);
         }
 
-        private const string MultipleJoinConditionsLoading_TestGraph =
-@"
-@prefix rr: <http://www.w3.org/ns/r2rml#> .
-@prefix odcz:    <http://linked.opendata.cz/ontology/coi.cz/> .
-@base <http://example.com/base/> .
-
-<LawTriples> a rr:TriplesMap;	
-    rr:logicalTable [ rr:tableName ""Laws"" ];
-        rr:subjectMap [
-            rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/law/{LawId}"";
-        ];
-.
-
-<CheckActionSubjectTriples> a rr:TriplesMap;
-    rr:logicalTable [ rr:tableName ""CheckActionSubjects""; ];
-    rr:subjectMap [
-        rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/check-action/{CheckActionId}/subject"";
-    ];
-    rr:predicateObjectMap [
-        rr:predicate odcz:zakon;
-        rr:objectMap [
-            rr:parentTriplesMap <LawTriples>;
-            rr:joinCondition [
-                rr:child ""LawChild1"";
-                rr:parent ""LawParent1"";
-            ];
-        ];
-    ];
-.
-
-<SanctionReasonTriples> a rr:TriplesMap;
-    rr:logicalTable [ rr:tableName ""SanctionReasons""; ];
-    rr:subjectMap [
-        rr:template ""http://linked.opendata.cz/resource/domain/coi.cz/sanction/{SanctionId}/reason/{SanctionReasonId}"";
-    ];
-    rr:predicateObjectMap [
-        rr:predicate odcz:zakon;
-        rr:objectMap [
-            rr:parentTriplesMap <LawTriples>;
-            rr:joinCondition [
-                rr:child ""LawChild2"";
-                rr:parent ""LawParent2"";
-            ];
-        ];
-    ];
-.
-";
-
         [Test]
         public void MultipleJoinConditionsLoading()
         {
-            IR2RML mappings = R2RMLLoader.Load(MultipleJoinConditionsLoading_TestGraph);
+            IR2RML mappings = R2RMLLoader.Load(Resource.AsString("Graphs.RefObjectMap.MultipleJoinConditions.ttl"));
             Assert.IsNotNull(mappings);
             Assert.AreEqual(3, mappings.TriplesMaps.Count());
 

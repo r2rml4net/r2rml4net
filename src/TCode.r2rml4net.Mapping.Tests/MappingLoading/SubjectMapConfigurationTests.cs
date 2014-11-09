@@ -39,6 +39,7 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
@@ -60,13 +61,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"".");
+            graph.LoadFromString(Resource.AsString("Graphs.SubjectMap.Simple.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
@@ -84,15 +79,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
-	                                   rr:graphMap [ rr:template ""http://data.example.com/jobgraph/{JOB}"" ] ;
-	                                   rr:graphMap [ rr:constant <http://data.example.com/agraph/> ] .");
+            graph.LoadFromString(Resource.AsString("Graphs.SubjectMap.GraphMaps.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
@@ -115,15 +102,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
-	                                   rr:graph <http://data.example.com/shortGraph/> ;
-	                                   rr:graph <http://data.example.com/agraph/> .");
+            graph.LoadFromString(Resource.AsString("Graphs.SubjectMap.GraphMapsShortcut.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when
@@ -146,10 +125,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:TriplesMap rr:subject ex:Value .");
+            graph.LoadFromString(Resource.AsString("Graphs.SubjectMap.Shortcut.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
 
             // when

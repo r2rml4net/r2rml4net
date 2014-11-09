@@ -1,0 +1,44 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix odcz:    <http://linked.opendata.cz/ontology/coi.cz/> .
+@base <http://example.com/base/> .
+
+<LawTriples> a rr:TriplesMap;	
+    rr:logicalTable [ rr:tableName "Laws" ];
+        rr:subjectMap [
+            rr:template "http://linked.opendata.cz/resource/domain/coi.cz/law/{LawId}";
+        ];
+.
+
+<CheckActionSubjectTriples> a rr:TriplesMap;
+    rr:logicalTable [ rr:tableName "CheckActionSubjects"; ];
+    rr:subjectMap [
+        rr:template "http://linked.opendata.cz/resource/domain/coi.cz/check-action/{CheckActionId}/subject";
+    ];
+    rr:predicateObjectMap [
+        rr:predicate odcz:zakon;
+        rr:objectMap [
+            rr:parentTriplesMap <LawTriples>;
+            rr:joinCondition [
+                rr:child "LawChild1";
+                rr:parent "LawParent1";
+            ];
+        ];
+    ];
+.
+
+<SanctionReasonTriples> a rr:TriplesMap;
+    rr:logicalTable [ rr:tableName "SanctionReasons"; ];
+    rr:subjectMap [
+        rr:template "http://linked.opendata.cz/resource/domain/coi.cz/sanction/{SanctionId}/reason/{SanctionReasonId}";
+    ];
+    rr:predicateObjectMap [
+        rr:predicate odcz:zakon;
+        rr:objectMap [
+            rr:parentTriplesMap <LawTriples>;
+            rr:joinCondition [
+                rr:child "LawChild2";
+                rr:parent "LawParent2";
+            ];
+        ];
+    ];
+.

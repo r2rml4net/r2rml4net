@@ -39,6 +39,7 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Validation;
@@ -64,11 +65,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:subjectMap ex:subject .
-ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
+            graph.LoadFromString(Resource.AsString("Graphs.TriplesMap.Simple.ttl"));
 
             // when
             var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
@@ -87,12 +84,8 @@ ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
         public void CanBeInitizalizedFromGraphWithShortcutSubject()
         {
             // given
-            IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:subject ex:subject .
-ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
+            IGraph graph = new Graph(); 
+            graph.LoadFromString(Resource.AsString("Graphs.TriplesMap.SubjectShortcut.ttl"));
 
             // when
             var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
@@ -114,11 +107,7 @@ ex:triplesMap rr:predicateObjectMap ex:predObj1, ex:predObj2, ex:predObj3 .");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:subject ex:subject .
-ex:triplesMap rr:subjectMap ex:subject1 .");
+            graph.LoadFromString(Resource.AsString("Graphs.TriplesMap.MultipleSubjects.ttl"));
 
             // when
             var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
@@ -132,7 +121,7 @@ ex:triplesMap rr:subjectMap ex:subject1 .");
         {
             // given
             IGraph mappings = new Graph();
-            mappings.LoadFromEmbeddedResource("TCode.r2rml4net.Mapping.Tests.MappingLoading.RefObjectMap.ttl, TCode.r2rml4net.Mapping.Tests");
+            mappings.LoadFromString(Resource.AsString("Graphs.RefObjectMap.Complex.ttl"));
             var referencedMap = new TriplesMapConfiguration(CreateStub(mappings), mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap2")));
             var triplesMapConfiguration = new TriplesMapConfiguration(CreateStub(mappings), mappings.GetUriNode(new Uri("http://example.com/base/TriplesMap1")));
             referencedMap.RecursiveInitializeSubMapsFromCurrentGraph();

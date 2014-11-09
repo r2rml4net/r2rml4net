@@ -53,6 +53,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Resourcer">
+      <HintPath>..\packages\Resourcer.Fody.1.2.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Resourcer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -145,15 +149,48 @@
     <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0017.ttl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MappingLoading\ComplexTestGraph.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ComplexMapping.ttl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\DirectCandidatePrimary.ttl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MappingLoading\RefObjectMap.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\Complex.ttl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+    <EmbeddedResource Include="MappingLoading\Graphs\SimpleMapping.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\SubjectShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\Shortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\GraphMapsShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\GraphMaps.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\MultipleJoinConditions.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\JoinCondition.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\RefObjectMap.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\Blank.ObjectShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\ObjectShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\ObjectMaps.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\GraphShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\PredicateShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\ConstantShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\Constant.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithDatatype.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithLanguage.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithDatatypeImplicit.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantIriShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteral.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantIri.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\Constant.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\ConstantShortcut.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\Simple.ttl" />
+    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\MultipleSubjects.ttl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets" Condition="Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -161,7 +198,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.26.1\build\Fody.targets'))" />
   </Target>
+  <Import Project="..\packages\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\packages\Fody.1.26.1\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

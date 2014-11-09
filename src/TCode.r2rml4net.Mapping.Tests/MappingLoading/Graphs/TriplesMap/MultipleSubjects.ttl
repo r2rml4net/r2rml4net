@@ -1,0 +1,5 @@
+@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+
+ex:triplesMap rr:subject ex:subject .
+ex:triplesMap rr:subjectMap ex:subject1 .

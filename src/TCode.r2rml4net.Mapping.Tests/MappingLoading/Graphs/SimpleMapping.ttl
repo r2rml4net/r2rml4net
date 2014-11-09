@@ -1,0 +1,22 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://mappingpedia.org/rdb2rdf/r2rml/tc/> .
+
+<StudentTriplesMap>
+    a rr:TriplesMap;
+    
+    rr:logicalTable [ rr:tableName "Student"; ];
+
+    rr:subjectMap 
+	[ 
+	    rr:termType rr:BlankNode;  
+	    rr:class <http://example.com/Student>
+	];
+
+    rr:predicateObjectMap
+    [ 
+        rr:predicateMap	[ rr:constant <http://example.com/Student#Name> ] ;
+        rr:objectMap	[ rr:column "Name" ]
+    ] .
+
+_:blankTriplesMap a rr:TriplesMap .

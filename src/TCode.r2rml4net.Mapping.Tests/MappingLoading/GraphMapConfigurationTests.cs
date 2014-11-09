@@ -39,9 +39,9 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
-using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
@@ -63,15 +63,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
-	                                   rr:graphMap [ rr:template ""http://data.example.com/jobgraph/{JOB}"" ].");
+            graph.LoadFromString(Resource.AsString("Graphs.GraphMap.Simple.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _graphMapParent.Setup(map => map.Node).Returns(graph.GetUriNode("ex:subject"));
 
@@ -91,15 +83,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
-	                                   rr:graphMap [ rr:constant ex:graph ].");
+            graph.LoadFromString(Resource.AsString("Graphs.GraphMap.Constant.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
             
@@ -118,15 +102,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-                                   @prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-                                   ex:triplesMap rr:subjectMap ex:subject .
-  
-                                   ex:subject 
-	                                   rr:template ""http://data.example.com/employee/{EMPNO}"";
-	                                   rr:graph ex:graph .");
+            graph.LoadFromString(Resource.AsString("Graphs.GraphMap.ConstantShortcut.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _graphMapParent.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:subject"));
 

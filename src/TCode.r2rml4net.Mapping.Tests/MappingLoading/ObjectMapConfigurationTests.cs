@@ -40,6 +40,7 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 using VDS.RDF.Parsing;
@@ -64,13 +65,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}"" ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.Simple.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -90,13 +85,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:template ""http://data.example.com/{JOB}
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantIri.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -116,13 +105,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ex:someObject ].");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteral.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -143,13 +126,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject"" ].");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""^^<http://example.org/some#datatype> ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteralWithDatatypeImplicit.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -170,13 +147,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""^^<http://example
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:constant 2 ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteralWithDatatypeImplicit.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -197,13 +168,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant 2 ].");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""@pl ].");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantLiteralWithLanguage.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -224,13 +189,7 @@ ex:PredicateObjectMap rr:objectMap [ rr:constant ""someObject""@pl ].");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(
-                @"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:object ex:someObject .");
+            graph.LoadFromString(Resource.AsString("Graphs.ObjectMap.ConstantIriShortcut.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:triplesMap"));
             _predictaObjectMap.Setup(map => map.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 

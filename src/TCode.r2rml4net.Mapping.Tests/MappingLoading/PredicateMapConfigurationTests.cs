@@ -39,6 +39,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
@@ -62,12 +63,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/employee/{EMPNO}"" ].");
+            graph.LoadFromString(Resource.AsString("Graphs.PredicateMap.Simple.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -86,13 +82,8 @@ ex:PredicateObjectMap rr:predicateMap [ rr:template ""http://data.example.com/em
         public void CanBeInitializedWithConstantValue()
         {
             // given
-            IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
+            IGraph graph = new Graph(); 
+            graph.LoadFromString(Resource.AsString("Graphs.PredicateMap.Constant.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
@@ -111,12 +102,7 @@ ex:PredicateObjectMap rr:predicateMap [ rr:constant ex:Value ].");
         {
             // given
             IGraph graph = new Graph();
-            graph.LoadFromString(@"@prefix ex: <http://www.example.com/>.
-@prefix rr: <http://www.w3.org/ns/r2rml#>.
-
-ex:triplesMap rr:predicateObjectMap ex:PredicateObjectMap .
-  
-ex:PredicateObjectMap rr:predicate ex:Value .");
+            graph.LoadFromString(Resource.AsString("Graphs.PredicateMap.ConstantShortcut.ttl"));
             _triplesMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
             _predicateObjectMap.Setup(tm => tm.Node).Returns(graph.GetUriNode("ex:PredicateObjectMap"));
 
