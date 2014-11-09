@@ -78,7 +78,6 @@ namespace TCode.r2rml4net.Validation
         /// <returns>true if language tag is valid</returns>
         public virtual bool LanguageTagIsValid(string languageTag)
         {
-            if (languageTag == null) throw new ArgumentNullException("languageTag");
             if (string.IsNullOrWhiteSpace(languageTag)) throw new ArgumentException("languageTag");
 
             var query = new SparqlParameterizedString(@"ASK WHERE { [] <urn:lang:code> ?code. FILTER(?code = @languageCode) }");

@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
@@ -183,22 +184,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
             get
             {
-                var termTypeNodes = R2RMLMappings.GetTriplesWithSubjectPredicate(Node,
-                                                                                 R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty)).ToArray();
-
-                if (termTypeNodes.Length > 1)
-                    throw new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", termTypeNodes.Length));
-
-                if (termTypeNodes.Length == 1)
-                {
-                    IUriNode termTypeNode = termTypeNodes[0].Object as IUriNode;
-                    if (termTypeNode == null)
-                        throw new InvalidMapException("Term type must be an IRI");
-
-                    return termTypeNode.Uri;
-                }
-
-                return null;
+                return Node.GetSingleObject(R2RMLUris.RrTermTypeProperty, nodes => new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", nodes.Count())))
+                           .GetUri(() => new InvalidMapException("Term type must be an IRI"));
             }
         }
 
@@ -222,7 +209,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string ColumnName
         {
             [return: AllowNull]
-            get { return this.GetObjectNode(R2RMLUris.RrColumnProperty).GetLiteral(); }
+            get { return Node.GetSingleObject(R2RMLUris.RrColumnProperty).GetLiteral(); }
         }
 
         /// <summary>
@@ -231,7 +218,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string Template
         {
             [return: AllowNull]
-            get { return this.GetObjectNode(R2RMLUris.RrTemplateProperty).GetLiteral(); }
+            get { return Node.GetSingleObject(R2RMLUris.RrTemplateProperty).GetLiteral(); }
         }
 
         /// <summary>
@@ -241,7 +228,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         protected internal Uri ConstantValue
         {
             [return: AllowNull]
-            get { return this.GetObjectNode(R2RMLUris.RrConstantProperty).GetIri(); }
+            get { return Node.GetSingleObject(R2RMLUris.RrConstantProperty).GetUri(); }
         }
 
         /// <summary>
@@ -250,19 +237,10 @@ namespace TCode.r2rml4net.Mapping.Fluent
         public string InverseExpression
         {
             [return: AllowNull]
-            get 
+            get
             {
-                var expressionTriples = R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty)).ToArray();
-
-                if (!expressionTriples.Any())
-                    return null;
-
-                if (expressionTriples.Count() == 1)
-                {
-                    return ((ILiteralNode)expressionTriples.Single().Object).Value;
-                }
-
-                throw new InvalidMapException("An inverse expression must be a literal node");
+                return Node.GetSingleObject(R2RMLUris.RrInverseExpressionProperty)
+                           .GetLiteral(() => new InvalidMapException("An inverse expression must be a literal node"));
             }
         }
 

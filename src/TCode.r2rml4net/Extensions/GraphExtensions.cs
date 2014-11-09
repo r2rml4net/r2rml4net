@@ -37,6 +37,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
@@ -48,23 +49,21 @@ namespace TCode.r2rml4net.Extensions
     public static class GraphExtensions
     {
         [return: AllowNull]
-        public static INode GetObjectNode(this TermMapConfiguration termMap, string predicate)
+        public static INode GetSingleObject(this INode termMapNode, string predicate, [AllowNull] Func<IEnumerable<INode>, Exception> multipleObjectError = null)
         {
-            var predicateNode = termMap.R2RMLMappings.CreateUriNode(predicate);
-            var triples = termMap.R2RMLMappings.GetTriplesWithSubjectPredicate(termMap.Node, predicateNode).ToArray();
+            var predicateNode = termMapNode.Graph.CreateUriNode(predicate);
+            var triples = termMapNode.Graph.GetTriplesWithSubjectPredicate(termMapNode, predicateNode).ToArray();
+
+            multipleObjectError = multipleObjectError ?? (nodes => MultipleResultsException(termMapNode, nodes, predicateNode));
 
             if (triples.Length > 1)
-                throw new InvalidMapException(
-                    string.Format("Term map {1} contains multiple values for predicate {2}:\r\n{0}",
-                                  string.Join("\r\n", triples.Select(triple => triple.Object.ToString())),
-                                  termMap.Node,
-                                  predicateNode.Uri));
+                throw multipleObjectError(triples.Select(GetObject));
 
             return triples.SingleOrDefault().GetObject();
         }
 
         [return: AllowNull]
-        public static string GetLiteral([AllowNull] this INode node)
+        public static string GetLiteral([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
             var literalNode = node as ILiteralNode;
 
@@ -73,17 +72,63 @@ namespace TCode.r2rml4net.Extensions
                 return literalNode.Value;
             }
 
+            if (node != null && getError != null)
+            {
+                throw getError();
+            }
+
             return null;
         }
 
         [return: AllowNull]
-        public static Uri GetIri([AllowNull] this INode node)
+        public static Uri GetUri([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
         {
-            var literalNode = node as IUriNode;
+            var uriNode = node as IUriNode;
 
-            if (literalNode != null)
+            if (uriNode != null)
             {
-                return literalNode.Uri;
+                return uriNode.Uri;
+            }
+
+            if (node != null && getError != null)
+            {
+                throw getError();
+            }
+
+            return null;
+        }
+
+        [return: AllowNull]
+        public static Uri GetDatatype([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
+        {
+            var uriNode = node as ILiteralNode;
+
+            if (uriNode != null)
+            {
+                return uriNode.DataType;
+            }
+
+            if (node != null && getError != null)
+            {
+                throw getError();
+            }
+
+            return null;
+        }
+
+        [return: AllowNull]
+        public static string GetLanguageTag([AllowNull] this INode node, [AllowNull] Func<Exception> getError = null)
+        {
+            var uriNode = node as ILiteralNode;
+
+            if (uriNode != null)
+            {
+                return uriNode.Language;
+            }
+
+            if (node != null && getError != null)
+            {
+                throw getError();
             }
 
             return null;
@@ -97,6 +142,15 @@ namespace TCode.r2rml4net.Extensions
             }
 
             return node.Object;
+        }
+
+        private static InvalidMapException MultipleResultsException(INode termMapNode, IEnumerable<INode> nodes, IUriNode predicateNode)
+        {
+            return new InvalidMapException(
+                string.Format("Term map {1} contains multiple values for predicate {2}:\r\n{0}",
+                              string.Join("\r\n", nodes.Select(node => node.ToString())),
+                              termMapNode,
+                              predicateNode.Uri));
         }
     }
 }
