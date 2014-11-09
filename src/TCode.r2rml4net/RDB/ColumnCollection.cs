@@ -66,6 +66,11 @@ namespace TCode.r2rml4net.RDB
         {
             get
             {
+                if (columnName == null)
+                {
+                    throw new ArgumentNullException("columnName");
+                }
+
                 if (string.IsNullOrWhiteSpace(columnName))
                 {
                     throw new ArgumentOutOfRangeException("columnName");

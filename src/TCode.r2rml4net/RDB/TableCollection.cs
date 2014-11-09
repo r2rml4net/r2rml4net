@@ -64,6 +64,11 @@ namespace TCode.r2rml4net.RDB
         {
             get
             {
+                if (tableName == null)
+                {
+                    throw new ArgumentNullException("tableName");
+                }
+
                 if (string.IsNullOrWhiteSpace(tableName))
                 {
                     throw new ArgumentOutOfRangeException("tableName");
