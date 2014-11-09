@@ -37,7 +37,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Resourcer;
 using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 using VDS.RDF.Parsing;
@@ -51,35 +51,15 @@ namespace TCode.r2rml4net.Mapping.Fluent
     /// </summary>
     public abstract class BaseConfiguration : IMapBase
     {
+        private static readonly string ShortcutSubmapsReplaceSparql = Resource.AsString("Queries.ReplaceShortcuts.rq"); 
         private readonly INode _node;
         private readonly ITriplesMapConfiguration _triplesMap;
 
-        private const string ShortcutSubmapsReplaceSparql = @"PREFIX rr: <http://www.w3.org/ns/r2rml#>
-DELETE { ?map rr:graph ?value . }
-INSERT { ?map rr:graphMap [ rr:constant ?value ] . }
-WHERE { ?map rr:graph ?value } ;
-
-DELETE { ?map rr:object ?value . }
-INSERT { ?map rr:objectMap [ rr:constant ?value ] . }
-WHERE { ?map rr:object ?value } ;
-
-DELETE { ?map rr:predicate ?value . }
-INSERT { ?map rr:predicateMap [ rr:constant ?value ] . }
-WHERE { ?map rr:predicate ?value } ;
-
-DELETE { ?map rr:subject ?value . }
-INSERT { ?map rr:subjectMap [ rr:constant ?value ] . }
-WHERE { ?map rr:subject ?value }";
-
         /// <summary>
-        /// DotNetRDF graph containing the R2RML mappings
-        /// </summary>
-        protected internal IGraph R2RMLMappings { get; private set; }
-
-        /// <summary>
-        /// Constructor used by <see cref="FluentR2RML"/>
+        /// Initializes a new instance of the <see cref="BaseConfiguration"/> class.
         /// </summary>
         /// <param name="graph">existing graph with mappings</param>
+        /// <remarks>Used by <see cref="FluentR2RML"/></remarks>
         internal BaseConfiguration(IGraph graph)
         {
             R2RMLMappings = graph;
@@ -87,23 +67,22 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Constructor used by <see cref="FluentR2RML"/>
+        /// Initializes a new instance of the <see cref="BaseConfiguration"/> class.
         /// </summary>
         /// <param name="baseUri">R2RML graph's base URI</param>
+        /// <remarks>Used by <see cref="FluentR2RML"/></remarks>
         protected BaseConfiguration(Uri baseUri)
             : this(new Graph { BaseUri = baseUri })
         {
         }
 
         /// <summary>
-        /// Constructor used by <see cref="TriplesMapConfiguration"/>
+        /// Initializes a new instance of the <see cref="BaseConfiguration"/> class.
         /// </summary>
+        /// <remarks>Used by <see cref="TriplesMapConfiguration"/></remarks>
         protected BaseConfiguration(IGraph existingMappingsGraph, INode node)
             : this(existingMappingsGraph)
         {
-            if (node == null)
-                throw new ArgumentNullException("node");
-
             _node = node;
             EnsureNoShortcutSubmaps();
         }
@@ -117,8 +96,6 @@ WHERE { ?map rr:subject ?value }";
             _triplesMap = triplesMap;
         }
 
-        #region Implementation of IMapBase
-
         /// <summary>
         /// Gets the RDF node representing this map
         /// </summary>
@@ -131,19 +108,32 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Base mapping URI. It will be used to resolve relative values when generating terms
+        /// Gets the base mapping URI. It will be used to resolve relative values when generating terms
         /// </summary>
         public Uri BaseUri
         {
             get { return R2RMLMappings.BaseUri; }
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the DotNetRDF graph containing the R2RML mappings
+        /// </summary>
+        protected internal IGraph R2RMLMappings { get; private set; }
 
-        private void EnsurePrefixes()
+        /// <summary>
+        /// Gets the parent <see cref="ITriplesMapConfiguration"/> containing this map
+        /// </summary>
+        protected internal virtual ITriplesMapConfiguration TriplesMap
         {
-            if (!R2RMLMappings.NamespaceMap.HasNamespace("rr"))
-                R2RMLMappings.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
+            get { return _triplesMap; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether configuration class is represented by an RDF node
+        /// </summary>
+        protected virtual bool UsesNode
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -156,12 +146,8 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
-        /// Gets value indicating whether configuration class is represented by an RDF node
-        /// </summary>
-        protected virtual bool UsesNode { get { return true; } }
-
-        /// <summary>
-        /// Implemented in child classes should create submaps and for each of the run the <see cref="BaseConfiguration.RecursiveInitializeSubMapsFromCurrentGraph"/> method
+        /// Implemented in child classes should create submaps and for each of the run the 
+        /// <see cref="BaseConfiguration.RecursiveInitializeSubMapsFromCurrentGraph"/> method
         /// </summary>
         protected abstract void InitializeSubMapsFromCurrentGraph();
 
@@ -182,7 +168,12 @@ WHERE { ?map rr:subject ?value }";
         }
 
         /// <summary>
+        /// Creates the sub maps.
         /// </summary>
+        /// <typeparam name="TConfiguration">The type of the configuration.</typeparam>
+        /// <param name="property">The property.</param>
+        /// <param name="createSubConfiguration">The create sub configuration.</param>
+        /// <param name="subMaps">The sub maps.</param>
         protected void CreateSubMaps<TConfiguration>(string property, Func<IGraph, INode, TConfiguration> createSubConfiguration, IList<TConfiguration> subMaps)
             where TConfiguration : BaseConfiguration
         {
@@ -194,12 +185,12 @@ WHERE { ?map rr:subject ?value }";
             }
         }
 
-        /// <summary>
-        /// Gets the parent <see cref="ITriplesMapConfiguration"/> containing this map
-        /// </summary>
-        protected internal virtual ITriplesMapConfiguration TriplesMap
+        private void EnsurePrefixes()
         {
-            get { return _triplesMap; }
+            if (!R2RMLMappings.NamespaceMap.HasNamespace("rr"))
+            {
+                R2RMLMappings.NamespaceMap.AddNamespace("rr", new Uri("http://www.w3.org/ns/r2rml#"));
+            }
         }
     }
 }

@@ -180,8 +180,9 @@ namespace TCode.r2rml4net.Extensions
         private static InvalidMapException MultipleResultsException(IEnumerable<INode> nodes)
         {
             return new InvalidMapException(
-                string.Format("Expected at most on values for predicate but got:\r\n{0}",
-                              string.Join("\r\n", nodes.Select(node => node.ToString()))));
+                string.Format(
+                    "Expected at most on values for predicate but got:\r\n{0}",
+                    string.Join("\r\n", nodes.Select(node => node.ToString()))));
         }
     }
 }

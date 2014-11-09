@@ -48,14 +48,14 @@ namespace TCode.r2rml4net.TriplesGeneration
     public interface ITriplesMapProcessor
     {
         /// <summary>
+        /// Gets or sets the <see cref="LogFacadeBase"/>
+        /// </summary>
+        LogFacadeBase Log { get; set; }
+        
+        /// <summary>
         /// Retrieves source data using the given <paramref name="connection"/> and processes <paramref name="triplesMap"/>
         /// to transform that data to RDF triples
         /// </summary>
         void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler);
-
-        /// <summary>
-        /// Gets or sets the <see cref="LogFacadeBase"/>
-        /// </summary>
-        LogFacadeBase Log { get; set; }
-    }
+   }
 }

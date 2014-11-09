@@ -42,11 +42,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.Extensions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
-using TCode.r2rml4net.Extensions;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
@@ -56,15 +56,15 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// </summary>
     public class RDFTermGenerator : IRDFTermGenerator
     {
-        static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\{\}.]+)(?<-N>\})(?(N)(?!))");
+        private static readonly Regex TemplateReplaceRegex = new Regex(@"(?<N>\{)([^\{\}.]+)(?<-N>\})(?(N)(?!))");
+        private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new Dictionary<string, IBlankNode>(256);
+        private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
         private LogFacadeBase _log = NullLog.Instance;
-        private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new Dictionary<string, IBlankNode>(256);
-        private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
 
         /// <summary>
-        /// <see cref="ISQLValuesMappingStrategy"/>
+        /// Gets or sets the <see cref="ISQLValuesMappingStrategy"/>
         /// </summary>
         public ISQLValuesMappingStrategy SqlValuesMappingStrategy
         {
@@ -73,7 +73,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Gets the <see cref="LogFacadeBase"/>
+        /// Gets or sets the <see cref="LogFacadeBase"/>
         /// </summary>
         public LogFacadeBase Log
         {
@@ -82,21 +82,15 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// <see cref="INodeFactory"/>
+        /// Gets or sets the <see cref="INodeFactory"/>
         /// </summary>
         public INodeFactory NodeFactory
         {
             get { return _nodeFactory; }
             set { _nodeFactory = value; }
         }
-
-        #region Implementation of IRDFTermGenerator
-
-        /// <summary>
-        /// Generates RDF term for the given <see cref="ITermMap"/> by applying to the <paramref name="logicalRow"/>
-        /// </summary>
-        /// <remarks>see http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term</remarks>
-        /// <returns>an RDF term (<see cref="INode"/>)</returns>
+        
+        /// <inheritdoc />
         [return: AllowNull]
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
             where TNodeType : class, INode
@@ -131,105 +125,23 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
 
             if (node == null)
+            {
                 Log.LogNullTermGenerated(termMap);
-            else Log.LogTermGenerated(node);
+            }
+            else
+            {
+                Log.LogTermGenerated(node);
+            }
 
             return (TNodeType)node;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-template">template-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
-        /// </summary>
-        protected INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
-        {
-            if (string.IsNullOrWhiteSpace(termMap.Template))
-                throw new InvalidTemplateException(termMap);
-
-            string value = null;
-            try
-            {
-                value = ReplaceColumnReferences(termMap.Template, logicalRow, termMap.TermType.IsURI);
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
-
-            if (value != null)
-                return GenerateTermForValue(termMap, value.Replace(@"\{", "{").Replace(@"\}", "}"));
-            return null;
-        }
-
-        /// <summary>
-        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#constant">constant-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
-        /// </summary>
-        protected INode CreateNodeFromConstant(ITermMap termMap)
-        {
-            var uriValuedTermMap = termMap as IUriValuedTermMap;
-            if (uriValuedTermMap != null)
-            {
-                if (uriValuedTermMap.URI == null)
-                    throw new InvalidTermException(termMap, "IRI-valued term map must have IRI set");
-
-                return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
-            }
-
-            var objectMap = termMap as IObjectMap;
-            if (objectMap != null)
-            {
-                if (objectMap.URI != null && objectMap.Literal != null)
-                    throw new InvalidTermException(termMap, "Object map's value cannot be both IRI and literal.");
-
-                if (objectMap.URI != null)
-                    return NodeFactory.CreateUriNode(objectMap.URI);
-                if (objectMap.Literal != null)
-                    return NodeFactory.CreateLiteralNode(objectMap.Literal);
-
-                throw new InvalidTermException(termMap, "Neither IRI nor literal was set");
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-column">column-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
-        /// </summary>
-        protected INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
-        {
-            int columnIndex;
-            try
-            {
-                columnIndex = logicalRow.GetOrdinal(termMap.ColumnName);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Log.LogColumnNotFound(termMap, termMap.ColumnName);
-                throw new InvalidMapException(string.Format("Column {0} not found", termMap.ColumnName));
-            }
-            if (logicalRow.IsDBNull(columnIndex))
-            {
-                Log.LogNullValueForColumn(termMap.ColumnName);
-                return null;
-            }
-
-            Uri implicitDatatype;
-            string value = SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out implicitDatatype);
-
-            if (termMap.TermType.IsLiteral)
-            {
-                return GenerateTermForLiteral(termMap, value, implicitDatatype);
-            }
-
-            AssertNoIllegalCharacters(termMap, new Uri(value, UriKind.RelativeOrAbsolute));
-
-            return GenerateTermForValue(termMap, value);
         }
 
         internal INode GenerateTermForValue(ITermMap termMap, string value)
         {
             if (value == null)
+            {
                 return null;
+            }
 
             if (termMap.TermType.IsURI)
             {
@@ -253,12 +165,13 @@ namespace TCode.r2rml4net.TriplesGeneration
                 {
                     throw new InvalidTermException(termMap, string.Format("Value {0} is invalid. {1}", value, ex.Message));
                 }
-
             }
+
             if (termMap.TermType.IsBlankNode)
             {
                 return GenerateBlankNodeForValue(termMap, value);
             }
+
             if (termMap.TermType.IsLiteral)
             {
                 var literalTermMap = termMap as ILiteralTermMap;
@@ -270,12 +183,116 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-template">template-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
+        protected INode CreateNodeFromTemplate(ITermMap termMap, IDataRecord logicalRow)
+        {
+            if (string.IsNullOrWhiteSpace(termMap.Template))
+            {
+                throw new InvalidTemplateException(termMap);
+            }
+
+            string value = null;
+            try
+            {
+                value = ReplaceColumnReferences(termMap.Template, logicalRow, termMap.TermType.IsURI);
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
+
+            if (value != null)
+            {
+                return GenerateTermForValue(termMap, value.Replace(@"\{", "{").Replace(@"\}", "}"));
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#constant">constant-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
+        protected INode CreateNodeFromConstant(ITermMap termMap)
+        {
+            var uriValuedTermMap = termMap as IUriValuedTermMap;
+            if (uriValuedTermMap != null)
+            {
+                if (uriValuedTermMap.URI == null)
+                {
+                    throw new InvalidTermException(termMap, "IRI-valued term map must have IRI set");
+                }
+
+                return NodeFactory.CreateUriNode(uriValuedTermMap.URI);
+            }
+
+            var objectMap = termMap as IObjectMap;
+            if (objectMap != null)
+            {
+                if (objectMap.URI != null && objectMap.Literal != null)
+                {
+                    throw new InvalidTermException(termMap, "Object map's value cannot be both IRI and literal.");
+                }
+
+                if (objectMap.URI != null)
+                {
+                    return NodeFactory.CreateUriNode(objectMap.URI);
+                }
+
+                if (objectMap.Literal != null)
+                {
+                    return NodeFactory.CreateLiteralNode(objectMap.Literal);
+                }
+
+                throw new InvalidTermException(termMap, "Neither IRI nor literal was set");
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Create an RDF term for a <a href="http://www.w3.org/TR/r2rml/#from-column">column-valued</a> <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>
+        /// </summary>
+        protected INode CreateNodeFromColumn(ITermMap termMap, IDataRecord logicalRow)
+        {
+            int columnIndex;
+            try
+            {
+                columnIndex = logicalRow.GetOrdinal(termMap.ColumnName);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Log.LogColumnNotFound(termMap, termMap.ColumnName);
+                throw new InvalidMapException(string.Format("Column {0} not found", termMap.ColumnName));
+            }
+
+            if (logicalRow.IsDBNull(columnIndex))
+            {
+                Log.LogNullValueForColumn(termMap.ColumnName);
+                return null;
+            }
+
+            Uri implicitDatatype;
+            string value = SqlValuesMappingStrategy.GetLexicalForm(columnIndex, logicalRow, out implicitDatatype);
+
+            if (termMap.TermType.IsLiteral)
+            {
+                return GenerateTermForLiteral(termMap, value, implicitDatatype);
+            }
+
+            AssertNoIllegalCharacters(termMap, new Uri(value, UriKind.RelativeOrAbsolute));
+
+            return GenerateTermForValue(termMap, value);
+        }
+
+        /// <summary>
         /// Throws <see cref="InvalidTermException"/> is uri contains any . or .. segments
         /// </summary>
         private Uri ConstructAbsoluteUri(ITermMap termMap, string relativePart)
         {
             if (relativePart.Split('/').Any(seg => seg == "." || seg == ".."))
+            {
                 throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
+            }
 
             return new Uri(termMap.BaseUri + relativePart);
         }
@@ -296,6 +313,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                         blankNode = _nodeFactory.CreateBlankNode();
                         _blankNodeObjects.Add(value, blankNode);
                     }
+
                     _blankNodeSubjects.Add(value, blankNode);
                 }
                 else if (MappingOptions.Current.PreserveDuplicateRows)
@@ -308,7 +326,9 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
 
                 if (!_blankNodeObjects.ContainsKey(value))
+                {
                     _blankNodeObjects.Add(value, blankNode);
+                }
             }
             else
             {
@@ -316,6 +336,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 {
                     _blankNodeObjects.Add(value, _nodeFactory.CreateBlankNode());
                 }
+
                 blankNode = _blankNodeObjects[value];
             }
 
@@ -326,7 +347,9 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             try
             {
-                return TemplateReplaceRegex.Replace(template, match =>
+                return TemplateReplaceRegex.Replace(
+                    template,
+                    match =>
                     {
                         var replacement = ReplaceColumnReference(match, logicalRow);
                         return escape ? MappingHelper.UrlEncode(replacement) : replacement;
@@ -356,19 +379,28 @@ namespace TCode.r2rml4net.TriplesGeneration
         private ILiteralNode GenerateTermForLiteral(ITermMap termMap, string value, Uri datatypeUriOverride = null)
         {
             if (!(termMap is ILiteralTermMap))
+            {
                 throw new InvalidTermException(termMap, "Term map cannot be of term type literal");
+            }
 
             var literalTermMap = termMap as ILiteralTermMap;
             Uri datatypeUri = literalTermMap.DataTypeURI ?? datatypeUriOverride;
             string language = literalTermMap.Language;
 
             if (language != null && datatypeUri != null)
+            {
                 throw new InvalidTermException(literalTermMap, "Literal term map cannot have both language tag and datatype set");
+            }
 
             if (language != null)
+            {
                 return NodeFactory.CreateLiteralNode(value, language);
+            }
+
             if (datatypeUri != null)
+            {
                 return NodeFactory.CreateLiteralNode(value, datatypeUri);
+            }
 
             return NodeFactory.CreateLiteralNode(value);
         }
@@ -376,7 +408,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         private void AssertNoIllegalCharacters(ITermMap termMap, Uri value)
         {
             IEnumerable<char> disallowedChars = string.Empty;
-            IEnumerable<string> segments = value.IsAbsoluteUri ? value.Segments : new[] {value.OriginalString};
+            IEnumerable<string> segments = value.IsAbsoluteUri ? value.Segments : new[] { value.OriginalString };
 
             foreach (var segment in segments)
             {

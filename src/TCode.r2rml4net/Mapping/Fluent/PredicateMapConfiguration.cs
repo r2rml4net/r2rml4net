@@ -36,6 +36,7 @@
 // terms.
 #endregion
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
@@ -52,7 +53,15 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
         }
 
-        #region Overrides of TermMapConfiguration
+        public System.Uri URI
+        {
+            get { return ConstantValue; }
+        }
+
+        public override ITermMapConfiguration IsBlankNode()
+        {
+            throw new InvalidMapException("Only obj map and subject map can be of term type rr:BlankNode");
+        }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
@@ -64,29 +73,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicatePropety);
         }
 
-        public override ITermMapConfiguration IsBlankNode()
-        {
-            throw new InvalidMapException("Only object map and subject map can be of term type rr:BlankNode");
-        }
-
-        #endregion
-
-        #region Implementation of IPredicateMap
-
-        public System.Uri URI
-        {
-            get { return ConstantValue; }
-        }
-
-        #endregion
-
-        #region Overrides of BaseConfiguration
-
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             // predicate maps have no submaps
         }
-
-        #endregion
     }
 }

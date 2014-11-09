@@ -37,6 +37,7 @@
 #endregion
 using System;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
@@ -53,7 +54,15 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
         }
 
-        #region Overrides of TermMapConfiguration
+        public Uri URI
+        {
+            get { return ConstantValue; }
+        }
+
+        public override ITermMapConfiguration IsBlankNode()
+        {
+            throw new InvalidMapException("Only object map and subject map can be of term type rr:Literal");
+        }
 
         protected internal override IUriNode CreateMapPropertyNode()
         {
@@ -65,29 +74,8 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrGraphPropety);
         }
 
-        public override ITermMapConfiguration IsBlankNode()
-        {
-            throw new InvalidMapException("Only object map and subject map can be of term type rr:Literal");
-        }
-
-        #endregion
-
-        #region Implementation of IGraphMap
-
-        public Uri URI
-        {
-            get { return ConstantValue; }
-        }
-
-        #endregion
-
-        #region Overrides of BaseConfiguration
-
         protected override void InitializeSubMapsFromCurrentGraph()
         {
-            
         }
-
-        #endregion
     }
 }

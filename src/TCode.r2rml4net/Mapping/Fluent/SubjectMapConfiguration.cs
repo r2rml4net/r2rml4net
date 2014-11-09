@@ -39,8 +39,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.Extensions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
-using GraphExtensions = TCode.r2rml4net.Extensions.GraphExtensions;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
@@ -61,28 +61,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         {
         }
 
-        #region Implementation of ISubjectMapConfiguration
-
-        /// <summary>
-        /// <see cref="ISubjectMapConfiguration.AddClass"/>
-        /// </summary>
-        public ISubjectMapConfiguration AddClass(Uri classIri)
-        {
-            // create SubjectMap - TriplesMap relation if no class has been added
-            if(Classes.Length == 0)
-                CreateParentMapRelation();
-
-            R2RMLMappings.Assert(
-                Node,
-                R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty),
-                R2RMLMappings.CreateUriNode(classIri));
-
-            return this;
-        }
-
-        /// <summary>
-        /// <see cref="ISubjectMap.Classes"/>
-        /// </summary>
+        /// <inheritdoc/>
         public Uri[] Classes
         {
             get
@@ -92,6 +71,19 @@ namespace TCode.r2rml4net.Mapping.Fluent
             }
         }
 
+        /// <inheritdoc/>
+        public Uri URI
+        {
+            get { return ConstantValue; }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IGraphMap> GraphMaps
+        {
+            get { return _graphMaps; }
+        }
+
+        /// <inheritdoc/>
         public IGraphMapConfiguration CreateGraphMap()
         {
             var graphMap = new GraphMapConfiguration(TriplesMap, this, R2RMLMappings);
@@ -99,9 +91,24 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return graphMap;
         }
 
-        #endregion
+        /// <summary>
+        /// <see cref="ISubjectMapConfiguration.AddClass"/>
+        /// </summary>
+        public ISubjectMapConfiguration AddClass(Uri classIri)
+        {
+            // create SubjectMap - TriplesMap relation if no class has been added
+            if (Classes.Length == 0)
+            {
+                CreateParentMapRelation();
+            }
 
-        #region Overrides of TermMapConfiguration
+            R2RMLMappings.Assert(
+                Node,
+                R2RMLMappings.CreateUriNode(R2RMLUris.RrClassProperty),
+                R2RMLMappings.CreateUriNode(classIri));
+
+            return this;
+        }
 
         /// <summary>
         /// Returns rr:subjectMap
@@ -116,32 +123,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return R2RMLMappings.CreateUriNode(R2RMLUris.RrSubjectProperty);
         }
 
-        #endregion
-
-        #region Implementation of ISubjectMap
-
-        /// <summary>
-        /// <see cref="IUriValuedTermMap.URI"/>
-        /// </summary>
-        public Uri URI
-        {
-            get { return ConstantValue; }
-        }
-
-        public IEnumerable<IGraphMap> GraphMaps
-        {
-            get { return _graphMaps; }
-        }
-
-        #endregion
-
-        #region Overrides of BaseConfiguration
-
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             CreateSubMaps(R2RMLUris.RrGraphMapPropety, (graph, node) => new GraphMapConfiguration(TriplesMap, this, graph, node), _graphMaps);
         }
-
-        #endregion
     }
 }

@@ -51,8 +51,9 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         protected string CreateBlankNodeTemplate(string tableName, IEnumerable<string> columnsArray)
         {
-            var joinedColumnNames = string.Join(MappingOptions.Current.BlankNodeTemplateSeparator,
-                                                columnsArray.Select(MappingHelper.EncloseColumnName));
+            var joinedColumnNames = string.Join(
+                MappingOptions.Current.BlankNodeTemplateSeparator,
+                columnsArray.Select(MappingHelper.EncloseColumnName));
             return string.Format("{0}{1}{2}", tableName, MappingOptions.Current.BlankNodeTemplateSeparator, joinedColumnNames);
         }
     }

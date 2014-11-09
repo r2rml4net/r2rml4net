@@ -45,25 +45,30 @@ namespace TCode.r2rml4net.RDB
     public class ColumnMetadata : IVistitable<IDatabaseMetadataVisitor>
     {
         /// <summary>
-        /// Column name
+        /// Gets the column name
         /// </summary>
         public string Name { [return: AllowNull] get; internal set; }
+
         /// <summary>
         /// Gets the .NET column <see cref="Type"/> as mapped in ADO.NET
         /// </summary>
         public R2RMLType Type { get; internal set; }
+
         /// <summary>
         /// Gets the native column type as declared in the source RDBMS
         /// </summary>
         public string NativeType { get; internal set; }
+
         /// <summary>
-        /// The <see cref="TableMetadata" />, which contains this column
+        /// Gets the <see cref="TableMetadata" />, which contains this column
         /// </summary>
         public TableMetadata Table { get; internal set; }
+
         /// <summary>
-        /// Returns true is this column is (part of) the primary key
+        /// Gets a value indicating whether this column is (part of) the primary key
         /// </summary>
         public bool IsPrimaryKey { get; internal set; }
+
         /// <summary>
         /// Implementation of <see cref="IVistitable{T}"/>. Only visits this
         /// </summary>

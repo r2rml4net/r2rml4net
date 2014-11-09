@@ -46,8 +46,9 @@ namespace TCode.r2rml4net.Exceptions
     public class InvalidTemplateException : InvalidTermException
     {
         /// <summary>
-        /// Creates a new instance of <see cref="InvalidTemplateException"/> for a <paramref name="termMap"/>
+        /// Initializes a new instance of the <see cref="InvalidTemplateException"/> class.
         /// </summary>
+        /// <param name="termMap">The term map.</param>
         public InvalidTemplateException(ITermMap termMap)
             : base(termMap, "Template is missing")
         {

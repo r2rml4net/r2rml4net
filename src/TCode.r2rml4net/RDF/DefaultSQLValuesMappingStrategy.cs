@@ -54,30 +54,29 @@ namespace TCode.r2rml4net.RDF
         private readonly IDictionary<Type, string> _datatypeMappings = new Dictionary<Type, string>();
 
         /// <summary>
-        /// Creates an instance of <see cref="DefaultSQLValuesMappingStrategy"/>
+        /// Initializes a new instance of the <see cref="DefaultSQLValuesMappingStrategy"/> class.
         /// </summary>
         public DefaultSQLValuesMappingStrategy()
         {
             FillDefaultDatatypeMappings();
         }
 
-        #region Implementation of ISQLValuesMappingStrategy
-
         /// <summary>
         /// Gets the column value's lexical form and it's RDF datatype URI
         /// </summary>
+        [return: AllowNull]
         public string GetLexicalForm(int columnIndex, IDataRecord logicalRow, out Uri naturalRdfDatatype)
         {
             Type type = logicalRow.GetFieldType(columnIndex);
             naturalRdfDatatype = GetXsdUriForType(type, logicalRow.GetDataTypeName(columnIndex));
 
             if (logicalRow.IsDBNull(columnIndex))
+            {
                 return null;
+            }
 
             return GetMappedValue(columnIndex, logicalRow, naturalRdfDatatype);
         }
-
-        #endregion
 
         /// <summary>
         /// Gets a lexical form for column value and the given <paramref name="dataType"/>
@@ -108,7 +107,7 @@ namespace TCode.r2rml4net.RDF
                     case XsdDatatypes.Date:
                         return GetUtcTime(columnIndex, logicalRow).ToString("u").Split(' ')[0];
                     case XsdDatatypes.Binary:
-                        return ByteArrayToString((byte[]) logicalRow.GetValue(columnIndex));
+                        return ByteArrayToString((byte[])logicalRow.GetValue(columnIndex));
                 }
             }
 
@@ -127,17 +126,38 @@ namespace TCode.r2rml4net.RDF
                 {
                     return new Uri(XsdDatatypes.Time);
                 }
+
                 if (typeNamelowered == "date")
                 {
                     return new Uri(XsdDatatypes.Date);
                 }
             }
+
             if (_datatypeMappings.ContainsKey(type))
             {
                 return new Uri(_datatypeMappings[type]);
             }
 
             return null;
+        }
+
+        private static DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
+        {
+            return TimeZoneInfo.ConvertTimeToUtc(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Utc);
+        }
+
+        private static string ByteArrayToString(byte[] bytes)
+        {
+            char[] c = new char[bytes.Length * 2];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                byte b = (byte)(bytes[i] >> 4);
+                c[i * 2] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+                b = (byte)(bytes[i] & 0xF);
+                c[(i * 2) + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+            }
+
+            return new string(c);
         }
 
         private void FillDefaultDatatypeMappings()
@@ -152,24 +172,6 @@ namespace TCode.r2rml4net.RDF
             _datatypeMappings.Add(typeof(double), XsdDatatypes.Double);
             _datatypeMappings.Add(typeof(DateTime), XsdDatatypes.DateTime);
             _datatypeMappings.Add(typeof(TimeSpan), XsdDatatypes.DateTime);
-        }
-
-        static DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
-        {
-            return TimeZoneInfo.ConvertTimeToUtc(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Utc);
-        }
-
-        static string ByteArrayToString(byte[] bytes)
-        {
-            char[] c = new char[bytes.Length * 2];
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                byte b = ((byte)(bytes[i] >> 4));
-                c[i * 2] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-                b = ((byte)(bytes[i] & 0xF));
-                c[i * 2 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
-            }
-            return new string(c);
         }
     }
 }

@@ -50,33 +50,29 @@ namespace TCode.r2rml4net.Mapping.Direct
     public class PrimaryKeyMappingStrategy : MappingStrategyBase, IPrimaryKeyMappingStrategy
     {
         /// <summary>
-        /// Default mapping log
-        /// </summary>
-        public LogFacadeBase Log { get; set; }
-
-        /// <summary>
-        /// Creates an instance of <see cref="PrimaryKeyMappingStrategy"/>
+        /// Initializes a new instance of <see cref="PrimaryKeyMappingStrategy"/>
         /// </summary>
         public PrimaryKeyMappingStrategy()
         {
             Log = NullLog.Instance;
         }
-
-        #region Implementation of IPrimaryKeyMappingStrategy
+        
+        /// <summary>
+        /// Gets or sets the default mapping log
+        /// </summary>
+        public LogFacadeBase Log { get; set; }
 
         /// <summary>
-        /// Creates a URI for subject class by joining <paramref name="BaseUri"/> and <paramref name="tableName"/>
+        /// Creates a URI for subject class by joining <paramref name="baseUri"/> and <paramref name="tableName"/>
         /// </summary>
-        public Uri CreateSubjectClassUri(Uri BaseUri, string tableName)
+        public Uri CreateSubjectClassUri(Uri baseUri, string tableName)
         {
-            if (BaseUri == null)
-                throw new ArgumentNullException("BaseUri");
-            if (tableName == null)
-                throw new ArgumentNullException("tableName");
             if (string.IsNullOrWhiteSpace(tableName))
+            {
                 throw new ArgumentException("Invalid table name");
+            }
 
-            return new Uri(BaseUri, MappingHelper.UrlEncode(tableName));
+            return new Uri(baseUri, MappingHelper.UrlEncode(tableName));
         }
 
         /// <summary>
@@ -87,32 +83,37 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// If the referenced table has no unique key, all columns are used</remarks>
         public virtual string CreateSubjectTemplateForNoPrimaryKey(TableMetadata table)
         {
-            if (table == null)
-                throw new ArgumentNullException("table");
-
             var uniqueKeys = table.UniqueKeys.ToArray();
             var referencedUniqueKeys = uniqueKeys.Where(uq => uq.IsReferenced).ToArray();
             if (referencedUniqueKeys.Length > 1)
+            {
                 Log.LogMultipleCompositeKeyReferences(table);
+            }
 
             ColumnCollection columnsForTemplate;
 
             if (uniqueKeys.Any())
             {
                 if (referencedUniqueKeys.Length == 1)
+                {
                     columnsForTemplate = referencedUniqueKeys.Single();
+                }
                 else
+                {
                     columnsForTemplate = uniqueKeys.OrderBy(c => c.ColumnsCount).First();
+                }
             }
             else
             {
                 columnsForTemplate = table;
             }
 
-            var columnsArray=columnsForTemplate.Select(c => c.Name).ToArray();
+            var columnsArray = columnsForTemplate.Select(c => c.Name).ToArray();
             var name = table.Name;
             if (!columnsArray.Any())
+            {
                 throw new InvalidMapException(string.Format("No columns for table {0}", name));
+            }
 
             return CreateBlankNodeTemplate(name, columnsArray);
         }
@@ -120,21 +121,16 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Creates a blank node identifier subject template for referenced table with primary key
         /// </summary>
-        public virtual string CreateSubjectTemplateForPrimaryKey(Uri BaseUri, TableMetadata table)
+        public virtual string CreateSubjectTemplateForPrimaryKey(Uri baseUri, TableMetadata table)
         {
-            if (table == null)
-                throw new ArgumentNullException("table");
-            if (BaseUri == null)
-                throw new ArgumentNullException("BaseUri");
-
             if (!table.PrimaryKey.Any())
+            {
                 throw new ArgumentException(string.Format("Table {0} has no primary key", table.Name));
+            }
 
-            string template = CreateSubjectClassUri(BaseUri, table.Name).OriginalString;
+            string template = CreateSubjectClassUri(baseUri, table.Name).OriginalString;
             template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
             return template;
         }
-
-        #endregion
     }
 }

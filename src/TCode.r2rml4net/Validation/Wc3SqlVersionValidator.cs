@@ -48,7 +48,7 @@ namespace TCode.r2rml4net.Validation
     /// </summary>
     public class Wc3SqlVersionValidator : ISqlVersionValidator
     {
-        readonly ICollection<string> _identifiers = new Collection<string>
+        private readonly ICollection<string> _identifiers = new Collection<string>
             {
                 "http://www.w3.org/ns/r2rml#SQL2008",
                 "http://www.w3.org/ns/r2rml#Oracle",

@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Log
         private readonly TextWriter _writer;
 
         /// <summary>
-        /// Creates an instance <see cref="TextWriterLog"/>, which will write to the given <paramref name="writer"/>
+        /// Initializes an instance <see cref="TextWriterLog"/>, which will write to the given <paramref name="writer"/>
         /// </summary>
         public TextWriterLog(TextWriter writer)
         {

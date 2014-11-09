@@ -43,11 +43,11 @@ namespace TCode.r2rml4net.Mapping
     /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-join-condition</remarks>
     public struct JoinCondition
     {
-        readonly string _childColumn;
-        readonly string _parentColumn;
+        private readonly string _childColumn;
+        private readonly string _parentColumn;
 
         /// <summary>
-        /// Creates an instance of <see cref="JoinCondition"/>
+        /// Initializes a new instance of the <see cref="JoinCondition"/> struct.
         /// </summary>
         /// <param name="childColumn">See http://www.w3.org/TR/r2rml/#dfn-child-column</param>
         /// <param name="parentColumn">See http://www.w3.org/TR/r2rml/#dfn-parent-column</param>
@@ -61,11 +61,18 @@ namespace TCode.r2rml4net.Mapping
         /// Gets the child column, which will be used to create joins between logical tables
         /// </summary>
         /// <remarks>Read more on http://www.w3.org/TR/r2rml/#dfn-joint-sql-query</remarks>
-        public string ChildColumn { get { return _childColumn; } }
+        public string ChildColumn
+        {
+            get { return _childColumn; }
+        }
+
         /// <summary>
         /// Gets the parent column, which will be used to create joins between logical tables
         /// </summary>
         /// <remarks>Read more on http://www.w3.org/TR/r2rml/#dfn-joint-sql-query</remarks>
-        public string ParentColumn { get { return _parentColumn; } }
+        public string ParentColumn
+        {
+            get { return _parentColumn; }
+        }
     }
 }

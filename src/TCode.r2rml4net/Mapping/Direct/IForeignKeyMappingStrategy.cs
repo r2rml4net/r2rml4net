@@ -48,13 +48,15 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// <summary>
         /// Create a predicate URI for a foreign key
         /// </summary>
-        Uri CreateReferencePredicateUri(Uri BaseUri, ForeignKeyMetadata foreignKey);
+        Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey);
+
         /// <summary>
-        /// Create a URI template for referenced object
+        /// Create a URI template for referenced obj
         /// </summary>
-        string CreateReferenceObjectTemplate(Uri BaseUri, ForeignKeyMetadata foreignKey);
+        string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey);
+
         /// <summary>
-        /// Create a blank node identifier template for referenced object
+        /// Create a blank node identifier template for referenced obj
         /// </summary>
         string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey);
     }

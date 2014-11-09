@@ -35,6 +35,7 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
 using System;
 
 namespace TCode.r2rml4net
@@ -47,44 +48,13 @@ namespace TCode.r2rml4net
     /// </summary>
     public sealed class MappingOptions : IFreezable
     {
-        private static readonly object Locker = new object();
-        private static MappingOptions _defaultInstance;
-
-        private bool _isFrozen;
-        private string _blankNodeTemplateSeparator;
         private const string DefaultTemplateSeparator = "_";
         private const char DefaultIdentifierDelimiter = '\"';
+        private static readonly Lazy<MappingOptions> DefaultInstance = new Lazy<MappingOptions>(CreateDefaultInstance);
+        private bool _isFrozen;
 
         /// <summary>
-        /// Gets a singleton instance with default values of <see cref="MappingOptions" />
-        /// </summary>
-        public static MappingOptions Default
-        {
-            get
-            {
-                lock (Locker)
-                {
-                    if (_defaultInstance == null)
-                    {
-                        _defaultInstance = new MappingOptions();
-                        _defaultInstance.Freeze();
-                    }
-                }
-
-                return _defaultInstance;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="MappingOptions"/> from the current <see cref="MappingScope"/> or the <see cref="Default"/> options
-        /// </summary>
-        public static MappingOptions Current
-        {
-            get { return MappingScope.Current ?? Default; }
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="MappingOptions"/> with default options' values
+        /// Initializes a new instance of <see cref="MappingOptions"/> with default options' values
         /// </summary>
         public MappingOptions()
         {
@@ -100,23 +70,29 @@ namespace TCode.r2rml4net
         }
 
         /// <summary>
-        /// Gets or sets the string which will be used for building blank node <a href="http://www.w3.org/TR/r2rml/#from-template">templates</a>.
-        /// Default value is "_"
+        /// Gets a singleton instance with default values of <see cref="MappingOptions" />
         /// </summary>
-        public string BlankNodeTemplateSeparator
+        public static MappingOptions Default
         {
-            get { return _blankNodeTemplateSeparator; }
-            internal set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                _blankNodeTemplateSeparator = value;
-            }
+            get { return DefaultInstance.Value; }
         }
 
         /// <summary>
-        /// Gets or sets value indicating whether delimited SQL identifiers should be used in mapping graphs
+        /// Gets the <see cref="MappingOptions"/> from the current <see cref="MappingScope"/> or the <see cref="Default"/> options
+        /// </summary>
+        public static MappingOptions Current
+        {
+            get { return MappingScope.Current ?? Default; }
+        }
+
+        /// <summary>
+        /// Gets the string which will be used for building blank node <a href="http://www.w3.org/TR/r2rml/#from-template">templates</a>.
+        /// Default value is "_"
+        /// </summary>
+        public string BlankNodeTemplateSeparator { get; internal set; }
+
+        /// <summary>
+        /// Gets a value indicating whether delimited SQL identifiers should be used in mapping graphs
         /// </summary>
         public bool UseDelimitedIdentifiers { get; internal set; }
 
@@ -131,37 +107,42 @@ namespace TCode.r2rml4net
         public char SqlIdentifierLeftDelimiter { get; internal set; }
 
         /// <summary>
-        /// Gets or sets value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-sql-version-identifier">SQL version identifier</a> should be validated.
+        /// Gets a value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-sql-version-identifier">SQL version identifier</a> should be validated.
         /// Default value is true
         /// </summary>
         public bool ValidateSqlVersion { get; internal set; }
 
         /// <summary>
-        /// Gets or sets value indicating whether mapping errors should be ignored.
+        /// Gets a value indicating whether mapping errors should be ignored.
         /// Default value is true
         /// </summary>
         public bool IgnoreMappingErrors { get; internal set; }
 
         /// <summary>
-        /// Gets or sets value indicating whether data errors should be ignored.
+        /// Gets a value indicating whether data errors should be ignored.
         /// Default value is true
         /// </summary>
         public bool IgnoreDataErrors { get; internal set; }
 
         /// <summary>
-        /// Gets or sets value indicating whether duplicate rows in tables without primary key <a href="http://www.w3.org/TR/r2rml/#default-mappings">should be preserved</a>.
+        /// Gets a value indicating whether duplicate rows in tables without primary key <a href="http://www.w3.org/TR/r2rml/#default-mappings">should be preserved</a>.
         /// Default value is false
         /// </summary>
         public bool PreserveDuplicateRows { get; internal set; }
 
         /// <summary>
-        /// Gets or set value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither
+        /// Gets a value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither
         /// a <a href="http://www.w3.org/TR/r2rml/#dfn-template-valued-term-map">template-valued</a> nor 
         /// a <a href="http://www.w3.org/TR/r2rml/#dfn-constant-valued-term-map">constant-valued</a> nor 
         /// a <a href="http://www.w3.org/TR/r2rml/#dfn-column-valued-term-map">column-valued</a>. In such case a distinct automatic blank node
         /// will be created for each logical row.
         /// </summary>
         public bool AllowAutomaticBlankNodeSubjects { get; internal set; }
+
+        internal bool IsFrozen
+        {
+            get { return _isFrozen; }
+        }
 
         /// <summary>
         /// Sets the SQL identifier delimiters
@@ -257,9 +238,11 @@ namespace TCode.r2rml4net
             return this;
         }
 
-        internal bool IsFrozen
+        private static MappingOptions CreateDefaultInstance()
         {
-            get { return _isFrozen; }
+            var defaultInstance = new MappingOptions();
+            defaultInstance.Freeze();
+            return defaultInstance;
         }
     }
 }

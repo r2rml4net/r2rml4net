@@ -50,25 +50,49 @@ namespace TCode.r2rml4net.Mapping.Direct
     {
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
-        #region Implementation of IForeignKeyMappingStrategy
+        /// <summary>
+        /// Gets or sets mapping strategy for primary keys
+        /// </summary>
+        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
+        {
+            get
+            {
+                if (_primaryKeyMappingStrategy == null)
+                {
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
+                }
+
+                return _primaryKeyMappingStrategy;
+            }
+
+            set
+            {
+                _primaryKeyMappingStrategy = value;
+            }
+        }
 
         /// <summary>
         /// Creates a predicate URI for foreign Key according to <a href="www.w3.org/TR/rdb-direct-mapping/">Direct Mapping specfication</a>
         /// </summary>
         /// <example>For referenced table "Student", foreign key columns "Last Name" and "SSN" and base URI "http://www.exmample.com/" it creates a 
         /// URI "http://www.exmample.com/Student#ref-{\"Last Name\"};{\"SSN\"}"</example>
-        public virtual Uri CreateReferencePredicateUri(Uri BaseUri, ForeignKeyMetadata foreignKey)
+        public virtual Uri CreateReferencePredicateUri(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            if (BaseUri == null)
-                throw new ArgumentNullException("BaseUri");
-            if (foreignKey == null)
-                throw new ArgumentNullException("foreignKey");
             if (string.IsNullOrWhiteSpace(foreignKey.TableName))
+            {
                 throw new ArgumentException("Invalid referencing table's name");
-            if (!foreignKey.ForeignKeyColumns.Any())
-                throw new ArgumentException("Empty foreign key", "foreignKey");
+            }
 
-            string uri = BaseUri + MappingHelper.UrlEncode(foreignKey.TableName) + "#ref-" + string.Join(";", foreignKey.ForeignKeyColumns.Select(MappingHelper.UrlEncode));
+            if (!foreignKey.ForeignKeyColumns.Any())
+            {
+                throw new ArgumentException("Empty foreign key", "foreignKey");
+            }
+
+            string uri = string.Format(
+                "{0}{1}#ref-{2}", 
+                baseUri, 
+                MappingHelper.UrlEncode(foreignKey.TableName), 
+                string.Join(";", foreignKey.ForeignKeyColumns.Select(MappingHelper.UrlEncode)));
 
             return new Uri(uri);
         }
@@ -78,19 +102,26 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         /// <remarks>The template contains both referenced and referencing columns. Different columns are used
         /// if the referenced table has or hasn't got a primary key producing different templates</remarks>
-        public virtual string CreateReferenceObjectTemplate(Uri BaseUri, ForeignKeyMetadata foreignKey)
+        public virtual string CreateReferenceObjectTemplate(Uri baseUri, ForeignKeyMetadata foreignKey)
         {
             if (!foreignKey.ForeignKeyColumns.Any())
+            {
                 throw new ArgumentException("Empty foreign key", "foreignKey");
+            }
 
             if (foreignKey.ForeignKeyColumns.Length != foreignKey.ReferencedColumns.Length)
+            {
                 throw new ArgumentException(string.Format("Foreign key columns count mismatch in table {0}", foreignKey.TableName), "foreignKey");
+            }
 
             if (foreignKey.IsCandidateKeyReference && (!foreignKey.ReferencedTableHasPrimaryKey || !foreignKey.ReferencedTable.PrimaryKey.Any()))
+            {
                 throw new ArgumentException(
                     string.Format(
                         "Canditate key reference between tables {0} and {1} but table {1} has no primary key",
-                        foreignKey.TableName, foreignKey.ReferencedTable.Name));
+                        foreignKey.TableName, 
+                        foreignKey.ReferencedTable.Name));
+            }
 
             string[] referencedColumns = foreignKey.IsCandidateKeyReference && foreignKey.ReferencedTableHasPrimaryKey
                 ? foreignKey.ReferencedTable.PrimaryKey.ToArray()
@@ -99,7 +130,7 @@ namespace TCode.r2rml4net.Mapping.Direct
                 ? foreignKey.ReferencedTable.PrimaryKey.Select(c => string.Format("{0}{1}", foreignKey.ReferencedTable.Name, c)).ToArray()
                 : foreignKey.ForeignKeyColumns;
 
-            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, foreignKey.ReferencedTable.Name) + "/");
+            StringBuilder template = new StringBuilder(PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, foreignKey.ReferencedTable.Name) + "/");
             template.AppendFormat("{0}={1}", MappingHelper.UrlEncode(referencedColumns[0]), MappingHelper.EncloseColumnName(foreignKeyColumns[0]));
             for (int i = 1; i < foreignKeyColumns.Length; i++)
             {
@@ -115,32 +146,16 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         public string CreateObjectTemplateForCandidateKeyReference(ForeignKeyMetadata foreignKey)
         {
-            if (foreignKey == null)
-                throw new ArgumentNullException("foreignKey");
             if (!foreignKey.IsCandidateKeyReference)
+            {
                 throw new ArgumentException(
                     string.Format(
                         "Canditate key reference expected but was primary key reference between tables {0} and {1}",
-                        foreignKey.TableName, foreignKey.ReferencedTable.Name));
+                        foreignKey.TableName, 
+                        foreignKey.ReferencedTable.Name));
+            }
 
             return CreateBlankNodeTemplate(foreignKey.ReferencedTable.Name, foreignKey.ForeignKeyColumns);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Mapping strategy for primary keys
-        /// </summary>
-        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
-        {
-            get
-            {
-                if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
-
-                return _primaryKeyMappingStrategy;
-            }
-            set { _primaryKeyMappingStrategy = value; }
         }
     }
 }

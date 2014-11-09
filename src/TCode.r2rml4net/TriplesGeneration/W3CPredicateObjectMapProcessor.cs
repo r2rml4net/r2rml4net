@@ -43,7 +43,7 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.TriplesGeneration
 {
-    class W3CPredicateObjectMapProcessor : MapProcessorBase, IPredicateObjectMapProcessor
+    internal class W3CPredicateObjectMapProcessor : MapProcessorBase, IPredicateObjectMapProcessor
     {
         public W3CPredicateObjectMapProcessor(IRDFTermGenerator termGenerator)
             : base(termGenerator)
@@ -52,7 +52,12 @@ namespace TCode.r2rml4net.TriplesGeneration
 
         #region Implementation of IPredicateObjectMapProcessor
 
-        public void ProcessPredicateObjectMap(INode subject, IPredicateObjectMap predicateObjectMap, IEnumerable<IUriNode> subjectGraphs, IDataRecord logicalRow, IRdfHandler rdfHandler)
+        public void ProcessPredicateObjectMap(
+            INode subject,
+            IPredicateObjectMap predicateObjectMap,
+            IEnumerable<IUriNode> subjectGraphs, 
+            IDataRecord logicalRow,
+            IRdfHandler rdfHandler)
         {
             var predicates = (from predicateMap in predicateObjectMap.PredicateMaps
                               select TermGenerator.GenerateTerm<IUriNode>(predicateMap, logicalRow)).ToArray();

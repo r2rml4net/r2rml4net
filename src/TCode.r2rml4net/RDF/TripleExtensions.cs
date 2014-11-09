@@ -68,7 +68,7 @@ namespace TCode.r2rml4net.RDF
             {
                 newTriple = new Triple(newSubject, newPredicate, newObject);
             }
-            else if(newGraph != null)
+            else if (newGraph != null)
             {
                 if (replacedGraphUri != null)
                 {

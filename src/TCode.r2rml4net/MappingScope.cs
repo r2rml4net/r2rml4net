@@ -44,47 +44,48 @@ namespace TCode.r2rml4net
     /// <summary>
     /// A thread-static scope, which allow changing mapping options for a given time
     /// </summary>
-    /// <remarks>See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx</remarks>
+    /// <remarks>
+    /// See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx
+    /// </remarks>
     public sealed class MappingScope : IDisposable
     {
-        private bool _disposed;
+        [ThreadStatic]
+        // ReSharper disable InconsistentNaming
+        private static MappingScope Head;
+        // ReSharper restore InconsistentNaming
         private readonly MappingOptions _instance;
         private readonly MappingScope _parent;
-        [ThreadStatic]
-        private static MappingScope _head;
+        private bool _disposed;
 
         /// <summary>
         /// Creates a new instance of <see cref="MappingScope"/> with a given set of options
         /// </summary>
-        /// <param name="instance"></param>
-        /// <exception cref="ArgumentNullException"></exception>
         public MappingScope(MappingOptions instance)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
             _instance = instance;
             _instance.Freeze();
 
             Thread.BeginThreadAffinity();
-            _parent = _head;
-            _head = this;
+            _parent = Head;
+            Head = this;
         }
 
         internal static MappingOptions Current
         {
-            get { return _head != null ? _head._instance : null; }
+            get { return Head != null ? Head._instance : null; }
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             if (!_disposed)
             {
                 _disposed = true;
 
-                Debug.Assert(this == _head, "Disposed out of order.");
-                _head = _parent;
+                Debug.Assert(this == Head, "Disposed out of order.");
+                Head = _parent;
                 Thread.EndThreadAffinity();
             }
         }

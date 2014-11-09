@@ -37,17 +37,16 @@
 #endregion
 using System.Collections.Generic;
 using TCode.r2rml4net.Extensions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
-using VDS.RDF.Query;
-using System.Linq;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
     internal class RefObjectMapConfiguration : BaseConfiguration, IRefObjectMapConfiguration
     {
-        readonly ITriplesMap _parentTriplesMap;
+        private readonly ITriplesMap _parentTriplesMap;
         private readonly IPredicateObjectMap _predicateObjectMap;
-        readonly ITriplesMapConfiguration _childTriplesMap;
+        private readonly ITriplesMapConfiguration _childTriplesMap;
 
         internal RefObjectMapConfiguration(
             IPredicateObjectMap predicateObjectMap, 
@@ -73,40 +72,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
             AssertObjectMapSubgraph();
         }
 
-        #region Overrides of BaseConfiguration
+        // todo: this is for ignored tests?
+        ////protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
+        ////{
+        ////    R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
+        ////    R2RMLMappings.Retract(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
 
-        protected override void InitializeSubMapsFromCurrentGraph()
-        {
-            AssertObjectMapSubgraph();
-        }
+        ////    Node = refObjectMapNode;
+        ////    AssertObjectMapSubgraph();
 
-        //protected internal override void RecursiveInitializeSubMapsFromCurrentGraph()
-        //{
-        //    R2RMLMappings.Retract(_predicateObjectMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty), Node);
-        //    R2RMLMappings.Retract(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty), _childTriplesMap.Node);
-
-        //    Node = refObjectMapNode;
-        //    AssertObjectMapSubgraph();
-
-        //    base.RecursiveInitializeSubMapsFromCurrentGraph();
-        //}
-
-        #endregion
-
-        #region Implementation of IRefObjectMapConfiguration
-
-        public void AddJoinCondition(string childColumn, string parentColumn)
-        {
-            IBlankNode joinConditionNode = R2RMLMappings.CreateBlankNode();
-
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrJoinCondition), joinConditionNode);
-            R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrChild), R2RMLMappings.CreateLiteralNode(childColumn));
-            R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParent), R2RMLMappings.CreateLiteralNode(parentColumn));
-        }
-
-        #endregion
-
-        #region Implementation of IRefObjectMap
+        ////    base.RecursiveInitializeSubMapsFromCurrentGraph();
+        ////}
 
         public IEnumerable<JoinCondition> JoinConditions
         {
@@ -160,7 +136,19 @@ namespace TCode.r2rml4net.Mapping.Fluent
             }
         }
 
-        #endregion
+        public void AddJoinCondition(string childColumn, string parentColumn)
+        {
+            IBlankNode joinConditionNode = R2RMLMappings.CreateBlankNode();
+
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrJoinCondition), joinConditionNode);
+            R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrChild), R2RMLMappings.CreateLiteralNode(childColumn));
+            R2RMLMappings.Assert(joinConditionNode, R2RMLMappings.CreateUriNode(R2RMLUris.RrParent), R2RMLMappings.CreateLiteralNode(parentColumn));
+        }
+
+        protected override void InitializeSubMapsFromCurrentGraph()
+        {
+            AssertObjectMapSubgraph();
+        }
 
         private void AssertObjectMapSubgraph()
         {

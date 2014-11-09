@@ -52,10 +52,12 @@ namespace TCode.r2rml4net
         /// Gets triple maps contained by this <see cref="IR2RML"/>
         /// </summary>
         IEnumerable<ITriplesMap> TriplesMaps { get; }
+
         /// <summary>
         /// Gets or sets the <see cref="ISqlQueryBuilder"/>, which is used during generating triples
         /// </summary>
         ISqlQueryBuilder SqlQueryBuilder { get; set; }
+
         /// <summary>
         /// Gets or sets the SQL version validator implementation
         /// </summary>

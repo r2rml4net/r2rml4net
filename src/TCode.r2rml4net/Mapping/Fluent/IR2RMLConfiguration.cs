@@ -45,6 +45,11 @@ namespace TCode.r2rml4net.Mapping.Fluent
     public interface IR2RMLConfiguration : IR2RML
     {
         /// <summary>
+        /// Gets base mapping URI. It will be used to resolve relative values when generating terms
+        /// </summary>
+        Uri BaseUri { get; }
+
+        /// <summary>
         /// Creates a <see cref="ITriplesMapConfiguration"/>, which will use a concrete table or view as datasource 
         /// as described on http://www.w3.org/TR/r2rml/#physical-tables
         /// </summary>
@@ -57,10 +62,5 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <param name="sqlQuery">a valid SQL query</param>
         ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery);
-
-        /// <summary>
-        /// Base mapping URI. It will be used to resolve relative values when generating terms
-        /// </summary>
-        Uri BaseUri { get; }
     }
 }

@@ -47,11 +47,13 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many object maps</remarks>
         IObjectMapConfiguration CreateObjectMap();
+
         /// <summary>
         /// Creates a new predicate map
         /// </summary>
         /// <remarks><see cref="IPredicateObjectMapConfiguration"/> can have many predicate maps</remarks>
         ITermMapConfiguration CreatePredicateMap();
+
         /// <summary>
         /// Creates a new ref object map
         /// </summary>

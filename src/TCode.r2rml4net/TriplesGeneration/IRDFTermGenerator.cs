@@ -49,15 +49,16 @@ namespace TCode.r2rml4net.TriplesGeneration
     public interface IRDFTermGenerator
     {
         /// <summary>
+        /// Gets or sets the <see cref="LogFacadeBase"/>
+        /// </summary>
+        LogFacadeBase Log { get; set; }
+   
+        /// <summary>
         /// Generates RDF term for the given <see cref="ITermMap"/> by applying to the <paramref name="logicalRow"/>
         /// </summary>
         /// <remarks>see http://www.w3.org/TR/r2rml/#dfn-generated-rdf-term</remarks>
         /// <returns>an RDF term (<see cref="INode"/>)</returns>
+        /// <typeparam name="TNodeType">the type of node</typeparam>
         TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow) where TNodeType : class, INode;
-
-        /// <summary>
-        /// Gets the <see cref="LogFacadeBase"/>
-        /// </summary>
-        LogFacadeBase Log { get; set; }
-    }
+ }
 }

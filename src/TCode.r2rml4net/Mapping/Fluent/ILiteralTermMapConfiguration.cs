@@ -50,16 +50,19 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
         void HasDataType(Uri dataTypeUri);
+
         /// <summary>
         /// Sets the datatype of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
         void HasDataType(string dataTypeUri);
+
         /// <summary>
         /// Sets the language tag of the term map
         /// </summary>
         /// <remarks>language tag and datatype cannot be set simultaneously</remarks>
         void HasLanguage(string languageTag);
+
         /// <summary>
         /// Sets the language tag of the term map
         /// </summary>

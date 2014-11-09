@@ -36,11 +36,11 @@
 // terms.
 #endregion
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Extensions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Fluent
@@ -52,16 +52,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
     public abstract class TermMapConfiguration : BaseConfiguration, ITermMapConfiguration, ITermTypeConfiguration, ITermType
     {
         /// <summary>
-        /// The parent node for the current term map
-        /// </summary>
-        /// <remarks>
-        /// Depending on the type the parent can be a triples map (for property-object maps, subject maps), 
-        /// property-object map (for object maps, property maps and graph maps)
-        /// or subject map (for graph maps)
-        /// </remarks>
-        protected internal INode ParentMapNode { get; private set; }
-
-        /// <summary>
         /// Creates a new instance of <see cref="TermMapConfiguration"/>
         /// </summary>
         protected TermMapConfiguration(ITriplesMapConfiguration parentTriplesMap, IMapBase parentMap, IGraph r2RMLMappings, INode node) 
@@ -70,105 +60,27 @@ namespace TCode.r2rml4net.Mapping.Fluent
             ParentMapNode = parentMap.Node;
         }
 
-        #region Implementation of ITermMapConfiguration
+        /// <inheritdoc/>
+        public string ColumnName
+        {
+            [return: AllowNull]
+            get { return Node.GetObjects(R2RMLUris.RrColumnProperty).GetSingleOrDefault().GetLiteral(); }
+        }
 
-        /// <summary>
-        /// <see cref="ITermMapConfiguration.TermType"/>
-        /// </summary>
+        /// <inheritdoc/>
+        public string Template
+        {
+            [return: AllowNull]
+            get { return Node.GetObjects(R2RMLUris.RrTemplateProperty).GetSingleOrDefault().GetLiteral(); }
+        }
+
+        /// <inheritdoc/>
         public ITermTypeConfiguration TermType
         {
             get { return this; }
         }
 
-        /// <summary>
-        /// <see cref="ITermMapConfiguration.IsConstantValued(Uri)"/>
-        /// </summary>
-        public ITermTypeConfiguration IsConstantValued(Uri uri)
-        {
-            if (ConstantValue != null)
-                throw new InvalidMapException("Term map can have at most one constant value");
-
-            if (InverseExpression != null)
-                throw new InvalidMapException("Only column-valued term map or template-value term map can have an inverse expression");
-
-            EnsureRelationWithParentMap();
-
-            R2RMLMappings.Retract(R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)));
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
-
-            return this;
-        }
-
-        /// <summary>
-        /// <see cref="ITermMapConfiguration.IsTemplateValued(string)"/>
-        /// </summary>
-        public ITermTypeConfiguration IsTemplateValued(string template)
-        {
-            IUriNode templateProperty = R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty);
-            if (R2RMLMappings.GetTriplesWithSubjectPredicate(Node, templateProperty).Any())
-                throw new InvalidMapException("Term map can have at most one template");
-
-            EnsureRelationWithParentMap();
-
-            R2RMLMappings.Assert(Node, templateProperty, R2RMLMappings.CreateLiteralNode(template));
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the inverse expression. <see cref="ITermMapConfiguration.SetInverseExpression"/>
-        /// </summary>
-        public ITermMapConfiguration SetInverseExpression(string stringTemplate)
-        {
-            if (ConstantValue != null)
-                throw new InvalidMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
-
-            R2RMLMappings.Assert(
-                Node, 
-                R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty), 
-                R2RMLMappings.CreateLiteralNode(stringTemplate));
-
-            return this;
-        }
-
-        #endregion
-
-        #region Implementation of ITermTypeConfiguration
-
-        /// <summary>
-        /// <see cref="ITermTypeConfiguration.IsBlankNode"/>
-        /// </summary>
-        public virtual ITermMapConfiguration IsBlankNode()
-        {
-            AssertTermTypeNotSet();
-            EnsureRelationWithParentMap();
-
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode));
-            return this;
-        }
-
-        /// <summary>
-        /// <see cref="ITermTypeConfiguration.IsIRI"/>
-        /// </summary>
-        public virtual ITermMapConfiguration IsIRI()
-        {
-            AssertTermTypeNotSet();
-            EnsureRelationWithParentMap();
-
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI));
-            return this;
-        }
-
-        /// <summary>
-        /// <see cref="ITermTypeConfiguration.IsLiteral"/>
-        /// </summary>
-        public virtual ITermMapConfiguration IsLiteral()
-        {
-            throw new InvalidMapException("Only object map can be of term type rr:Literal");
-        }
-
-        /// <summary>
-        /// <see cref="ITermMap.TermTypeURI"/>
-        /// </summary>
+        /// <inheritdoc/>
         public virtual Uri TermTypeURI
         {
             get
@@ -177,64 +89,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
             }
         }
 
-        /// <summary>
-        /// Gets explicitly set
-        /// </summary>
-        protected Uri ExplicitTermType
-        {
-            get
-            {
-                return Node.GetObjects(R2RMLUris.RrTermTypeProperty)
-                           .GetSingleOrDefault(nodes => new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", nodes.Count())))
-                           .GetUri(() => new InvalidMapException("Term type must be an IRI"));
-            }
-        }
-
-        ///<summary>
-        /// Checks wheather term type is already set
-        /// </summary>
-        /// <exception cref="InvalidMapException" />
-        protected void AssertTermTypeNotSet()
-        {
-            if (ExplicitTermType != null)
-                throw new InvalidMapException("Term type already set");
-        }
-
-        #endregion
-
-        #region Implementation of ITermMap
-
-        /// <summary>
-        /// <see cref="ITermMap.ColumnName"/>
-        /// </summary>
-        public string ColumnName
-        {
-            [return: AllowNull]
-            get { return Node.GetObjects(R2RMLUris.RrColumnProperty).GetSingleOrDefault().GetLiteral(); }
-        }
-
-        /// <summary>
-        /// <see cref="ITermMap.Template"/>
-        /// </summary>
-        public string Template
-        {
-            [return: AllowNull]
-            get { return Node.GetObjects(R2RMLUris.RrTemplateProperty).GetSingleOrDefault().GetLiteral(); }
-        }
-
-        /// <summary>
-        /// Gets the constant URI value for this term map
-        /// </summary>
-        /// <remarks>Read more on http://www.w3.org/TR/r2rml/#constant</remarks>
-        protected internal Uri ConstantValue
-        {
-            [return: AllowNull]
-            get { return Node.GetObjects(R2RMLUris.RrConstantProperty).GetSingleOrDefault().GetUri(); }
-        }
-
-        /// <summary>
-        /// <see cref="ITermMap.InverseExpression"/>
-        /// </summary>
+        /// <inheritdoc/>
         public string InverseExpression
         {
             [return: AllowNull]
@@ -266,35 +121,150 @@ namespace TCode.r2rml4net.Mapping.Fluent
             get { return this; }
         }
 
-        #endregion
-
-        #region Implementation of ITermType
-
-        /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:IRI
-        /// </summary>
+        /// <inheritdoc />
         public bool IsURI
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI).Uri.AbsoluteUri.Equals(TermTypeURI.AbsoluteUri); }
         }
 
-        /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:BlankNode
-        /// </summary>
+        /// <inheritdoc />
         bool ITermType.IsBlankNode
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode).Uri.AbsoluteUri.Equals(TermTypeURI.AbsoluteUri); }
+        }
+
+        /// <inheritdoc />
+        bool ITermType.IsLiteral
+        {
+            get { return R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.AbsoluteUri.Equals(TermTypeURI.AbsoluteUri); }
+        }
+
+        /// <inheritdoc/>
+        protected internal Uri ConstantValue
+        {
+            [return: AllowNull]
+            get { return Node.GetObjects(R2RMLUris.RrConstantProperty).GetSingleOrDefault().GetUri(); }
         }
 
         /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:Literal
+        /// Gets the parent node for the current term map
         /// </summary>
-        bool ITermType.IsLiteral
+        /// <remarks>
+        /// Depending on the type the parent can be a triples map (for property-object maps, subject maps), 
+        /// property-object map (for object maps, property maps and graph maps)
+        /// or subject map (for graph maps)
+        /// </remarks>
+        protected internal INode ParentMapNode { get; private set; }
+
+        /// <summary>
+        /// Gets explicitly set term type
+        /// </summary>
+        protected Uri ExplicitTermType
         {
-            get { return (R2RMLMappings.CreateUriNode(R2RMLUris.RrLiteral).Uri.AbsoluteUri).Equals(TermTypeURI.AbsoluteUri); }
+            get
+            {
+                return Node.GetObjects(R2RMLUris.RrTermTypeProperty)
+                           .GetSingleOrDefault(nodes => new InvalidMapException(string.Format("TermMap has {0} (should be zero or one)", nodes.Count())))
+                           .GetUri(() => new InvalidMapException("Term type must be an IRI"));
+            }
         }
 
-        #endregion
+        /// <summary>
+        /// <see cref="INonLiteralTermMapConfigutarion.IsColumnValued"/>
+        /// </summary>
+        public void IsColumnValued(string columnName)
+        {
+            if (ColumnName != null)
+            {
+                throw new InvalidMapException("Term map can have only one column name");
+            }
+
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
+        }
+
+        /// <inheritdoc/>
+        public ITermTypeConfiguration IsConstantValued(Uri uri)
+        {
+            if (ConstantValue != null)
+            {
+                throw new InvalidMapException("Term map can have at most one constant value");
+            }
+
+            if (InverseExpression != null)
+            {
+                throw new InvalidMapException("Only column-valued term map or template-value term map can have an inverse expression");
+            }
+
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Retract(R2RMLMappings.GetTriplesWithSubjectPredicate(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty)));
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrConstantProperty), R2RMLMappings.CreateUriNode(uri));
+
+            return this;
+        }
+
+        /// <summary>
+        /// <see cref="ITermMapConfiguration.IsTemplateValued(string)"/>
+        /// </summary>
+        public ITermTypeConfiguration IsTemplateValued(string template)
+        {
+            IUriNode templateProperty = R2RMLMappings.CreateUriNode(R2RMLUris.RrTemplateProperty);
+            if (R2RMLMappings.GetTriplesWithSubjectPredicate(Node, templateProperty).Any())
+            {
+                throw new InvalidMapException("Term map can have at most one template");
+            }
+
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Assert(Node, templateProperty, R2RMLMappings.CreateLiteralNode(template));
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the inverse expression. <see cref="ITermMapConfiguration.SetInverseExpression"/>
+        /// </summary>
+        public ITermMapConfiguration SetInverseExpression(string stringTemplate)
+        {
+            if (ConstantValue != null)
+            {
+                throw new InvalidMapException("An inverse expression can be only associated with a column-valued term map or template-value term map");
+            }
+
+            R2RMLMappings.Assert(
+                Node,
+                R2RMLMappings.CreateUriNode(R2RMLUris.RrInverseExpressionProperty),
+                R2RMLMappings.CreateLiteralNode(stringTemplate));
+
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual ITermMapConfiguration IsBlankNode()
+        {
+            AssertTermTypeNotSet();
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrBlankNode));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual ITermMapConfiguration IsIRI()
+        {
+            AssertTermTypeNotSet();
+            EnsureRelationWithParentMap();
+
+            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrTermTypeProperty), R2RMLMappings.CreateUriNode(R2RMLUris.RrIRI));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual ITermMapConfiguration IsLiteral()
+        {
+            throw new InvalidMapException("Only object map can be of term type rr:Literal");
+        }
 
         /// <summary>
         /// Returns a term map property
@@ -307,6 +277,17 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <returns>one of the following: rr:subject, rr:object, rr:property or rr:graph</returns>
         protected internal abstract IUriNode CreateShortcutPropertyNode();
+
+        /// <summary>
+        /// Checks wheather term type is already set
+        /// </summary>
+        protected void AssertTermTypeNotSet()
+        {
+            if (ExplicitTermType != null)
+            {
+                throw new InvalidMapException("Term type already set");
+            }
+        }
 
         /// <summary>
         /// Ensures that <see cref="ParentMapNode"/> and this <see cref="BaseConfiguration.Node"/> are 
@@ -329,19 +310,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         protected void CreateParentMapRelation()
         {
             R2RMLMappings.Assert(ParentMapNode, CreateMapPropertyNode(), Node);
-        }
-
-        /// <summary>
-        /// <see cref="INonLiteralTermMapConfigutarion.IsColumnValued"/>
-        /// </summary>
-        public void IsColumnValued(string columnName)
-        {
-            if (ColumnName != null)
-                throw new InvalidMapException("Term map can have only one column name");
-
-            EnsureRelationWithParentMap();
-
-            R2RMLMappings.Assert(Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrColumnProperty), R2RMLMappings.CreateLiteralNode(columnName));
         }
     }
 }

@@ -35,11 +35,10 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseSchemaReader.DataSchema;
 using DatabaseSchemaReader;
+using DatabaseSchemaReader.DataSchema;
 
 namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 {
@@ -48,30 +47,24 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
     /// </summary>
     public class DatabaseSchemaAdapter : IDatabaseMetadata
     {
-        readonly DatabaseSchema _schema;
-        TableCollection _tables;
-
-        internal IColumnTypeMapper ColumnTypeMapper { get; private set; }
+        private readonly DatabaseSchema _schema;
+        private TableCollection _tables;
 
         /// <summary>
-        /// Creates an instance of <see cref="DatabaseSchemaAdapter"/>
+        /// Initializes a new instance of the <see cref="DatabaseSchemaAdapter"/> class.
         /// </summary>
         /// <param name="reader">A <see cref="DatabaseReader"/> initialized for reading a desired database type</param>
-        /// <param name="columnTypeMapper">Implementation of <see cref="IColumnTypeMapper"/> responsible for transforming column type read by <see cref="DatabaseReader"/> to <see cref="R2RMLType"/></param>
+        /// <param name="columnTypeMapper">Implementation of <see cref="IColumnTypeMapper"/> 
+        /// responsible for transforming column type read by <see cref="DatabaseReader"/> to <see cref="R2RMLType"/></param>
         public DatabaseSchemaAdapter(IDatabaseReader reader, IColumnTypeMapper columnTypeMapper)
         {
-            if (reader == null)
-                throw new ArgumentNullException("reader");
-            if (columnTypeMapper == null)
-                throw new ArgumentNullException("columnTypeMapper");
-
             ColumnTypeMapper = columnTypeMapper;
             reader.ReadAll();
             _schema = reader.DatabaseSchema;
         }
 
         /// <summary>
-        /// Reads database schema if required and gets all tables
+        /// Gets all tables from the database schema
         /// </summary>
         public TableCollection Tables
         {
@@ -85,6 +78,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     {
                         _tables.Add(TableMetadataFromDatabaseTable(dbTable));
                     }
+
                     foreach (var dbTable in _schema.Tables)
                     {
                         ReadKeysMetadata(dbTable);
@@ -93,15 +87,17 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     MarkReferencedUniqueKeys();
 
                     // todo: default generation from View?
-                    //foreach (var view in _schema.Views)
-                    //{
-                    //    _tables.Add(TableMetadataFromDatabaseView(view));
-                    //}
+                    ////foreach (var view in _schema.Views)
+                    ////{
+                    ////    _tables.Add(TableMetadataFromDatabaseView(view));
+                    ////}
                 }
 
                 return _tables;
             }
         }
+
+        internal IColumnTypeMapper ColumnTypeMapper { get; private set; }
 
         private void ReadKeysMetadata(DatabaseTable dbTable)
         {
@@ -129,7 +125,11 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                 {
                     foreach (var uniqueKey in foreignKey.ReferencedTable.UniqueKeys)
                     {
-                        if (foreignKey.ReferencedColumns.Except(uniqueKey.Select(c => c.Name)).Any()) continue;
+                        if (foreignKey.ReferencedColumns.Except(uniqueKey.Select(c => c.Name)).Any())
+                        {
+                            continue;
+                        }
+
                         uniqueKey.IsReferenced = true;
                     }
                 }
@@ -141,6 +141,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             TableMetadata table = new TableMetadata { Name = dbTable.Name };
 
             foreach (var column in dbTable.Columns)
+            {
                 table.Add(new ColumnMetadata
                 {
                     Name = column.Name,
@@ -148,6 +149,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
                     IsPrimaryKey = column.IsPrimaryKey,
                     Type = ColumnTypeMapper.GetColumnTypeFromColumn(column.DataType)
                 });
+            }
 
             return table;
         }

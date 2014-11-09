@@ -47,14 +47,17 @@ namespace TCode.r2rml4net.RDB
         /// Visits a <see cref="TableCollection"/> and it's tables
         /// </summary>
         void Visit(TableCollection tables);
+
         /// <summary>
         /// Visits a <see cref="TableMetadata"/> and it's columns
         /// </summary>
         void Visit(TableMetadata table);
+
         /// <summary>
         /// Visits a <see cref="ColumnMetadata"/>
         /// </summary>
         void Visit(ColumnMetadata column);
+        
         /// <summary>
         /// Visist a <see cref="ForeignKeyMetadata"/>
         /// </summary>

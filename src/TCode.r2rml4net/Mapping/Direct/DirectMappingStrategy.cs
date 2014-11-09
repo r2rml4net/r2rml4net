@@ -50,7 +50,47 @@ namespace TCode.r2rml4net.Mapping.Direct
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
         private IForeignKeyMappingStrategy _foreignKeyMappingStrategy;
 
-        #region Implementation of IDirectMappingStrategy
+        /// <summary>
+        /// Gets or sets the trategy for mapping primary keys
+        /// </summary>
+        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
+        {
+            get
+            {
+                if (_primaryKeyMappingStrategy == null)
+                {
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
+                }
+
+                return _primaryKeyMappingStrategy;
+            }
+
+            set
+            {
+                _primaryKeyMappingStrategy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the strategy for mapping foreign keys
+        /// </summary>
+        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy
+        {
+            get
+            {
+                if (_foreignKeyMappingStrategy == null)
+                {
+                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy();
+                }
+
+                return _foreignKeyMappingStrategy;
+            }
+
+            set
+            {
+                _foreignKeyMappingStrategy = value;
+            }
+        }
 
         /// <summary>
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#subject-map">subject map</a> as a template valued blank node with template 
@@ -59,15 +99,10 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// </summary>
         public virtual void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            if (subjectMap == null)
-                throw new ArgumentNullException("subjectMap");
-            if (baseUri == null)
-                throw new ArgumentNullException("baseUri");
-            if (table == null)
-                throw new ArgumentNullException("table");
-
             if (table.PrimaryKey.Length != 0)
+            {
                 throw new ArgumentException(string.Format("Table {0} has primay key. CreateSubjectMapForPrimaryKey method should be used", table.Name));
+            }
 
             string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForNoPrimaryKey(table);
             var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
@@ -81,21 +116,16 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey"/>
         /// and class returned by <see cref="IPrimaryKeyMappingStrategy.CreateSubjectClassUri"/>
         /// </summary>
-        public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table)
+        public virtual void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
-            if (subjectMap == null)
-                throw new ArgumentNullException("subjectMap");
-            if (BaseUri == null)
-                throw new ArgumentNullException("BaseUri");
-            if (table == null)
-                throw new ArgumentNullException("table");
-
-            if(table.PrimaryKey.Length == 0)
+            if (table.PrimaryKey.Length == 0)
+            {
                 throw new ArgumentException(string.Format("Table {0} has no primay key", table.Name));
+            }
 
-            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(BaseUri, table.Name);
+            var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);
 
-            string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(BaseUri, table);
+            string template = PrimaryKeyMappingStrategy.CreateSubjectTemplateForPrimaryKey(baseUri, table);
 
             subjectMap.AddClass(classIri).IsTemplateValued(template);
         }
@@ -104,9 +134,9 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#dfn-predicate-map">predicate map</a> as constant valued with URI returned by
         /// <see cref="IForeignKeyMappingStrategy.CreateReferencePredicateUri"/>
         /// </summary>
-        public virtual void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri BaseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            Uri foreignKeyRefUri = ForeignKeyMappingStrategy.CreateReferencePredicateUri(BaseUri, foreignKey);
+            Uri foreignKeyRefUri = ForeignKeyMappingStrategy.CreateReferencePredicateUri(baseUri, foreignKey);
             predicateMap.IsConstantValued(foreignKeyRefUri);
         }
 
@@ -125,42 +155,10 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// Sets up an <a href="http://www.w3.org/TR/r2rml/#dfn-object-map">object map</a> as template valued node with template returned by
         /// <see cref="IForeignKeyMappingStrategy.CreateReferenceObjectTemplate"/>
         /// </summary>
-        public virtual void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri BaseUri, ForeignKeyMetadata foreignKey)
+        public virtual void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri baseUri, ForeignKeyMetadata foreignKey)
         {
-            var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(BaseUri, foreignKey);
+            var templateForForeignKey = ForeignKeyMappingStrategy.CreateReferenceObjectTemplate(baseUri, foreignKey);
             objectMap.IsTemplateValued(templateForForeignKey);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Strategy for mapping primary keys
-        /// </summary>
-        public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
-        {
-            get
-            {
-                if (_primaryKeyMappingStrategy == null)
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
-
-                return _primaryKeyMappingStrategy;
-            }
-            set { _primaryKeyMappingStrategy = value; }
-        }
-
-        /// <summary>
-        /// Strategy for mapping foreign keys
-        /// </summary>
-        public IForeignKeyMappingStrategy ForeignKeyMappingStrategy
-        {
-            get
-            {
-                if (_foreignKeyMappingStrategy == null)
-                    _foreignKeyMappingStrategy = new ForeignKeyMappingStrategy();
-
-                return _foreignKeyMappingStrategy;
-            }
-            set { _foreignKeyMappingStrategy = value; }
         }
     }
 }

@@ -45,7 +45,7 @@ using TCode.r2rml4net.Validation;
 namespace TCode.r2rml4net
 {
     /// <summary>
-    /// Provides default mapping by wrapping the <see cref="R2RMLMappingGenerator"/>
+    /// Provides default mapping by wrapping the <see cref="R2RMLMappingGenerator" />
     /// </summary>
     public class DirectR2RMLMapping : IR2RML
     {
@@ -61,25 +61,30 @@ namespace TCode.r2rml4net
         }
 
         /// <summary>
-        /// Creates a default mapping with a base URI set
+        /// Initializes a new instance of the <see cref="DirectR2RMLMapping"/> class.
         /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="baseMappingUri">The base mapping URI.</param>
         public DirectR2RMLMapping(IDatabaseMetadata provider, Uri baseMappingUri)
         {
             _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(baseMappingUri));
         }
 
+        /// <inheritdoc/>
         public ISqlVersionValidator SqlVersionValidator
         {
             get { return GeneratedMappings.SqlVersionValidator; }
             set { GeneratedMappings.SqlVersionValidator = value; }
         }
 
+        /// <inheritdoc/>
         public ISqlQueryBuilder SqlQueryBuilder
         {
             get { return GeneratedMappings.SqlQueryBuilder; }
             set { GeneratedMappings.SqlQueryBuilder = value; }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<ITriplesMap> TriplesMaps
         {
             get { return GeneratedMappings.TriplesMaps; }

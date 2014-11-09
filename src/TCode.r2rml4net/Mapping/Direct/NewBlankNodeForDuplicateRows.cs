@@ -42,26 +42,14 @@ using TCode.r2rml4net.RDB;
 namespace TCode.r2rml4net.Mapping.Direct
 {
     /// <summary>
-    /// 
+    /// This class may be removed in future versions
     /// </summary>
     [Obsolete("Produces invalid R2RML. Consider removind")]
     public class NewBlankNodeForDuplicateRows : DirectMappingStrategy
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public NewBlankNodeForDuplicateRows()
-        {
-
-        }
-
         #region Overrides of DirectMappingStrategy
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="subjectMap"></param>
-        /// <param name="baseUri"></param>
-        /// <param name="table"></param>
+
+        /// <inheritdoc/>
         public override void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table)
         {
             var classIri = PrimaryKeyMappingStrategy.CreateSubjectClassUri(baseUri, table.Name);

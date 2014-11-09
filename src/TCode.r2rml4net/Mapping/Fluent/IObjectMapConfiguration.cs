@@ -50,6 +50,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// Asserted using the rr:constant property as described on http://www.w3.org/TR/r2rml/#constant
         /// </remarks>
         ILiteralTermMapConfiguration IsConstantValued(string literal);
+
         /// <summary>
         /// Sets the object map as column-valued
         /// </summary>

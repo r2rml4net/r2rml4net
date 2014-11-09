@@ -47,7 +47,7 @@ namespace TCode.r2rml4net.TriplesGeneration
     /// Default implementation of <see cref="IRefObjectMapProcessor"/> generating triples for joined triples maps
     /// </summary>
     /// <remarks>see http://www.w3.org/TR/r2rml/#generated-triples</remarks>
-    class W3CRefObjectMapProcessor : MapProcessorBase, IRefObjectMapProcessor
+    internal class W3CRefObjectMapProcessor : MapProcessorBase, IRefObjectMapProcessor
     {
         public W3CRefObjectMapProcessor(IRDFTermGenerator termGenerator)
             : base(termGenerator)
@@ -60,20 +60,27 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             IDataReader dataReader;
             if (!FetchLogicalRows(dbConnection, refObjectMap, out dataReader))
+            {
                 return;
+            }
 
             using (dataReader)
             {
                 while (dataReader.Read())
                 {
-                    var childRow = WrapDataRecord(dataReader, childColumnsCount,
-                                                  ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
+                    var childRow = WrapDataRecord(dataReader, childColumnsCount, ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns);
                     IDataRecord parentRow;
                     if (childColumnsCount == dataReader.FieldCount)
+                    {
                         parentRow = childRow;
+                    }
                     else
-                        parentRow = WrapDataRecord(dataReader, childColumnsCount,
-                                                   ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
+                    {
+                        parentRow = WrapDataRecord(
+                            dataReader,
+                            childColumnsCount,
+                            ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns);
+                    }
 
                     AssertNoDuplicateColumnNames(parentRow);
                     AssertNoDuplicateColumnNames(childRow);

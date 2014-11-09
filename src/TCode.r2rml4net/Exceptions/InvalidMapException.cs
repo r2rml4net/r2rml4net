@@ -46,16 +46,19 @@ namespace TCode.r2rml4net.Exceptions
     public class InvalidMapException : Exception
     {
         /// <summary>
-        /// Creates an instance of <see cref="InvalidMapException"/> with a message
+        /// Initializes a new instance of the <see cref="InvalidMapException"/> class.
         /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="triplesMap">The triples map.</param>
         public InvalidMapException(string message, IMapBase triplesMap)
             : base(string.Format("Map {0} is invalid. {1}", triplesMap.Node, message))
         {
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="InvalidMapException"/> with a message
+        /// Initializes a new instance of the <see cref="InvalidMapException"/> class.
         /// </summary>
+        /// <param name="message">The message that describes the error.</param>
         public InvalidMapException(string message)
             : base(message)
         {

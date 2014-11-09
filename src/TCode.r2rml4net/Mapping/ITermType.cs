@@ -43,15 +43,17 @@ namespace TCode.r2rml4net.Mapping
     public interface ITermType
     {
         /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:IRI
+        /// Gets a value indicating whether the term map's term type is rr:IRI
         /// </summary>
         bool IsURI { get; }
+
         /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:BlankNode
+        /// Gets a value indicating whether the term map's term type is rr:BlankNode
         /// </summary>
         bool IsBlankNode { get; }
+
         /// <summary>
-        /// Gets value indicating whether the term map's term type is rr:Literal
+        /// Gets a value indicating whether the term map's term type is rr:Literal
         /// </summary>
         bool IsLiteral { get; }
     }

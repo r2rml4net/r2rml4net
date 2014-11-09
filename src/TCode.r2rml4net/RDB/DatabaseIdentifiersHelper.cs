@@ -39,7 +39,7 @@ using System.Text.RegularExpressions;
 
 namespace TCode.r2rml4net.RDB
 {
-    static class DatabaseIdentifiersHelper
+    internal static class DatabaseIdentifiersHelper
     {
         private static readonly char[] StartDelimiters = new[] { '`', '\"', '[' };
         private static readonly char[] EndDelimiters = new[] { '`', '\"', ']' };
@@ -51,10 +51,12 @@ namespace TCode.r2rml4net.RDB
             return columnName.TrimStart(StartDelimiters).TrimEnd(EndDelimiters);
         }
 
-        internal static string DelimitIdentifier(string identifier)
+        internal static string DelimitIdentifier(this string identifier)
         {
             if (MappingOptions.Current.UseDelimitedIdentifiers && !ColumnNameRegex.IsMatch(identifier))
+            {
                 return string.Format("{0}{1}{2}", MappingOptions.Current.SqlIdentifierLeftDelimiter, identifier, MappingOptions.Current.SqlIdentifierRightDelimiter);
+            }
 
             return identifier; 
         }

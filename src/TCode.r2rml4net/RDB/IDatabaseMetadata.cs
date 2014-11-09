@@ -43,7 +43,7 @@ namespace TCode.r2rml4net.RDB
     public interface IDatabaseMetadata
     {
         /// <summary>
-        /// Collecion of tables contained by the current database
+        /// Gets the collecion of tables contained by the current database
         /// </summary>
         TableCollection Tables { get; }
     }

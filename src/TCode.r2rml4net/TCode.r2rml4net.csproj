@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Common.props.1.0\build\Common.props.props" Condition="Exists('..\packages\Common.props.1.0\build\Common.props.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -53,6 +54,10 @@
     </Reference>
     <Reference Include="NullGuard">
       <HintPath>..\packages\NullGuard.Fody.1.2.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\NullGuard.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Resourcer">
+      <HintPath>..\packages\Resourcer.Fody.1.2.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Resourcer.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -117,7 +122,6 @@
     <Compile Include="Mapping\Fluent\PredicateMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\PredicateObjectMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\R2RMLLoader.cs" />
-    <Compile Include="Mapping\Fluent\R2RMLUris.cs" />
     <Compile Include="Mapping\Fluent\RefObjectMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\SubjectMapConfiguration.cs" />
     <Compile Include="Mapping\Fluent\TermMapConfiguration.cs" />
@@ -183,6 +187,7 @@
     <Compile Include="Validation\Wc3SqlVersionValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Mapping\Fluent\Queries\ReplaceShortcuts.rq" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +195,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+    <EmbeddedResource Include="Validation\LanguageRegex.txt" />
+  </ItemGroup>
+  <ItemGroup Label="StyleCopAdditionalAddinPaths">
+    <StyleCopAdditionalAddinPaths Include="..\packages\StyleCopPlus.MSBuild.4.7.49.4\tools">
+      <Visible>false</Visible>
+    </StyleCopAdditionalAddinPaths>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.targets" />
@@ -207,7 +218,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets'))" />
     <Error Condition="!Exists('..\packages\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.26.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets'))" />
+    <Error Condition="!Exists('..\packages\Common.props.1.0\build\Common.props.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Common.props.1.0\build\Common.props.props'))" />
   </Target>
   <Import Project="..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets" Condition="Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" />
   <Import Project="..\packages\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\packages\Fody.1.26.1\build\Fody.targets')" />
+  <Import Project="..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets')" />
 </Project>

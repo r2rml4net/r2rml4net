@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.RDB
     public class W3CSqlQueryBuilder : ISqlQueryBuilder
     {
         /// <summary>
-        /// Creates a new instance of <see cref="W3CSqlQueryBuilder"/>
+        /// Initializes a new instance of <see cref="W3CSqlQueryBuilder"/>
         /// </summary>
         public W3CSqlQueryBuilder()
         {
@@ -59,7 +59,7 @@ namespace TCode.r2rml4net.RDB
         }
 
         /// <summary>
-        /// Validates SQL version of R2RML views
+        /// Gets or sets the SQL version validator.
         /// </summary>
         public ISqlVersionValidator SqlVersionValidator { get; set; }
 
@@ -69,11 +69,14 @@ namespace TCode.r2rml4net.RDB
         /// Gets effective sql query based on table name or sql view
         /// </summary>
         /// <returns>SQL query string</returns>
-        /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
+        /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, 
+        /// http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         public string GetEffectiveQueryForTriplesMap(ITriplesMap triplesMap)
         {
             if (MappingOptions.Current.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
+            {
                 throw new InvalidSqlVersionException(triplesMap.SqlVersions.First(version => !SqlVersionValidator.SqlVersionIsValid(version)));
+            }
 
             if (triplesMap.TableName != null && triplesMap.SqlQuery != null)
             {
@@ -81,7 +84,9 @@ namespace TCode.r2rml4net.RDB
             }
 
             if (triplesMap.TableName != null)
-                return string.Format("SELECT * FROM {0}", DatabaseIdentifiersHelper.DelimitIdentifier(triplesMap.TableName));
+            {
+                return string.Format("SELECT * FROM {0}", triplesMap.TableName.DelimitIdentifier());
+            }
 
             return triplesMap.SqlQuery;
         }
@@ -97,16 +102,20 @@ namespace TCode.r2rml4net.RDB
             {
                 var joinStatements =
                     refObjectMap.JoinConditions.Select(
-                        delegate(JoinCondition @join)
+                        delegate(JoinCondition joinCondition)
                         {
-                            var childColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ChildColumn);
-                            var parentColumn = DatabaseIdentifiersHelper.DelimitIdentifier(@join.ParentColumn);
+                            var childColumn = joinCondition.ChildColumn.DelimitIdentifier();
+                            var parentColumn = joinCondition.ParentColumn.DelimitIdentifier();
                             return string.Format("child.{0}=parent.{1}", childColumn, parentColumn);
                         });
 
-                return string.Format(@"SELECT * FROM ({0}) AS child, 
+                return string.Format(
+                    @"SELECT * FROM ({0}) AS child, 
 ({1}) AS parent
-WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSqlQuery, string.Join("\nAND ", joinStatements));
+WHERE {2}",
+                    refObjectMap.ChildEffectiveSqlQuery,
+                    refObjectMap.ParentEffectiveSqlQuery,
+                    string.Join("\nAND ", joinStatements));
             }
 
             return string.Format("SELECT * FROM ({0}) AS tmp", refObjectMap.ChildEffectiveSqlQuery);
@@ -118,10 +127,10 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
         /// <param name="table">child table</param>
         public string GetR2RMLViewForJoinedTables(TableMetadata table)
         {
-            if (table == null)
-                throw new ArgumentNullException("table");
             if (table.ForeignKeys.All(fk => !fk.ReferencedTableHasPrimaryKey))
+            {
                 throw new ArgumentException("None of the referenced tables have a primary key", "table");
+            }
 
             StringBuilder sqlBuilder = new StringBuilder();
 
@@ -129,15 +138,13 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
 
             sqlBuilder.AppendFormat("SELECT child.*, {0}", string.Join(", ", GetJoinedPrimaryKeyColumnList(fkTargetHasPrimaryKey)));
             sqlBuilder.AppendLine();
-            sqlBuilder.AppendFormat("FROM {0} as child", DatabaseIdentifiersHelper.DelimitIdentifier(table.Name));
+            sqlBuilder.AppendFormat("FROM {0} as child", table.Name.DelimitIdentifier());
             sqlBuilder.AppendLine();
 
             int i = 1;
             foreach (var foreignKey in fkTargetHasPrimaryKey)
             {
-                sqlBuilder.AppendFormat("LEFT JOIN {0} as p{1} ON",
-                    DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name),
-                    i);
+                sqlBuilder.AppendFormat("LEFT JOIN {0} as p{1} ON", foreignKey.ReferencedTable.Name.DelimitIdentifier(), i);
                 sqlBuilder.AppendLine();
                 sqlBuilder.Append(string.Join(" AND ", GetJoinConditions(foreignKey, "p" + i++)));
                 sqlBuilder.AppendLine();
@@ -154,23 +161,21 @@ WHERE {2}", refObjectMap.ChildEffectiveSqlQuery, refObjectMap.ParentEffectiveSql
             return from foreignKey in foreignKeys
                    let tableAlias = "p" + i++
                    from pkColumn in foreignKey.ReferencedTable.PrimaryKey
-                   select string.Format("{0}.{1} as {2}",
-                                        tableAlias,
-                                        DatabaseIdentifiersHelper.DelimitIdentifier(pkColumn),
-                                        DatabaseIdentifiersHelper.DelimitIdentifier(foreignKey.ReferencedTable.Name + pkColumn));
+                   select string.Format(
+                       "{0}.{1} as {2}",
+                       tableAlias,
+                       pkColumn.DelimitIdentifier(),
+                       (foreignKey.ReferencedTable.Name + pkColumn).DelimitIdentifier());
         }
 
         private IEnumerable<string> GetJoinConditions(ForeignKeyMetadata foreignKey, string parent)
         {
             return foreignKey.ReferencedColumns
-                .Select((t, colIdx) => string.Format("{0}.{1} = child.{2}",
-                                                     parent,
-                                                     DatabaseIdentifiersHelper.DelimitIdentifier(
-                                                         t
-                                                     ),
-                                                     DatabaseIdentifiersHelper.DelimitIdentifier(
-                                                         foreignKey.ForeignKeyColumns[colIdx]
-                                                     )));
+                             .Select((t, colIdx) => string.Format(
+                                 "{0}.{1} = child.{2}",
+                                 parent,
+                                 t.DelimitIdentifier(),
+                                 foreignKey.ForeignKeyColumns[colIdx].DelimitIdentifier()));
         }
     }
 }

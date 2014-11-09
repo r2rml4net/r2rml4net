@@ -50,8 +50,9 @@ namespace TCode.r2rml4net.Mapping
         /// Gets the graph maps associated with this <see cref="ISubjectMap"/>
         /// </summary>
         IEnumerable<IGraphMap> GraphMaps { get; }
+
         /// <summary>
-        /// All classes added to this <see cref="ISubjectMap"/>
+        /// Gets all classes added to this <see cref="ISubjectMap"/>
         /// </summary>
         Uri[] Classes { get; }
     }

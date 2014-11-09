@@ -35,16 +35,17 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
+
+using System;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Log
 {
-    class NullLog : LogFacadeBase
+    internal class NullLog : LogFacadeBase
     {
-        static readonly object ClassLock = new object();
-        private static NullLog _instance;
+        private static readonly Lazy<NullLog> GetInstance = new Lazy<NullLog>(() => new NullLog());
 
         private NullLog()
         {
@@ -54,18 +55,7 @@ namespace TCode.r2rml4net.Log
         {
             get
             {
-                lock(ClassLock)
-                {
-                    if(_instance == null)
-                    {
-                        lock (ClassLock)
-                        {
-                          _instance = new NullLog();  
-                        }
-                    }
-                }
-
-                return _instance;
+                return GetInstance.Value;
             }
         }
 

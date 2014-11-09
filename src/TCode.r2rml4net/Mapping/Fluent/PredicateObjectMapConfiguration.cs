@@ -35,15 +35,16 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using TCode.r2rml4net.Exceptions;
+using TCode.r2rml4net.RDF;
 using VDS.RDF;
 using VDS.RDF.Query;
 
 namespace TCode.r2rml4net.Mapping.Fluent
 {
-    class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
+    internal class PredicateObjectMapConfiguration : BaseConfiguration, IPredicateObjectMapConfiguration
     {
         private readonly IList<ObjectMapConfiguration> _objectMaps = new List<ObjectMapConfiguration>();
         private readonly IList<RefObjectMapConfiguration> _refObjectMaps = new List<RefObjectMapConfiguration>();
@@ -61,7 +62,25 @@ namespace TCode.r2rml4net.Mapping.Fluent
             R2RMLMappings.Assert(parentTriplesMap.Node, R2RMLMappings.CreateUriNode(R2RMLUris.RrPredicateObjectMapPropety), Node);
         }
 
-        #region Implementation of IPredicateObjectMapConfiguration
+        public IEnumerable<IObjectMap> ObjectMaps
+        {
+            get { return _objectMaps; }
+        }
+
+        public IEnumerable<IRefObjectMap> RefObjectMaps
+        {
+            get { return _refObjectMaps; }
+        }
+
+        public IEnumerable<IPredicateMap> PredicateMaps
+        {
+            get { return _predicateMaps; }
+        }
+
+        public IEnumerable<IGraphMap> GraphMaps
+        {
+            get { return _graphMaps; }
+        }
 
         public IObjectMapConfiguration CreateObjectMap()
         {
@@ -91,10 +110,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
             return refObjectMap;
         }
 
-        #endregion
-
-        #region Overrides of BaseConfiguration
-
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             CreateSubMaps(R2RMLUris.RrGraphMapPropety, (graph, node) => new GraphMapConfiguration(TriplesMap, this, graph, node), _graphMaps);
@@ -117,7 +132,7 @@ WHERE
             query.SetParameter("triplesMap", TriplesMap.Node);
             query.SetParameter("objectMapProperty", R2RMLMappings.CreateUriNode(R2RMLUris.RrObjectMapProperty));
             query.SetParameter("parentTriplesMap", R2RMLMappings.CreateUriNode(R2RMLUris.RrParentTriplesMapProperty));
-            var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
+            var resultSet = (SparqlResultSet)R2RMLMappings.ExecuteQuery(query);
             
             foreach (var result in resultSet.Where(result => result["predObj"].Equals(Node)))
             {
@@ -138,46 +153,22 @@ WHERE
     ?objectMap rr:parentTriplesMap ?triplesMap .
 }");
             query.SetParameter("childTriplesMap", TriplesMap.Node);
-            var resultSet = (SparqlResultSet) R2RMLMappings.ExecuteQuery(query);
+            var resultSet = (SparqlResultSet)R2RMLMappings.ExecuteQuery(query);
 
             foreach (var result in resultSet.Where(result => result["predObjectMap"].Equals(Node)))
             {
                 ITriplesMap referencedTriplesMap =
                     TriplesMap.R2RMLConfiguration.TriplesMaps.SingleOrDefault(tMap => result.Value("triplesMap").Equals(tMap.Node));
 
-                if(referencedTriplesMap == null)
+                if (referencedTriplesMap == null)
+                {
                     throw new InvalidMapException(string.Format("Triples map {0} not found. It must be added before creating ref object map", result.Value("triplesMap")));
+                }
 
                 var subConfiguration = new RefObjectMapConfiguration(this, TriplesMap, referencedTriplesMap, R2RMLMappings, result["objectMap"]);
                 subConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
                 _refObjectMaps.Add(subConfiguration);
             }
         }
-
-        #endregion
-
-        #region Implementation of IPredicateObjectMap
-
-        public IEnumerable<IObjectMap> ObjectMaps
-        {
-            get { return _objectMaps; }
-        }
-
-        public IEnumerable<IRefObjectMap> RefObjectMaps
-        {
-            get { return _refObjectMaps; }
-        }
-
-        public IEnumerable<IPredicateMap> PredicateMaps
-        {
-            get { return _predicateMaps; }
-        }
-
-        public IEnumerable<IGraphMap> GraphMaps
-        {
-            get { return _graphMaps; }
-        }
-
-        #endregion
     }
 }

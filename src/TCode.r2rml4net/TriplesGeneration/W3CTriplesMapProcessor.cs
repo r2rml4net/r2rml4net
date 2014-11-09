@@ -36,7 +36,6 @@
 // terms.
 #endregion
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -49,9 +48,6 @@ namespace TCode.r2rml4net.TriplesGeneration
 {
     internal class W3CTriplesMapProcessor : MapProcessorBase, ITriplesMapProcessor
     {
-        public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
-        public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
-
         public W3CTriplesMapProcessor(IRDFTermGenerator termGenerator)
             : this(
                 termGenerator,
@@ -70,8 +66,10 @@ namespace TCode.r2rml4net.TriplesGeneration
             RefObjectMapProcessor = refObjectMapProcessor;
             Log = NullLog.Instance;
         }
+        
+        public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
 
-        #region Implementation of ITriplesMapProcessor
+        public IRefObjectMapProcessor RefObjectMapProcessor { get; set; }
 
         public void ProcessTriplesMap(ITriplesMap triplesMap, IDbConnection connection, IRdfHandler rdfHandler)
         {
@@ -85,8 +83,10 @@ namespace TCode.r2rml4net.TriplesGeneration
             else
             {
                 IDataReader logicalTable;
-                if(!FetchLogicalRows(connection, triplesMap, out logicalTable))
+                if (!FetchLogicalRows(connection, triplesMap, out logicalTable))
+                {
                     return;
+                }
 
                 using (logicalTable)
                 {
@@ -104,8 +104,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                             new[] { rdfHandler.CreateUriNode(new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) },
                             classes.Select(rdfHandler.CreateUriNode).Cast<INode>().ToList(),
                             graphs,
-                            rdfHandler
-                            );
+                            rdfHandler);
 
                         foreach (IPredicateObjectMap map in triplesMap.PredicateObjectMaps)
                         {
@@ -130,7 +129,5 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
             }
         }
-
-        #endregion
     }
 }

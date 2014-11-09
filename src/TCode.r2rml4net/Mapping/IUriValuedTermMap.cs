@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.Mapping
     public interface IUriValuedTermMap : ITermMap
     {
         /// <summary>
-        /// Get the URI
+        /// Gets the URI
         /// </summary>
         Uri URI { get; }
     }

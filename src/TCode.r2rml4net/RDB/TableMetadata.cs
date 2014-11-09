@@ -45,7 +45,7 @@ namespace TCode.r2rml4net.RDB
     public class TableMetadata : ColumnCollection, IVistitable<IDatabaseMetadataVisitor>
     {
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="TableMetadata"/> class.
         /// </summary>
         public TableMetadata()
         {
@@ -54,12 +54,17 @@ namespace TCode.r2rml4net.RDB
         }
 
         /// <summary>
-        /// Table name
+        /// Gets the collection of table's unique keys
+        /// </summary>
+        public UniqueKeyCollection UniqueKeys { get; internal set; }
+
+        /// <summary>
+        /// Gets the table name
         /// </summary>
         public string Name { get; internal set; }
 
         /// <summary>
-        /// Primary key column (or columns in case of composite key)
+        /// Gets the primary key column (or columns in case of composite key)
         /// </summary>
         public string[] PrimaryKey
         {
@@ -79,13 +84,17 @@ namespace TCode.r2rml4net.RDB
             visitor.Visit(this);
 
             foreach (ColumnMetadata column in this)
+            {
                 column.Accept(visitor);
+            }
 
             if (this.ForeignKeys != null)
+            {
                 foreach (var foreignKey in ForeignKeys)
                 {
                     visitor.Visit(foreignKey);
                 }
+            }
         }
 
         /// <summary>
@@ -96,10 +105,5 @@ namespace TCode.r2rml4net.RDB
             base.Add(column);
             column.Table = this;
         }
-
-        /// <summary>
-        /// Gets the collection of table's unique keys
-        /// </summary>
-        public UniqueKeyCollection UniqueKeys { get; internal set; }
-    }
+  }
 }

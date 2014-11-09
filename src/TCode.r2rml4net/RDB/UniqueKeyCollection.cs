@@ -81,9 +81,6 @@ namespace TCode.r2rml4net.RDB
         /// </summary>
         public void Add(UniqueKeyMetadata uniqueKey)
         {
-            if(uniqueKey == null)
-                throw new ArgumentNullException("uniqueKey");
-
             _uniqueKeys.Add(uniqueKey);
         }
     }

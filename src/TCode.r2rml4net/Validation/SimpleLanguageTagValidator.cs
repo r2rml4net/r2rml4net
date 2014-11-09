@@ -49,27 +49,12 @@ namespace TCode.r2rml4net.Validation
     /// <remarks>the graph is an embedded turtle file located in TCode.r2rml4net.DataSets.languages.ttl</remarks>
     public class SimpleLanguageTagValidator : ILanguageTagValidator
     {
-        private static readonly object ClassLock = new object();
-        private static IGraph _languagesGraph;
+        private static readonly IGraph LanguagesGraph;
 
-        private static IGraph LanguagesGraph
+        static SimpleLanguageTagValidator()
         {
-            get
-            {
-                lock (ClassLock)
-                {
-                    if (_languagesGraph == null)
-                    {
-                        lock (ClassLock)
-                        {
-                            _languagesGraph = new Graph();
-                            _languagesGraph.LoadFromEmbeddedResource("TCode.r2rml4net.DataSets.languages.ttl, TCode.r2rml4net");
-                        }
-                    } 
-                }
-
-                return _languagesGraph;
-            }
+            LanguagesGraph = new Graph();
+            LanguagesGraph.LoadFromEmbeddedResource("TCode.r2rml4net.DataSets.languages.ttl, TCode.r2rml4net");
         }
 
         /// <summary>
@@ -78,7 +63,10 @@ namespace TCode.r2rml4net.Validation
         /// <returns>true if language tag is valid</returns>
         public virtual bool LanguageTagIsValid(string languageTag)
         {
-            if (string.IsNullOrWhiteSpace(languageTag)) throw new ArgumentException("languageTag");
+            if (string.IsNullOrWhiteSpace(languageTag))
+            {
+                throw new ArgumentException("languageTag");
+            }
 
             var query = new SparqlParameterizedString(@"ASK WHERE { [] <urn:lang:code> ?code. FILTER(?code = @languageCode) }");
             query.SetLiteral("languageCode", languageTag.Split('-').First());

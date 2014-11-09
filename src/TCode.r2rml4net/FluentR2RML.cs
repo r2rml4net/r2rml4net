@@ -41,6 +41,7 @@ using System.Linq;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
+using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.Validation;
 using VDS.RDF;
 
@@ -51,22 +52,13 @@ namespace TCode.r2rml4net
     /// </summary>
     public class FluentR2RML : BaseConfiguration, IR2RMLConfiguration
     {
-        internal static Uri DefaultBaseUri
-        {
-            get
-            {
-                return new Uri("http://r2rml.net/mappings/");
-            }
-        }
-
-        IGraph _graphCopy;
+        private readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
+        private IGraph _graphCopy;
         private ISqlVersionValidator _sqlVersionValidator = new Wc3SqlVersionValidator();
-        ISqlQueryBuilder _sqlQueryBuilder = new W3CSqlQueryBuilder();
-
-        readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
+        private ISqlQueryBuilder _sqlQueryBuilder = new W3CSqlQueryBuilder();
 
         /// <summary>
-        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
+        /// Initializes a new instance of the <see cref="FluentR2RML"/> class.
         /// </summary>
         /// <param name="baseUri">base URI for mapping nodes</param>
         public FluentR2RML(Uri baseUri)
@@ -81,16 +73,85 @@ namespace TCode.r2rml4net
         public FluentR2RML()
             : base(DefaultBaseUri)
         {
-
         }
 
         internal FluentR2RML(IGraph mappingsGraph)
             : base(mappingsGraph)
         {
-
         }
 
-        #region Overrides of BaseConfiguration
+        /// <summary>
+        /// Gets a copy of the mapping graph
+        /// </summary>
+        public IGraph GraphReadOnly
+        {
+            get
+            {
+                if (_graphCopy == null)
+                {
+                    _graphCopy = new Graph(R2RMLMappings.Triples);
+                    _graphCopy.NamespaceMap.Import(R2RMLMappings.NamespaceMap);
+                    _graphCopy.BaseUri = R2RMLMappings.BaseUri;
+                }
+
+                return _graphCopy;
+            }
+        }
+
+        /// <inheritdoc />
+        public ISqlQueryBuilder SqlQueryBuilder
+        {
+            get { return _sqlQueryBuilder; }
+            set { _sqlQueryBuilder = value; }
+        }
+
+        /// <inheritdoc />
+        public ISqlVersionValidator SqlVersionValidator
+        {
+            get { return _sqlVersionValidator; }
+            set { _sqlVersionValidator = value; }
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<ITriplesMap> TriplesMaps
+        {
+            get { return _triplesMaps; }
+        }
+
+        internal static Uri DefaultBaseUri
+        {
+            get
+            {
+                return new Uri("http://r2rml.net/mappings/");
+            }
+        }
+
+        /// <summary>
+        /// Always returns false
+        /// </summary>
+        protected override bool UsesNode
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Creates a Triples Map with physical table datasource and adds it to the R2RML mappings
+        /// </summary>
+        public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
+        {
+            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), tablename));
+        }
+
+        /// <summary>
+        /// Creates a Triples Map with R2RML view datasource and adds it to the R2RML mappings
+        /// </summary>
+        public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
+        {
+            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), sqlQuery));
+        }
 
         /// <summary>
         /// Creates triples maps configuration objects for the current mapping file
@@ -99,7 +160,9 @@ namespace TCode.r2rml4net
         protected override void InitializeSubMapsFromCurrentGraph()
         {
             if (R2RMLMappings == null)
+            {
                 return;
+            }
 
             var rdfType = R2RMLMappings.CreateUriNode(R2RMLUris.RdfType);
             var triplesMapClass = R2RMLMappings.CreateUriNode(R2RMLUris.RrTriplesMapClass);
@@ -119,38 +182,9 @@ namespace TCode.r2rml4net
             }
         }
 
-        /// <summary>
-        /// Always returns false
-        /// </summary>
-        protected override bool UsesNode
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        #endregion
-
-        void R2RMLMappingsChanged(object sender, GraphEventArgs args)
+        private void R2RMLMappingsChanged(object sender, GraphEventArgs args)
         {
             _graphCopy = null;
-        }
-
-        /// <summary>
-        /// Creates a Triples Map with physical table datasource and adds it to the R2RML mappings
-        /// </summary>
-        public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
-        {
-            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), tablename));
-        }
-
-        /// <summary>
-        /// Creates a Triples Map with R2RML view datasource and adds it to the R2RML mappings
-        /// </summary>
-        public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
-        {
-            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), sqlQuery));
         }
 
         private TriplesMapConfiguration SetupTriplesMap(TriplesMapConfiguration triplesMapConfiguration)
@@ -158,53 +192,5 @@ namespace TCode.r2rml4net
             _triplesMaps.Add(triplesMapConfiguration);
             return triplesMapConfiguration;
         }
-
-        /// <summary>
-        /// Returns copy of the mapping graph
-        /// </summary>
-        public IGraph GraphReadOnly
-        {
-            get
-            {
-                if (_graphCopy == null)
-                {
-                    _graphCopy = new Graph(R2RMLMappings.Triples);
-                    _graphCopy.NamespaceMap.Import(R2RMLMappings.NamespaceMap);
-                    _graphCopy.BaseUri = R2RMLMappings.BaseUri;
-                }
-
-                return _graphCopy;
-            }
-        }
-
-        #region Implementation of IR2RML
-
-        /// <summary>
-        /// Gets or sets the <see cref="ISqlQueryBuilder"/>
-        /// </summary>
-        public ISqlQueryBuilder SqlQueryBuilder
-        {
-            get { return _sqlQueryBuilder; }
-            set { _sqlQueryBuilder = value; }
-        }
-
-        /// <summary>
-        /// <see cref="ISqlVersionValidator"/>
-        /// </summary>
-        public ISqlVersionValidator SqlVersionValidator
-        {
-            get { return _sqlVersionValidator; }
-            set { _sqlVersionValidator = value; }
-        }
-
-        /// <summary>
-        /// <see cref="IR2RML.TriplesMaps"/>
-        /// </summary>
-        public IEnumerable<ITriplesMap> TriplesMaps
-        {
-            get { return _triplesMaps; }
-        }
-
-        #endregion
     }
 }

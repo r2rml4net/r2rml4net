@@ -57,13 +57,13 @@ namespace TCode.r2rml4net.Mapping
         ISubjectMap SubjectMap { get; }
 
         /// <summary>
-        /// Name of the table view which is source for triples
+        /// Gets the name of the table view which is source for triples
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#physical-tables</remarks>
         string TableName { get; }
 
         /// <summary>
-        /// Query, which will be used as source for triples
+        /// Gets the query, which will be used as source for triples
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         string SqlQuery { get; }

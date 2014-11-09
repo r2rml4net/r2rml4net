@@ -50,74 +50,105 @@ namespace TCode.r2rml4net.Mapping.Direct
     {
         private readonly IDatabaseMetadata _databaseMetadataProvider;
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
-        internal ITriplesMapConfiguration CurrentTriplesMapConfiguration;
+        private ITriplesMapConfiguration _currentTriplesMapConfiguration;
         private IDirectMappingStrategy _mappingStrategy;
         private IColumnMappingStrategy _columnMappingStrategy;
         private IPrimaryKeyMappingStrategy _primaryKeyMappingStrategy;
 
         /// <summary>
-        /// Creates <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
+        /// Initializes a new instance of <see cref="R2RMLMappingGenerator"/> which will read RDB metadata using <see cref="RDB.IDatabaseMetadata"/>
         /// </summary>
         public R2RMLMappingGenerator(IDatabaseMetadata databaseMetadataProvider, IR2RMLConfiguration r2RMLConfiguration)
         {
-            this._databaseMetadataProvider = databaseMetadataProvider;
-            this._r2RMLConfiguration = r2RMLConfiguration;
+            _databaseMetadataProvider = databaseMetadataProvider;
+            _r2RMLConfiguration = r2RMLConfiguration;
 
             MappingBaseUri = r2RMLConfiguration.BaseUri;
             SqlBuilder = new W3CSqlQueryBuilder();
         }
 
         /// <summary>
-        /// R2RML graph's base URI
+        /// Gets or sets the R2RML graph's base URI
         /// </summary>
         public Uri MappingBaseUri { get; set; }
 
         /// <summary>
-        /// Implementation of <see cref="IDirectMappingStrategy"/>, which defines how to map relational database to RDF subject , predicate and object maps
+        /// Gets or sets an implementation of <see cref="IDirectMappingStrategy"/>, 
+        /// which defines how to map relational database to RDF subject, predicate and object maps
         /// </summary>
         public IDirectMappingStrategy MappingStrategy
         {
             get
             {
                 if (_mappingStrategy == null)
+                {
                     _mappingStrategy = new DirectMappingStrategy();
+                }
+
                 return _mappingStrategy;
             }
-            set { _mappingStrategy = value; }
+
+            set
+            {
+                _mappingStrategy = value;
+            }
         }
 
         /// <summary>
-        /// Impementation of <see cref="IColumnMappingStrategy"/>, which defines how to map columns to RDF predicates
+        /// Gets or sets an impementation of <see cref="IColumnMappingStrategy"/>,
+        /// which defines how to map columns to RDF predicates
         /// </summary>
         public IColumnMappingStrategy ColumnMappingStrategy
         {
             get
             {
                 if (_columnMappingStrategy == null)
+                {
                     _columnMappingStrategy = new ColumnMappingStrategy();
+                }
+
                 return _columnMappingStrategy;
             }
-            set { _columnMappingStrategy = value; }
+
+            set
+            {
+                _columnMappingStrategy = value;
+            }
         }
 
         /// <summary>
-        /// Implementation of <see cref="IPrimaryKeyMappingStrategy"/>, which defines how to map primary keys to RDF subjects
+        /// Gets or sets  the implementation of <see cref="IPrimaryKeyMappingStrategy"/>, 
+        /// which defines how to map primary keys to RDF subjects
         /// </summary>
         public IPrimaryKeyMappingStrategy PrimaryKeyMappingStrategy
         {
             get
             {
                 if (_primaryKeyMappingStrategy == null)
+                {
                     _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
+                }
+
                 return _primaryKeyMappingStrategy;
             }
-            set { _primaryKeyMappingStrategy = value; }
+
+            set
+            {
+                _primaryKeyMappingStrategy = value;
+            }
         }
 
         /// <summary>
-        /// Implementation of <see cref="ISqlQueryBuilder"/>, which builds queries used to retrieve data from relationalt database for genertaing triples
+        /// Gets or sets the implementation of <see cref="ISqlQueryBuilder"/>, 
+        /// which builds queries used to retrieve data from relationalt database for genertaing triples
         /// </summary>
         public ISqlQueryBuilder SqlBuilder { get; set; }
+
+        internal ITriplesMapConfiguration CurrentTriplesMapConfiguration
+        {
+            get { return _currentTriplesMapConfiguration; }
+            set { _currentTriplesMapConfiguration = value; }
+        }
 
         /// <summary>
         /// Generates default R2RML mappings based on database metadata
@@ -125,7 +156,9 @@ namespace TCode.r2rml4net.Mapping.Direct
         public IR2RML GenerateMappings()
         {
             if (_databaseMetadataProvider.Tables != null)
+            {
                 _databaseMetadataProvider.Tables.Accept(this);
+            }
 
             return _r2RMLConfiguration;
         }
@@ -146,11 +179,13 @@ namespace TCode.r2rml4net.Mapping.Direct
         {
             if (table.ForeignKeys.Any(fk => fk.IsCandidateKeyReference && fk.ReferencedTableHasPrimaryKey))
             {
-                var r2RMLView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
-                CurrentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(r2RMLView);
+                var rmlView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
+                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(rmlView);
             }
             else
-                CurrentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
+            {
+                _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromTable(table.Name);
+            }
 
             if (table.PrimaryKey.Length == 0)
             {
@@ -175,7 +210,9 @@ namespace TCode.r2rml4net.Mapping.Direct
 
             var dataTypeUri = XsdDatatypes.GetDataType(column.Type);
             if (dataTypeUri != null)
+            {
                 literalTermMap.HasDataType(dataTypeUri);
+            }
         }
 
         /// <summary>

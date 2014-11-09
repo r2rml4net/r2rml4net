@@ -53,21 +53,25 @@ namespace TCode.r2rml4net.Mapping.Direct
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#subject-map">subject map</a> for table without primary key
         /// </summary>
         void CreateSubjectMapForNoPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table);
+
         /// <summary>
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#subject-map">subject map</a> for table with primary key
         /// </summary>
-        void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri BaseUri, TableMetadata table);
+        void CreateSubjectMapForPrimaryKey(ISubjectMapConfiguration subjectMap, Uri baseUri, TableMetadata table);
+
         /// <summary>
         /// Sets up a <a href="http://www.w3.org/TR/r2rml/#dfn-predicate-map">predicate map</a> for foreign key
         /// </summary>
-        void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri BaseUri, ForeignKeyMetadata foreignKey);
+        void CreatePredicateMapForForeignKey(ITermMapConfiguration predicateMap, Uri baseUri, ForeignKeyMetadata foreignKey);
+
         /// <summary>
         /// Sets up an <a href="http://www.w3.org/TR/r2rml/#dfn-object-map">object map</a> for candidate key reference
         /// </summary>
         void CreateObjectMapForCandidateKeyReference(IObjectMapConfiguration createObjectMap, ForeignKeyMetadata foreignKey);
+
         /// <summary>
         /// Sets up an <a href="http://www.w3.org/TR/r2rml/#dfn-object-map">object map</a> for primary key reference
         /// </summary>
-        void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri BaseUri, ForeignKeyMetadata foreignKey);
+        void CreateObjectMapForPrimaryKeyReference(IObjectMapConfiguration objectMap, Uri baseUri, ForeignKeyMetadata foreignKey);
     }
 }

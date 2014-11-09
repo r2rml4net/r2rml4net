@@ -36,7 +36,6 @@
 // terms.
 #endregion
 using System;
-using TCode.r2rml4net.Exceptions;
 
 namespace TCode.r2rml4net.Mapping
 {
@@ -49,7 +48,6 @@ namespace TCode.r2rml4net.Mapping
         /// <summary>
         /// Gets constant object URI or null if absent
         /// </summary>
-        /// <exception cref="InvalidMapException"></exception>
         Uri URI { get; }
     }
 }

@@ -37,7 +37,7 @@
 #endregion
 namespace TCode.r2rml4net.RDF
 {
-    class R2RMLUris
+    internal class R2RMLUris
     {
         internal const string RrTemplateProperty = "rr:template";
         internal const string RdfType = "rdf:type";

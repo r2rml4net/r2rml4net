@@ -58,22 +58,7 @@ namespace TCode.r2rml4net
         private LogFacadeBase _log;
 
         /// <summary>
-        /// Gets the <see cref="LogFacadeBase"/>
-        /// </summary>
-        public LogFacadeBase Log
-        {
-            get { return _log; }
-            set
-            {
-                _log = value;
-                _triplesMapProcessor.Log = _log;
-            }
-        }
-
-        #region Constructors
-
-        /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
+        /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
         /// and uses default RDF term generation and map processing algorithms
         /// </summary>
         /// <param name="connection">connection to datasource</param>
@@ -83,7 +68,7 @@ namespace TCode.r2rml4net
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
+        /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the supplied <see cref="IRDFTermGenerator"/>
         /// and uses default map processing algorithm
         /// </summary>
         /// <param name="connection">connection to datasource</param>
@@ -94,10 +79,9 @@ namespace TCode.r2rml4net
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="W3CR2RMLProcessor"/> which processes triples maps with the supplied implementatioon of <see cref="ITriplesMapProcessor"/>
+        /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which processes triples maps with the supplied implementatioon of <see cref="ITriplesMapProcessor"/>
         /// </summary>
         /// <param name="connection">connection to datasource</param>
-        /// <param name="triplesMapProcessor"></param>
         protected internal W3CR2RMLProcessor(IDbConnection connection, ITriplesMapProcessor triplesMapProcessor)
         {
             _triplesMapProcessor = triplesMapProcessor;
@@ -106,24 +90,44 @@ namespace TCode.r2rml4net
             Log = NullLog.Instance;
 
             if (connection.State != ConnectionState.Open)
+            {
                 connection.Open();
+            }
         }
 
-        #endregion
-
-        #region Implementation of IR2RMLProcessor
+        /// <summary>
+        /// Gets a value indicating whether generating triples had no errors
+        /// </summary>
+        public bool Success { get; private set; }
 
         /// <summary>
-        /// Generates triples from <paramref name="r2RML"/> mappings and processes them with the given <see cref="IRdfHandler"/>
+        /// Gets or sets the <see cref="LogFacadeBase"/>
         /// </summary>
-        public void GenerateTriples(IR2RML r2RML, IRdfHandler rdfHandler)
+        public LogFacadeBase Log
+        {
+            get
+            {
+                return _log;
+            }
+
+            set
+            {
+                _log = value;
+                _triplesMapProcessor.Log = _log;
+            }
+        }
+
+        /// <summary>
+        /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
+        /// </summary>
+        public void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler)
         {
             bool handlingOk = true;
             IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler);
 
             blankNodeReplaceHandler.StartRdf();
 
-            foreach (var triplesMap in r2RML.TriplesMaps)
+            foreach (var triplesMap in mappings.TriplesMaps)
             {
                 try
                 {
@@ -134,14 +138,18 @@ namespace TCode.r2rml4net
                     Log.LogInvalidTermMap(e.TermMap, e.Message);
                     handlingOk = false;
                     if (!MappingOptions.Current.IgnoreDataErrors)
+                    {
                         break;
+                    }
                 }
                 catch (InvalidMapException e)
                 {
                     Log.LogInvaldTriplesMap(triplesMap, e.Message);
                     handlingOk = false;
                     if (!MappingOptions.Current.IgnoreMappingErrors)
+                    {
                         break;
+                    }
                 }
             }
 
@@ -150,32 +158,23 @@ namespace TCode.r2rml4net
         }
 
         /// <summary>
-        /// Generates triples from <paramref name="r2RML"/> mappings and returns the generated dataset
+        /// Generates triples from <paramref name="mappings"/> mappings and returns the generated dataset
         /// </summary>
-        public ITripleStore GenerateTriples(IR2RML r2RML)
+        public ITripleStore GenerateTriples(IR2RML mappings)
         {
             var tripleStore = new TripleStore();
-            GenerateTriples(r2RML, tripleStore);
+            GenerateTriples(mappings, tripleStore);
             return tripleStore;
         }
 
         /// <summary>
-        /// Generates triples from <paramref name="r2RML"/> mappings and adds the generated triples to the given <see cref="ITripleStore"/>
+        /// Generates triples from <paramref name="mappings"/> mappings and adds the generated triples to the given <see cref="ITripleStore"/>
         /// </summary>
-        public void GenerateTriples(IR2RML r2RML, ITripleStore tripleStore)
+        public void GenerateTriples(IR2RML mappings, ITripleStore tripleStore)
         {
             IRdfHandler handler = new StoreHandler(tripleStore);
-            GenerateTriples(r2RML, handler);
+            GenerateTriples(mappings, handler);
         }
-
-        /// <summary>
-        /// Gets a value indicating whether generating triples had no errors
-        /// </summary>
-        public bool Success { get; private set; }
-
-        #endregion
-
-        #region Implementation of IDisposable
 
         /// <summary>
         /// Disposes of the connection
@@ -183,11 +182,11 @@ namespace TCode.r2rml4net
         public void Dispose()
         {
             if (_connection.State == ConnectionState.Open)
+            {
                 _connection.Close();
+            }
 
             _connection.Dispose();
         }
-
-        #endregion
     }
 }

@@ -51,13 +51,18 @@ namespace TCode.r2rml4net.RDF
             _wrapped = wrapped;
         }
 
-        #region Overrides of BaseRdfHandler
+        /// <summary>
+        /// Gets whether the Handler will accept all Triples i.e. it will never abort handling early
+        /// </summary>
+        public override bool AcceptsAll
+        {
+            get { return true; }
+        }
 
         /// <summary>
         /// Must be overridden by derived handlers to take appropriate Triple handling action
         /// </summary>
         /// <param name="t">Triple</param>
-        /// <returns/>
         protected override bool HandleTripleInternal(Triple t)
         {
             IBlankNode subject = t.Subject as IBlankNode;
@@ -69,6 +74,7 @@ namespace TCode.r2rml4net.RDF
                 {
                     _replacedNodes.Add(subject.InternalID, _wrapped.CreateBlankNode());
                 }
+
                 IBlankNode replacedSubject = _replacedNodes[subject.InternalID];
 
                 toHandle = t.CloneTriple(replacedSubject);
@@ -77,20 +83,10 @@ namespace TCode.r2rml4net.RDF
             return _wrapped.HandleTriple(toHandle);
         }
 
-        /// <summary>
-        /// Gets whether the Handler will accept all Triples i.e. it will never abort handling early
-        /// </summary>
-        public override bool AcceptsAll
-        {
-            get { return true; }
-        }
-
         protected override void StartRdfInternal()
         {
             _wrapped.StartRdf();
             base.StartRdfInternal();
         }
-
-        #endregion
     }
 }

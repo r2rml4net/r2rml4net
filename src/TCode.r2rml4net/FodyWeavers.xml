@@ -2,4 +2,5 @@
 <Weavers>
   <Freezable />
   <NullGuard IncludeDebugAssert="false" />
+  <Resourcer />
 </Weavers>

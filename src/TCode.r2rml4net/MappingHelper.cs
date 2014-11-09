@@ -36,9 +36,9 @@
 // terms.
 #endregion
 using System;
+using System.Linq;
 using System.Text;
 using TCode.r2rml4net.RDB;
-using System.Linq;
 
 namespace TCode.r2rml4net
 {
@@ -47,7 +47,7 @@ namespace TCode.r2rml4net
     /// </summary>
     public static class MappingHelper
     {
-        private static readonly char[] AllowedChars = new[] {'-', '.', '_', '~'};
+        private static readonly char[] AllowedChars = new[] { '-', '.', '_', '~' };
 
         private static readonly Tuple<int, int>[] UnicodeRanges = new[]
             {
@@ -79,13 +79,13 @@ namespace TCode.r2rml4net
 
             foreach (var character in unescapedString)
             {
-                if(IsIUnreserved(character))
+                if (IsIUnreserved(character))
                 {
                     encodedString.Append(character);
                 }
                 else
                 {
-                    var bytes = Encoding.UTF8.GetBytes(new[] {character});
+                    var bytes = Encoding.UTF8.GetBytes(new[] { character });
                     foreach (var octet in bytes)
                     {
                         encodedString.AppendFormat("%{0}", octet.ToString("X2"));

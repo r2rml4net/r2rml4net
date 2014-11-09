@@ -57,35 +57,51 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
             if (dataType != null)
             {
                 if (dataType.IsString || dataType.IsStringClob)
+                {
                     return R2RMLType.String;
+                }
 
                 Type type = dataType.GetNetType();
 
                 if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
+                {
                     return R2RMLType.Integer;
+                }
 
                 if (dataType.IsDateTime || dataType.GetNetType() == typeof(DateTimeOffset))
                 {
                     if (dataType.TypeName.Equals("date", StringComparison.OrdinalIgnoreCase))
+                    {
                         return R2RMLType.Date;
+                    }
 
                     return R2RMLType.DateTime;
                 }
 
                 if (new[] { typeof(float), typeof(double) }.Contains(type))
+                {
                     return R2RMLType.FloatingPoint;
+                }
 
                 if (type == typeof(decimal))
+                {
                     return R2RMLType.Decimal;
+                }
 
                 if (type == typeof(TimeSpan))
+                {
                     return R2RMLType.Time;
+                }
 
                 if (dataType.GetNetType() == typeof(byte[]))
+                {
                     return R2RMLType.Binary;
+                }
 
                 if (dataType.GetNetType() == typeof(bool))
+                {
                     return R2RMLType.Boolean;
+                }
             }
 
             return R2RMLType.Undefined;

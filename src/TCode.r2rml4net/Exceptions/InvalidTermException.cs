@@ -46,13 +46,7 @@ namespace TCode.r2rml4net.Exceptions
     public class InvalidTermException : Exception
     {
         /// <summary>
-        /// The <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>, 
-        /// which cannot be used to <a href="http://www.w3.org/TR/r2rml/#generated-rdf-term">generate an RDF term</a>
-        /// </summary>
-        public ITermMap TermMap { get; private set; }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="InvalidTermException"/> for a <paramref name="termMap"/>
+        /// Initializes a new instance of <see cref="InvalidTermException"/> for a <paramref name="termMap"/>
         /// with a given <paramref name="reason"/> why it occured
         /// </summary>
         public InvalidTermException(ITermMap termMap, string reason)
@@ -60,5 +54,11 @@ namespace TCode.r2rml4net.Exceptions
         {
             TermMap = termMap;
         }
+
+        /// <summary>
+        /// Gets the <a href="http://www.w3.org/TR/r2rml/#term-map">term map</a>, 
+        /// which cannot be used to <a href="http://www.w3.org/TR/r2rml/#generated-rdf-term">generate an RDF term</a>
+        /// </summary>
+        public ITermMap TermMap { get; private set; }
     }
 }

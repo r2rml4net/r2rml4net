@@ -67,19 +67,15 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
-        /// Generates RDF terms from term maps
-        /// </summary>
-        protected IRDFTermGenerator TermGenerator
-        {
-            get { return _termGenerator; }
-        }
-
-        /// <summary>
-        /// Generation log
+        /// Gets or sets the generation log
         /// </summary>
         public LogFacadeBase Log
         {
-            get { return _log; }
+            get
+            {
+                return _log;
+            }
+
             set
             {
                 _log = value;
@@ -88,10 +84,23 @@ namespace TCode.r2rml4net.TriplesGeneration
         }
 
         /// <summary>
+        /// Gets the term generator.
+        /// </summary>
+        protected IRDFTermGenerator TermGenerator
+        {
+            get { return _termGenerator; }
+        }
+
+        /// <summary>
         /// Adds zero or more triples to the output dataset
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-add-triples</remarks>
-        protected internal void AddTriplesToDataSet(INode subject, IEnumerable<IUriNode> predicates, IEnumerable<INode> objects, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
+        protected internal void AddTriplesToDataSet(
+            INode subject,
+            IEnumerable<IUriNode> predicates,
+            IEnumerable<INode> objects, 
+            IEnumerable<IUriNode> graphs, 
+            IRdfHandler rdfHandler)
         {
             var objectsLocal = objects.ToList();
             var graphsLocal = graphs.ToArray();
@@ -103,46 +112,6 @@ namespace TCode.r2rml4net.TriplesGeneration
                     AddTriplesToDataSet(subject, predicate, @object, graphsLocal, rdfHandler);
                 }
             }
-        }
-
-        /// <summary>
-        /// Handle triple by inserting it to all <paramref name="graphs"/> using the <paramref name="rdfHandler"/>
-        /// </summary>
-        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode @object, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
-        {
-            IEnumerable<IUriNode> graphsLocal = graphs.ToList();
-            if (!graphsLocal.Any())
-                graphsLocal = new[] { rdfHandler.CreateUriNode(new Uri(RrDefaultgraph)) };
-
-            foreach (IUriNode graph in graphsLocal.Where(g => g != null))
-            {
-                if (new Uri(RrDefaultgraph).Equals(graph.Uri))
-                {
-                    AddTripleToDataSet(subject, predicate, @object, rdfHandler);
-                }
-                else
-                {
-                    AddTripleToDataSet(subject, predicate, @object, graph, rdfHandler);
-                }
-            }
-        }
-
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IRdfHandler rdfHandler)
-        {
-            if (subject == null || predicate == null || @object == null)
-                return;
-
-            var triple = new Triple(subject, predicate, @object);
-            rdfHandler.HandleTriple(triple);
-        }
-
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode @object, IUriNode graph, IRdfHandler rdfHandler)
-        {
-            if (subject == null || predicate == null || @object == null || graph == null)
-                return;
-
-            var triple = new Triple(subject, predicate, @object, graph.Uri);
-            rdfHandler.HandleTriple(triple);
         }
 
         /// <summary>
@@ -180,12 +149,59 @@ namespace TCode.r2rml4net.TriplesGeneration
             for (int colIdx = 0; colIdx < fieldCount; colIdx++)
             {
                 string name = reader.GetName(colIdx);
-                if(columnNames.Contains(name))
+                if (columnNames.Contains(name))
                 {
                     throw new InvalidMapException("Sql query contains duplicate names");
                 }
+
                 columnNames.Add(name);
             }
+        }
+
+        /// <summary>
+        /// Handle triple by inserting it to all <paramref name="graphs"/> using the <paramref name="rdfHandler"/>
+        /// </summary>
+        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode obj, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
+        {
+            IEnumerable<IUriNode> graphsLocal = graphs.ToList();
+            if (!graphsLocal.Any())
+            {
+                graphsLocal = new[] { rdfHandler.CreateUriNode(new Uri(RrDefaultgraph)) };
+            }
+
+            foreach (IUriNode graph in graphsLocal.Where(g => g != null))
+            {
+                if (new Uri(RrDefaultgraph).Equals(graph.Uri))
+                {
+                    AddTripleToDataSet(subject, predicate, obj, rdfHandler);
+                }
+                else
+                {
+                    AddTripleToDataSet(subject, predicate, obj, graph, rdfHandler);
+                }
+            }
+        }
+
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode obj, IRdfHandler rdfHandler)
+        {
+            if (subject == null || predicate == null || obj == null)
+            {
+                return;
+            }
+
+            var triple = new Triple(subject, predicate, obj);
+            rdfHandler.HandleTriple(triple);
+        }
+
+        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode obj, IUriNode graph, IRdfHandler rdfHandler)
+        {
+            if (subject == null || predicate == null || obj == null || graph == null)
+            {
+                return;
+            }
+
+            var triple = new Triple(subject, predicate, obj, graph.Uri);
+            rdfHandler.HandleTriple(triple);
         }
     }
 }
