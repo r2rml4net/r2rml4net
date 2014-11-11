@@ -5,7 +5,7 @@ Welcome to r2rml4net, a project which brings [R2RML](http://www.w3.org/TR/r2rml/
 ## Getting
 
 ```
-nuget install r2rml.net
+nuget install [r2rml4net](http://nuget.org/packages/r2rml4net)
 ```
 
 Or clone this repository.
