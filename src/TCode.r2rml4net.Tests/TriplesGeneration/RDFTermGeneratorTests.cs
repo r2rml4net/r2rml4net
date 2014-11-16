@@ -44,6 +44,7 @@ using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
+using VDS.RDF.Parsing;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
@@ -180,6 +181,46 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             Assert.AreEqual(literal, node.Value);
+            _log.Verify(log => log.LogTermGenerated(node));
+        }
+
+        [Test]
+        public void ObjectMapsConstantCanBeTypedLiteral()
+        {
+            // given
+            _objectMap = new Mock<IObjectMap>();
+            _objectMap.Setup(sm => sm.IsConstantValued).Returns(true);
+            const string literal = "some value";
+            _objectMap.Setup(sm => sm.Literal).Returns(literal);
+            var datatype = new Uri(XmlSpecsHelper.XmlSchemaDataTypeString);
+            _objectMap.Setup(sm => sm.DataTypeURI).Returns(datatype);
+
+            // when
+            var node = _termGenerator.GenerateTerm<ILiteralNode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.AreEqual(literal, node.Value);
+            Assert.AreEqual(datatype, node.DataType);
+            _log.Verify(log => log.LogTermGenerated(node));
+        }
+
+        [Test]
+        public void ObjectMapsConstantCanBeLiteralWithLanguage()
+        {
+            // given
+            _objectMap = new Mock<IObjectMap>();
+            _objectMap.Setup(sm => sm.IsConstantValued).Returns(true);
+            const string literal = "some value";
+            _objectMap.Setup(sm => sm.Literal).Returns(literal);
+            const string language = "en-GB";
+            _objectMap.Setup(sm => sm.Language).Returns(language);
+
+            // when
+            var node = _termGenerator.GenerateTerm<ILiteralNode>(_objectMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.AreEqual(literal, node.Value);
+            Assert.AreEqual(language, node.Language);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
