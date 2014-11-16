@@ -240,6 +240,16 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                 if (objectMap.Literal != null)
                 {
+                    if (objectMap.DataTypeURI != null)
+                    {
+                        return NodeFactory.CreateLiteralNode(objectMap.Literal, objectMap.DataTypeURI);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(objectMap.Language) == false)
+                    {
+                        return NodeFactory.CreateLiteralNode(objectMap.Literal, objectMap.Language);
+                    }
+
                     return NodeFactory.CreateLiteralNode(objectMap.Literal);
                 }
 
