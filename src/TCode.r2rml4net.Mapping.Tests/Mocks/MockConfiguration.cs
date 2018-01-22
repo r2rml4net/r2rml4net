@@ -72,6 +72,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mocks
 
         public Uri BaseUri { get; private set; }
 
+        public ITriplesMap TriplesMap { get; }
+
         /// <summary>
         /// Creates an attached <see cref="IGraphMap"/>
         /// </summary>
