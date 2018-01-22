@@ -110,9 +110,18 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <summary>
         /// Gets the base mapping URI. It will be used to resolve relative values when generating terms
         /// </summary>
-        public Uri BaseUri
+        public Uri BaseUri      
         {
             get { return R2RMLMappings.BaseUri; }
+        }
+
+        /// <summary>
+        /// Gets the parent <see cref="ITriplesMapConfiguration" /> containing this map
+        /// </summary>
+        /// <value>The triples map.</value>
+        ITriplesMap IMapBase.TriplesMap
+        {
+            get { return TriplesMap; }
         }
 
         /// <summary>
@@ -127,15 +136,6 @@ namespace TCode.r2rml4net.Mapping.Fluent
         protected internal virtual ITriplesMapConfiguration TriplesMap
         {
             get { return _triplesMap; }
-        }
-
-        /// <summary>
-        /// Gets the parent <see cref="ITriplesMapConfiguration" /> containing this map
-        /// </summary>
-        /// <value>The triples map.</value>
-        ITriplesMap IMapBase.TriplesMap
-        {
-            get { return TriplesMap; }
         }
 
         /// <summary>
