@@ -13,7 +13,7 @@
     <releaseNotes>
       1. Fix handling literal constants with datatype or language tag
     </releaseNotes>
-    <copyright>Copyright 2012-2014 Tomasz Pluskiewicz</copyright>
+    <copyright>Copyright 2012-2018 Tomasz Pluskiewicz</copyright>
     <tags>rdf r2rml semantic web</tags>
 	<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
 	<dependencies>

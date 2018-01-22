@@ -1,5 +1,5 @@
 #region Licence
-// Copyright (C) 2012-2014 Tomasz Pluskiewicz
+// Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
 // 	
