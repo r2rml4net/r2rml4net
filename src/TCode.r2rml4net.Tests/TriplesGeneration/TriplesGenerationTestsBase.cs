@@ -46,7 +46,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     public class TriplesGenerationTestsBase
     {
-        protected IEnumerable<TMap> GenerateNMocks<TMap>(int count, params Tuple<Expression<Func<TMap, object>>, Func<object>>[] mockSetupFunctions) where TMap : class
+        protected IEnumerable<TMap> GenerateNMocks<TMap, TType>(int count, params Tuple<Expression<Func<TMap, TType>>, Func<TType>>[] mockSetupFunctions) where TMap : class
         {
             for (int i = 0; i < count; i++)
             {
@@ -57,6 +57,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 }
                 yield return mock.Object;
             }
+        }
+
+        protected IEnumerable<TMap> GenerateNMocks<TMap>(int count) where TMap : class
+        {
+            return GenerateNMocks<TMap, object>(count);
         }
 
         protected IUriNode CreateMockedUriNode(Uri uri)

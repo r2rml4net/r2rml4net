@@ -1,15 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
     <RootNamespace>TCode.r2rml4net.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Tests</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DatabaseSchemaReader" Version="2.5.0" />
+    <PackageReference Include="DatabaseSchemaReader" Version="2.5.1" />
     <PackageReference Include="dotNetRDF" Version="1.0.1.2533" />
-    <PackageReference Include="moq" Version="4.0.10827" />
+    <PackageReference Include="moq" Version="4.8.2" />
     <PackageReference Include="dotNetRDF" Version="2.0.1" />
-    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="Resourcer.Fody" Version="1.7.0" />
+    <PackageReference Include="SqlLocalDb" Version="1.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DatabaseSchemaReader\TestDbScripts\SqlServer.sql" />

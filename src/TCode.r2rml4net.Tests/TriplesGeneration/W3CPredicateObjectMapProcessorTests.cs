@@ -186,7 +186,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                               return mock.Object;
                           });
             _subjectGraphs = GenerateNMocks(subjectGrapsCount,
-                new Tuple<Expression<Func<IUriNode, object>>, Func<object>>(map => map.Uri, () => new Uri("http://www.example.com/graph")));
+                new Tuple<Expression<Func<IUriNode, Uri>>, Func<Uri>>(map => map.Uri, () => new Uri("http://www.example.com/graph")));
 
             // when
             _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);

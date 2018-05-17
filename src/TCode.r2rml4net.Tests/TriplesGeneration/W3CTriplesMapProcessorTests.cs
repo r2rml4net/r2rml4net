@@ -181,8 +181,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(conn => conn.CreateCommand()).Returns(CreateCommandWithNRowsResult(10));
             _triplesMap.Setup(map => map.PredicateObjectMaps).Returns(new[] { predicateObjectMap.Object });
             predicateObjectMap.Setup(map => map.RefObjectMaps).Returns(() =>
-                GenerateNMocks<IRefObjectMap>(refObjectMapsCount,
-                new Tuple<Expression<Func<IRefObjectMap, object>>, Func<object>>(map => map.SubjectMap, () => subjectMap.Object))
+                GenerateNMocks<IRefObjectMap, ISubjectMap>(refObjectMapsCount,
+                new Tuple<Expression<Func<IRefObjectMap, ISubjectMap>>, Func<ISubjectMap>>(map => map.SubjectMap, () => subjectMap.Object))
                 );
 
             // when

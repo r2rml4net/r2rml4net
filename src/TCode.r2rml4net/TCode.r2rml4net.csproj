@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>netstandard1.5</TargetFramework>
     <RootNamespace>TCode.r2rml4net</RootNamespace>
     <AssemblyName>TCode.r2rml4net</AssemblyName>
   </PropertyGroup>
@@ -11,10 +11,10 @@
     <EmbeddedResource Include="Validation\LanguageRegex.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DatabaseSchemaReader" Version="2.5.0" />
+    <PackageReference Include="DatabaseSchemaReader" Version="2.5.1" />
     <PackageReference Include="dotNetRDF" Version="2.0.1" />
-    <PackageReference Include="Freezable.Fody" Version="1.8.0" />
-    <PackageReference Include="NullGuard.Fody" Version="1.6.3" />
-    <PackageReference Include="Resourcer.Fody" Version="1.6.0" />
+    <PackageReference Include="Freezable.Fody" Version="1.9.0" />
+    <PackageReference Include="NullGuard.Fody" Version="1.8.0" />
+    <PackageReference Include="Resourcer.Fody" Version="1.7.0" />
   </ItemGroup>
 </Project>

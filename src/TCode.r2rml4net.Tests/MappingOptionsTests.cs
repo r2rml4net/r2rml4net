@@ -84,7 +84,7 @@ namespace TCode.r2rml4net.Tests
         }
 
         [Test]
-        public void DefaultTemplateSeparatorCannotBeNull(string newSeparator)
+        public void DefaultTemplateSeparatorCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 _options.WithBlankNodeTemplateSeparator(null)

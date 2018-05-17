@@ -37,10 +37,8 @@
 #endregion
 using System;
 using NUnit.Framework;
-using DatabaseSchemaReader.DataSchema;
-using System.Reflection;
-using System.IO;
 using DatabaseSchemaReader;
+using SqlLocalDb;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 
@@ -49,32 +47,30 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
     [TestFixture(Category = "Database")]
     public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
+        private LocalDatabase _database;
+
         protected override DatabaseSchemaAdapter SetupAdapter()
         {
-            string dbInitScript;
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TCode.r2rml4net.Tests.DatabaseSchemaReader.TestDbScripts.SqlServer.sql");
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                dbInitScript = reader.ReadToEnd();
-            }
+            string dbInitScript = Resourcer.Resource.AsString("TestDbScripts.SqlServer.sql");
+            _database = new LocalDatabase();
 
-            var conStringMaster = System.Configuration.ConfigurationManager.ConnectionStrings["SqlServerMaster"].ConnectionString;
-            var conString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
-            using (var connection = System.Data.SqlClient.SqlClientFactory.Instance.CreateConnection())
+            using (var connection = _database.GetConnection())
             {
-                connection.ConnectionString = conStringMaster;
-                connection.Open();
-
                 foreach (var commandText in dbInitScript.Split(new[] { "go", "GO" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     var command = connection.CreateCommand();
                     command.CommandText = commandText;
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
-            }
 
-            return new DatabaseSchemaAdapter(new DatabaseReader(conString, SqlType.SqlServer), new MSSQLServerColumTypeMapper());
+                return new DatabaseSchemaAdapter(new DatabaseReader(connection), new MSSQLServerColumTypeMapper());
+            }
+        }
+
+        [OneTimeTearDown]
+        public void Teardown()
+        {
+            _database.Dispose();
         }
 
         [TestCase(R2RMLType.Integer, "Long")]
