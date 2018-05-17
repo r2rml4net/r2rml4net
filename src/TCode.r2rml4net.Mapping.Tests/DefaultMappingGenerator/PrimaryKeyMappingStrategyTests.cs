@@ -56,7 +56,6 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _strategy = new PrimaryKeyMappingStrategy();
         }
 
-        [TestCase(0, "_", null, ExpectedException = typeof(InvalidMapException))]
         [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
         [TestCase(3, "_", "Table_{\"Column1\"}_{\"Column2\"}_{\"Column3\"}")]
         [TestCase(3, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}")]
@@ -80,6 +79,27 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // then
             Assert.AreEqual(expectedTemplate, template);
+        }
+
+        [TestCase(0, "_")]
+        public void GeneratesSubjectBlankNodesComposedOfAllColumns(int columnsCount, string columnSeparator)
+        {
+            // given
+            TableMetadata table = new TableMetadata { Name = "Table" };
+            for (int i = 1; i <= columnsCount; i++)
+            {
+                table.Add(new ColumnMetadata { Name = "Column" + i });
+            }
+            _strategy = new PrimaryKeyMappingStrategy();
+
+            // when
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator)))
+            {
+                // then
+                Assert.Throws<InvalidMapException>(() =>
+                    _strategy.CreateSubjectTemplateForNoPrimaryKey(table)
+                );
+            }
         }
 
         [Test]

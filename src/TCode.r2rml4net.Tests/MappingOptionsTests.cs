@@ -71,7 +71,6 @@ namespace TCode.r2rml4net.Tests
             Assert.AreEqual(true, _options.UseDelimitedIdentifiers);
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
         [TestCase("")]
         [TestCase(":")]
         [TestCase("^_^")]
@@ -82,6 +81,14 @@ namespace TCode.r2rml4net.Tests
 
             // then
             Assert.AreEqual(newSeparator, _options.BlankNodeTemplateSeparator);
+        }
+
+        [Test]
+        public void DefaultTemplateSeparatorCannotBeNull(string newSeparator)
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                _options.WithBlankNodeTemplateSeparator(null)
+            );
         }
 
         [TestCase('\"', '\"')]

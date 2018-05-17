@@ -56,7 +56,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             _graph = new FluentR2RML().R2RMLMappings;
             _triplesMapNode = _graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
-         
+
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
             _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph);
@@ -102,11 +102,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Test]
         public void CannnotSetTermMapsTermTypeToLiteral()
         {
             // when
-            _subjectMapConfiguration.TermType.IsLiteral();
+            Assert.Throws<InvalidMapException>(() => _subjectMapConfiguration.TermType.IsLiteral());
         }
 
         [Test]
@@ -189,10 +189,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#subject"), _subjectMapConfiguration.CreateShortcutPropertyNode().Uri);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void NodeCannotBeNull()
         {
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, (INode) null);
+            Assert.Throws<ArgumentNullException>(() =>
+                _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, (INode)null)
+            );
         }
     }
 }

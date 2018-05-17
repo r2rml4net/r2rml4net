@@ -46,7 +46,7 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
     {
         protected DatabaseSchemaAdapter DatabaseSchema;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             DatabaseSchema = SetupAdapter();

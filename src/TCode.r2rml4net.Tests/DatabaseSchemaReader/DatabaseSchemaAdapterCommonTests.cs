@@ -59,16 +59,20 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             _adapter = new DatabaseSchemaAdapter(_databaseReader.Object, _columnTypeMapper.Object);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void CannotBeInitializedWithNullReader()
         {
-            new DatabaseSchemaAdapter(null, _columnTypeMapper.Object);
+            Assert.Throws<ArgumentNullException>(() =>
+                new DatabaseSchemaAdapter(null, _columnTypeMapper.Object)
+            );
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void CannotBeInitializedWithNullColumnMapper()
         {
-            new DatabaseSchemaAdapter(_databaseReader.Object, null);
+            Assert.Throws<ArgumentNullException>(() =>
+                new DatabaseSchemaAdapter(_databaseReader.Object, null)
+            );
         }
     }
 }

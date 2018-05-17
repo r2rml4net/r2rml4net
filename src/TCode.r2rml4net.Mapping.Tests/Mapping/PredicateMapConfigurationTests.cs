@@ -66,10 +66,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void NodeCannotBeNull()
         {
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null);
+            Assert.Throws<ArgumentNullException>(() =>
+                new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null)
+            );
         }
 
         [Test]
@@ -95,16 +97,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(uri, _predicateMap.ConstantValue);
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Test]
         public void PredicateMapCannotBeOfTypeLiteral()
         {
-            _predicateMap.TermType.IsLiteral();
+            Assert.Throws<InvalidMapException>(() => 
+                _predicateMap.TermType.IsLiteral()
+            );
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Test]
         public void PredicateMapCannotBeOfTypeBlankNode()
         {
-            _predicateMap.TermType.IsBlankNode();
+            Assert.Throws<InvalidMapException>(() =>
+                _predicateMap.TermType.IsBlankNode()
+            );
         }
 
         [Test]

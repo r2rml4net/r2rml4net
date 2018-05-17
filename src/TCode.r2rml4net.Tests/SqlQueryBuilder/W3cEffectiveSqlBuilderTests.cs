@@ -373,7 +373,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             }
         }
 
-        [Test, ExpectedException(typeof(Exceptions.InvalidSqlVersionException))]
+        [Test]
         public void ThrowsIfInvalidSqlViewHasSqlIdentifier()
         {
             _triplesMap.Setup(tm => tm.SqlVersions).Returns(new[]
@@ -381,7 +381,9 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                     new Uri("http://no-such-identifier.com")
                 });
 
-            _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
+            Assert.Throws<Exceptions.InvalidSqlVersionException>(() =>
+                _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object)
+            );
         }
     }
 }

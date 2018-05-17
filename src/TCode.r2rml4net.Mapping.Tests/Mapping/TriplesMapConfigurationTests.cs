@@ -134,18 +134,22 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.IsNull(_triplesMapConfiguration.SqlQuery);
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName)
+        [TestCase(null, typeof(ArgumentNullException))]
+        [TestCase("", typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName, Type exceptionType)
         {
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
+            Assert.Throws(exceptionType, () =>
+                _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName)
+            );
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery)
+        [TestCase(null, typeof(ArgumentNullException))]
+        [TestCase("", typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery, Type exceptionType)
         {
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery);
+            Assert.Throws(exceptionType, () =>
+                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery)
+            );
         }
 
         [Test]

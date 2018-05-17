@@ -66,10 +66,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void NodeCannotBeNull()
         {
-            _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null);
+            Assert.Throws<ArgumentNullException>(() =>
+               _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null));
         }
 
         [Test]
@@ -95,16 +96,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.AreEqual(uri, _graphMap.URI);
         }
 
-        [Test, ExpectedException(typeof (InvalidMapException))]
+        [Test]
         public void GraphMapCannotBeOfTypeLiteral()
         {
-            _graphMap.TermType.IsLiteral();
+            Assert.Throws<InvalidMapException>(() => _graphMap.TermType.IsLiteral());
         }
 
-        [Test, ExpectedException(typeof (InvalidMapException))]
+        [Test]
         public void GraphMapCannotBeOfTypeBlankNode()
         {
-            _graphMap.TermType.IsBlankNode();
+            Assert.Throws<InvalidMapException>(() => _graphMap.TermType.IsBlankNode());
         }
 
         [Test]

@@ -289,7 +289,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test, Ignore]
+        [Test, Ignore("Don't remember")]
         public void InvalidUriValueThrowsException()
         {
             // given
@@ -314,9 +314,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         }
 
         [TestCase("http://example.com/company/Alice", "http://example.com/company/Alice", Description = "If value is already an absoulte URI, it is the result")]
-        [TestCase("path/../Danny", null, ExpectedException = typeof(InvalidTermException), Description = "Data error on invalid column value")]
         [TestCase("Bob/Charles", "http://example.com/base/Bob/Charles")]
-        [TestCase("Bob Charles", null, ExpectedException = typeof(InvalidTermException))]
         [TestCase("Bob", "http://example.com/base/Bob")]
         public void EscapesColumnValuesBeforeConstructingAbsoluteUri(string value, string expected)
         {
@@ -325,8 +323,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
             Uri datatype;
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
-                                .Returns(value)
-                                .Verifiable();
+                .Returns(value)
+                .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
             _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
@@ -339,6 +337,28 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.IsNotNull(node);
             Assert.IsTrue(node is IUriNode);
             Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+        }
+
+        [TestCase("path/../Danny", null, Description = "Data error on invalid column value")]
+        [TestCase("Bob Charles", null)]
+        public void ThrowsWhenGeneratingTermFromInvalidValues(string value, string expected)
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                .Returns(value)
+                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            Assert.Throws<InvalidTermException>(() =>
+                _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object)
+            );
         }
 
         [Test]

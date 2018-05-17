@@ -77,10 +77,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 };
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void NodeCannotBeNull()
         {
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, (INode) null);
+            Assert.Throws<ArgumentNullException>(() =>
+                _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null)
+            );
         }
 
         [Test]
@@ -203,11 +205,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CannotSetInvalidLanguageTag()
         {
             _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("english")).Returns(false);
-            _objectMap.HasLanguage("english");
+
+            Assert.Throws<ArgumentException>(() =>
+                _objectMap.HasLanguage("english")
+            );
         }
 
         [Test]
