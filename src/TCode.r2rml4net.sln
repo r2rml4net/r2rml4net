@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net", "TCode.r2rml4net\TCode.r2rml4net.csproj", "{7C5D6099-CEA0-4D34-84C7-754A92E51798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCode.r2rml4net", "TCode.r2rml4net\TCode.r2rml4net.csproj", "{7C5D6099-CEA0-4D34-84C7-754A92E51798}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Tests", "TCode.r2rml4net.Tests\TCode.r2rml4net.Tests.csproj", "{A7938022-C641-4470-B22E-0CBBC2D11D5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCode.r2rml4net.Tests", "TCode.r2rml4net.Tests\TCode.r2rml4net.Tests.csproj", "{A7938022-C641-4470-B22E-0CBBC2D11D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCode.r2rml4net.Mapping.Tests", "TCode.r2rml4net.Mapping.Tests\TCode.r2rml4net.Mapping.Tests.csproj", "{B2B367CA-B338-4176-B97B-FB9B5558C4B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCode.r2rml4net.Mapping.Tests", "TCode.r2rml4net.Mapping.Tests\TCode.r2rml4net.Mapping.Tests.csproj", "{B2B367CA-B338-4176-B97B-FB9B5558C4B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{F2EE94E6-037C-4FCE-8B3C-0C7FBB2966FC}"
 EndProject
@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4EAAEB3C-B182-4E09-BEF1-576977F217BA}"
 	ProjectSection(SolutionItems) = preProject
 		after.TCode.r2rml4net.sln.targets = after.TCode.r2rml4net.sln.targets
+		appveyor.yml = appveyor.yml
 		..\r2rml4net.nuspec = ..\r2rml4net.nuspec
 	EndProjectSection
 EndProject
