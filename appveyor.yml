@@ -1,0 +1,13 @@
+image: Visual Studio 2017
+
+install:
+  - choco install gitversion.portable -pre -y
+
+ before_build:
+   - ps: gitversion /l console /output buildserver /updateassemblyinfo
+
+ build_script:
+  - ps: dotnet pack -c Release -o nugets src/TCode.r2rml4net /p:Version=$env:GitVersion_LegacySemVerPadded
+
+  artifacts:
+  - path: 'nugets\*.nupkg'
