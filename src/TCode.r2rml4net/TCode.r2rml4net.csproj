@@ -5,6 +5,7 @@
     <AssemblyName>TCode.r2rml4net</AssemblyName>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' != 'netstandard1.5' ">
     <DefineConstants>$(DefineContants);THREAD_AFFINITY</DefineConstants>

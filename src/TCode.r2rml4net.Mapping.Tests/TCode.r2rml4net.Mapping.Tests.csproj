@@ -5,6 +5,7 @@
     <AssemblyName>TCode.r2rml4net.Mapping.Tests</AssemblyName>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\*.ttl" />
