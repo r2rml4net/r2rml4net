@@ -47,9 +47,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class RefObjectMapConfigurationTests
     {
-        RefObjectMapConfiguration _refObjectMap;
-        private Mock<ITriplesMapConfiguration> _parentTriplesMap;
-        private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
+        readonly RefObjectMapConfiguration _refObjectMap;
+        private readonly Mock<ITriplesMapConfiguration> _parentTriplesMap;
+        private readonly Mock<ITriplesMapConfiguration> _referencedTriplesMap;
 
         public RefObjectMapConfigurationTests()
         {

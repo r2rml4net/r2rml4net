@@ -50,9 +50,9 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class R2RMLMappingGeneratorCompleteCaseTests
     {
-        private R2RMLMappingGenerator _r2RMLMappingGenerator;
-        private Mock<IDatabaseMetadata> _databaseMetedata;
-        private FluentR2RML _configuration;
+        private readonly R2RMLMappingGenerator _r2RMLMappingGenerator;
+        private readonly Mock<IDatabaseMetadata> _databaseMetedata;
+        private readonly FluentR2RML _configuration;
 
         public R2RMLMappingGeneratorCompleteCaseTests()
         {

@@ -8,8 +8,8 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
 {
     public class BlankNodeReplaceHandlerTests
     {
-        private BlankNodeReplaceHandler _handler;
-        private Mock<IRdfHandler> _decoratedHandler;
+        private readonly BlankNodeReplaceHandler _handler;
+        private readonly Mock<IRdfHandler> _decoratedHandler;
 
         public BlankNodeReplaceHandlerTests()
         {

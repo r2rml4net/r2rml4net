@@ -45,8 +45,8 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
 {
     public class BlankNodeSubjectReplaceHandlerTests
     {
-        private BlankNodeSubjectReplaceHandler _handler;
-        private Mock<IRdfHandler> _decoratedHandler;
+        private readonly BlankNodeSubjectReplaceHandler _handler;
+        private readonly Mock<IRdfHandler> _decoratedHandler;
 
         public BlankNodeSubjectReplaceHandlerTests()
         {

@@ -51,13 +51,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
     public class MapProcessorBaseTests : TriplesGenerationTestsBase
     {
         private Mock<IRdfHandler> _rdfHandler;
-        private Mock<MapProcessorBase> _processor;
-        private INode _subject;
-        private IEnumerable<IUriNode> _predicates;
+        private readonly Mock<MapProcessorBase> _processor;
+        private readonly INode _subject;
+        private readonly IEnumerable<IUriNode> _predicates;
         private IEnumerable<IUriNode> _graphs;
-        private IEnumerable<INode> _objects;
-        private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<LogFacadeBase> _log;
+        private readonly IEnumerable<INode> _objects;
+        private readonly Mock<IRDFTermGenerator> _termGenerator;
+        private readonly Mock<LogFacadeBase> _log;
 
         public MapProcessorBaseTests()
         {

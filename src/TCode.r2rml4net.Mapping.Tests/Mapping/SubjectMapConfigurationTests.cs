@@ -46,10 +46,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class SubjectMapConfigurationTests
     {
-        private IGraph _graph;
+        private readonly IGraph _graph;
         private SubjectMapConfiguration _subjectMapConfiguration;
-        private IUriNode _triplesMapNode;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly IUriNode _triplesMapNode;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
 
         public SubjectMapConfigurationTests()
         {

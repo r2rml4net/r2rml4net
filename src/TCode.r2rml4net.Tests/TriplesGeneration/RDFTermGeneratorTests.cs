@@ -50,15 +50,15 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
     public class RDFTermGeneratorTests
     {
         private RDFTermGenerator _termGenerator;
-        private Mock<ISubjectMap> _subjectMap;
+        private readonly Mock<ISubjectMap> _subjectMap;
         private Mock<IPredicateMap> _predicateMap;
-        private Mock<ISQLValuesMappingStrategy> _lexicalFormProvider;
-        private Mock<IDataRecord> _logicalRow;
+        private readonly Mock<ISQLValuesMappingStrategy> _lexicalFormProvider;
+        private readonly Mock<IDataRecord> _logicalRow;
         private Mock<ITermMap> _termMap;
-        private Mock<ITermType> _termType;
+        private readonly Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
-        private Mock<LogFacadeBase> _log;
+        private readonly Mock<LogFacadeBase> _log;
 
         public RDFTermGeneratorTests()
         {

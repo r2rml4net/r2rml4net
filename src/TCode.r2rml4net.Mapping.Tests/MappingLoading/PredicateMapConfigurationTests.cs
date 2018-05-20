@@ -46,8 +46,8 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
     public class PredicateMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private Mock<IPredicateObjectMap> _predicateObjectMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<IPredicateObjectMap> _predicateObjectMap;
 
         public PredicateMapConfigurationTests()
         {

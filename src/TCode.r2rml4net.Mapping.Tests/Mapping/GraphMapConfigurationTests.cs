@@ -47,9 +47,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     public class GraphMapConfigurationTests
     {
         private GraphMapConfiguration _graphMap;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private Mock<IGraphMapParent> _predicateObjectMap;
-        private IGraph _graph;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<IGraphMapParent> _predicateObjectMap;
+        private readonly IGraph _graph;
 
         public GraphMapConfigurationTests()
         {

@@ -47,7 +47,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
     public class SubjectMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
 
         public SubjectMapConfigurationTests()
         {

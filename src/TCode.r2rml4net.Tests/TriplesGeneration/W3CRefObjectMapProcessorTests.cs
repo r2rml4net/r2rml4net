@@ -50,15 +50,15 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
     public class W3CRefObjectMapProcessorTests : TriplesGenerationTestsBase
     {
-        private W3CRefObjectMapProcessor _processor;
-        private Mock<IRdfHandler> _rdfHandler;
-        private Mock<ISubjectMap> _subjectMap;
-        private Mock<IRefObjectMap> _refObjMap;
-        private Mock<IDbConnection> _connection;
-        private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<IPredicateObjectMap> _predObjectMap;
-        private Mock<LogFacadeBase> _log;
-        private Mock<ISubjectMap> _childSubjectMap;
+        private readonly W3CRefObjectMapProcessor _processor;
+        private readonly Mock<IRdfHandler> _rdfHandler;
+        private readonly Mock<ISubjectMap> _subjectMap;
+        private readonly Mock<IRefObjectMap> _refObjMap;
+        private readonly Mock<IDbConnection> _connection;
+        private readonly Mock<IRDFTermGenerator> _termGenerator;
+        private readonly Mock<IPredicateObjectMap> _predObjectMap;
+        private readonly Mock<LogFacadeBase> _log;
+        private readonly Mock<ISubjectMap> _childSubjectMap;
 
         public W3CRefObjectMapProcessorTests()
         {

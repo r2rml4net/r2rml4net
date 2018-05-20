@@ -47,11 +47,11 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class R2RMLMappingGeneratorTests
     {
-        private R2RMLMappingGenerator _generator;
-        private Mock<IR2RMLConfiguration> _configuration;
-        private Mock<IDatabaseMetadata> _databaseMetedata;
-        private Mock<ISqlQueryBuilder> _sqlBuilder;
-        private Mock<IDirectMappingStrategy> _mappingStrategy;
+        private readonly R2RMLMappingGenerator _generator;
+        private readonly Mock<IR2RMLConfiguration> _configuration;
+        private readonly Mock<IDatabaseMetadata> _databaseMetedata;
+        private readonly Mock<ISqlQueryBuilder> _sqlBuilder;
+        private readonly Mock<IDirectMappingStrategy> _mappingStrategy;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
         public R2RMLMappingGeneratorTests()

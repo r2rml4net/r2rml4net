@@ -44,7 +44,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class ForeignKeyMappingStrategyTests
     {
-        ForeignKeyMappingStrategy _strategy;
+        readonly ForeignKeyMappingStrategy _strategy;
 
         public ForeignKeyMappingStrategyTests()
         {

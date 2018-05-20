@@ -49,8 +49,8 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
     public class TriplesMapConfigurationTests
     {
-        private Mock<IR2RMLConfiguration> _configuration;
-        private Mock<ISqlVersionValidator> _sqlVersionValidator;
+        private readonly Mock<IR2RMLConfiguration> _configuration;
+        private readonly Mock<ISqlVersionValidator> _sqlVersionValidator;
 
         public TriplesMapConfigurationTests()
         {

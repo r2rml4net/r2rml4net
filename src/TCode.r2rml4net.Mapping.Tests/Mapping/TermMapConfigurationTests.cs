@@ -47,11 +47,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class TermMapConfigurationTests
     {
-        private INode _triplesMapNode;
-        private Mock<TermMapConfiguration> _termMapConfigurationMock;
-        private TermMapConfiguration _termMapConfiguration;
-        private IGraph _graph;
-        private Mock<ITriplesMapConfiguration> _parentTriplesMap;
+        private readonly INode _triplesMapNode;
+        private readonly Mock<TermMapConfiguration> _termMapConfigurationMock;
+        private readonly TermMapConfiguration _termMapConfiguration;
+        private readonly IGraph _graph;
+        private readonly Mock<ITriplesMapConfiguration> _parentTriplesMap;
 
         public TermMapConfigurationTests()
         {

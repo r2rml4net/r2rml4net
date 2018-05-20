@@ -48,12 +48,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class R2RMLMappingGeneratorStrategyTests
     {
-        private R2RMLMappingGenerator _generator;
-        private Mock<IDatabaseMetadata> _databaseMetedata;
-        private Mock<IDirectMappingStrategy> _mappingStrategy;
-        private Mock<IForeignKeyMappingStrategy> _foreignKeyStrategy;
-        private Mock<IColumnMappingStrategy> _columnStrategy;
-        private Mock<IR2RMLConfiguration> _configuration;
+        private readonly R2RMLMappingGenerator _generator;
+        private readonly Mock<IDatabaseMetadata> _databaseMetedata;
+        private readonly Mock<IDirectMappingStrategy> _mappingStrategy;
+        private readonly Mock<IForeignKeyMappingStrategy> _foreignKeyStrategy;
+        private readonly Mock<IColumnMappingStrategy> _columnStrategy;
+        private readonly Mock<IR2RMLConfiguration> _configuration;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
         public R2RMLMappingGeneratorStrategyTests()

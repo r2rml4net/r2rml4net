@@ -50,11 +50,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
     public class ObjectMapConfigurationTests
     {
         private ObjectMapConfiguration _objectMap;
-        private Uri _tripesMapURI;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private IGraph _graph;
-        private Mock<IPredicateObjectMapConfiguration> _predicateObjectMap;
-        private Mock<ILanguageTagValidator> _languageTagValidator;
+        private readonly Uri _tripesMapURI;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly IGraph _graph;
+        private readonly Mock<IPredicateObjectMapConfiguration> _predicateObjectMap;
+        private readonly Mock<ILanguageTagValidator> _languageTagValidator;
 
         public ObjectMapConfigurationTests()
         {

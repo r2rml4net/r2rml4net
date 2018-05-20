@@ -46,9 +46,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class PredicateObjectMapConfigurationTests
     {
-        private PredicateObjectMapConfiguration _predicateObjectMap;
-        private Uri _triplesMapURI;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly PredicateObjectMapConfiguration _predicateObjectMap;
+        private readonly Uri _triplesMapURI;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
 
         public PredicateObjectMapConfigurationTests()
         {

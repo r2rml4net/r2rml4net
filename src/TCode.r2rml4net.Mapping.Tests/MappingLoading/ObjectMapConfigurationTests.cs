@@ -48,8 +48,8 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
     public class ObjectMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private Mock<IPredicateObjectMapConfiguration> _predictaObjectMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<IPredicateObjectMapConfiguration> _predictaObjectMap;
 
         public ObjectMapConfigurationTests()
         {

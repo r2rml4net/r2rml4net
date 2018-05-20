@@ -46,10 +46,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class PredicateMapConfigurationTests
     {
-        private IGraph _graph;
-        private PredicateMapConfiguration _predicateMap;
-        private Mock<ITriplesMapConfiguration> _triplesMapNode;
-        private Mock<IPredicateObjectMap> _predicateObjectMap;
+        private readonly IGraph _graph;
+        private readonly PredicateMapConfiguration _predicateMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMapNode;
+        private readonly Mock<IPredicateObjectMap> _predicateObjectMap;
 
         public PredicateMapConfigurationTests()
         {

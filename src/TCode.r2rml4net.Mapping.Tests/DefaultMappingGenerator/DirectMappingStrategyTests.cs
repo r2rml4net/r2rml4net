@@ -49,11 +49,11 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     {
         static readonly Uri BaseUri = new Uri("http://example.com/base");
 
-        private DirectMappingStrategy _strategy;
-        private Mock<IForeignKeyMappingStrategy> _fkStrategy;
-        private Mock<IPrimaryKeyMappingStrategy> _pkStrategy;
-        private Mock<ISubjectMapConfiguration> _subjectMap;
-        private Mock<ITermTypeConfiguration> _termType;
+        private readonly DirectMappingStrategy _strategy;
+        private readonly Mock<IForeignKeyMappingStrategy> _fkStrategy;
+        private readonly Mock<IPrimaryKeyMappingStrategy> _pkStrategy;
+        private readonly Mock<ISubjectMapConfiguration> _subjectMap;
+        private readonly Mock<ITermTypeConfiguration> _termType;
 
         public DirectMappingStrategyTests()
         {

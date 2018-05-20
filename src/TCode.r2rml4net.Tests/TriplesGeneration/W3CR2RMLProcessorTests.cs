@@ -52,10 +52,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
     public class W3CR2RMLProcessorTests
     {
         private W3CR2RMLProcessor _triplesGenerator;
-        private Mock<IR2RML> _r2RML;
-        private Mock<DbConnection> _connection;
-        private Mock<ITriplesMapProcessor> _triplesMapProcessor;
-        private Mock<IRdfHandler> _rdfHandler;
+        private readonly Mock<IR2RML> _r2RML;
+        private readonly Mock<DbConnection> _connection;
+        private readonly Mock<ITriplesMapProcessor> _triplesMapProcessor;
+        private readonly Mock<IRdfHandler> _rdfHandler;
         private bool? _handlingResult;
 
         public W3CR2RMLProcessorTests()
