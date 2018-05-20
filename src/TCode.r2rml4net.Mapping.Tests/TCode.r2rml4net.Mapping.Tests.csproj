@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DatabaseSchemaReader" Version="2.5.1" />
-    <PackageReference Include="dotNetRDF" Version="1.0.1.2533" />
     <PackageReference Include="moq" Version="4.8.2" />
     <PackageReference Include="dotNetRDF" Version="2.0.1" />
     <PackageReference Include="NUnit" Version="3.10.1" />
