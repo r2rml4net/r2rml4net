@@ -3,6 +3,8 @@
     <TargetFramework>net462</TargetFramework>
     <RootNamespace>TCode.r2rml4net.Mapping.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Mapping.Tests</AssemblyName>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\*.ttl" />

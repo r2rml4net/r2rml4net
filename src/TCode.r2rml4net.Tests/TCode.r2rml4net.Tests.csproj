@@ -3,6 +3,8 @@
     <TargetFramework>net462</TargetFramework>
     <RootNamespace>TCode.r2rml4net.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Tests</AssemblyName>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DatabaseSchemaReader" Version="2.5.1" />
