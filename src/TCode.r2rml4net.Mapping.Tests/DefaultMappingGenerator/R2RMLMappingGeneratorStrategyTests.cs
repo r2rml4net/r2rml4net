@@ -38,7 +38,7 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Tests.Mocks;
@@ -46,7 +46,6 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
-    [TestFixture]
     public class R2RMLMappingGeneratorStrategyTests
     {
         private R2RMLMappingGenerator _generator;
@@ -57,8 +56,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private Mock<IR2RMLConfiguration> _configuration;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
-        [SetUp]
-        public void Setup()
+        public R2RMLMappingGeneratorStrategyTests()
         {
             _configuration = new Mock<IR2RMLConfiguration>();
             _databaseMetedata = new Mock<IDatabaseMetadata>();
@@ -77,49 +75,49 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 .Returns(new MockConfiguration(_mappingBaseUri, _configuration.Object));
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithoutPrimaryKey()
         {
             TestStrategyUsage(RelationalTestMappings.D003_1table3columns);
         }
 
-        [Test]
+        [Fact]
         public void AnotherTestForTableWithoutPrimaryKey()
         {
             TestStrategyUsage(RelationalTestMappings.D001_1table1column);
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithMultipleColumns()
         {
             TestStrategyUsage(RelationalTestMappings.TypedColumns);
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithCompositePrimaryKey()
         {
             TestStrategyUsage(RelationalTestMappings.D008_1table1compositeprimarykey3columns);
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithPrimaryKey()
         {
             TestStrategyUsage(RelationalTestMappings.D006_1table1primarykey1column);
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithForeignKey()
         {
             TestStrategyUsage(RelationalTestMappings.D009_2tables1primarykey1foreignkey);
         }
 
-        [Test]
+        [Fact]
         public void TestForTableWithCompositeKeyReference()
         {
             TestStrategyUsage(RelationalTestMappings.D015_1table3columns1composityeprimarykey);
         }
 
-        //[Test]
+        //[Fact]
         //public void TestForTableWithCandidateKeyReference()
         //{
         //    TestStrategyUsage(RelationalTestMappings.D015_1table3columns1composityeprimarykey);

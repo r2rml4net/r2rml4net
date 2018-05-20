@@ -38,14 +38,13 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class RefObjectMapConfigurationTests
     {
         RefObjectMapConfiguration _refObjectMap;
@@ -53,15 +52,14 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
         private Mock<IPredicateObjectMap> _predicateObjectMap;
 
-        [SetUp]
-        public void Setup()
+        public RefObjectMapConfigurationTests()
         {
             _parentTriplesMap = new Mock<ITriplesMapConfiguration>();
             _referencedTriplesMap = new Mock<ITriplesMapConfiguration>();
             _predicateObjectMap = new Mock<IPredicateObjectMap>();
         }
 
-        [Test]
+        [Fact]
         public void CanInitializeJoinConditions()
         {
             // given
@@ -78,55 +76,55 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _refObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(1, _refObjectMap.JoinConditions.Count());
-            Assert.AreEqual("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
-            Assert.AreEqual("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
-            Assert.AreEqual(blankNode, _refObjectMap.Node);
+            Assert.Single(_refObjectMap.JoinConditions);
+            Assert.Equal("DEPTNO", _refObjectMap.JoinConditions.ElementAt(0).ChildColumn);
+            Assert.Equal("ID", _refObjectMap.JoinConditions.ElementAt(0).ParentColumn);
+            Assert.Equal(blankNode, _refObjectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void MultipleJoinConditionsLoading()
         {
             IR2RML mappings = R2RMLLoader.Load(Resource.AsString("Graphs.RefObjectMap.MultipleJoinConditions.ttl"));
-            Assert.IsNotNull(mappings);
-            Assert.AreEqual(3, mappings.TriplesMaps.Count());
+            Assert.NotNull(mappings);
+            Assert.Equal(3, mappings.TriplesMaps.Count());
 
             var checkActionTriples = mappings.TriplesMaps.ElementAt(1);
-            Assert.AreEqual(
+            Assert.Equal(
                     new Uri("http://example.com/base/CheckActionSubjectTriples"),
                     ((IUriNode)checkActionTriples.Node).Uri);
 
             var sanctionTriples = mappings.TriplesMaps.ElementAt(2);
-            Assert.AreEqual(
+            Assert.Equal(
                     new Uri("http://example.com/base/SanctionReasonTriples"),
                     ((IUriNode)sanctionTriples.Node).Uri);
 
-            Assert.AreEqual(1, checkActionTriples.PredicateObjectMaps.Count());
-            Assert.AreEqual(1, sanctionTriples.PredicateObjectMaps.Count());
+            Assert.Single(checkActionTriples.PredicateObjectMaps);
+            Assert.Single(sanctionTriples.PredicateObjectMaps);
 
             var checkActionTriplesPOM = checkActionTriples.PredicateObjectMaps.First();
             var sanctionTriplesPOM = sanctionTriples.PredicateObjectMaps.First();
 
-            Assert.AreEqual(0, checkActionTriplesPOM.ObjectMaps.Count());
-            Assert.AreEqual(1, checkActionTriplesPOM.RefObjectMaps.Count());
+            Assert.Empty(checkActionTriplesPOM.ObjectMaps);
+            Assert.Single(checkActionTriplesPOM.RefObjectMaps);
 
-            Assert.AreEqual(0, sanctionTriplesPOM.ObjectMaps.Count());
-            Assert.AreEqual(1, sanctionTriplesPOM.RefObjectMaps.Count());
+            Assert.Empty(sanctionTriplesPOM.ObjectMaps);
+            Assert.Single(sanctionTriplesPOM.RefObjectMaps);
 
             var checkActionTriplesROM = checkActionTriplesPOM.RefObjectMaps.First();
             var sanctionTriplesROM = sanctionTriplesPOM.RefObjectMaps.First();
 
-            Assert.AreEqual(1, checkActionTriplesROM.JoinConditions.Count());
-            Assert.AreEqual(1, sanctionTriplesROM.JoinConditions.Count());
+            Assert.Single(checkActionTriplesROM.JoinConditions);
+            Assert.Single(sanctionTriplesROM.JoinConditions);
 
             var checkActionTriplesJoinCond = checkActionTriplesROM.JoinConditions.First();
             var sanctionTriplesJoinCond = sanctionTriplesROM.JoinConditions.First();
 
-            Assert.AreEqual("LawChild1", checkActionTriplesJoinCond.ChildColumn);
-            Assert.AreEqual("LawParent1", checkActionTriplesJoinCond.ParentColumn);
+            Assert.Equal("LawChild1", checkActionTriplesJoinCond.ChildColumn);
+            Assert.Equal("LawParent1", checkActionTriplesJoinCond.ParentColumn);
 
-            Assert.AreEqual("LawChild2", sanctionTriplesJoinCond.ChildColumn);
-            Assert.AreEqual("LawParent2", sanctionTriplesJoinCond.ParentColumn);
+            Assert.Equal("LawChild2", sanctionTriplesJoinCond.ChildColumn);
+            Assert.Equal("LawParent2", sanctionTriplesJoinCond.ParentColumn);
         }
     }
 }

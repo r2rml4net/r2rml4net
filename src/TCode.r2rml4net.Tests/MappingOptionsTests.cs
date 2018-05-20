@@ -37,53 +37,52 @@
 #endregion
 using System;
 using System.Threading;
-using NUnit.Framework;
+using Xunit;
 
 namespace TCode.r2rml4net.Tests
 {
-    [TestFixture]
     public class MappingOptionsTests
     {
         private MappingOptions _options;
 
-        [SetUp]
-        public void Setup()
+        public MappingOptionsTests()
         {
             _options = new MappingOptions();
         }
 
-        [Test]
+        [Fact]
         public void HasDefaultTemplateSeparator()
         {
-            Assert.AreEqual("_", _options.BlankNodeTemplateSeparator);
+            Assert.Equal("_", _options.BlankNodeTemplateSeparator);
         }
 
-        [Test]
+        [Fact]
         public void HasDefaultIdentifierDelimiter()
         {
-            Assert.AreEqual('\"', _options.SqlIdentifierLeftDelimiter);
-            Assert.AreEqual('\"', _options.SqlIdentifierRightDelimiter);
+            Assert.Equal('\"', _options.SqlIdentifierLeftDelimiter);
+            Assert.Equal('\"', _options.SqlIdentifierRightDelimiter);
         }
 
-        [Test]
+        [Fact]
         public void DelimitsIdentifiersByDefault()
         {
-            Assert.AreEqual(true, _options.UseDelimitedIdentifiers);
+            Assert.True(_options.UseDelimitedIdentifiers);
         }
 
-        [TestCase("")]
-        [TestCase(":")]
-        [TestCase("^_^")]
+        [Theory]
+        [InlineData("")]
+        [InlineData(":")]
+        [InlineData("^_^")]
         public void DefaultTemplateSeparatorCanBeChanged(string newSeparator)
         {
             // when
             _options.WithBlankNodeTemplateSeparator(newSeparator);
 
             // then
-            Assert.AreEqual(newSeparator, _options.BlankNodeTemplateSeparator);
+            Assert.Equal(newSeparator, _options.BlankNodeTemplateSeparator);
         }
 
-        [Test]
+        [Fact]
         public void DefaultTemplateSeparatorCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -91,69 +90,70 @@ namespace TCode.r2rml4net.Tests
             );
         }
 
-        [TestCase('\"', '\"')]
-        [TestCase('[', ']')]
-        [TestCase('`', '`')]
+        [Theory]
+        [InlineData('\"', '\"')]
+        [InlineData('[', ']')]
+        [InlineData('`', '`')]
         public void DefaultIdentifierDelimiterCanBeChanged(char newLeftDelimiter, char newRightDelimiter)
         {
             // when
             _options.WithSqlIdentifierDelimiters(newLeftDelimiter, newRightDelimiter);
 
             // then
-            Assert.AreEqual(newLeftDelimiter, _options.SqlIdentifierLeftDelimiter);
-            Assert.AreEqual(newRightDelimiter, _options.SqlIdentifierRightDelimiter);
+            Assert.Equal(newLeftDelimiter, _options.SqlIdentifierLeftDelimiter);
+            Assert.Equal(newRightDelimiter, _options.SqlIdentifierRightDelimiter);
         }
 
-        [Test]
+        [Fact]
         public void DefaultIdentifierDelimiterCanBeChangedToSameValue()
         {
             // when
             _options.WithSqlIdentifierDelimiters('-');
 
             // then
-            Assert.AreEqual('-', _options.SqlIdentifierLeftDelimiter);
-            Assert.AreEqual('-', _options.SqlIdentifierRightDelimiter);
+            Assert.Equal('-', _options.SqlIdentifierLeftDelimiter);
+            Assert.Equal('-', _options.SqlIdentifierRightDelimiter);
         }
 
-        [Test]
+        [Fact]
         public void CanTurnOffIdentifierDelimiting()
         {
             // when
             _options.UsingDelimitedIdentifiers(false);
 
             // then
-            Assert.AreEqual(false, _options.UseDelimitedIdentifiers);
+            Assert.False(_options.UseDelimitedIdentifiers);
         }
 
-        [Test]
+        [Fact]
         public void ValidateSqlVersionByDefault()
         {
-            Assert.IsTrue(_options.ValidateSqlVersion);
+            Assert.True(_options.ValidateSqlVersion);
         }
 
-        [Test]
+        [Fact]
         public void CanDisableSqlVersionValidatioon()
         {
             // when
             _options = _options.WithSqlVersionValidation(false);
 
             // then
-            Assert.IsFalse(_options.ValidateSqlVersion);
+            Assert.False(_options.ValidateSqlVersion);
         }
 
-        [Test]
+        [Fact]
         public void ByDefaultContinueOnErrors()
         {
-            Assert.IsTrue(_options.IgnoreMappingErrors);
+            Assert.True(_options.IgnoreMappingErrors);
         }
 
-        [Test]
+        [Fact]
         public void ByDefaultDontPreserveDuplicateRows()
         {
-            Assert.IsFalse(_options.PreserveDuplicateRows);
+            Assert.False(_options.PreserveDuplicateRows);
         }
 
-        [Test]
+        [Fact]
         public void Accessing_scope_without_inizializing_should_return_instance()
         {
             // when
@@ -161,25 +161,25 @@ namespace TCode.r2rml4net.Tests
             var mappingOptions2 = MappingOptions.Current;
 
             // then
-            Assert.That(mappingOptions, Is.Not.Null);
-            Assert.That(mappingOptions, Is.SameAs(mappingOptions2));
+            Assert.NotNull(mappingOptions);
+            Assert.Same(mappingOptions, mappingOptions2);
         }
 
-        [Test]
+        [Fact]
         public void Creating_scope_should_change_current_mapping_options()
         {
             // when
             using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("x")))
             {
-                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+                Assert.Equal("x", MappingOptions.Current.BlankNodeTemplateSeparator);
             }
 
             // then
-            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("_"));
-            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+            Assert.Equal("_", MappingOptions.Current.BlankNodeTemplateSeparator);
+            Assert.Equal("_", MappingOptions.Default.BlankNodeTemplateSeparator);
         }
 
-        [Test]
+        [Fact]
         public void Should_allow_nesting_scopes()
         {
             // when
@@ -187,17 +187,17 @@ namespace TCode.r2rml4net.Tests
             {
                 using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator("y")))
                 {
-                    Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("y"));
+                    Assert.Equal("y", MappingOptions.Current.BlankNodeTemplateSeparator);
                 }
-                Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("x"));
+                Assert.Equal("x", MappingOptions.Current.BlankNodeTemplateSeparator);
             }
 
             // then
-            Assert.That(MappingOptions.Current.BlankNodeTemplateSeparator, Is.EqualTo("_"));
-            Assert.That(MappingOptions.Default.BlankNodeTemplateSeparator, Is.EqualTo("_"));
+            Assert.Equal("_", MappingOptions.Current.BlankNodeTemplateSeparator);
+            Assert.Equal("_", MappingOptions.Default.BlankNodeTemplateSeparator);
         }
 
-        [Test]
+        [Fact]
         public void Changed_options_should_not_affect_other_threads()
         {
             // given
@@ -215,25 +215,25 @@ namespace TCode.r2rml4net.Tests
             }
 
             // then
-            Assert.That(inThreadSeparator, Is.EqualTo("_"));
+            Assert.Equal("_", inThreadSeparator);
         }
 
-        [Test]
+        [Fact]
         public void When_added_to_scope_should_be_frozen()
         {
              using (new MappingScope(new MappingOptions()))
              {
-                 Assert.That(MappingOptions.Current.IsFrozen, Is.True);
+                 Assert.True(MappingOptions.Current.IsFrozen);
              }
         }
 
-        [Test]
+        [Fact]
         public void Default_options_should_be_frozen()
         {
-            Assert.That(MappingOptions.Default.IsFrozen, Is.True);
+            Assert.True(MappingOptions.Default.IsFrozen);
         }
 
-        [Test]
+        [Fact]
         public void Frozen_options_cannot_be_changed()
         {
             // when

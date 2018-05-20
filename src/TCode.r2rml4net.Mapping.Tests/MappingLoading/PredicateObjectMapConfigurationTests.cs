@@ -37,7 +37,7 @@
 #endregion
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
@@ -45,15 +45,13 @@ using Moq;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class PredicateObjectMapConfigurationTests
     {
         private Mock<ITriplesMapConfiguration> _triplesMap;
         private Mock<ITriplesMapConfiguration> _otherTriplesMap;
         private Mock<IR2RMLConfiguration> _configuration;
 
-        [SetUp]
-        public void Setup()
+        public PredicateObjectMapConfigurationTests()
         {
             _otherTriplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap = new Mock<ITriplesMapConfiguration>();
@@ -63,7 +61,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             _triplesMap.Setup(tm => tm.R2RMLConfiguration).Returns(_configuration.Object);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithPredicateMaps()
         {
             // given
@@ -76,16 +74,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
-            Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(0).Template);
-            Assert.AreEqual("http://data.example.com/user/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(1).Template);
+            Assert.Equal(2, predicateObjectMap.PredicateMaps.Count());
+            Assert.Equal("http://data.example.com/employee/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(0).Template);
+            Assert.Equal("http://data.example.com/user/{EMPNO}", predicateObjectMap.PredicateMaps.ElementAt(1).Template);
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithPredicateMapsUsingShortcut()
         {
             // given
@@ -98,16 +96,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.PredicateMaps.Count());
-            Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.PredicateMaps.ElementAt(0).URI);
-            Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.PredicateMaps.ElementAt(1).URI);
+            Assert.Equal(2, predicateObjectMap.PredicateMaps.Count());
+            Assert.Equal(new Uri("http://www.example.com/Employee"), predicateObjectMap.PredicateMaps.ElementAt(0).URI);
+            Assert.Equal(new Uri("http://www.example.com/Worker"), predicateObjectMap.PredicateMaps.ElementAt(1).URI);
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(blankNode1, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(0).Node);
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(blankNode2, predicateObjectMap.PredicateMaps.Cast<PredicateMapConfiguration>().ElementAt(1).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithGraphMapsUsingShortcut()
         {
             // given
@@ -120,16 +118,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.GraphMaps.Count());
-            Assert.AreEqual(new Uri("http://www.example.com/Employee"), predicateObjectMap.GraphMaps.ElementAt(0).URI);
-            Assert.AreEqual(new Uri("http://www.example.com/Worker"), predicateObjectMap.GraphMaps.ElementAt(1).URI);
+            Assert.Equal(2, predicateObjectMap.GraphMaps.Count());
+            Assert.Equal(new Uri("http://www.example.com/Employee"), predicateObjectMap.GraphMaps.ElementAt(0).URI);
+            Assert.Equal(new Uri("http://www.example.com/Worker"), predicateObjectMap.GraphMaps.ElementAt(1).URI);
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode1, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(blankNode1, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode2, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(blankNode2, predicateObjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithObjectMaps()
         {
             // given
@@ -143,16 +141,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => new Uri("http://www.example.com/Employee").Equals(map.URI)));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => "http://data.example.com/user/{EMPNO}".Equals(map.Template)));
+            Assert.Equal(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => new Uri("http://www.example.com/Employee").Equals(map.URI));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => "http://data.example.com/user/{EMPNO}".Equals(map.Template));
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode1));
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode2));
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithObjectMapsUsingShortcut()
         {
             // given
@@ -165,16 +163,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
+            Assert.Equal(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.URI.Equals(new Uri("http://www.example.com/Employee")));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.URI.Equals(new Uri("http://www.example.com/Worker")));
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode1));
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode2));
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithObjectMapsUsingShortcutWhenBlankNodeIsUsed()
         {
             // given
@@ -187,16 +185,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Employee"))));
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.URI.Equals(new Uri("http://www.example.com/Worker"))));
+            Assert.Equal(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.URI.Equals(new Uri("http://www.example.com/Employee")));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.URI.Equals(new Uri("http://www.example.com/Worker")));
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetBlankNode("blank"), graph.CreateUriNode("rr:objectMap")).ElementAt(0).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode1)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode1));
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetBlankNode("blank"), graph.CreateUriNode("rr:objectMap")).ElementAt(1).Object;
-            Assert.IsTrue(predicateObjectMap.ObjectMaps.Any(map => map.Node.Equals(blankNode2)));
+            Assert.Contains(predicateObjectMap.ObjectMaps, map => map.Node.Equals(blankNode2));
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithRefObjectMaps()
         {
             // given
@@ -210,9 +208,9 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateObjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(2, predicateObjectMap.ObjectMaps.Count());
-            Assert.AreEqual(1, predicateObjectMap.RefObjectMaps.Count());
-            Assert.AreEqual(graph.CreateUriNode("ex:refObjectMap"), predicateObjectMap.RefObjectMaps.Cast<RefObjectMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(2, predicateObjectMap.ObjectMaps.Count());
+            Assert.Single(predicateObjectMap.RefObjectMaps);
+            Assert.Equal(graph.CreateUriNode("ex:refObjectMap"), predicateObjectMap.RefObjectMaps.Cast<RefObjectMapConfiguration>().ElementAt(0).Node);
         }
     }
 }

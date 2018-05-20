@@ -37,28 +37,26 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.SqlQueryBuilder
 {
-    [TestFixture]
     public class W3CEffectiveSqlBuilderTests
     {
-        private W3CSqlQueryBuilder _sqlQueryBuilder;
-        Mock<IRefObjectMap> _refObjectMap;
-        private Mock<ITriplesMap> _triplesMap;
+        private readonly W3CSqlQueryBuilder _sqlQueryBuilder;
+        private readonly Mock<IRefObjectMap> _refObjectMap;
+        private readonly Mock<ITriplesMap> _triplesMap;
 
-        [SetUp]
-        public void Setup()
+        public W3CEffectiveSqlBuilderTests()
         {
             _sqlQueryBuilder = new W3CSqlQueryBuilder();
             _refObjectMap = new Mock<IRefObjectMap>(MockBehavior.Strict);
             _triplesMap = new Mock<ITriplesMap>();
         }
 
-        [Test]
+        [Fact]
         public void ReturnsSqlQueryAsEffectiveSql()
         {
             // given
@@ -70,10 +68,10 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             string sql = _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
 
             // then
-            Assert.AreEqual(sqlQuery, sql);
+            Assert.Equal(sqlQuery, sql);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsCorrectEffectiveSqlForTable()
         {
             // given
@@ -85,10 +83,10 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             string sql = _sqlQueryBuilder.GetEffectiveQueryForTriplesMap(_triplesMap.Object);
 
             // then
-            Assert.AreEqual("SELECT * FROM \"Student\"", sql);
+            Assert.Equal("SELECT * FROM \"Student\"", sql);
         }
 
-        [Test]
+        [Fact]
         public void RefObjectMapWithNoJoinConditionsGiven()
         {
             // given
@@ -99,10 +97,10 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             string sql = _sqlQueryBuilder.GetEffectiveQueryForRefObjectMap(_refObjectMap.Object);
 
             // then
-            Assert.AreEqual("SELECT * FROM (SELECT * FROM \"A\") AS tmp", sql);
+            Assert.Equal("SELECT * FROM (SELECT * FROM \"A\") AS tmp", sql);
         }
 
-        [Test]
+        [Fact]
         public void RefObjectMapWithSingleJoinCondition()
         {
             // given
@@ -120,7 +118,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                                    "WHERE child.\"colX\"=parent.\"colY\"");
         }
 
-        [Test]
+        [Fact]
         public void RefObjectMapWithMultipleJoinConditions()
         {
             // given
@@ -145,7 +143,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                                    "child.\"dlihc\"=parent.\"tnerap\"");
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfNoForeignKeyReferencedTableHasPrimaryKey()
         {
             // given
@@ -164,7 +162,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             Assert.Throws<ArgumentException>(() => _sqlQueryBuilder.GetR2RMLViewForJoinedTables(table));
         }
 
-        [Test]
+        [Fact]
         public void ReturnsJoinedQueryForSingleReferenceSimplePrimaryKey()
         {
             // given
@@ -205,7 +203,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p1.\"unique2\" = child.\"candidate2\"");
         }
 
-        [Test]
+        [Fact]
         public void ReturnsJoinedQueryForSingleReferenceCompositePrimaryKey()
         {
             // given
@@ -248,7 +246,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p1.\"unique2\" = child.\"candidate2\"");
         }
 
-        [Test]
+        [Fact]
         public void ReturnsJoinedQueryForMultipleReferencesMixedPrimaryKeys()
         {
             // given
@@ -307,7 +305,7 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
                 "p2.\"pk2\" = child.\"fk2\"");
         }
 
-        [Test]
+        [Fact]
         public void ReturnsJoinedQueryOnlyForTablesWith()
         {
             // given
@@ -368,12 +366,12 @@ namespace TCode.r2rml4net.Tests.SqlQueryBuilder
             foreach (var seqElement in expectedValues)
             {
                 int indexOfCurrent = actualString.IndexOf(seqElement, lastIndex, StringComparison.Ordinal);
-                Assert.AreNotEqual(-1, indexOfCurrent, string.Format("Sequence element\r\n\r\n{0}\r\n\r\nnot found in\r\n\r\n{1}", seqElement, actualString));
+                Assert.NotEqual(-1, indexOfCurrent);
                 lastIndex = indexOfCurrent + seqElement.Length;
             }
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfInvalidSqlViewHasSqlIdentifier()
         {
             _triplesMap.Setup(tm => tm.SqlVersions).Returns(new[]

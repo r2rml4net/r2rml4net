@@ -35,46 +35,47 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Validation;
 
 namespace TCode.r2rml4net.Tests.Validation
 {
     public abstract class LanguageTagValidatorTestsBase<T> where T : ILanguageTagValidator
     {
-        private T _validator;
+        private readonly T _validator;
 
-        [SetUp]
-        public void Setup()
+        protected LanguageTagValidatorTestsBase()
         {
             _validator = NewSimpleLanguageTagValidator();
         }
 
         protected abstract T NewSimpleLanguageTagValidator();
 
-        [TestCase("pl")]
-        [TestCase("pl-pl")]
-        [TestCase("de-CH")]
-        [TestCase("de-DE-1901")]
-        [TestCase("es-419")]
-        [TestCase("sl-IT-nedis")]
-        [TestCase("en-US-boont")]
-        [TestCase("mn-Cyrl-MN")]
-        [TestCase("x-fr-CH")]
-        [TestCase("en-GB-boont-r-extended-sequence-x-private")]
-        [TestCase("sr-Cyrl")]
-        [TestCase("sr-Latn")]
-        [TestCase("hy-Latn-IT-arevela")]
+        [Theory]
+        [InlineData("pl")]
+        [InlineData("pl-pl")]
+        [InlineData("de-CH")]
+        [InlineData("de-DE-1901")]
+        [InlineData("es-419")]
+        [InlineData("sl-IT-nedis")]
+        [InlineData("en-US-boont")]
+        [InlineData("mn-Cyrl-MN")]
+        [InlineData("x-fr-CH")]
+        [InlineData("en-GB-boont-r-extended-sequence-x-private")]
+        [InlineData("sr-Cyrl")]
+        [InlineData("sr-Latn")]
+        [InlineData("hy-Latn-IT-arevela")]
         public void CanValidateValidLanguage(string langTag)
         {
-            Assert.IsTrue(_validator.LanguageTagIsValid(langTag));
+            Assert.True(_validator.LanguageTagIsValid(langTag));
         }
 
-        [TestCase("123")]
-        [TestCase("english")]
+        [Theory]
+        [InlineData("123")]
+        [InlineData("english")]
         public void CanValidateInvalidLanguage(string langTag)
         {
-            Assert.IsFalse(_validator.LanguageTagIsValid(langTag));
+            Assert.False(_validator.LanguageTagIsValid(langTag));
         }
     }
 }

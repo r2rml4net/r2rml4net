@@ -39,7 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -49,20 +49,18 @@ using System.Linq.Expressions;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
     public class W3CTriplesMapProcessorTests : TriplesGenerationTestsBase
     {
-        private W3CTriplesMapProcessor _triplesMapProcessor;
-        private Mock<ITriplesMap> _triplesMap;
-        private Mock<IDbConnection> _connection;
-        private Mock<LogFacadeBase> _log;
-        private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<IRdfHandler> _rdfHandler;
-        private Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
-        private Mock<IRefObjectMapProcessor> _refObjectMapProcessor;
+        private readonly W3CTriplesMapProcessor _triplesMapProcessor;
+        private readonly Mock<ITriplesMap> _triplesMap;
+        private readonly Mock<IDbConnection> _connection;
+        private readonly Mock<LogFacadeBase> _log;
+        private readonly Mock<IRDFTermGenerator> _termGenerator;
+        private readonly Mock<IRdfHandler> _rdfHandler;
+        private readonly Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
+        private readonly Mock<IRefObjectMapProcessor> _refObjectMapProcessor;
 
-        [SetUp]
-        public void Setup()
+        public W3CTriplesMapProcessorTests()
         {
             _log = new Mock<LogFacadeBase>();
             _triplesMap = new Mock<ITriplesMap>();
@@ -79,7 +77,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                        };
         }
 
-        [Test]
+        [Fact]
         public void DoesNotExecuteQueryIfSubjectMapIsInvalid()
         {
             // given
@@ -93,9 +91,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _log.Verify(log => log.LogMissingSubject(It.IsAny<ITriplesMap>()), Times.Once());
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void GeneratesTermForSubjectForEachForLogicalRow(int rowsCount)
         {
             // given
@@ -111,9 +110,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termGenerator.Verify(tg => tg.GenerateTerm<INode>(subjectMap.Object, It.IsAny<IDataRecord>()), Times.Exactly(rowsCount));
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void ReadsSubjectClassesOnce(int rowsCount)
         {
             // given
@@ -129,10 +129,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             subjectMap.Verify(sm => sm.Classes, Times.Once());
         }
 
-        [TestCase(0, 5)]
-        [TestCase(1, 0)]
-        [TestCase(1, 5)]
-        [TestCase(10, 5)]
+        [Theory]
+        [InlineData(0, 5)]
+        [InlineData(1, 0)]
+        [InlineData(1, 5)]
+        [InlineData(10, 5)]
         public void CreatesTermForEachGraphForEachLogicalRow(int rowsCount, int graphsCount)
         {
             // given
@@ -148,10 +149,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termGenerator.Verify(tg => tg.GenerateTerm<IUriNode>(It.IsAny<IGraphMap>(), It.IsAny<IDataRecord>()), Times.Exactly(rowsCount * graphsCount));
         }
 
-        [TestCase(0, 1)]
-        [TestCase(1, 0)]
-        [TestCase(1, 5)]
-        [TestCase(10, 5)]
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(1, 0)]
+        [InlineData(1, 5)]
+        [InlineData(10, 5)]
         public void ProcessesEachPredicateObjectMap(int mapsCount, int rowsCount)
         {
             // given
@@ -169,9 +171,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(mapsCount * rowsCount));
         }
 
-        [TestCase(0)]
-        [TestCase(2)]
-        [TestCase(17)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(17)]
         public void ProcessesEachRefObjectMapFromPredicateObjectMap(int refObjectMapsCount)
         {
             // given
@@ -196,7 +199,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(refObjectMapsCount));
         }
 
-        [Test]
+        [Fact]
         public void SkipProcessingRefObjectMapIfSubjectMapIsAbsent()
         {
             // given
@@ -219,7 +222,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Never());
         }
 
-        [Test]
+        [Fact]
         public void LogsSqlExecuteErrorAndThrows()
         {
             // given
@@ -235,7 +238,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _log.Verify(log => log.LogQueryExecutionError(_triplesMap.Object, "Error message"), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void SettingLogShouldSetLogToRdfTermGenerator()
         {
             // given

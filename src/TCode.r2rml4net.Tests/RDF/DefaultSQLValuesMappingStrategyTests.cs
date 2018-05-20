@@ -38,33 +38,32 @@
 using System;
 using System.Data;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDF;
 
 namespace TCode.r2rml4net.Tests.RDF
 {
-    [TestFixture]
     public class DefaultSQLValuesMappingStrategyTests
     {
         private const int ColumnIndex = 1;
 
-        private DefaultSQLValuesMappingStrategy _strategy;
-        private Mock<IDataRecord> _logicalRow;
+        private readonly DefaultSQLValuesMappingStrategy _strategy;
+        private readonly Mock<IDataRecord> _logicalRow;
 
-        [SetUp]
-        public void Setup()
+        public DefaultSQLValuesMappingStrategyTests()
         {
             _strategy = new DefaultSQLValuesMappingStrategy();
             _logicalRow = new Mock<IDataRecord>();
         }
 
-        [TestCase("System.Int64", XsdDatatypes.Integer)]
-        [TestCase("System.Int32", XsdDatatypes.Integer)]
-        [TestCase("System.Int16", XsdDatatypes.Integer)]
-        [TestCase("System.DateTime", XsdDatatypes.DateTime)]
-        [TestCase("System.Single", XsdDatatypes.Double)]
-        [TestCase("System.Double", XsdDatatypes.Double)]
-        [TestCase("System.Decimal", XsdDatatypes.Decimal)] 
+        [Theory]
+        [InlineData("System.Int64", XsdDatatypes.Integer)]
+        [InlineData("System.Int32", XsdDatatypes.Integer)]
+        [InlineData("System.Int16", XsdDatatypes.Integer)]
+        [InlineData("System.DateTime", XsdDatatypes.DateTime)]
+        [InlineData("System.Single", XsdDatatypes.Double)]
+        [InlineData("System.Double", XsdDatatypes.Double)]
+        [InlineData("System.Decimal", XsdDatatypes.Decimal)] 
         public void MapsDotnetTypes(string typeName, string uri)
         {
             // given
@@ -76,11 +75,11 @@ namespace TCode.r2rml4net.Tests.RDF
             _strategy.GetLexicalForm(ColumnIndex, _logicalRow.Object, out datatype);
 
             // then
-            Assert.IsNotNull(datatype);
-            Assert.AreEqual(uri, datatype.AbsoluteUri);
+            Assert.NotNull(datatype);
+            Assert.Equal(uri, datatype.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void MapsDateToDate()
         {
             // given
@@ -91,11 +90,11 @@ namespace TCode.r2rml4net.Tests.RDF
             // when
             Uri datatype;
             _strategy.GetLexicalForm(ColumnIndex, _logicalRow.Object, out datatype);
-            Assert.IsNotNull(datatype);
-            Assert.AreEqual(XsdDatatypes.Date, datatype.AbsoluteUri);
+            Assert.NotNull(datatype);
+            Assert.Equal(XsdDatatypes.Date, datatype.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void MapsTimeToTime()
         {
             // given
@@ -106,12 +105,13 @@ namespace TCode.r2rml4net.Tests.RDF
             // when
             Uri datatype;
             _strategy.GetLexicalForm(ColumnIndex, _logicalRow.Object, out datatype);
-            Assert.IsNotNull(datatype);
-            Assert.AreEqual(XsdDatatypes.Time, datatype.AbsoluteUri);
+            Assert.NotNull(datatype);
+            Assert.Equal(XsdDatatypes.Time, datatype.AbsoluteUri);
         }
 
-        [TestCase(true, "true")]
-        [TestCase(false, "false")]
+        [Theory]
+        [InlineData(true, "true")]
+        [InlineData(false, "false")]
         public void EnsuresBooleanIsLowercase(bool value, string expected)
         {
             // given
@@ -121,16 +121,17 @@ namespace TCode.r2rml4net.Tests.RDF
             var valueString = _strategy.GetMappedValue(ColumnIndex, _logicalRow.Object, new Uri(XsdDatatypes.Boolean));
 
             // then
-            Assert.IsNotNull(valueString);
-            Assert.AreEqual(expected, valueString);
+            Assert.NotNull(valueString);
+            Assert.Equal(expected, valueString);
             _logicalRow.VerifyAll();
         }
 
-        [TestCase(-5.9, "-5.9E0")]
-        [TestCase(+0.00014770215000, "1.4770215E-4")]
-        [TestCase(01E+3, "1.0E3")]
-        [TestCase(0, "0.0E0")]
-        [TestCase(100.0, "1.0E2")]
+        [Theory]
+        [InlineData(-5.9, "-5.9E0")]
+        [InlineData(+0.00014770215000, "1.4770215E-4")]
+        [InlineData(01E+3, "1.0E3")]
+        [InlineData(0, "0.0E0")]
+        [InlineData(100.0, "1.0E2")]
         public void EnsuresProperyDoubleForm(double value, string expected)
         {
             // given
@@ -140,8 +141,8 @@ namespace TCode.r2rml4net.Tests.RDF
             var valueString = _strategy.GetMappedValue(ColumnIndex, _logicalRow.Object, new Uri(XsdDatatypes.Double));
 
             // then
-            Assert.IsNotNull(valueString);
-            Assert.AreEqual(expected, valueString);
+            Assert.NotNull(valueString);
+            Assert.Equal(expected, valueString);
             _logicalRow.VerifyAll();
         }
     }

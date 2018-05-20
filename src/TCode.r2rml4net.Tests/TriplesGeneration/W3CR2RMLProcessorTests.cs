@@ -39,7 +39,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -49,7 +49,6 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
     public class W3CR2RMLProcessorTests
     {
         private W3CR2RMLProcessor _triplesGenerator;
@@ -59,8 +58,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IRdfHandler> _rdfHandler;
         private bool? _handlingResult;
 
-        [SetUp]
-        public void Setup()
+        public W3CR2RMLProcessorTests()
         {
             _rdfHandler = new Mock<IRdfHandler>();
             _rdfHandler.Setup(handler => handler.EndRdf(It.IsAny<bool>()))
@@ -71,9 +69,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void ProcessesAllTriplesMaps(int triplesMapsCount)
         {
             // given
@@ -92,8 +91,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 ITriplesMap map = triplesMap;
                 _triplesMapProcessor.Verify(rml => rml.ProcessTriplesMap(map, It.IsAny<DbConnection>(), It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Once());
             }
-            Assert.IsTrue(_handlingResult.HasValue && _handlingResult.Value);
-            Assert.IsTrue(_triplesGenerator.Success);
+            Assert.True(_handlingResult.HasValue && _handlingResult.Value);
+            Assert.True(_triplesGenerator.Success);
         }
 
         IEnumerable<ITriplesMap> GenerateTriplesMaps(int count)
@@ -104,7 +103,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
         }
 
-        [Test]
+        [Fact]
         public void CanStopProcessingIfDataErrorOccurs()
         {
             using (new MappingScope(new MappingOptions().IgnoringDataErrors(false)))
@@ -127,12 +126,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                     rml =>
                     rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
                                           It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Once());
-                Assert.IsTrue(_handlingResult.HasValue && !_handlingResult.Value);
-                Assert.IsFalse(_triplesGenerator.Success);
+                Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
+                Assert.False(_triplesGenerator.Success);
             }
         }
 
-        [Test]
+        [Fact]
         public void CanStopProcessingIfMappingErrorOccurs()
         {
             using (new MappingScope(new MappingOptions().IgnoringMappingErrors(false)))
@@ -155,12 +154,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                     rml =>
                     rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
                                           It.IsAny<BlankNodeSubjectReplaceHandler>()), Times.Once());
-                Assert.IsTrue(_handlingResult.HasValue && !_handlingResult.Value);
-                Assert.IsFalse(_triplesGenerator.Success);
+                Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
+                Assert.False(_triplesGenerator.Success);
             }
         }
 
-        [Test]
+        [Fact]
         public void SettingLogFacadeShouldSetAllChildLoggers()
         {
             // given

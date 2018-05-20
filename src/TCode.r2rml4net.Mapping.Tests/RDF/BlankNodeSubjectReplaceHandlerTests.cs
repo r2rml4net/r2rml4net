@@ -37,7 +37,7 @@
 #endregion
 using System.Collections.Generic;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDF;
 using VDS.RDF;
 
@@ -48,8 +48,7 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
         private BlankNodeSubjectReplaceHandler _handler;
         private Mock<IRdfHandler> _decoratedHandler;
 
-        [SetUp]
-        public void Setup()
+        public BlankNodeSubjectReplaceHandlerTests()
         {
             _decoratedHandler = new Mock<IRdfHandler>(MockBehavior.Strict);
             _handler = new BlankNodeSubjectReplaceHandler(_decoratedHandler.Object);
@@ -57,7 +56,7 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
             _handler.StartRdf();
         }
 
-        [Test]
+        [Fact]
         public void ReplacesBlankNodeSubjectOnce()
         {
             // given
@@ -79,13 +78,13 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
             // then
             foreach (var subject in subjects)
             {
-                Assert.IsNotNull(subject);
-                Assert.AreSame(newBlankNode, subject);
+                Assert.NotNull(subject);
+                Assert.Same(newBlankNode, subject);
             }
             _decoratedHandler.Verify(h=>h.CreateBlankNode(), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void TestDoesNotReplaceUriSubject()
         {
             // given
@@ -99,11 +98,11 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
             _handler.HandleTriple(triple);
 
             // then
-            Assert.AreSame(subj, triple.Subject);
-            Assert.AreSame(subj1, triple1.Subject);
+            Assert.Same(subj, triple.Subject);
+            Assert.Same(subj1, triple1.Subject);
         }
 
-        [Test]
+        [Fact]
         public void AlsoReplacesBlankNodeObjects()
         {
             // given
@@ -124,7 +123,7 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
 
             // then
             _decoratedHandler.Verify(h => h.CreateBlankNode(), Times.Once()); 
-            Assert.AreEqual(triples[0].Subject, triples[1].Object);
+            Assert.Equal(triples[0].Subject, triples[1].Object);
         }
 
         private TNode MockNode<TNode>() where TNode : class, INode

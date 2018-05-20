@@ -37,22 +37,20 @@
 #endregion
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 using Moq;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class PredicateObjectMapConfigurationTests
     {
         private PredicateObjectMapConfiguration _predicateObjectMap;
         private Uri _triplesMapURI;
         private Mock<ITriplesMapConfiguration> _triplesMap;
 
-        [SetUp]
-        public void Setup()
+        public PredicateObjectMapConfigurationTests()
         {
             IGraph graph = new FluentR2RML().R2RMLMappings;
             _triplesMapURI = new Uri("http://tests.example.com/TriplesMap");
@@ -62,13 +60,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _predicateObjectMap = new PredicateObjectMapConfiguration(_triplesMap.Object, graph);
         }
 
-        [Test]
+        [Fact]
         public void CreatingPredicateObjectMapCreatesTriple()
         {
             _predicateObjectMap.R2RMLMappings.VerifyHasTripleWithBlankObject(_triplesMapURI, UriConstants.RrPredicateObjectMapProperty);
         }
 
-        [Test]
+        [Fact]
         public void CanCreateObjectMaps()
         {
             // when 
@@ -76,13 +74,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var objectMap2 = _predicateObjectMap.CreateObjectMap();
 
             // then
-            Assert.AreNotSame(objectMap1, objectMap2);
-            Assert.IsInstanceOf<TermMapConfiguration>(objectMap1);
-            Assert.IsInstanceOf<TermMapConfiguration>(objectMap2);
-            Assert.AreEqual(2, _predicateObjectMap.ObjectMaps.Count());
+            Assert.NotSame(objectMap1, objectMap2);
+            Assert.True(objectMap1 is TermMapConfiguration);
+            Assert.True(objectMap2 is TermMapConfiguration);
+            Assert.Equal(2, _predicateObjectMap.ObjectMaps.Count());
         }
 
-        [Test]
+        [Fact]
         public void CanCreatePredicateMaps()
         {
             // when 
@@ -90,12 +88,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var propertyMap2 = _predicateObjectMap.CreatePredicateMap();
 
             // then
-            Assert.AreNotSame(propertyMap1, propertyMap2);
-            Assert.IsInstanceOf<TermMapConfiguration>(propertyMap1);
-            Assert.IsInstanceOf<TermMapConfiguration>(propertyMap2);
+            Assert.NotSame(propertyMap1, propertyMap2);
+            Assert.True(propertyMap1 is TermMapConfiguration);
+            Assert.True(propertyMap2 is TermMapConfiguration);
         }
 
-        [Test]
+        [Fact]
         public void CanCreateMultipleGraphMap()
         {
             // when
@@ -103,12 +101,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IGraphMap graphMap2 = _predicateObjectMap.CreateGraphMap();
 
             // then
-            Assert.AreNotSame(graphMap1, graphMap2);
-            Assert.IsInstanceOf<TermMapConfiguration>(graphMap1);
-            Assert.IsInstanceOf<TermMapConfiguration>(graphMap2);
+            Assert.NotSame(graphMap1, graphMap2);
+            Assert.True(graphMap1 is TermMapConfiguration);
+            Assert.True(graphMap2 is TermMapConfiguration);
         }
 
-        [Test]
+        [Fact]
         public void CanCreateRefObjectMaps()
         {
             // given
@@ -120,13 +118,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var objectMap2 = _predicateObjectMap.CreateRefObjectMap(parentTriplesMap.Object);
 
             // then
-            Assert.AreNotSame(objectMap1, objectMap2);
-            Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap1);
-            Assert.IsInstanceOf<RefObjectMapConfiguration>(objectMap2);
-            Assert.AreEqual(2, _predicateObjectMap.RefObjectMaps.Count());
+            Assert.NotSame(objectMap1, objectMap2);
+            Assert.True(objectMap1 is RefObjectMapConfiguration);
+            Assert.True(objectMap2 is RefObjectMapConfiguration);
+            Assert.Equal(2, _predicateObjectMap.RefObjectMaps.Count());
         }
 
-        [Test]
+        [Fact]
         public void CanCreateObjectMapAndRefObjectMap()
         {
             // given
@@ -138,8 +136,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _predicateObjectMap.CreateObjectMap();
 
             // then
-            Assert.AreEqual(1, _predicateObjectMap.ObjectMaps.Count());
-            Assert.AreEqual(1, _predicateObjectMap.RefObjectMaps.Count());
+            Assert.Single(_predicateObjectMap.ObjectMaps);
+            Assert.Single(_predicateObjectMap.RefObjectMaps);
         }
     }
 }

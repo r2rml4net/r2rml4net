@@ -39,7 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -48,7 +48,6 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
     public class MapProcessorBaseTests : TriplesGenerationTestsBase
     {
         private Mock<IRdfHandler> _rdfHandler;
@@ -60,8 +59,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private Mock<IRDFTermGenerator> _termGenerator;
         private Mock<LogFacadeBase> _log;
 
-        [SetUp]
-        public void Setup()
+        public MapProcessorBaseTests()
         {
             _subject = new Mock<INode>().Object;
             _predicates = new[] { new Mock<IUriNode>().Object };
@@ -81,7 +79,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _processor.Object.Log = _log.Object;
         }
 
-        [Test]
+        [Fact]
         public void AddsToDefaultGraphWhenNoGraphSpecified()
         {
             // when
@@ -91,7 +89,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void AddsToDefaultGraphWhenSpecialGraphSpecified()
         {
             // given
@@ -107,7 +105,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void DoesNotAssertAnyTriplesIfAnyTermIsNull()
         {
             // given
@@ -134,7 +132,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler.VerifyAll();
         }
 
-        [Test]
+        [Fact]
         public void CanHaveSpecialDefaultGraphMixedWithRealGraphs()
         {
             // given
@@ -152,7 +150,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler.Verify(handler => handler.HandleTriple(It.Is<Triple>(t => t.GraphUri == null)), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void ThrowsErrorOnInvalidSqlAlndLogsIt()
         {
             // given
@@ -170,7 +168,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _log.Verify(log => log.LogQueryExecutionError(It.IsAny<IQueryMap>(), It.IsAny<string>()));
         }
 
-        [Test]
+        [Fact]
         public void ThrowsOnMultipleColumnsWithSameName()
         {
             // given

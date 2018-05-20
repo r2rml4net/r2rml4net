@@ -36,7 +36,7 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.RDB;
 
@@ -44,16 +44,16 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
     public class SubjectMappingStrategyTests
     {
-        private PrimaryKeyMappingStrategy _strategy;
+        private readonly PrimaryKeyMappingStrategy _strategy;
 
-        [SetUp]
-        public void Setup()
+        public SubjectMappingStrategyTests()
         {
             _strategy = new PrimaryKeyMappingStrategy();
         }
 
-        [TestCase("http://example.com")]
-        [TestCase("http://example.com/")]
+        [Theory]
+        [InlineData("http://example.com")]
+        [InlineData("http://example.com/")]
         public void CreatesSubjectClassUri(string BaseUri)
         {
             // given
@@ -63,7 +63,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var classUri = _strategy.CreateSubjectClassUri(new Uri(BaseUri), table.Name);
 
             // then
-            Assert.AreEqual("http://example.com/TableXYZ", classUri.AbsoluteUri);
+            Assert.Equal("http://example.com/TableXYZ", classUri.AbsoluteUri);
         }
     }
 }

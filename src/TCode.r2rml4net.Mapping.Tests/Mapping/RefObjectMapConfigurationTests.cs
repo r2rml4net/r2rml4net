@@ -38,22 +38,20 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class RefObjectMapConfigurationTests
     {
         RefObjectMapConfiguration _refObjectMap;
         private Mock<ITriplesMapConfiguration> _parentTriplesMap;
         private Mock<ITriplesMapConfiguration> _referencedTriplesMap;
 
-        [SetUp]
-        public void Setup()
+        public RefObjectMapConfigurationTests()
         {
             IGraph graph = new FluentR2RML().R2RMLMappings;
             Mock<IPredicateObjectMap> predicateObjectMap = new Mock<IPredicateObjectMap>();
@@ -68,14 +66,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _refObjectMap = new RefObjectMapConfiguration(predicateObjectMap.Object, _parentTriplesMap.Object, _referencedTriplesMap.Object, graph);
         }
 
-        [Test]
+        [Fact]
         public void CreatingAssertsRequiredTriples()
         {
             _refObjectMap.R2RMLMappings.VerifyHasTripleWithBlankObject("http://test.example.com/PredicateObjectMap", UriConstants.RrObjectMapProperty);
             _refObjectMap.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrParentTriplesMapProperty, "http://test.example.com/TriplesMap");
         }
 
-        [Test]
+        [Fact]
         public void CanCreateJoinConditions()
         {
             // given
@@ -87,12 +85,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _refObjectMap.AddJoinCondition(childColumn + "2", parentColumn + "2");
 
             // then
-            Assert.AreEqual(2, _refObjectMap.JoinConditions.Count());
-            Assert.IsNotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child1" && jc.ParentColumn == "parent1"));
-            Assert.IsNotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child2" && jc.ParentColumn == "parent2"));
+            Assert.Equal(2, _refObjectMap.JoinConditions.Count());
+            Assert.NotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child1" && jc.ParentColumn == "parent1"));
+            Assert.NotNull(_refObjectMap.JoinConditions.SingleOrDefault(jc => jc.ChildColumn == "child2" && jc.ParentColumn == "parent2"));
         }
 
-        [Test]
+        [Fact]
         public void UsesEffectiveSqlBuilder()
         {
             // given
@@ -108,7 +106,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             string sql = _refObjectMap.EffectiveSqlQuery;
 
             // then
-            Assert.AreEqual(excpetedSql, sql);
+            Assert.Equal(excpetedSql, sql);
             sqlBuilder.Verify(builder => builder.GetEffectiveQueryForRefObjectMap(It.IsAny<IRefObjectMap>()),
                               Times.Once());
             r2RML.Verify(config => config.SqlQueryBuilder, Times.Once());

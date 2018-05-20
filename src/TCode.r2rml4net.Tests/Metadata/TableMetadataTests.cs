@@ -36,15 +36,14 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.Metadata
 {
-    [TestFixture]
     public class TableMetadataTests
     {
-        [Test]
+        [Fact]
         public void ReturnsSinglePrimaryKey()
         {
             // given
@@ -60,11 +59,11 @@ namespace TCode.r2rml4net.Tests.Metadata
             string[] primaryKey = table.PrimaryKey;
 
             // then
-            Assert.AreEqual(1, primaryKey.Length);
+            Assert.Single(primaryKey);
             Assert.Contains(primaryKeyColumn.Name, primaryKey);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsCompositePrimaryKey()
         {
             // given
@@ -82,13 +81,13 @@ namespace TCode.r2rml4net.Tests.Metadata
             string[] primaryKey = table.PrimaryKey;
 
             // then
-            Assert.AreEqual(3, primaryKey.Length);
+            Assert.Equal(3, primaryKey.Length);
             Assert.Contains(primaryKeyColumn1.Name, primaryKey);
             Assert.Contains(primaryKeyColumn2.Name, primaryKey);
             Assert.Contains(primaryKeyColumn3.Name, primaryKey);
         }
 
-        [Test]
+        [Fact]
         public void CanBeIndexed()
         {
             // given
@@ -101,11 +100,11 @@ namespace TCode.r2rml4net.Tests.Metadata
                              };
 
             // then
-            Assert.AreSame(column1, table["Column1"]);
-            Assert.AreSame(column2, table["Column2"]);
+            Assert.Same(column1, table["Column1"]);
+            Assert.Same(column2, table["Column2"]);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsWhenIndexingWithAnInvalidColumnName()
         {
             // given
@@ -124,7 +123,7 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Throws<ArgumentNullException>(() => { var column = table[null]; });
         }
 
-        [Test]
+        [Fact]
         public void CanContainUniquellyNamedColumns()
         {
             // given
@@ -140,7 +139,7 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Throws<ArgumentException>(() => table.Add(new ColumnMetadata { Name = "Column" }));
         }
 
-        [Test]
+        [Fact]
         public void TableWithNoForeignKeysReturnsEmptyCollection()
         {
             // given
@@ -155,8 +154,8 @@ namespace TCode.r2rml4net.Tests.Metadata
             var foreignKeys = table.ForeignKeys;
 
             // then
-            Assert.IsNotNull(foreignKeys);
-            Assert.IsEmpty(foreignKeys);
+            Assert.NotNull(foreignKeys);
+            Assert.Empty(foreignKeys);
         }
     }
 }

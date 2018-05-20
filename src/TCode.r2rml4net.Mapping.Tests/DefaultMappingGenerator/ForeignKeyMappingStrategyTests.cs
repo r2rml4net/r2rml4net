@@ -36,24 +36,22 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
-    [TestFixture]
     public class ForeignKeyMappingStrategyTests
     {
         ForeignKeyMappingStrategy _strategy;
 
-        [SetUp]
-        public void Setup()
+        public ForeignKeyMappingStrategyTests()
         {
             _strategy = new ForeignKeyMappingStrategy();
         }
 
-        [Test]
+        [Fact]
         public void GeneratesReferenceProperty()
         {
             // given
@@ -69,10 +67,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreateReferencePredicateUri(new Uri("http://example.com"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/Table#ref-FK", uri.AbsoluteUri);
+            Assert.Equal("http://example.com/Table#ref-FK", uri.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesReferencePropertyForMulticolumnKey()
         {
             // given
@@ -88,10 +86,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreateReferencePredicateUri(new Uri("http://example.com"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/Table#ref-FK1;FK2;FK3", uri.AbsoluteUri);
+            Assert.Equal("http://example.com/Table#ref-FK1;FK2;FK3", uri.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesReferenceObjectTemplate()
         {
             // given
@@ -108,10 +106,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
             // then
 
-            Assert.AreEqual("http://example.com/Other/ID={\"FK\"}", template);
+            Assert.Equal("http://example.com/Other/ID={\"FK\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesReferenceObjectTemplateForMulticolumnKey()
         {
             // given
@@ -127,10 +125,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/Other/ID1={\"FK1\"};ID2={\"FK2\"};ID3={\"FK3\"}", template);
+            Assert.Equal("http://example.com/Other/ID1={\"FK1\"};ID2={\"FK2\"};ID3={\"FK3\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void GeneratedReferencedObjectTemplateForCandidateKeyReference()
         {
             // given
@@ -147,10 +145,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateObjectTemplateForCandidateKeyReference(foreignKey);
 
             // then
-            Assert.AreEqual("Other_{\"FK1\"}_{\"FK2\"}_{\"FK3\"}", template);
+            Assert.Equal("Other_{\"FK1\"}_{\"FK2\"}_{\"FK3\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfGeneratingForPrimaryKeyButIsCandidateKeyReference()
         {
             // given
@@ -167,7 +165,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             Assert.Throws<ArgumentException>(() => _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com"), foreignKey));
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfGeneratingForIsCandidateKeyButIsPrimaryKeyReference()
         {
             // given
@@ -183,7 +181,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             Assert.Throws<ArgumentException>(() => _strategy.CreateObjectTemplateForCandidateKeyReference(foreignKey));
         }
 
-        [Test]
+        [Fact]
         public void GeneratesForeignKeyObjectTemplateForCandidateKeyRefWhereTableHasPrimaryKey()
         {
             // given
@@ -203,17 +201,17 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com/base/"), foreignKey);
 
             // then
-            Assert.AreEqual("http://example.com/base/Other/ID={\"FK\"}", template);
+            Assert.Equal("http://example.com/base/Other/ID={\"FK\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesTemplateWithUnicodeCharacters()
         {
             // when
             var template = _strategy.CreateReferenceObjectTemplate(new Uri("http://example.com/"), RelationalTestMappings.D017_I18NnoSpecialChars["成分"].ForeignKeys[0]);
 
             // then
-            Assert.AreEqual("http://example.com/植物/名={\"植物名\"};使用部={\"使用部\"}", template);
+            Assert.Equal("http://example.com/植物/名={\"植物名\"};使用部={\"使用部\"}", template);
         }
     }
 }

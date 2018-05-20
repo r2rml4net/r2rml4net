@@ -37,14 +37,13 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class GraphMapConfigurationTests
     {
         private GraphMapConfiguration _graphMap;
@@ -52,8 +51,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         private Mock<IGraphMapParent> _predicateObjectMap;
         private IGraph _graph;
 
-        [SetUp]
-        public void Setup()
+        public GraphMapConfigurationTests()
         {
             _graph = new FluentR2RML().R2RMLMappings;
             IUriNode triplesMapNode = _graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
@@ -66,14 +64,14 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph);
         }
 
-        [Test]
+        [Fact]
         public void NodeCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                _graphMap = new GraphMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null));
         }
 
-        [Test]
+        [Fact]
         public void GraphMapCanBeIRIConstantValued()
         {
             // given
@@ -83,41 +81,41 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _graphMap.IsConstantValued(uri);
 
             // then
-            Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_graphMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _graphMap.ParentMapNode,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrGraphMapProperty)),
                     _graphMap.Node)));
-            Assert.IsTrue(_graphMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_graphMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _graphMap.Node,
                     _graphMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _graphMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _graphMap.URI);
+            Assert.Equal(uri, _graphMap.URI);
         }
 
-        [Test]
+        [Fact]
         public void GraphMapCannotBeOfTypeLiteral()
         {
             Assert.Throws<InvalidMapException>(() => _graphMap.TermType.IsLiteral());
         }
 
-        [Test]
+        [Fact]
         public void GraphMapCannotBeOfTypeBlankNode()
         {
             Assert.Throws<InvalidMapException>(() => _graphMap.TermType.IsBlankNode());
         }
 
-        [Test]
+        [Fact]
         public void GraphUriIsNullByDefault()
         {
-            Assert.IsNull(_graphMap.URI);
+            Assert.Null(_graphMap.URI);
         }
 
-        [Test]
+        [Fact]
         public void CreatesCorrectShortcutPropertyNode()
         {
-            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#graph"), _graphMap.CreateShortcutPropertyNode().Uri);
+            Assert.Equal(new Uri("http://www.w3.org/ns/r2rml#graph"), _graphMap.CreateShortcutPropertyNode().Uri);
         }
     }
 }

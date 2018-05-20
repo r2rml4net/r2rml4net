@@ -37,7 +37,7 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Mapping.Tests.Mocks;
@@ -45,7 +45,6 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
-    [TestFixture]
     public class R2RMLMappingGeneratorTests
     {
         private R2RMLMappingGenerator _generator;
@@ -55,8 +54,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private Mock<IDirectMappingStrategy> _mappingStrategy;
         private readonly Uri _mappingBaseUri = new Uri("http://base.uri/");
 
-        [SetUp]
-        public void Setup()
+        public R2RMLMappingGeneratorTests()
         {
             _configuration = new Mock<IR2RMLConfiguration>();
             _databaseMetedata = new Mock<IDatabaseMetadata>();
@@ -74,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                           .Returns(new MockConfiguration(_mappingBaseUri, _configuration.Object));
         }
 
-        [Test]
+        [Fact]
         public void CreatesTriplesMapFromTableWithPrimaryKey()
         {
             //given
@@ -88,7 +86,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration.Verify(conf => conf.CreateTriplesMapFromTable(tableName), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CreatesTriplesMapFromTableWithoutPrimaryKey()
         {
             //given
@@ -102,7 +100,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration.Verify(conf => conf.CreateTriplesMapFromTable(tableName), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CreatesTriplesMapFromTableWithCandidateKeyReference()
         {
             //given
@@ -116,8 +114,9 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _configuration.Verify(conf => conf.CreateTriplesMapFromTable(tableName), Times.Once());
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void CreatesTriplesMapFromSqlViewForTableWithCandidateKeyReferenceReferencingTablePrimaryKey(bool isCandidateKeyRef)
         {
             //given
@@ -161,7 +160,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 _configuration.Verify(conf => conf.CreateTriplesMapFromTable("TableName"), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CreatesUriTemplateIfCandidateForeignKeyTargetHasPrimaryKey()
         {
             // given 

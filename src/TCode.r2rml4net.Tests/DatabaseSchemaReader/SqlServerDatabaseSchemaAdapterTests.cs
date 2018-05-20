@@ -36,7 +36,7 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
+using Xunit;
 using DatabaseSchemaReader;
 using SqlLocalDb;
 using TCode.r2rml4net.RDB;
@@ -44,8 +44,8 @@ using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
-    [TestFixture(Category = "Database")]
-    public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
+    [Trait("Category", "Database")]
+    public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase, IDisposable
     {
         private LocalDatabase _database;
 
@@ -67,53 +67,52 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             }
         }
 
-        [OneTimeTearDown]
-        public void Teardown()
+        public void Dispose()
         {
             _database.Dispose();
         }
 
-        [TestCase(R2RMLType.Integer, "Long")]
-        [TestCase(R2RMLType.Integer, "Short")]
-        [TestCase(R2RMLType.Integer, "Integer")]
-        [TestCase(R2RMLType.Integer, "Tiny")]
-        [TestCase(R2RMLType.String, "UnicodeText")]
-        [TestCase(R2RMLType.String, "Text")]
-        [TestCase(R2RMLType.String, "FixedLength")]
-        [TestCase(R2RMLType.String, "UnicodeFixedLength")]
-        [TestCase(R2RMLType.Boolean, "Boolean")]
-        [TestCase(R2RMLType.Binary, "Binary")]
-        [TestCase(R2RMLType.Binary, "Image")]
-        [TestCase(R2RMLType.Binary, "Timestamp")]
-        [TestCase(R2RMLType.Date, "Date")]
-        [TestCase(R2RMLType.DateTime, "Datetime")]
-        [TestCase(R2RMLType.DateTime, "Datetime2")]
-        [TestCase(R2RMLType.Time, "Time")]
-        [TestCase(R2RMLType.Decimal, "Decimal")]
-        [TestCase(R2RMLType.FloatingPoint, "Float")]
-        [TestCase(R2RMLType.Decimal, "Money")]
-        [TestCase(R2RMLType.Undefined, "Guid")]
-        [TestCase(R2RMLType.String, "Char")]
-        [TestCase(R2RMLType.DateTime, "DatetimeOffset")]
-        [TestCase(R2RMLType.Undefined, "Geography")]
-        [TestCase(R2RMLType.Undefined, "Geometry")]
-        [TestCase(R2RMLType.Undefined, "Hierarchy")]
-        [TestCase(R2RMLType.String, "Nchar")]
-        [TestCase(R2RMLType.String, "Ntext")]
-        [TestCase(R2RMLType.Decimal, "Numeric")]
-        [TestCase(R2RMLType.DateTime, "Smalldatetime")]
-        [TestCase(R2RMLType.Undefined, "SqlVariant")]
-        [TestCase(R2RMLType.String, "Text")]
-        [TestCase(R2RMLType.Binary, "Varbinary")]
-        [TestCase(R2RMLType.String, "XML")]
+        [Theory]
+        [InlineData(R2RMLType.Integer, "Long")]
+        [InlineData(R2RMLType.Integer, "Short")]
+        [InlineData(R2RMLType.Integer, "Integer")]
+        [InlineData(R2RMLType.Integer, "Tiny")]
+        [InlineData(R2RMLType.String, "UnicodeText")]
+        [InlineData(R2RMLType.String, "Text")]
+        [InlineData(R2RMLType.String, "FixedLength")]
+        [InlineData(R2RMLType.String, "UnicodeFixedLength")]
+        [InlineData(R2RMLType.Boolean, "Boolean")]
+        [InlineData(R2RMLType.Binary, "Binary")]
+        [InlineData(R2RMLType.Binary, "Image")]
+        [InlineData(R2RMLType.Binary, "Timestamp")]
+        [InlineData(R2RMLType.Date, "Date")]
+        [InlineData(R2RMLType.DateTime, "Datetime")]
+        [InlineData(R2RMLType.DateTime, "Datetime2")]
+        [InlineData(R2RMLType.Time, "Time")]
+        [InlineData(R2RMLType.Decimal, "Decimal")]
+        [InlineData(R2RMLType.FloatingPoint, "Float")]
+        [InlineData(R2RMLType.Decimal, "Money")]
+        [InlineData(R2RMLType.Undefined, "Guid")]
+        [InlineData(R2RMLType.String, "Char")]
+        [InlineData(R2RMLType.DateTime, "DatetimeOffset")]
+        [InlineData(R2RMLType.Undefined, "Geography")]
+        [InlineData(R2RMLType.Undefined, "Geometry")]
+        [InlineData(R2RMLType.Undefined, "Hierarchy")]
+        [InlineData(R2RMLType.String, "Nchar")]
+        [InlineData(R2RMLType.String, "Ntext")]
+        [InlineData(R2RMLType.Decimal, "Numeric")]
+        [InlineData(R2RMLType.DateTime, "Smalldatetime")]
+        [InlineData(R2RMLType.Undefined, "SqlVariant")]
+        [InlineData(R2RMLType.Binary, "Varbinary")]
+        [InlineData(R2RMLType.String, "XML")]
         public void CorrectlyMapsSqlTypes(R2RMLType r2RMLType, string columnName)
         {
             // when
             TableMetadata table = DatabaseSchema.Tables["ManyDataTypes"];
 
             // then
-            Assert.AreEqual(35, table.ColumnsCount, "Column count mismatch. Some columns not tested");
-            Assert.AreEqual(r2RMLType, table[columnName].Type);
+            Assert.Equal(35, table.ColumnsCount);
+            Assert.Equal(r2RMLType, table[columnName].Type);
         }
     }
 }

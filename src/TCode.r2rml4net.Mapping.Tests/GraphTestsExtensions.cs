@@ -37,7 +37,7 @@
 #endregion
 using System;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests
@@ -107,7 +107,7 @@ namespace TCode.r2rml4net.Mapping.Tests
         /// </summary>
         internal static void VerifyHasTriple(this IGraph graph, Uri subjectUri, Uri predicateUri, Uri objectUri)
         {
-            Assert.IsTrue(graph.ContainsTriple(new Triple(
+            Assert.True(graph.ContainsTriple(new Triple(
                 graph.CreateUriNode(subjectUri),
                 graph.CreateUriNode(predicateUri),
                 graph.CreateUriNode(objectUri)
@@ -152,10 +152,10 @@ namespace TCode.r2rml4net.Mapping.Tests
                 graph.CreateUriNode(predicateUri)
                 ).ToArray();
 
-            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            Assert.Equal(expectedTriplesCount, triples.Count());
             foreach (var triple in triples)
             {
-                Assert.AreEqual(NodeType.Blank, triple.Object.NodeType, "Triple found but object was {0}", triple.Object.NodeType);
+                Assert.Equal(NodeType.Blank, triple.Object.NodeType);
             }
         }
 
@@ -188,10 +188,10 @@ namespace TCode.r2rml4net.Mapping.Tests
                 literalNode
                 ).ToArray();
 
-            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            Assert.Equal(expectedTriplesCount, triples.Count());
             foreach (var triple in triples)
             {
-                Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Object.NodeType);
+                Assert.Equal(NodeType.Blank, triple.Subject.NodeType);
             }
         }
 
@@ -233,10 +233,10 @@ namespace TCode.r2rml4net.Mapping.Tests
                 graph.CreateUriNode(objectUri)
                 ).ToArray();
 
-            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            Assert.Equal(expectedTriplesCount, triples.Count());
             foreach (var triple in triples)
             {
-                Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Subject.NodeType);
+                Assert.Equal(NodeType.Blank, triple.Subject.NodeType);
             }
         }
 
@@ -253,11 +253,11 @@ namespace TCode.r2rml4net.Mapping.Tests
         {
             var triples = graph.GetTriplesWithPredicate(graph.CreateUriNode(predicateUri)).ToArray();
 
-            Assert.AreEqual(expectedTriplesCount, triples.Count());
+            Assert.Equal(expectedTriplesCount, triples.Count());
             foreach (var triple in triples)
             {
-                Assert.AreEqual(NodeType.Blank, triple.Subject.NodeType, "Triple found but subject was {0}", triple.Subject.NodeType);
-                Assert.AreEqual(NodeType.Blank, triple.Object.NodeType, "Triple found but object was {0}", triple.Object.NodeType);
+                Assert.Equal(NodeType.Blank, triple.Subject.NodeType);
+                Assert.Equal(NodeType.Blank, triple.Object.NodeType);
             }
         }
 

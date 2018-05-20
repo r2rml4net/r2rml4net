@@ -38,14 +38,13 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class TermMapConfigurationTests
     {
         private INode _triplesMapNode;
@@ -54,8 +53,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         private IGraph _graph;
         private Mock<ITriplesMapConfiguration> _parentTriplesMap;
 
-        [SetUp]
-        public void Setup()
+        public TermMapConfigurationTests()
         {
             _graph = new FluentR2RML().R2RMLMappings;
             _triplesMapNode = _graph.CreateUriNode(new Uri("http://mapping.com/SomeMap"));
@@ -74,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration = _termMapConfigurationMock.Object;
         }
 
-        [Test]
+        [Fact]
         public void ConstantIRIValueCanBeSetOnlyOnce()
         {
             // given
@@ -87,6 +85,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsConstantValued(uri));
         }
 
+        [Fact]
         public void CanBeConstantIRIValued()
         {
             // given
@@ -96,11 +95,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsConstantValued(uri);
 
             // then
-            Assert.AreEqual(uri, _termMapConfiguration.ConstantValue);
-            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsConstantValued);
+            Assert.Equal(uri, _termMapConfiguration.ConstantValue);
+            Assert.True(((ITermMap)_termMapConfiguration).IsConstantValued);
         }
 
-        [Test]
+        [Fact]
         public void TermMapCanBeColumnValued()
         {
             // given
@@ -110,20 +109,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsColumnValued(columnName);
 
             // then
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+            Assert.True(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode,
                 _termMapConfiguration.CreateMapPropertyNode(),
                 _termMapConfiguration.Node)));
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+            Assert.True(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrColumnProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(columnName))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
-            Assert.AreEqual(columnName, _termMapConfiguration.ColumnName);
-            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsColumnValued);
+            Assert.Equal(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.Equal(columnName, _termMapConfiguration.ColumnName);
+            Assert.True(((ITermMap)_termMapConfiguration).IsColumnValued);
         }
 
-        [Test]
+        [Fact]
         public void ColumnValueCanOnlyBeSetOnce()
         {
             // given
@@ -136,7 +135,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsColumnValued(columnName));
         }
 
-        [Test]
+        [Fact]
         public void TermMapCanBeTemplateValued()
         {
             // given
@@ -146,20 +145,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.IsTemplateValued(template);
 
             //then
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+            Assert.True(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode,
                 _termMapConfiguration.CreateMapPropertyNode(),
                 _termMapConfiguration.Node)));
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+            Assert.True(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTemplateProperty)),
                 _termMapConfiguration.R2RMLMappings.CreateLiteralNode(template))));
-            Assert.AreEqual(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
-            Assert.AreEqual(template, _termMapConfiguration.Template);
-            Assert.IsTrue(((ITermMap)_termMapConfiguration).IsTemplateValued);
+            Assert.Equal(UriConstants.RrIRI, _termMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.Equal(template, _termMapConfiguration.Template);
+            Assert.True(((ITermMap)_termMapConfiguration).IsTemplateValued);
         }
 
-        [Test]
+        [Fact]
         public void TemplateCanOnlyBeSetOnce()
         {
             // given
@@ -173,45 +172,45 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsTemplateValued("something else"));
         }
 
-        [Test]
+        [Fact]
         public void CanBeOfTypeBlankNode()
         {
             // when
             _termMapConfiguration.TermType.IsBlankNode();
 
             // then
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
+            Assert.True(_termMapConfiguration.R2RMLMappings.ContainsTriple(new Triple(
                 _termMapConfiguration.ParentMapNode, 
                 _termMapConfiguration.CreateMapPropertyNode(),
                 _termMapConfiguration.Node)));
-            Assert.IsTrue(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.True(_termMapConfiguration.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _termMapConfiguration.Node,
                 _termMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrTermTypeProperty))).Any());
-            Assert.AreEqual(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.AbsoluteUri);
-            Assert.IsTrue((_termMapConfiguration as ITermType).IsBlankNode);
-            Assert.IsFalse((_termMapConfiguration as ITermType).IsURI);
-            Assert.IsFalse((_termMapConfiguration as ITermType).IsLiteral);
+            Assert.Equal(UriConstants.RrBlankNode, _termMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.True((_termMapConfiguration as ITermType).IsBlankNode);
+            Assert.False((_termMapConfiguration as ITermType).IsURI);
+            Assert.False((_termMapConfiguration as ITermType).IsLiteral);
         }
 
-        [Test]
+        [Fact]
         public void ColumnNameIsNullByDefault()
         {
-            Assert.IsNull(_termMapConfiguration.ColumnName);
+            Assert.Null(_termMapConfiguration.ColumnName);
         }
 
-        [Test]
+        [Fact]
         public void TemplateIsNullByDefault()
         {
-            Assert.IsNull(_termMapConfiguration.Template);
+            Assert.Null(_termMapConfiguration.Template);
         }
 
-        [Test]
+        [Fact]
         public void ConstantValueIsNullByDefault()
         {
-            Assert.IsNull(_termMapConfiguration.ConstantValue);
+            Assert.Null(_termMapConfiguration.ConstantValue);
         }
 
-        [Test]
+        [Fact]
         public void CanHaveInverseExpression()
         {
             // given
@@ -221,10 +220,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _termMapConfiguration.SetInverseExpression(expression);
 
             // then
-            Assert.AreEqual(expression, _termMapConfiguration.InverseExpression);
+            Assert.Equal(expression, _termMapConfiguration.InverseExpression);
         }
 
-        [Test]
+        [Fact]
         public void CannotHaveInverseExpressionWhenConstantValued()
         {
             // given
@@ -237,7 +236,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _termMapConfiguration.SetInverseExpression(expression));
         }
 
-        [Test]
+        [Fact]
         public void CannotConstantValueWhenInverseExpressionIsSet()
         {
             // given
@@ -250,13 +249,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _termMapConfiguration.IsConstantValued(new Uri("http://www.example.com/TermUri")));
         }
 
-        [Test]
+        [Fact]
         public void TermTypeIsIriByDefault()
         {
             ITermType type = _termMapConfiguration;
-            Assert.IsTrue(type.IsURI);
-            Assert.IsFalse(type.IsLiteral);
-            Assert.IsFalse(type.IsBlankNode);
+            Assert.True(type.IsURI);
+            Assert.False(type.IsLiteral);
+            Assert.False(type.IsBlankNode);
         }
     }
 }

@@ -38,14 +38,13 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
-    [TestFixture]
     public class DirectMappingStrategyTests
     {
         static readonly Uri BaseUri = new Uri("http://example.com/base");
@@ -56,8 +55,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
         private Mock<ISubjectMapConfiguration> _subjectMap;
         private Mock<ITermTypeConfiguration> _termType;
 
-        [SetUp]
-        public void Setup()
+        public DirectMappingStrategyTests()
         {
             _fkStrategy = new Mock<IForeignKeyMappingStrategy>(MockBehavior.Strict);
             _pkStrategy = new Mock<IPrimaryKeyMappingStrategy>(MockBehavior.Strict);
@@ -72,7 +70,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 };
         }
 
-        [Test]
+        [Fact]
         public void InitializesSubjectMapForCorrectPrimaryKeyTable()
         {
             // given
@@ -92,7 +90,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _subjectMap.Verify(sm => sm.IsTemplateValued(template), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CannotInitializeSubjectMapWhenTableHasNoPrimaryKey()
         {
             // given
@@ -103,7 +101,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 () => _strategy.CreateSubjectMapForPrimaryKey(_subjectMap.Object, BaseUri, table));
         }
 
-        [Test]
+        [Fact]
         public void CannotInitializePrimaryKeySubjectMapWhenAnyParametersIsNull()
         {
             // given
@@ -118,7 +116,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 () => _strategy.CreateSubjectMapForPrimaryKey(_subjectMap.Object, BaseUri, null));
         }
 
-        [Test]
+        [Fact]
         public void InitializesSubjectMapForCorrectTableWithoutPrimary()
         {
             // given
@@ -141,7 +139,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             _termType.Verify(tt => tt.IsBlankNode(), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CannotInitializeBlankNodeSubjectMapWhenTableHasPrimaryKey()
         {
             // given
@@ -152,7 +150,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
                 () => _strategy.CreateSubjectMapForNoPrimaryKey(_subjectMap.Object, BaseUri, table));
         }
 
-        [Test]
+        [Fact]
         public void CannotInitializeBlankNodeSubjectMapWhenAnyParametersIsNull()
         {
             // given

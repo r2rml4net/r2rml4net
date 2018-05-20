@@ -9,5 +9,8 @@ before_build:
 build_script:
   - ps: dotnet pack -c Release -o $env:APPVEYOR_BUILD_FOLDER/nugets src/TCode.r2rml4net /p:Version=$env:GitVersion_LegacySemVerPadded
 
+test_script:
+  - ps: Get-ChildItem -R -File -Filter '*Tests.csproj' | % { Push-Location $_.Directory; dotnet xunit; Pop-Location }
+
 artifacts:
   - path: 'nugets\*.nupkg'

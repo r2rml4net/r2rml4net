@@ -39,30 +39,29 @@ using System;
 using System.Data;
 using System.Data.Common;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.RDB
 {
-    [TestFixture]
     public class ColumnConstrainedDataRecordTests
     {
         private ColumnConstrainedDataRecord _dataRecord;
         private Mock<DbDataRecord> _wrappedRecord;
 
-        [SetUp]
-        public void Setup()
+        public ColumnConstrainedDataRecordTests()
         {
             _wrappedRecord = new Mock<DbDataRecord>();
             _wrappedRecord.Setup(r => r.FieldCount).Returns(10);
         }
 
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 1, 5, 1)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 1, 5, 0)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 5, 5, 5)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 5, 5, 0)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 8, 5, 5)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 8, 5, 3)]
+        [Theory]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 1, 5, 1)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 1, 5, 0)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 5, 5, 5)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 5, 5, 0)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 8, 5, 5)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 8, 5, 3)]
         public void ChangesReturnedColumnCount(ColumnConstrainedDataRecord.ColumnLimitType limitType, int rows, int limit, int expectedCoulmnsCount)
         {
             // given 
@@ -74,13 +73,14 @@ namespace TCode.r2rml4net.Tests.RDB
             int columnsCount = _dataRecord.FieldCount;
 
             // then
-            Assert.AreEqual(expectedCoulmnsCount, columnsCount);
+            Assert.Equal(expectedCoulmnsCount, columnsCount);
         }
 
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 0, 0)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 4, 4)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 0, 5)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 4, 9)]
+        [Theory]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 0, 0)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 4, 4)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 0, 5)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 4, 9)]
         public void CallsWrappedDataRecordForValidColumnIndex(ColumnConstrainedDataRecord.ColumnLimitType limitType, int columnToFetch, int underlyingColumnFetched)
         {
             // given 
@@ -93,7 +93,8 @@ namespace TCode.r2rml4net.Tests.RDB
             _wrappedRecord.Verify(r => r.GetString(underlyingColumnFetched));
         }
 
-        [TestCase(2, 2)]
+        [Theory]
+        [InlineData(2, 2)]
         public void ReturnsCorrectOrdinalForColumnNameInFirstNColumns(int actualColumnIndex, int expectedColumnIndex)
         {
             // given
@@ -107,10 +108,11 @@ namespace TCode.r2rml4net.Tests.RDB
 
             // then
             _wrappedRecord.Verify(r => r.GetOrdinal(columnName), Times.Once());
-            Assert.AreEqual(expectedColumnIndex, columnIndex);
+            Assert.Equal(expectedColumnIndex, columnIndex);
         }
 
-        [TestCase(6, 1)]
+        [Theory]
+        [InlineData(6, 1)]
         public void ReturnsCorrectOrdinalForColumnNameInAllButFirstNColumns(int actualColumnIndex, int expectedColumnIndex)
         {
             // given
@@ -124,13 +126,14 @@ namespace TCode.r2rml4net.Tests.RDB
 
             // then
             _wrappedRecord.Verify(r => r.GetName(It.IsAny<int>()), Times.Exactly(2));
-            Assert.AreEqual(expectedColumnIndex, columnIndex);
+            Assert.Equal(expectedColumnIndex, columnIndex);
         }
 
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 5)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 9)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 0)]
-        [TestCase(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 4)]
+        [Theory]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 5)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.FirstNColumns, 9)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 0)]
+        [InlineData(ColumnConstrainedDataRecord.ColumnLimitType.AllButFirstNColumns, 4)]
         public void ThrowsIfColumnFoundOutsideLimit(ColumnConstrainedDataRecord.ColumnLimitType limitType, int actualColumnIndex)
         {
             // given

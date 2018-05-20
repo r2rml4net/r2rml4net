@@ -35,29 +35,30 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.RDB
 {
-    [TestFixture]
     public class DatabaseIdentifiersHelperTests
     {
-        [TestCase("\"葉\"", "葉")]
-        [TestCase("[Column]", "Column")]
-        [TestCase("\"Column\"", "Column")]
-        [TestCase("`Column`", "Column")]
-        [TestCase("`Column with spaces and_underscored]", "Column with spaces and_underscored")]
-        [TestCase("\"Column with spaces and_underscored\"", "Column with spaces and_underscored")]
-        [TestCase("[Column with spaces and_underscored]", "Column with spaces and_underscored")]
+        [Theory]
+        [InlineData("\"葉\"", "葉")]
+        [InlineData("[Column]", "Column")]
+        [InlineData("\"Column\"", "Column")]
+        [InlineData("`Column`", "Column")]
+        [InlineData("`Column with spaces and_underscored]", "Column with spaces and_underscored")]
+        [InlineData("\"Column with spaces and_underscored\"", "Column with spaces and_underscored")]
+        [InlineData("[Column with spaces and_underscored]", "Column with spaces and_underscored")]
         public void EscapesSimpleColumnNames(string inputName, string expectedName)
         {
-            Assert.AreEqual(expectedName, DatabaseIdentifiersHelper.GetColumnNameUnquoted(inputName));
+            Assert.Equal(expectedName, DatabaseIdentifiersHelper.GetColumnNameUnquoted(inputName));
         }
 
-        [TestCase('[', ']')]
-        [TestCase('`', '`')]
-        [TestCase('\"', '\"')]
+        [Theory]
+        [InlineData('[', ']')]
+        [InlineData('`', '`')]
+        [InlineData('\"', '\"')]
         public void DoesntDelimitIfAlreadyDelimited(char delimitLeft, char delimitRight)
         {
             // given
@@ -67,7 +68,7 @@ namespace TCode.r2rml4net.Tests.RDB
             var delimited = DatabaseIdentifiersHelper.DelimitIdentifier(sqlId);
 
             // then
-            Assert.AreEqual(sqlId, delimited);
+            Assert.Equal(sqlId, delimited);
         }
     }
 }
