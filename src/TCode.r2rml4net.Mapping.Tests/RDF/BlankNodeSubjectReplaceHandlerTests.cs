@@ -123,7 +123,8 @@ namespace TCode.r2rml4net.Mapping.Tests.RDF
 
             // then
             _decoratedHandler.Verify(h => h.CreateBlankNode(), Times.Once()); 
-            Assert.Equal(triples[0].Subject, triples[1].Object);
+            Assert.Same(newBlankNode, triples[1].Object);
+            Assert.Same(newBlankNode, triples[0].Subject);
         }
 
         private TNode MockNode<TNode>() where TNode : class, INode
