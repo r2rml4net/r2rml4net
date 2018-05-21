@@ -35,41 +35,17 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System;
 using Xunit;
-using DatabaseSchemaReader;
-using SqlLocalDb;
 using TCode.r2rml4net.RDB;
-using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
+    [Collection("SQL Server")]
     [Trait("Category", "Database")]
-    public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase, IDisposable
+    public class SqlServerDatabaseSchemaAdapterTests : DatabaseSchemaAdapterTestsBase
     {
-        private LocalDatabase _database;
-
-        protected override DatabaseSchemaAdapter SetupAdapter()
+        public SqlServerDatabaseSchemaAdapterTests(SqlServerFixture fixture) : base(fixture)
         {
-            string dbInitScript = Resourcer.Resource.AsString("TestDbScripts.SqlServer.sql");
-            _database = new LocalDatabase();
-
-            using (var connection = _database.GetConnection())
-            {
-                foreach (var commandText in dbInitScript.Split(new[] { "go", "GO" }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    var command = connection.CreateCommand();
-                    command.CommandText = commandText;
-                    command.ExecuteNonQuery();
-                }
-
-                return new DatabaseSchemaAdapter(new DatabaseReader(connection), new MSSQLServerColumTypeMapper());
-            }
-        }
-
-        public void Dispose()
-        {
-            _database.Dispose();
         }
 
         [Theory]

@@ -44,14 +44,12 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
     public abstract class DatabaseSchemaAdapterTestsBase
     {
-        protected DatabaseSchemaAdapter DatabaseSchema;
+        protected readonly DatabaseSchemaAdapter DatabaseSchema;
 
-        protected DatabaseSchemaAdapterTestsBase()
+        protected DatabaseSchemaAdapterTestsBase(SqlServerFixture fixture)
         {
-            DatabaseSchema = SetupAdapter();
+            DatabaseSchema = fixture.DatabaseSchema;
         }
-
-        protected abstract DatabaseSchemaAdapter SetupAdapter();
 
         [Fact]
         public void ContainsTablesCorrectly()
