@@ -2,6 +2,7 @@ type file
 id TCode.r2rml4net
 title r2rml4net
 authors tpluscode
+owners tpluscode
 description A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework
 licenseUrl http://www.opensource.org/licenses/mit-license.php
 copyright Copyright 2012-2018 Tomasz Pluskiewicz
