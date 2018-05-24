@@ -12,3 +12,4 @@ AssemblyVersionInfo.cs
 src/**/VersionAssemblyInfo.cs
 *.Cache
 .vs
+/paket-files/paket.restore.cached

@@ -1,14 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <RootNamespace>TCode.r2rml4net</RootNamespace>
     <AssemblyName>TCode.r2rml4net</AssemblyName>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'netstandard1.5' ">
-    <DefineConstants>$(DefineContants);THREAD_AFFINITY</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Authors>Tomasz Pluskiewicz</Authors>
@@ -30,11 +28,5 @@
     <Content Include="FodyWeavers.xml" />
     <EmbeddedResource Include="Validation\LanguageRegex.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="DatabaseSchemaReader" Version="2.5.1" />
-    <PackageReference Include="dotNetRDF" Version="2.0.1" />
-    <PackageReference Include="Freezable.Fody" Version="1.9.0" />
-    <PackageReference Include="NullGuard.Fody" Version="1.8.0" />
-    <PackageReference Include="Resourcer.Fody" Version="1.7.0" />
-  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

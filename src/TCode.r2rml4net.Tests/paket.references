@@ -1,0 +1,11 @@
+DatabaseSchemaReader
+moq
+dotNetRDF
+xunit.extensibility.execution
+xunit.runner.visualstudio
+dotnet-xunit
+Resourcer.Fody
+SqlLocalDb
+System.Data.SqlClient
+Xunit.SkippableFact
+xunit

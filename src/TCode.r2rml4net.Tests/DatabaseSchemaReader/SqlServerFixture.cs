@@ -1,5 +1,6 @@
 ﻿using System;
 using DatabaseSchemaReader;
+using DatabaseSchemaReader.DataSchema;
 using SqlLocalDb;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 

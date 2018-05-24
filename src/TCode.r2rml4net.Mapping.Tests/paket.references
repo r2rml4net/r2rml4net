@@ -1,0 +1,10 @@
+DatabaseSchemaReader
+dotNetRDF
+Freezable.Fody
+NullGuard.Fody
+Resourcer.Fody
+Xunit.SkippableFact
+xunit
+xunit.extensibility.execution
+xunit.runner.visualstudio
+moq
