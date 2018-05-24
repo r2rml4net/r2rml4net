@@ -8,7 +8,8 @@ before_build:
   - ps: gitversion /l console /output buildserver /updateassemblyinfo
 
 build_script:
-  - ps: dotnet pack -c Release -o $env:APPVEYOR_BUILD_FOLDER/nugets src/TCode.r2rml4net /p:Version=$env:GitVersion_LegacySemVerPadded
+  - ps: dotnet build -c Release src/TCode.r2rml4net.sln
+  - ps: .paket/paket.exe pack --minimum-from-lock-file --version $env:GitVersion_LegacySemVerPadded .
 
 test_script:
   - ps: Get-ChildItem -R -File -Filter '*Tests.csproj' | % {
@@ -19,4 +20,4 @@ test_script:
         }
 
 artifacts:
-  - path: 'nugets\*.nupkg'
+  - path: '*.nupkg'
