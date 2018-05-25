@@ -37,7 +37,7 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping.Direct;
@@ -45,22 +45,20 @@ using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
-    [TestFixture]
     public class PrimaryKeyMappingStrategyTests
     {
-        PrimaryKeyMappingStrategy _strategy;
+        private PrimaryKeyMappingStrategy _strategy;
 
-        [SetUp]
-        public void Setup()
+        public PrimaryKeyMappingStrategyTests()
         {
             _strategy = new PrimaryKeyMappingStrategy();
         }
 
-        [TestCase(0, "_", null, ExpectedException = typeof(InvalidMapException))]
-        [TestCase(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
-        [TestCase(3, "_", "Table_{\"Column1\"}_{\"Column2\"}_{\"Column3\"}")]
-        [TestCase(3, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}")]
-        [TestCase(8, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}:{\"Column4\"}:{\"Column5\"}:{\"Column6\"}:{\"Column7\"}:{\"Column8\"}")]
+        [Theory]
+        [InlineData(3, "", "Table{\"Column1\"}{\"Column2\"}{\"Column3\"}")]
+        [InlineData(3, "_", "Table_{\"Column1\"}_{\"Column2\"}_{\"Column3\"}")]
+        [InlineData(3, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}")]
+        [InlineData(8, ":", "Table:{\"Column1\"}:{\"Column2\"}:{\"Column3\"}:{\"Column4\"}:{\"Column5\"}:{\"Column6\"}:{\"Column7\"}:{\"Column8\"}")]
         public void GeneratesSubjectBlankNodesComposedOfAllColumns(int columnsCount, string columnSeparator, string expectedTemplate)
         {
             // given
@@ -79,10 +77,32 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             }
 
             // then
-            Assert.AreEqual(expectedTemplate, template);
+            Assert.Equal(expectedTemplate, template);
         }
 
-        [Test]
+        [Theory]
+        [InlineData(0, "_")]
+        public void ThrowsWhenSeparatorIsInvalid(int columnsCount, string columnSeparator)
+        {
+            // given
+            TableMetadata table = new TableMetadata { Name = "Table" };
+            for (int i = 1; i <= columnsCount; i++)
+            {
+                table.Add(new ColumnMetadata { Name = "Column" + i });
+            }
+            _strategy = new PrimaryKeyMappingStrategy();
+
+            // when
+            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator)))
+            {
+                // then
+                Assert.Throws<InvalidMapException>(() =>
+                    _strategy.CreateSubjectTemplateForNoPrimaryKey(table)
+                );
+            }
+        }
+
+        [Fact]
         public void CanGenerateTemplatesWithRegularIdentifiers()
         {
             // given
@@ -101,11 +121,12 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             }
 
             // then
-            Assert.AreEqual("Table_{ColumnA}_{Column B}_{Yet another column}", template);
+            Assert.Equal("Table_{ColumnA}_{Column B}_{Yet another column}", template);
         }
 
-        [TestCase("http://www.example.com/", new[] { "Id" }, "http://www.example.com/Table/Id={\"Id\"}")]
-        [TestCase("http://www.example.com/", new[] { "PK 1", "PK2" }, "http://www.example.com/Table/PK%201={\"PK 1\"};PK2={\"PK2\"}")]
+        [Theory]
+        [InlineData("http://www.example.com/", new[] { "Id" }, "http://www.example.com/Table/Id={\"Id\"}")]
+        [InlineData("http://www.example.com/", new[] { "PK 1", "PK2" }, "http://www.example.com/Table/PK%201={\"PK 1\"};PK2={\"PK2\"}")]
         public void GeneratesSubjectTemplateFromPrimaryKey(string BaseUriString, string[] columns, string expected)
         {
             // given
@@ -119,10 +140,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri(BaseUriString), table);
 
             // then
-            Assert.AreEqual(expected, template);
+            Assert.Equal(expected, template);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsOnTemplateGenerationIfNoPrimaryKey()
         {
             // given
@@ -133,7 +154,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             Assert.Throws<ArgumentException>(() => _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://www.example.com/"), table));
         }
 
-        [Test]
+        [Fact]
         public void LogsErrorOnGeneratingTemplateForMultipleReferencedUniqueKeysAndUsesTheShortest()
         {
             // given
@@ -145,11 +166,11 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
-            Assert.AreEqual("Student_{\"ID\"}", template);
+            Assert.Equal("Student_{\"ID\"}", template);
             log.Verify(l => l.LogMultipleCompositeKeyReferences(table), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void WhenAUniqueKeyIsReferencedGeneratesBlankNodeForItsColumns()
         {
             // given
@@ -184,10 +205,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(studentsTable);
 
             // then
-            Assert.AreEqual("Student_{\"PESEL\"}", template);
+            Assert.Equal("Student_{\"PESEL\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void WhenNoUniqueKeyIsReferencedGeneratesTemplateOfTheShortest()
         {
             // given
@@ -239,17 +260,17 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(studentsTable);
 
             // then
-            Assert.AreEqual("Student_{\"ID\"}", template);
+            Assert.Equal("Student_{\"ID\"}", template);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesTemplateWithUnicodeCharacters()
         {
             // when
             var template = _strategy.CreateSubjectTemplateForPrimaryKey(new Uri("http://example.com/"), RelationalTestMappings.D017_I18NnoSpecialChars["植物"]);
 
             // then
-            Assert.AreEqual("http://example.com/植物/名={\"名\"};使用部={\"使用部\"}", template);
+            Assert.Equal("http://example.com/植物/名={\"名\"};使用部={\"使用部\"}", template);
         }
     }
 }

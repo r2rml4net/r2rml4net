@@ -36,9 +36,9 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
 using TCode.r2rml4net.Mapping.Direct;
 using TCode.r2rml4net.RDB;
+using Xunit;
 
 namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 {
@@ -46,8 +46,9 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
     {
         readonly ColumnMappingStrategy _strategy = new ColumnMappingStrategy();
 
-        [TestCase("http://example.com/")]
-        [TestCase("http://example.com")]
+        [Theory]
+        [InlineData("http://example.com/")]
+        [InlineData("http://example.com")]
         public void CreatesATemplateForColumn(string BaseUri)
         {
             // given
@@ -64,17 +65,17 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             var uri = _strategy.CreatePredicateUri(new Uri(BaseUri), columnMetadata);
 
             // then
-            Assert.AreEqual("http://example.com/TableABC#ColumnXYZ", uri.AbsoluteUri);
+            Assert.Equal("http://example.com/TableABC#ColumnXYZ", uri.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfAnyParamIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _strategy.CreatePredicateUri(new Uri("http://www.example.com"), null));
             Assert.Throws<ArgumentNullException>(() => _strategy.CreatePredicateUri(null, new ColumnMetadata()));
         }
 
-        [Test]
+        [Fact]
         public void ThrowsIfColumnNameIsMissing()
         {
             Assert.Throws<ArgumentException>(() => _strategy.CreatePredicateUri(new Uri("http://www.example.com"), new ColumnMetadata()));

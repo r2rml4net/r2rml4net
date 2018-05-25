@@ -1,211 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B2B367CA-B338-4176-B97B-FB9B5558C4B0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net462</TargetFramework>
     <RootNamespace>TCode.r2rml4net.Mapping.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Mapping.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dotNetRDF, Version=1.0.1.2533, Culture=neutral, PublicKeyToken=6055ffe4c97cc780, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotNetRDF.1.0.0.2533\lib\net40\dotNetRDF.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Resourcer">
-      <HintPath>..\packages\Resourcer.Fody.1.2.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Resourcer.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="VDS.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=ab5f4eb908061bf0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\VDS.Common.1.2.0\lib\net40-client\VDS.Common.dll</HintPath>
-    </Reference>
+    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\*.ttl" />
+    <EmbeddedResource Include="MappingLoading\**\*.ttl" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultMappingGenerator\ColumnMappingStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\DirectMappingStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\PrimaryKeyMappingStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorCompleteCaseTests.cs" />
-    <Compile Include="DefaultMappingGenerator\ForeignKeyMappingStrategyTests.cs" />
-    <Compile Include="DefaultMappingGenerator\R2RMLMappingGeneratorTests.cs" />
-    <Compile Include="DefaultMappingGenerator\SubjectMappingStrategytests.cs" />
-    <Compile Include="MappingLoading\GraphMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\ObjectMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\PredicateMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\PredicateObjectMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\RefObjectMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\SubjectMapConfigurationTests.cs" />
-    <Compile Include="MappingLoading\TriplesMapConfigurationTests.cs" />
-    <Compile Include="Mapping\GraphMapConfigurationTests.cs" />
-    <Compile Include="Mapping\PredicateMapConfigurationTests.cs" />
-    <Compile Include="Mapping\ObjectMapConfigurationTests.cs" />
-    <Compile Include="Mapping\PredicateObjectMapConfigurationTests.cs" />
-    <Compile Include="Mapping\RefObjectMapConfigurationTests.cs" />
-    <Compile Include="Mapping\SubjectMapConfigurationTests.cs" />
-    <Compile Include="GraphTestsExtensions.cs" />
-    <Compile Include="MappingLoading\R2RMLLoaderTests.cs" />
-    <Compile Include="Mocks\MockBaseConfiguration.cs" />
-    <Compile Include="Mocks\MockConfiguration.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mapping\DotnetrdfR2RMLConfigurationTests.cs" />
-    <Compile Include="Mapping\TermMapConfigurationTests.cs" />
-    <Compile Include="Mapping\TriplesMapConfigurationTests.cs" />
-    <Compile Include="RDF\BlankNodeSubjectReplaceHandlerTests.cs" />
-    <Compile Include="RelationalExampleMappings.cs" />
-    <Compile Include="UriConstants.cs" />
+    <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj">
-      <Project>{7C5D6099-CEA0-4D34-84C7-754A92E51798}</Project>
-      <Name>TCode.r2rml4net</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0001.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0002.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0003.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0006.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0008.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0009.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0010.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0011.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0014.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0015.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0016.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\R2RMLTC0017.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MappingLoading\Graphs\ComplexMapping.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DefaultMappingGenerator\TestGraphs\DirectCandidatePrimary.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\Complex.ttl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
-    <EmbeddedResource Include="MappingLoading\Graphs\SimpleMapping.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\SubjectShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\Shortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\GraphMapsShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\GraphMaps.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\SubjectMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\MultipleJoinConditions.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\RefObjectMap\JoinCondition.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\RefObjectMap.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\Blank.ObjectShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\ObjectShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\ObjectMaps.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\GraphShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\PredicateShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateObjectMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\ConstantShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\Constant.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\PredicateMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithDatatype.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithLanguage.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralWithDatatypeImplicit.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantIriShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteralShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantLiteral.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\ConstantIri.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\ObjectMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\Constant.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\ConstantShortcut.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\GraphMap\Simple.ttl" />
-    <EmbeddedResource Include="MappingLoading\Graphs\TriplesMap\MultipleSubjects.ttl" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets" Condition="Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Zoltu.Versioning.1.1.29.0\build\Zoltu.Versioning.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.26.1\build\Fody.targets'))" />
-  </Target>
-  <Import Project="..\packages\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\packages\Fody.1.26.1\build\Fody.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

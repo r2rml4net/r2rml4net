@@ -37,7 +37,7 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.RDB;
@@ -46,13 +46,12 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class TriplesMapConfigurationTests
     {
-        private Mock<ISqlVersionValidator> _sqlVersionValidator;
+        private readonly Mock<ISqlVersionValidator> _sqlVersionValidator;
         TriplesMapConfiguration _triplesMapConfiguration;
-        private Mock<IR2RMLConfiguration> _r2RMLConfiguration;
-        private IGraph _r2RMLMappings;
+        private readonly Mock<IR2RMLConfiguration> _r2RMLConfiguration;
+        private readonly IGraph _r2RMLMappings;
         private Mock<ISqlVersionValidator> _sqlValidator;
 
         private TriplesMapConfigurationStub CreatStub()
@@ -63,8 +62,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             return new TriplesMapConfigurationStub(_r2RMLConfiguration.Object, _r2RMLMappings, _sqlVersionValidator.Object);
         }
 
-        [SetUp]
-        public void Setup()
+        public TriplesMapConfigurationTests()
         {
             // Initialize TriplesMapConfiguration with a default graph
             var r2RMLConfiguration = new FluentR2RML();
@@ -74,7 +72,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration = new TriplesMapConfiguration(CreatStub(), _r2RMLMappings.CreateBlankNode());
         }
 
-        [Test]
+        [Fact]
         public void SqlQueryIsSetAsIs()
         {
             // given
@@ -84,71 +82,79 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), query);
 
             // then
-            Assert.AreEqual(query, _triplesMapConfiguration.SqlQuery);
-            Assert.IsNull(_triplesMapConfiguration.TableName);
+            Assert.Equal(query, _triplesMapConfiguration.SqlQuery);
+            Assert.Null(_triplesMapConfiguration.TableName);
         }
 
-        [TestCase("TableName", "TableName")]
-        [TestCase("[TableName]", "TableName")]
-        [TestCase("[Table1Name]", "Table1Name")]
-        [TestCase("'TableName'", "TableName")]
-        [TestCase("`TableName`", "TableName")]
-        [TestCase("`Table12Name`", "Table12Name")]
-        [TestCase("\"TableName\"", "TableName")]
+        [Theory]
+        [InlineData("TableName", "TableName")]
+        [InlineData("[TableName]", "TableName")]
+        [InlineData("[Table1Name]", "Table1Name")]
+        [InlineData("'TableName'", "TableName")]
+        [InlineData("`TableName`", "TableName")]
+        [InlineData("`Table12Name`", "Table12Name")]
+        [InlineData("\"TableName\"", "TableName")]
         public void TriplesMapTableNameShouldBeTrimmed(string tableName, string expected)
         {
             // when
             _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
 
             // then
-            Assert.AreEqual(expected, _triplesMapConfiguration.TableName);
-            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
+            Assert.Equal(expected, _triplesMapConfiguration.TableName);
+            Assert.Null(_triplesMapConfiguration.SqlQuery);
         }
 
-        [TestCase("`Schema`.`TableName`")]
-        [TestCase("[Schema].[TableName]")]
-        [TestCase("[Schema].[TableName]")]
-        [TestCase("Schema.[TableName]")]
-        [TestCase("Schema.`TableName`")]
+        [Theory]
+        [InlineData("`Schema`.`TableName`")]
+        [InlineData("[Schema].[TableName]")]
+        [InlineData("Schema.[TableName]")]
+        [InlineData("Schema.`TableName`")]
         public void TriplesMapTableNameCanContainSchema(string tableName)
         {
             // when
             _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
 
             // then
-            Assert.AreEqual("Schema.TableName", _triplesMapConfiguration.TableName);
-            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
+            Assert.Equal("Schema.TableName", _triplesMapConfiguration.TableName);
+            Assert.Null(_triplesMapConfiguration.SqlQuery);
         }
 
-        [TestCase("[Database].[Schema].[TableName]")]
-        [TestCase("Database.[Schema].[TableName]")]
-        [TestCase("`Database`.`Schema`.`TableName`")]
-        [TestCase("Database.`Schema`.`TableName`")]
+        [Theory]
+        [InlineData("[Database].[Schema].[TableName]")]
+        [InlineData("Database.[Schema].[TableName]")]
+        [InlineData("`Database`.`Schema`.`TableName`")]
+        [InlineData("Database.`Schema`.`TableName`")]
         public void TriplesMapTableNameCanContainSchemaAndDatabaseName(string tableName)
         {
             // when
             _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
 
             // then
-            Assert.AreEqual("Database.Schema.TableName", _triplesMapConfiguration.TableName);
-            Assert.IsNull(_triplesMapConfiguration.SqlQuery);
+            Assert.Equal("Database.Schema.TableName", _triplesMapConfiguration.TableName);
+            Assert.Null(_triplesMapConfiguration.SqlQuery);
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName)
+        [Theory]
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName, Type exceptionType)
         {
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
+            Assert.Throws(exceptionType, () =>
+                _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName)
+            );
         }
 
-        [TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-        [TestCase("", ExpectedException = typeof(ArgumentOutOfRangeException))]
-        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery)
+        [Theory]
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentOutOfRangeException))]
+        public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery, Type exceptionType)
         {
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery);
+            Assert.Throws(exceptionType, () =>
+                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery)
+            );
         }
 
-        [Test]
+        [Fact]
         public void CanSetSqlVersionTwice()
         {
             // given
@@ -167,7 +173,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", "http://www.w3.org/ns/r2rml#MSSQL");
         }
 
-        [Test]
+        [Fact]
         public void CanSetSameSqlVersionTwice()
         {
             // given
@@ -183,8 +189,9 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _triplesMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject("http://www.w3.org/ns/r2rml#sqlVersion", "http://www.w3.org/ns/r2rml#SQL2008", 2);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void CanSetSqlVersion(bool fromUriString)
         {
             // given
@@ -208,7 +215,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Contains(sqlVersion, _triplesMapConfiguration.SqlVersions);
         }
 
-        [Test]
+        [Fact]
         public void CannotSetSqlVersionWhenTableNameHasAlreadyBeenSet()
         {
             // given
@@ -220,7 +227,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             );
         }
 
-        [Test]
+        [Fact]
         public void ByDefaultCannotSetInvalidSqlVersion()
         {
             // given
@@ -239,7 +246,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _sqlVersionValidator.Verify(v => v.SqlVersionIsValid(sqlVersion), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void CanUseSettingToDisableSqlVersionValidation()
         {
             // given
@@ -254,13 +261,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             }
             // when
-            Assert.DoesNotThrow(() => _triplesMapConfiguration.SetSqlVersion(sqlVersion));
+            _triplesMapConfiguration.SetSqlVersion(sqlVersion);
 
             // then
             Assert.Contains(sqlVersion, _triplesMapConfiguration.SqlVersions);
         }
 
-        [Test]
+        [Fact]
         public void CanCreateSubjectMaps()
         {
             // given
@@ -270,12 +277,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var subjectMapConfiguration = (ISubjectMapConfiguration)_triplesMapConfiguration.SubjectMap;
 
             // then
-            Assert.IsNotNull(subjectMapConfiguration);
-            Assert.IsInstanceOf<TermMapConfiguration>(subjectMapConfiguration);
-            Assert.IsInstanceOf<ITermMapConfiguration>(subjectMapConfiguration);
+            Assert.NotNull(subjectMapConfiguration);
+            Assert.True(subjectMapConfiguration is TermMapConfiguration);
+            Assert.True(subjectMapConfiguration is ITermMapConfiguration);
         }
 
-        [Test]
+        [Fact]
         public void SubjectMapAlwaysReturnsSameInstance()
         {
             // given 
@@ -286,10 +293,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var shouldBeTheSame = (ISubjectMapConfiguration)_triplesMapConfiguration.SubjectMap;
 
             // then
-            Assert.AreSame(subjectMapConfiguration, shouldBeTheSame);
+            Assert.Same(subjectMapConfiguration, shouldBeTheSame);
         }
 
-        [Test]
+        [Fact]
         public void CanCreatePropertyObjectMap()
         {
             // given
@@ -299,11 +306,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IPredicateObjectMapConfiguration predicateObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
 
             // then
-            Assert.IsNotNull(predicateObjectMap);
-            Assert.IsInstanceOf<PredicateObjectMapConfiguration>(predicateObjectMap);
+            Assert.NotNull(predicateObjectMap);
+            Assert.True(predicateObjectMap is PredicateObjectMapConfiguration);
         }
 
-        [Test]
+        [Fact]
         public void UsesEffectiveSqlBuilder()
         {
             // given
@@ -317,10 +324,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             string sql = _triplesMapConfiguration.EffectiveSqlQuery;
 
             // then
-            Assert.AreEqual(excpetedSql, sql);
+            Assert.Equal(excpetedSql, sql);
         }
 
-        [Test]
+        [Fact]
         public void BlankNodeTriplesMapsDontInterfereWithEachOther()
         {
             // given
@@ -328,10 +335,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var fromSqlQuery = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SElECT * FROM y");
 
             // then
-            Assert.IsNull(fromTable.SqlQuery);
-            Assert.IsNull(fromSqlQuery.TableName);
-            Assert.AreEqual("Table", fromTable.TableName);
-            Assert.AreEqual("SElECT * FROM y", fromSqlQuery.SqlQuery);
+            Assert.Null(fromTable.SqlQuery);
+            Assert.Null(fromSqlQuery.TableName);
+            Assert.Equal("Table", fromTable.TableName);
+            Assert.Equal("SElECT * FROM y", fromSqlQuery.SqlQuery);
         }
     }
 }

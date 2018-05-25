@@ -41,26 +41,24 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
     public class W3CPredicateObjectMapProcessorTests : TriplesGenerationTestsBase
     {
-        private W3CPredicateObjectMapProcessor _processor;
-        private Mock<IPredicateObjectMap> _predicateObjectMap;
-        private Mock<IDataRecord> _logicalRow;
-        private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<IRdfHandler> _storeWriter;
+        private readonly W3CPredicateObjectMapProcessor _processor;
+        private readonly Mock<IPredicateObjectMap> _predicateObjectMap;
+        private readonly Mock<IDataRecord> _logicalRow;
+        private readonly Mock<IRDFTermGenerator> _termGenerator;
+        private readonly Mock<IRdfHandler> _storeWriter;
         private IEnumerable<IUriNode> _subjectGraphs;
-        private IUriNode _subject;
+        private readonly IUriNode _subject;
 
-        [SetUp]
-        public void Setup()
+        public W3CPredicateObjectMapProcessorTests()
         {
             _predicateObjectMap = new Mock<IPredicateObjectMap>();
             _logicalRow = new Mock<IDataRecord>();
@@ -72,9 +70,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _processor = new W3CPredicateObjectMapProcessor(_termGenerator.Object);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void GeneratesRDFTermsForEachPredicateMap(int mapsCount)
         {
             // given
@@ -93,9 +92,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void GeneratesRDFTermsForEachObjectMap(int mapsCount)
         {
             // given
@@ -114,9 +114,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
         public void GeneratesRDFTermsForEachGraphMap(int mapsCount)
         {
             // given
@@ -135,11 +136,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
         }
 
-        [TestCase(0, 0)]
-        [TestCase(0, 1)]
-        [TestCase(1, 1)]
-        [TestCase(1, 8)]
-        [TestCase(3, 7)]
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 8)]
+        [InlineData(3, 7)]
         public void AssertsTriplesAccordingToObjectsAndPredicatesCount(int predicatesCount, int objectsCount)
         {
             // given
@@ -160,11 +162,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 Times.Exactly(predicatesCount * objectsCount));
         }
 
-        [TestCase(0, 0)]
-        [TestCase(0, 1)]
-        [TestCase(1, 1)]
-        [TestCase(1, 8)]
-        [TestCase(3, 7)]
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 8)]
+        [InlineData(3, 7)]
         public void AssertsTriplesAccordingToGraphsCount(int subjectGrapsCount, int graphsCount)
         {
             // given
@@ -186,7 +189,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                               return mock.Object;
                           });
             _subjectGraphs = GenerateNMocks(subjectGrapsCount,
-                new Tuple<Expression<Func<IUriNode, object>>, Func<object>>(map => map.Uri, () => new Uri("http://www.example.com/graph")));
+                new Tuple<Expression<Func<IUriNode, Uri>>, Func<Uri>>(map => map.Uri, () => new Uri("http://www.example.com/graph")));
 
             // when
             _processor.ProcessPredicateObjectMap(_subject, _predicateObjectMap.Object, _subjectGraphs, _logicalRow.Object, _storeWriter.Object);

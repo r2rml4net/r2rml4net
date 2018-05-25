@@ -40,5 +40,5 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: Guid("75adf600-efa6-4088-aac7-af2c7e4d74c4")]
-[assembly: AssemblyTitle("r2rml.net Core Library")]
 [assembly: InternalsVisibleTo("TCode.r2rml4net.Tests")]
+[assembly: InternalsVisibleTo("TCode.r2rml4net.Mapping.Tests")]

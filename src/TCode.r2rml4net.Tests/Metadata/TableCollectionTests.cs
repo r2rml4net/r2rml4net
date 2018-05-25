@@ -36,15 +36,14 @@
 // terms.
 #endregion
 using System;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDB;
 
 namespace TCode.r2rml4net.Tests.Metadata
 {
-    [TestFixture]
     public class TableCollectionTests
     {
-        [Test]
+        [Fact]
         public void CanBeIndexed()
         {
             // given
@@ -53,11 +52,11 @@ namespace TCode.r2rml4net.Tests.Metadata
             TableCollection tables = new TableCollection { table1, table2 };
 
             // then
-            Assert.AreSame(table1, tables["Table1"]);
-            Assert.AreSame(table2, tables["Table2"]);
+            Assert.Same(table1, tables["Table1"]);
+            Assert.Same(table2, tables["Table2"]);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsWhenIndexingWithAnInvalidTableName()
         {
             // given
@@ -72,7 +71,7 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Throws<ArgumentNullException>(() => { var table = tables[null]; });
         }
 
-        [Test]
+        [Fact]
         public void CanContainUniquellyNamedTables()
         {
             // given
@@ -88,17 +87,17 @@ namespace TCode.r2rml4net.Tests.Metadata
             Assert.Throws<ArgumentException>(() => tables.Add(new TableMetadata { Name = "Table" }));
         }
 
-        [Test]
+        [Fact]
         public void IsCreatedEmpty()
         {
             // given
             var collection = new TableCollection();
 
             // then
-            Assert.AreEqual(0, collection.Count);
+            Assert.Equal(0, collection.Count);
         }
 
-        [Test]
+        [Fact]
         public void HasCorrectCount()
         {
             // given
@@ -110,7 +109,7 @@ namespace TCode.r2rml4net.Tests.Metadata
             collection.Add(new TableMetadata { Name = "c" });
 
             // then
-            Assert.AreEqual(3, collection.Count);
+            Assert.Equal(3, collection.Count);
         }
     }
 }

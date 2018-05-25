@@ -37,38 +37,37 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using DatabaseSchemaReader;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 
 namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
-    [TestFixture]
     public class DatabaseSchemaAdapterCommonTests
     {
-        private Mock<IDatabaseReader> _databaseReader;
-        private Mock<IColumnTypeMapper> _columnTypeMapper;
-        private DatabaseSchemaAdapter _adapter;
+        private readonly Mock<IDatabaseReader> _databaseReader;
+        private readonly Mock<IColumnTypeMapper> _columnTypeMapper;
 
-        [SetUp]
-        public void SetupAdapter()
+        public DatabaseSchemaAdapterCommonTests()
         {
             _columnTypeMapper = new Mock<IColumnTypeMapper>();
             _databaseReader = new Mock<IDatabaseReader>();
-
-            _adapter = new DatabaseSchemaAdapter(_databaseReader.Object, _columnTypeMapper.Object);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CannotBeInitializedWithNullReader()
         {
-            new DatabaseSchemaAdapter(null, _columnTypeMapper.Object);
+            Assert.Throws<ArgumentNullException>(() =>
+                new DatabaseSchemaAdapter(null, _columnTypeMapper.Object)
+            );
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CannotBeInitializedWithNullColumnMapper()
         {
-            new DatabaseSchemaAdapter(_databaseReader.Object, null);
+            Assert.Throws<ArgumentNullException>(() =>
+                new DatabaseSchemaAdapter(_databaseReader.Object, null)
+            );
         }
     }
 }

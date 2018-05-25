@@ -38,7 +38,7 @@
 using System;
 using System.Data;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -48,21 +48,19 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
-    class W3CRefObjectMapProcessorTests : TriplesGenerationTestsBase
+    public class W3CRefObjectMapProcessorTests : TriplesGenerationTestsBase
     {
-        private W3CRefObjectMapProcessor _processor;
-        private Mock<IRdfHandler> _rdfHandler;
-        private Mock<ISubjectMap> _subjectMap;
-        private Mock<IRefObjectMap> _refObjMap;
-        private Mock<IDbConnection> _connection;
-        private Mock<IRDFTermGenerator> _termGenerator;
-        private Mock<IPredicateObjectMap> _predObjectMap;
-        private Mock<LogFacadeBase> _log;
-        private Mock<ISubjectMap> _childSubjectMap;
+        private readonly W3CRefObjectMapProcessor _processor;
+        private readonly Mock<IRdfHandler> _rdfHandler;
+        private readonly Mock<ISubjectMap> _subjectMap;
+        private readonly Mock<IRefObjectMap> _refObjMap;
+        private readonly Mock<IDbConnection> _connection;
+        private readonly Mock<IRDFTermGenerator> _termGenerator;
+        private readonly Mock<IPredicateObjectMap> _predObjectMap;
+        private readonly Mock<LogFacadeBase> _log;
+        private readonly Mock<ISubjectMap> _childSubjectMap;
 
-        [SetUp]
-        public void Setup()
+        public W3CRefObjectMapProcessorTests()
         {
             _termGenerator = new Mock<IRDFTermGenerator>();
             _connection = new Mock<IDbConnection>();
@@ -85,10 +83,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 };
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(9)]
-        [TestCase(15)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(9)]
+        [InlineData(15)]
         public void GeneratesSubjectForEachLogicalRow(int rowsCount)
         {
             // given
@@ -103,10 +102,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(rowsCount));
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(9)]
-        [TestCase(15)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(9)]
+        [InlineData(15)]
         public void GeneratesObjectForEachLogicalRow(int rowsCount)
         {
             // given
@@ -121,15 +121,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(rowsCount));
         }
 
-        [TestCase(0, 0)]
-        [TestCase(1, 0)]
-        [TestCase(9, 0)]
-        [TestCase(0, 1)]
-        [TestCase(1, 1)]
-        [TestCase(9, 1)]
-        [TestCase(0, 5)]
-        [TestCase(1, 5)]
-        [TestCase(9, 5)]
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(9, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(9, 1)]
+        [InlineData(0, 5)]
+        [InlineData(1, 5)]
+        [InlineData(9, 5)]
         public void GeneratesTermForPredicatesForEachRow(int rowsCount, int graphsCount)
         {
             // given
@@ -145,15 +146,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(rowsCount * graphsCount));
         }
 
-        [TestCase(0, 0)]
-        [TestCase(1, 0)]
-        [TestCase(9, 0)]
-        [TestCase(0, 1)]
-        [TestCase(1, 1)]
-        [TestCase(9, 1)]
-        [TestCase(0, 5)]
-        [TestCase(1, 5)]
-        [TestCase(9, 5)]
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(9, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(9, 1)]
+        [InlineData(0, 5)]
+        [InlineData(1, 5)]
+        [InlineData(9, 5)]
         public void GeneratesTermForSubjectsGraphMapsForEachRow(int rowsCount, int graphsCount)
         {
             // given
@@ -169,15 +171,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(rowsCount * graphsCount));
         }
 
-        [TestCase(0, 0)]
-        [TestCase(1, 0)]
-        [TestCase(9, 0)]
-        [TestCase(0, 1)]
-        [TestCase(1, 1)]
-        [TestCase(9, 1)]
-        [TestCase(0, 5)]
-        [TestCase(1, 5)]
-        [TestCase(9, 5)]
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(9, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(9, 1)]
+        [InlineData(0, 5)]
+        [InlineData(1, 5)]
+        [InlineData(9, 5)]
         public void GeneratesTermForPredicateObjectGraphMapsForEachRow(int rowsCount, int graphsCount)
         {
             // given
@@ -193,14 +196,15 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 Times.Exactly(rowsCount * graphsCount));
         }
 
-        [TestCase(0, 0, 0, 0)]
-        [TestCase(0, 3, 0, 0)]
-        [TestCase(0, 0, 1, 0)]
-        [TestCase(0, 0, 0, 2)]
-        [TestCase(2, 7, 0, 0)]
-        [TestCase(4, 7, 3, 0)]
-        [TestCase(2, 9, 0, 2)]
-        [TestCase(3, 8, 4, 2)]
+        [Theory]
+        [InlineData(0, 0, 0, 0)]
+        [InlineData(0, 3, 0, 0)]
+        [InlineData(0, 0, 1, 0)]
+        [InlineData(0, 0, 0, 2)]
+        [InlineData(2, 7, 0, 0)]
+        [InlineData(4, 7, 3, 0)]
+        [InlineData(2, 9, 0, 2)]
+        [InlineData(3, 8, 4, 2)]
         public void AssertsTriplesForEachCombinationOfPredicatesAndOptionallyGraphs(int rowsCount, int predicatesCount, int predObjectGraphsCount, int subjectGraphsCount)
         {
             // given
@@ -224,7 +228,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _rdfHandler.Verify(handler => handler.HandleTriple(It.IsAny<Triple>()), Times.Exactly(expectedCallsCount));
         }
 
-        [Test]
+        [Fact]
         public void LogsSqlExecuteErrorAndThrows()
         {
             // given

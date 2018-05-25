@@ -37,27 +37,25 @@
 #endregion
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class PredicateMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private Mock<IPredicateObjectMap> _predicateObjectMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<IPredicateObjectMap> _predicateObjectMap;
 
-        [SetUp]
-        public void Setup()
+        public PredicateMapConfigurationTests()
         {
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _predicateObjectMap = new Mock<IPredicateObjectMap>();
         }
             
-        [Test]
+        [Fact]
         public void CanBeInitializedWithExistingGraph()
         {
             // given
@@ -72,12 +70,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual("http://data.example.com/employee/{EMPNO}", predicateMap.Template);
-            Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)predicateMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(blankNode, predicateMap.Node);
+            Assert.Equal("http://data.example.com/employee/{EMPNO}", predicateMap.Template);
+            Assert.Equal("http://www.example.com/PredicateObjectMap", ((IUriNode)predicateMap.ParentMapNode).Uri.AbsoluteUri);
+            Assert.Equal(blankNode, predicateMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithConstantValue()
         {
             // given
@@ -92,11 +90,11 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             predicateMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
-            Assert.AreEqual(blankNode, predicateMap.Node);
+            Assert.Equal(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
+            Assert.Equal(blankNode, predicateMap.Node);
         }
 
-        [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
+        [SkippableFact(Skip = "consider a way to allow directly passing a graph with shortcut node")]
         public void CanBeInitializedWithConstantValueUsingShortcut()
         {
             // given
@@ -111,8 +109,8 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:predicateMap")).Single().Object;
-            Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
-            Assert.AreEqual(blankNode, predicateMap.Node);
+            Assert.Equal(graph.CreateUriNode("ex:Value").Uri, predicateMap.ConstantValue);
+            Assert.Equal(blankNode, predicateMap.Node);
         }
     }
 }

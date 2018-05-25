@@ -35,12 +35,10 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using NUnit.Framework;
 using TCode.r2rml4net.Validation;
 
 namespace TCode.r2rml4net.Tests.Validation
 {
-    [TestFixture]
     class Bcp47RegexLanguageTagValidatorTests : LanguageTagValidatorTestsBase<Bcp47RegexLanguageTagValidator>
     {
         #region Overrides of LanguageTagValidatorTestsBase<Bcp47RegexLanguageTagValidator>

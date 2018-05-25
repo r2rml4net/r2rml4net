@@ -38,7 +38,7 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
@@ -47,20 +47,18 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class TriplesMapConfigurationTests
     {
-        private Mock<IR2RMLConfiguration> _configuration;
-        private Mock<ISqlVersionValidator> _sqlVersionValidator;
+        private readonly Mock<IR2RMLConfiguration> _configuration;
+        private readonly Mock<ISqlVersionValidator> _sqlVersionValidator;
 
-        [SetUp]
-        public void Setup()
+        public TriplesMapConfigurationTests()
         {
             _sqlVersionValidator = new Mock<ISqlVersionValidator>();
             _configuration = new Mock<IR2RMLConfiguration>();
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitizalizedFromGraph()
         {
             // given
@@ -72,15 +70,15 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             triplesMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.GetUriNode("ex:subject"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
-            Assert.AreEqual(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
-            Assert.AreEqual(3, triplesMap.PredicateObjectMaps.Count());
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj1"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj2"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(1).Node);
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj3"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(2).Node);
+            Assert.Equal(graph.GetUriNode("ex:subject"), ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
+            Assert.Equal(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
+            Assert.Equal(3, triplesMap.PredicateObjectMaps.Count());
+            Assert.Equal(graph.CreateUriNode("ex:predObj1"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(graph.CreateUriNode("ex:predObj2"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(graph.CreateUriNode("ex:predObj3"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(2).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitizalizedFromGraphWithShortcutSubject()
         {
             // given
@@ -93,16 +91,16 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:triplesMap"), graph.CreateUriNode("rr:subjectMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode, ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
-            Assert.AreEqual(new Uri("http://www.example.com/subject"), triplesMap.SubjectMap.URI);
-            Assert.AreEqual(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
-            Assert.AreEqual(3, triplesMap.PredicateObjectMaps.Count());
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj1"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(0).Node);
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj2"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(1).Node);
-            Assert.AreEqual(graph.CreateUriNode("ex:predObj3"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(2).Node);
+            Assert.Equal(blankNode, ((SubjectMapConfiguration)triplesMap.SubjectMap).Node);
+            Assert.Equal(new Uri("http://www.example.com/subject"), triplesMap.SubjectMap.URI);
+            Assert.Equal(graph.GetUriNode("ex:triplesMap"), triplesMap.Node);
+            Assert.Equal(3, triplesMap.PredicateObjectMaps.Count());
+            Assert.Equal(graph.CreateUriNode("ex:predObj1"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(graph.CreateUriNode("ex:predObj2"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(graph.CreateUriNode("ex:predObj3"), triplesMap.PredicateObjectMaps.Cast<PredicateObjectMapConfiguration>().ElementAt(2).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitizalizedFromGraphWithMultipleSubjects()
         {
             // given
@@ -113,10 +111,10 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             var triplesMap = new TriplesMapConfiguration(CreateStub(graph), graph.CreateUriNode("ex:triplesMap"));
 
             // then
-            Assert.Throws<InvalidMapException>(triplesMap.RecursiveInitializeSubMapsFromCurrentGraph);
+            Assert.Throws<InvalidMapException>(() => triplesMap.RecursiveInitializeSubMapsFromCurrentGraph());
         }
 
-        [Test]
+        [Fact]
         public void CanLoadMappingsWithManyPredicateObjectMaps()
         {
             // given
@@ -131,12 +129,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             triplesMapConfiguration.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(4, triplesMapConfiguration.PredicateObjectMaps.Count());
-            Assert.AreEqual(3, triplesMapConfiguration.PredicateObjectMaps.Count(pm => !pm.RefObjectMaps.Any()));
-            Assert.AreEqual(1, triplesMapConfiguration.PredicateObjectMaps.Count(pm => pm.RefObjectMaps.Any()));
+            Assert.Equal(4, triplesMapConfiguration.PredicateObjectMaps.Count());
+            Assert.Equal(3, triplesMapConfiguration.PredicateObjectMaps.Count(pm => !pm.RefObjectMaps.Any()));
+            Assert.Single(triplesMapConfiguration.PredicateObjectMaps.Where(pm => pm.RefObjectMaps.Any()));
         }
 
-        [Test]
+        [Fact]
         public void CanBeCreatedFromTableName()
         {
             // given
@@ -147,7 +145,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             var triplesMap = TriplesMapConfiguration.FromTable(CreateStub(graph), tableName);
 
             // then
-            Assert.AreEqual(tableName, triplesMap.TableName);
+            Assert.Equal(tableName, triplesMap.TableName);
         }
 
         private TriplesMapConfigurationStub CreateStub(IGraph graph)

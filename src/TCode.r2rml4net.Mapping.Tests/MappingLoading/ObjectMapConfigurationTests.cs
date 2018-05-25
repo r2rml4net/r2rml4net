@@ -38,7 +38,7 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
@@ -46,20 +46,18 @@ using VDS.RDF.Parsing;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class ObjectMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private Mock<IPredicateObjectMapConfiguration> _predictaObjectMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<IPredicateObjectMapConfiguration> _predictaObjectMap;
 
-        [SetUp]
-        public void Setup()
+        public ObjectMapConfigurationTests()
         {
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _predictaObjectMap = new Mock<IPredicateObjectMapConfiguration>();
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithExistingGraph()
         {
             // given
@@ -74,12 +72,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual("http://data.example.com/{JOB}", objectMap.Template);
-            Assert.AreEqual("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.Equal("http://data.example.com/{JOB}", objectMap.Template);
+            Assert.Equal("http://www.example.com/PredicateObjectMap", ((IUriNode)objectMap.ParentMapNode).Uri.AbsoluteUri);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithConstantIRIValue()
         {
             // given
@@ -94,12 +92,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
-            Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.True(((ITermMap)objectMap).IsConstantValued);
+            Assert.Equal(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithConstantLiteralValue()
         {
             // given
@@ -114,13 +112,13 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
-            Assert.AreEqual("someObject", objectMap.Literal);
-            Assert.IsNull(objectMap.Language);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.True(((ITermMap)objectMap).IsConstantValued);
+            Assert.Equal("someObject", objectMap.Literal);
+            Assert.Null(objectMap.Language);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithTypedLiteralValue()
         {
             // given
@@ -135,13 +133,13 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
-            Assert.AreEqual("someObject", objectMap.Literal);
-            Assert.AreEqual(new Uri("http://example.org/some#datatype"), objectMap.DataTypeURI);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.True(((ITermMap)objectMap).IsConstantValued);
+            Assert.Equal("someObject", objectMap.Literal);
+            Assert.Equal(new Uri("http://example.org/some#datatype"), objectMap.DataTypeURI);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithImplictlyTypedLiteralValue()
         {
             // given
@@ -156,13 +154,13 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
-            Assert.AreEqual("2", objectMap.Literal);
-            Assert.AreEqual(new Uri(XmlSpecsHelper.XmlSchemaDataTypeInteger), objectMap.DataTypeURI);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.True(((ITermMap)objectMap).IsConstantValued);
+            Assert.Equal("2", objectMap.Literal);
+            Assert.Equal(new Uri(XmlSpecsHelper.XmlSchemaDataTypeInteger), objectMap.DataTypeURI);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanBeInitializedWithLiteralValueWithLanguageTag()
         {
             // given
@@ -177,13 +175,13 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             objectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.IsTrue(((ITermMap)objectMap).IsConstantValued);
-            Assert.AreEqual("someObject", objectMap.Literal);
-            Assert.AreEqual("pl", objectMap.Language);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.True(((ITermMap)objectMap).IsConstantValued);
+            Assert.Equal("someObject", objectMap.Literal);
+            Assert.Equal("pl", objectMap.Language);
+            Assert.Equal(blankNode, objectMap.Node);
         }
 
-        [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
+        [SkippableFact(Skip = "consider a way to allow directly passing a graph with shortcut node")]
         public void CanBeInitializedWithConstantValueUsingShortcut()
         {
             // given
@@ -198,8 +196,8 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 
             // then
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:PredicateObjectMap"), graph.CreateUriNode("rr:objectMap")).Single().Object;
-            Assert.AreEqual(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
-            Assert.AreEqual(blankNode, objectMap.Node);
+            Assert.Equal(graph.CreateUriNode("ex:someObject").Uri, objectMap.ConstantValue);
+            Assert.Equal(blankNode, objectMap.Node);
         }
     }
 }

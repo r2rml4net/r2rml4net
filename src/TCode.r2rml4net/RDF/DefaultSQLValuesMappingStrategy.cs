@@ -143,7 +143,7 @@ namespace TCode.r2rml4net.RDF
 
         private static DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
         {
-            return TimeZoneInfo.ConvertTimeToUtc(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Utc);
+            return TimeZoneInfo.ConvertTime(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Local, TimeZoneInfo.Utc);
         }
 
         private static string ByteArrayToString(byte[] bytes)

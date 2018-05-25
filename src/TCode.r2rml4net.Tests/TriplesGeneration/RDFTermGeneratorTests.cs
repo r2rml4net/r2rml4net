@@ -38,7 +38,7 @@
 using System;
 using System.Data;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -47,22 +47,20 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Tests.TriplesGeneration
 {
-    [TestFixture]
     public class RDFTermGeneratorTests
     {
         private RDFTermGenerator _termGenerator;
-        private Mock<ISubjectMap> _subjectMap;
+        private readonly Mock<ISubjectMap> _subjectMap;
         private Mock<IPredicateMap> _predicateMap;
-        private Mock<ISQLValuesMappingStrategy> _lexicalFormProvider;
-        private Mock<IDataRecord> _logicalRow;
+        private readonly Mock<ISQLValuesMappingStrategy> _lexicalFormProvider;
+        private readonly Mock<IDataRecord> _logicalRow;
         private Mock<ITermMap> _termMap;
-        private Mock<ITermType> _termType;
+        private readonly Mock<ITermType> _termType;
         private Mock<IGraphMap> _graphMap;
         private Mock<IObjectMap> _objectMap;
-        private Mock<LogFacadeBase> _log;
+        private readonly Mock<LogFacadeBase> _log;
 
-        [SetUp]
-        public void Setup()
+        public RDFTermGeneratorTests()
         {
             _log = new Mock<LogFacadeBase>();
             _objectMap = new Mock<IObjectMap>();
@@ -83,7 +81,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #region Test constant valued term map
 
-        [Test]
+        [Fact]
         public void SubjectMapsConstantIsAnIri()
         {
             // given
@@ -95,11 +93,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<IUriNode>(_subjectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual(uri, node.Uri);
+            Assert.Equal(uri, node.Uri);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void PredicateMapsConstantIsAnIri()
         {
             // given
@@ -112,11 +110,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<IUriNode>(_predicateMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual(uri, node.Uri);
+            Assert.Equal(uri, node.Uri);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void GraphMapsConstantIsAnIri()
         {
             // given
@@ -129,11 +127,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<IUriNode>(_graphMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual(uri, node.Uri);
+            Assert.Equal(uri, node.Uri);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapsConstantCanBeIRI()
         {
             // given
@@ -146,11 +144,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<IUriNode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual(uri, node.Uri);
+            Assert.Equal(uri, node.Uri);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void UriValuedConstantMustHaveConstantSet()
         {
             // given
@@ -166,7 +164,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termType.VerifyAll();
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapsConstantCanBeLiteral()
         {
             // given
@@ -179,11 +177,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<ILiteralNode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual(literal, node.Value);
+            Assert.Equal(literal, node.Value);
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapsConstantCannotBeBothLiteralAndIri()
         {
             // given
@@ -198,7 +196,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object));
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapsConstantMusBeEitherLiteralOrIri()
         {
             // given
@@ -221,7 +219,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private const string ColumnName = "Column";
         private const int ColumnIndex = 3;
 
-        [Test]
+        [Fact]
         public void NullValueReturnsNullNode()
         {
             // given
@@ -234,12 +232,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNull(node);
+            Assert.Null(node);
             _logicalRow.VerifyAll();
             _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
-        [Test]
+        [Fact]
         public void ColumnNotFoundThrowsAndLogsError()
         {
             // given
@@ -259,7 +257,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #region IRI term type
 
-        [Test]
+        [Fact]
         public void RelativeUriValueCreatesUriNode()
         {
             const string expected = "http://www.example.com/value";
@@ -280,16 +278,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IUriNode);
-            Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+            Assert.NotNull(node);
+            Assert.True(node is IUriNode);
+            Assert.Equal(expected, (node as IUriNode).Uri.AbsoluteUri);
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test, Ignore]
+        [SkippableFact(Skip = "Don't remember")]
         public void InvalidUriValueThrowsException()
         {
             // given
@@ -313,11 +311,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termType.VerifyAll();
         }
 
-        [TestCase("http://example.com/company/Alice", "http://example.com/company/Alice", Description = "If value is already an absoulte URI, it is the result")]
-        [TestCase("path/../Danny", null, ExpectedException = typeof(InvalidTermException), Description = "Data error on invalid column value")]
-        [TestCase("Bob/Charles", "http://example.com/base/Bob/Charles")]
-        [TestCase("Bob Charles", null, ExpectedException = typeof(InvalidTermException))]
-        [TestCase("Bob", "http://example.com/base/Bob")]
+        [Theory]
+        [InlineData("http://example.com/company/Alice", "http://example.com/company/Alice")]
+        [InlineData("Bob/Charles", "http://example.com/base/Bob/Charles")]
+        [InlineData("Bob", "http://example.com/base/Bob")]
         public void EscapesColumnValuesBeforeConstructingAbsoluteUri(string value, string expected)
         {
             // given
@@ -325,8 +322,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
             Uri datatype;
             _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
-                                .Returns(value)
-                                .Verifiable();
+                .Returns(value)
+                .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
             _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
@@ -336,12 +333,35 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IUriNode);
-            Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+            Assert.NotNull(node);
+            Assert.True(node is IUriNode);
+            Assert.Equal(expected, (node as IUriNode).Uri.AbsoluteUri);
         }
 
-        [Test]
+        [Theory]
+        [InlineData("path/../Danny")]
+        [InlineData("Bob Charles")]
+        public void ThrowsWhenGeneratingTermFromInvalidValues(string value)
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                .Returns(value)
+                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            Assert.Throws<InvalidTermException>(() =>
+                _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object)
+            );
+        }
+
+        [Fact]
         public void DoesntPercentEncodeValueAndThrowsExceptionForInvalidURI()
         {
             // given
@@ -364,7 +384,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #region Literal term type
 
-        [Test]
+        [Fact]
         public void GeneratesLiteralWithoutDatatypeOrLanguageTag()
         {
             // given
@@ -383,16 +403,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("value", (node as ILiteralNode).Value);
+            Assert.NotNull(node);
+            Assert.True(node is ILiteralNode);
+            Assert.Equal("value", (node as ILiteralNode).Value);
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void GeneratesLiteralWithDatatype()
         {
             // given
@@ -413,17 +433,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("value", (node as ILiteralNode).Value);
-            Assert.AreEqual(expectedDatatype, (node as ILiteralNode).DataType.AbsoluteUri);
+            Assert.NotNull(node);
+            Assert.True(node is ILiteralNode);
+            Assert.Equal("value", (node as ILiteralNode).Value);
+            Assert.Equal(expectedDatatype, (node as ILiteralNode).DataType.AbsoluteUri);
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void GeneratesLiteralWithLanguageTag()
         {
             // given
@@ -443,17 +463,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("value", (node as ILiteralNode).Value);
-            Assert.AreEqual("pl", (node as ILiteralNode).Language);
+            Assert.NotNull(node);
+            Assert.True(node is ILiteralNode);
+            Assert.Equal("value", (node as ILiteralNode).Value);
+            Assert.Equal("pl", (node as ILiteralNode).Language);
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void CannotGenerateLiteralWithBothLanguageTagAndDatatype()
         {
             // given
@@ -481,7 +501,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termType.VerifyAll();
         }
 
-        [Test]
+        [Fact]
         public void ExplicitDatatypeOverridesImplicit()
         {
             // given
@@ -504,17 +524,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("value", (node as ILiteralNode).Value);
-            Assert.AreEqual(expectedDatatype, (node as ILiteralNode).DataType.AbsoluteUri);
+            Assert.NotNull(node);
+            Assert.True(node is ILiteralNode);
+            Assert.Equal("value", (node as ILiteralNode).Value);
+            Assert.Equal(expectedDatatype, (node as ILiteralNode).DataType.AbsoluteUri);
             _logicalRow.VerifyAll();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
             _log.Verify(log => log.LogTermGenerated(node));
         }
 
-        [Test]
+        [Fact]
         public void DoesntPercentEncodeValue()
         {
             // given
@@ -533,7 +553,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<ILiteralNode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual("Juan Daniel", node.Value);
+            Assert.Equal("Juan Daniel", node.Value);
         }
 
         #endregion
@@ -542,9 +562,10 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         #region Test template-valued term map
 
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("  ")]
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
         public void ThrowsIsTemplateIsNotSet(string template)
         {
             // given
@@ -559,7 +580,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termMap.VerifyAll();
         }
 
-        [Test]
+        [Fact]
         public void NullValueReturnsNullNodeForTemplateTermMap()
         {
             // given
@@ -575,13 +596,13 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNull(node);
+            Assert.Null(node);
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
-        [Test]
+        [Fact]
         public void AnyNullValueReturnsNullNodeForTemplateTermMap()
         {
             // given
@@ -601,14 +622,14 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNull(node);
+            Assert.Null(node);
             _lexicalFormProvider.VerifyAll();
             _logicalRow.VerifyAll();
             _termMap.VerifyAll();
             _log.Verify(log => log.LogNullTermGenerated(_termMap.Object));
         }
 
-        [Test]
+        [Fact]
         public void ReplacesColumnNameWithValuesForLiteralTemplatedTermMap()
         {
             // given
@@ -628,16 +649,16 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_objectMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is ILiteralNode);
-            Assert.AreEqual("http://www.example.com/person/5/Tomasz Pluskiewicz", (node as ILiteralNode).Value);
+            Assert.NotNull(node);
+            Assert.True(node is ILiteralNode);
+            Assert.Equal("http://www.example.com/person/5/Tomasz Pluskiewicz", (node as ILiteralNode).Value);
             _logicalRow.VerifyAll();
             _logicalRow.Verify();
             _objectMap.VerifyAll();
             _termType.VerifyAll();
         }
 
-        [Test]
+        [Fact]
         public void ReplacesAndEscapesColumnNameWithValuesForIRITemplatedTermMap()
         {
             // given
@@ -655,19 +676,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IUriNode);
-            Assert.AreEqual(new Uri("http://www.example.com/person/5/Tomasz%20Pluskiewicz"), (node as IUriNode).Uri);
+            Assert.NotNull(node);
+            Assert.True(node is IUriNode);
+            Assert.Equal(new Uri("http://www.example.com/person/5/Tomasz%20Pluskiewicz"), (node as IUriNode).Uri);
             _logicalRow.VerifyAll();
             _logicalRow.Verify();
             _termMap.VerifyAll();
             _termType.VerifyAll();
         }
 
-        [TestCase("http://example.com/company/Alice", "http://example.com/base/http%3A%2F%2Fexample.com%2Fcompany%2FAlice")]
-        [TestCase("path/../Danny", "http://example.com/base/path%2F..%2FDanny")]
-        [TestCase("Bob/Charles", "http://example.com/base/Bob%2FCharles")]
-        [TestCase("Bob Charles", "http://example.com/base/Bob%20Charles")]
+        [Theory]
+        [InlineData("http://example.com/company/Alice", "http://example.com/base/http%3A%2F%2Fexample.com%2Fcompany%2FAlice")]
+        [InlineData("path/../Danny", "http://example.com/base/path%2F..%2FDanny")]
+        [InlineData("Bob/Charles", "http://example.com/base/Bob%2FCharles")]
+        [InlineData("Bob Charles", "http://example.com/base/Bob%20Charles")]
         public void EscapesColumnValuesBeforeComputingTemplateValue(string value, string expected)
         {
             // given
@@ -686,12 +708,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.IsNotNull(node);
-            Assert.IsTrue(node is IUriNode);
-            Assert.AreEqual(expected, (node as IUriNode).Uri.AbsoluteUri);
+            Assert.NotNull(node);
+            Assert.True(node is IUriNode);
+            Assert.Equal(expected, (node as IUriNode).Uri.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void GeneratesValueForTemplateWithManyBraces()
         {
             // given 
@@ -711,12 +733,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node = _termGenerator.GenerateTerm<ILiteralNode>(termMap.Object, _logicalRow.Object);
 
             // then
-            Assert.AreEqual("{{{ some value }}}", node.Value);
+            Assert.Equal("{{{ some value }}}", node.Value);
         }
 
         #endregion
 
-        [Test]
+        [Fact]
         public void ThrowsWhenSubjectMapIsLiteral()
         {
             // given
@@ -730,7 +752,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_subjectMap.Object, _logicalRow.Object));
         }
 
-        [Test]
+        [Fact]
         public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
         {
             using (new MappingScope(new MappingOptions().WithAutomaticBlankNodeSubjects(true)))
@@ -742,11 +764,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
 
                 // then
-                Assert.That(node, Is.Not.Null);
+                Assert.NotNull(node);
             }
         }
 
-        [Test]
+        [Fact]
         public void ThrowsWhenGraphMapIsNonIri()
         {
             // given
@@ -762,7 +784,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_graphMap.Object, _logicalRow.Object));
         }
 
-        [Test]
+        [Fact]
         public void ThrowsWhenTermIsNeitherColumnNorTemplateNorConstantValue()
         {
             // given
@@ -774,7 +796,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.Throws<InvalidTermException>(() => _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object));
         }
 
-        [Test]
+        [Fact]
         public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
             using (new MappingScope(new MappingOptions().WithDuplicateRowsPreserved(true)))
@@ -789,11 +811,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
                 // then
-                Assert.AreNotSame(node, node2);
+                Assert.NotSame(node, node2);
             }
         }
 
-        [Test]
+        [Fact]
         public void RetrunsSameSubjectBlankNodesForSameValuesWhenNotPreservingDuplicateRows()
         {
             // given
@@ -806,11 +828,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
             // then
-            Assert.AreSame(node, node2);
+            Assert.Same(node, node2);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void ReusesNodesForObjectsAndSubjectsWhenNotPreservingDulplicateRows(bool subjectFirst)
         {
             // given
@@ -834,11 +857,12 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
 
             // then
-            Assert.AreSame(node, node2);
+            Assert.Same(node, node2);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void ReusesNodesForObjectsAndSubjectsWhenPreservingDulplicateRows(bool subjectFirst)
         {
             // given
@@ -861,7 +885,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             }
 
             // then
-            Assert.AreSame(node, node2);
+            Assert.Same(node, node2);
         }
     }
 }

@@ -35,14 +35,13 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using NUnit.Framework;
+using Xunit;
 
 namespace TCode.r2rml4net.Tests
 {
-    [TestFixture]
     public class MappingHelperTests
     {
-        [Test]
+        [Fact]
         public void EnsuresUppercaseEscapedOctets()
         {
             // given
@@ -52,35 +51,38 @@ namespace TCode.r2rml4net.Tests
             string escaped = MappingHelper.UrlEncode(unescaped);
 
             // then
-            Assert.AreEqual("some%2C%20text%3B%20with%3A%20illegal%2F%20characters", escaped);
+            Assert.Equal("some%2C%20text%3B%20with%3A%20illegal%2F%20characters", escaped);
         }
 
-        [TestCase(".~_-")]
-        [TestCase("abcdefghigklmnopqrstuvwxyz")]
-        [TestCase("QWERTYUIOPASFFGHJKLZXCVBNM")]
-        [TestCase("0123654789")]
+        [Theory]
+        [InlineData(".~_-")]
+        [InlineData("abcdefghigklmnopqrstuvwxyz")]
+        [InlineData("QWERTYUIOPASFFGHJKLZXCVBNM")]
+        [InlineData("0123654789")]
         public void DoesntEncodeAllowedCharcters(string character)
         {
-            Assert.AreEqual(character, MappingHelper.UrlEncode(character));
+            Assert.Equal(character, MappingHelper.UrlEncode(character));
         }
 
-        [TestCase(" ", "%20")]
-        [TestCase(",", "%2C")]
-        [TestCase(";", "%3B")]
-        [TestCase(":", "%3A")]
-        [TestCase("/", "%2F")]
-        [TestCase("/(..)/", "%2F%28..%29%2F")]
+        [Theory]
+        [InlineData(" ", "%20")]
+        [InlineData(",", "%2C")]
+        [InlineData(";", "%3B")]
+        [InlineData(":", "%3A")]
+        [InlineData("/", "%2F")]
+        [InlineData("/(..)/", "%2F%28..%29%2F")]
         public void EncodesCharactersCaseSensitive(string character, string expectedEncoded)
         {
-            Assert.AreEqual(expectedEncoded, MappingHelper.UrlEncode(character));
+            Assert.Equal(expectedEncoded, MappingHelper.UrlEncode(character));
         }
 
-        [TestCase("成")]
-        [TestCase("用")]
-        [TestCase("カタカ")]
+        [Theory]
+        [InlineData("成")]
+        [InlineData("用")]
+        [InlineData("カタカ")]
         public void DoesntEscapeEasterScript(string character)
         {
-            Assert.AreEqual(character, MappingHelper.UrlEncode(character));
+            Assert.Equal(character, MappingHelper.UrlEncode(character));
             
         }
     }

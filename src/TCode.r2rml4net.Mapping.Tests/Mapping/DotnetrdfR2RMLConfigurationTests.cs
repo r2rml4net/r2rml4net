@@ -38,26 +38,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Mapping.Fluent;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class DotnetrdfR2RMLConfigurationTests
     {
         private FluentR2RML _configuration;
 
-        [SetUp]
-        public void Setup()
+        public DotnetrdfR2RMLConfigurationTests()
         {
             _configuration = new FluentR2RML();
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(5)]
-        [TestCase(20)]
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(5)]
+        [InlineData(20)]
         public void CanCreateTriplesMapsFromConcreteTable(int numberOfTables)
         {
             IList<ITriplesMapConfiguration> tripleMaps = new List<ITriplesMapConfiguration>(numberOfTables);
@@ -67,17 +66,18 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 tripleMaps.Add(_configuration.CreateTriplesMapFromTable("TableName"));
             }
 
-            Assert.IsTrue(tripleMaps.All(map => map != null));
+            Assert.True(tripleMaps.All(map => map != null));
             foreach (var configuration in tripleMaps)
             {
-                Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
+                Assert.True(configuration is TriplesMapConfiguration);
             }
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(5)]
-        [TestCase(20)]
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(5)]
+        [InlineData(20)]
         public void CanCreateTriplesMapsFromR2RMLView(int numberOfTables)
         {
             IList<ITriplesMapConfiguration> tripleMaps = new List<ITriplesMapConfiguration>(numberOfTables);
@@ -87,34 +87,34 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 tripleMaps.Add(_configuration.CreateTriplesMapFromR2RMLView("SELECT * from Table"));
             }
 
-            Assert.IsTrue(tripleMaps.All(map => map != null));
+            Assert.True(tripleMaps.All(map => map != null));
             foreach (var configuration in tripleMaps)
             {
-                Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
+                Assert.True(configuration is TriplesMapConfiguration);
             }
         }
 
-        [Test]
+        [Fact]
         public void SqlVersionUriCanBeChanged()
         {
             ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
                                                                    .SetSqlVersion(new Uri("http://www.w3.org/ns/r2rml#SQL2008"));
 
-            Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
-            Assert.IsNotNull(configuration);
+            Assert.True(configuration is TriplesMapConfiguration);
+            Assert.NotNull(configuration);
         }
 
-        [Test]
+        [Fact]
         public void SqlVersionUriCanBeChangedFromUriString()
         {
             ITriplesMapConfiguration configuration = _configuration.CreateTriplesMapFromR2RMLView("SELECT...")
                                                                    .SetSqlVersion("http://www.w3.org/ns/r2rml#SQL2008");
 
-            Assert.IsInstanceOf<TriplesMapConfiguration>(configuration);
-            Assert.IsNotNull(configuration);
+            Assert.True(configuration is TriplesMapConfiguration);
+            Assert.NotNull(configuration);
         }
 
-        [Test]
+        [Fact]
         public void CreatingTriplesMapFromTableNameAssertsTriplesInGraph()
         {
             // given
@@ -125,13 +125,13 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var triplesMap = _configuration.CreateTriplesMapFromTable(tablename);
 
             // then
-            Assert.AreEqual(triplesMapUri, triplesMap.Uri.AbsoluteUri);
+            Assert.Equal(triplesMapUri, triplesMap.Uri.AbsoluteUri);
             _configuration.R2RMLMappings.VerifyHasTriple(triplesMapUri, UriConstants.RdfType, UriConstants.RrTriplesMapClass);
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankObject(triplesMapUri, UriConstants.RrLogicalTableProperty);
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrTableNameProperty, tablename);
         }
 
-        [Test]
+        [Fact]
         public void CreatingTriplesMapFromR2RMLViewAssertsTriplesInGraph()
         {
             // given
@@ -146,36 +146,36 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _configuration.R2RMLMappings.VerifyHasTripleWithBlankSubjectAndLiteralObject(UriConstants.RrSqlQueryProperty, sqlQuery);
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationBuilderCreatedWithAnEmptyGraph()
         {
-            Assert.IsTrue(_configuration.R2RMLMappings.IsEmpty);
+            Assert.True(_configuration.R2RMLMappings.IsEmpty);
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationBuilderCreatedWithGraphWithDefaultNamespaces()
         {
-            Assert.IsTrue(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rr"));
-            Assert.AreEqual("http://www.w3.org/ns/r2rml#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rr").AbsoluteUri);
+            Assert.True(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rr"));
+            Assert.Equal("http://www.w3.org/ns/r2rml#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rr").AbsoluteUri);
 
-            Assert.IsTrue(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rdf"));
-            Assert.AreEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rdf").AbsoluteUri);
+            Assert.True(_configuration.R2RMLMappings.NamespaceMap.HasNamespace("rdf"));
+            Assert.Equal("http://www.w3.org/1999/02/22-rdf-syntax-ns#", _configuration.R2RMLMappings.NamespaceMap.GetNamespaceUri("rdf").AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationBuilderConstructedWithDefaultBaseUri()
         {
-            Assert.AreEqual(FluentR2RML.DefaultBaseUri, _configuration.R2RMLMappings.BaseUri);
+            Assert.Equal(FluentR2RML.DefaultBaseUri, _configuration.R2RMLMappings.BaseUri);
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationBuilderCanBeConstructedWithChangedDefaultBaseUri()
         {
             Uri BaseUri = new Uri("http://this.is.test.com/rdf/");
 
             _configuration = new FluentR2RML(BaseUri);
 
-            Assert.AreEqual(BaseUri, _configuration.R2RMLMappings.BaseUri);
+            Assert.Equal(BaseUri, _configuration.R2RMLMappings.BaseUri);
         }
     }
 }

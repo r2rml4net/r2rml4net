@@ -37,23 +37,21 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class PredicateMapConfigurationTests
     {
-        private IGraph _graph;
-        private PredicateMapConfiguration _predicateMap;
-        private Mock<ITriplesMapConfiguration> _triplesMapNode;
-        private Mock<IPredicateObjectMap> _predicateObjectMap;
+        private readonly IGraph _graph;
+        private readonly PredicateMapConfiguration _predicateMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMapNode;
+        private readonly Mock<IPredicateObjectMap> _predicateObjectMap;
 
-        [SetUp]
-        public void Setup()
+        public PredicateMapConfigurationTests()
         {
             _graph = new FluentR2RML().R2RMLMappings;
             IUriNode triplesMapNode = _graph.CreateUriNode(new Uri("http://test.example.com/TestMapping"));
@@ -66,13 +64,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void NodeCannotBeNull()
         {
-            _predicateMap = new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null);
+            Assert.Throws<ArgumentNullException>(() =>
+                new PredicateMapConfiguration(_triplesMapNode.Object, _predicateObjectMap.Object, _graph, null)
+            );
         }
 
-        [Test]
+        [Fact]
         public void PredicateMapCanBeIRIConstantValued()
         {
             // given
@@ -82,41 +82,45 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _predicateMap.IsConstantValued(uri);
 
             // then
-            Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_predicateMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _predicateMap.ParentMapNode,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrPredicateMapProperty)),
                     _predicateMap.Node)));
-            Assert.IsTrue(_predicateMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_predicateMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _predicateMap.Node,
                     _predicateMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _predicateMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _predicateMap.ConstantValue);
+            Assert.Equal(uri, _predicateMap.ConstantValue);
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Fact]
         public void PredicateMapCannotBeOfTypeLiteral()
         {
-            _predicateMap.TermType.IsLiteral();
+            Assert.Throws<InvalidMapException>(() => 
+                _predicateMap.TermType.IsLiteral()
+            );
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Fact]
         public void PredicateMapCannotBeOfTypeBlankNode()
         {
-            _predicateMap.TermType.IsBlankNode();
+            Assert.Throws<InvalidMapException>(() =>
+                _predicateMap.TermType.IsBlankNode()
+            );
         }
 
-        [Test]
+        [Fact]
         public void PredicateIsNullByDefault()
         {
-            Assert.IsNull(_predicateMap.URI);
+            Assert.Null(_predicateMap.URI);
         }
 
-        [Test]
+        [Fact]
         public void CreatesCorrectShortcutPropertyNode()
         {
-            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#predicate"), _predicateMap.CreateShortcutPropertyNode().Uri);
+            Assert.Equal(new Uri("http://www.w3.org/ns/r2rml#predicate"), _predicateMap.CreateShortcutPropertyNode().Uri);
         }
     }
 }

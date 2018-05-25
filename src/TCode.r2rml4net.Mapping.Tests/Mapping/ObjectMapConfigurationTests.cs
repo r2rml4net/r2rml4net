@@ -39,7 +39,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using TCode.r2rml4net.Validation;
@@ -47,18 +47,16 @@ using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
-    [TestFixture]
     public class ObjectMapConfigurationTests
     {
         private ObjectMapConfiguration _objectMap;
-        private Uri _tripesMapURI;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
-        private IGraph _graph;
-        private Mock<IPredicateObjectMapConfiguration> _predicateObjectMap;
-        private Mock<ILanguageTagValidator> _languageTagValidator;
+        private readonly Uri _tripesMapURI;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly IGraph _graph;
+        private readonly Mock<IPredicateObjectMapConfiguration> _predicateObjectMap;
+        private readonly Mock<ILanguageTagValidator> _languageTagValidator;
 
-        [SetUp]
-        public void Setup()
+        public ObjectMapConfigurationTests()
         {
             _graph = new FluentR2RML().R2RMLMappings;
             _tripesMapURI = new Uri("http://test.example.com/TestMapping");
@@ -77,13 +75,15 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                 };
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void NodeCannotBeNull()
         {
-            _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, (INode) null);
+            Assert.Throws<ArgumentNullException>(() =>
+                _objectMap = new ObjectMapConfiguration(_triplesMap.Object, _predicateObjectMap.Object, _graph, null)
+            );
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapCanBeLiteralConstantValued()
         {
             // given
@@ -93,20 +93,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.IsConstantValued(literal);
 
             // then
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.ParentMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty)),
                     _objectMap.Node)));
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(literal))));
-            Assert.AreEqual(literal, _objectMap.Literal);
+            Assert.Equal(literal, _objectMap.Literal);
         }
 
-        [Test]
+        [Fact]
         public void ConstantLiteralValueCanBeSetOnlyOnce()
         {
             // given
@@ -119,7 +119,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _objectMap.IsConstantValued(literal));
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapCanBeIRIConstantValued()
         {
             // given
@@ -129,20 +129,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _objectMap.IsConstantValued(uri);
 
             // then
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.ParentMapNode,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty)),
                     _objectMap.Node)));
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _objectMap.URI);
+            Assert.Equal(uri, _objectMap.URI);
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapLiteralConstantCanBeTyped()
         {
             // given
@@ -153,24 +153,24 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
 
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrDataTypeProperty)),
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RdfInteger)))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
-            Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.Equal(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
+            Assert.Empty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
-            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.Single(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
-                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
-            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))));
+            Assert.Single(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.Node,
-                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))));
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapLiteralConstantCanHaveLanguagTag()
         {
             // given
@@ -186,31 +186,34 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
         private void AssertLanguage(string languagTagValue)
         {
-            Assert.IsTrue(_objectMap.R2RMLMappings.ContainsTriple(
+            Assert.True(_objectMap.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _objectMap.Node,
                     _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrLanguageProperty)),
                     _objectMap.R2RMLMappings.CreateLiteralNode(languagTagValue))));
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
-            Assert.IsEmpty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.Equal(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
+            Assert.Empty(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
                 _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectProperty))));
-            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+            Assert.Single(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.ParentMapNode,
-                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))).Count());
-            Assert.AreEqual(1, _objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrObjectMapProperty))));
+            Assert.Single(_objectMap.R2RMLMappings.GetTriplesWithSubjectPredicate(
                 _objectMap.Node,
-                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))).Count());
+                _objectMap.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty))));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void CannotSetInvalidLanguageTag()
         {
             _languageTagValidator.Setup(validator => validator.LanguageTagIsValid("english")).Returns(false);
-            _objectMap.HasLanguage("english");
+
+            Assert.Throws<ArgumentException>(() =>
+                _objectMap.HasLanguage("english")
+            );
         }
 
-        [Test]
+        [Fact]
         public void ObjectMapLiteralConstantLanguagTagCanBeSetUsingCultureInfo()
         {
             // given
@@ -224,7 +227,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             AssertLanguage("pl-pl");
         }
 
-        [Test]
+        [Fact]
         public void CannotSetBothLanguageAndDataType()
         {
             // given
@@ -240,27 +243,27 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => literalConfiguration.HasLanguage("pl-PL"));
         }
 
-        [Test]
+        [Fact]
         public void DefaultValuesAreNull()
         {
             IObjectMap map = _objectMap;
-            Assert.IsNull(map.ColumnName);
-            Assert.IsNull(map.Literal);
-            Assert.IsNull(map.URI);
-            Assert.IsNull(map.Template);
+            Assert.Null(map.ColumnName);
+            Assert.Null(map.Literal);
+            Assert.Null(map.URI);
+            Assert.Null(map.Template);
         }
 
-        [Test]
+        [Fact]
         public void CanBeOfTermTypeLiteral()
         {
             // when
             _objectMap.TermType.IsLiteral();
 
             // then
-            Assert.AreEqual(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
+            Assert.Equal(UriConstants.RrLiteral, _objectMap.TermTypeURI.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void TermTypeCannotBeSetTwice()
         {
             // when
@@ -272,10 +275,10 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _objectMap.TermType.IsLiteral());
         }
 
-        [Test]
+        [Fact]
         public void CreatesCorrectShortcutPropertyNode()
         {
-            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#object"), _objectMap.CreateShortcutPropertyNode().Uri);
+            Assert.Equal(new Uri("http://www.w3.org/ns/r2rml#object"), _objectMap.CreateShortcutPropertyNode().Uri);
         }
     }
 }

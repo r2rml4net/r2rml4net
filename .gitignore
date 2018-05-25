@@ -11,3 +11,5 @@ src/TCode.r2rml4net.Mapping/Properties/AssemblyInfo.cs
 AssemblyVersionInfo.cs
 src/**/VersionAssemblyInfo.cs
 *.Cache
+.vs
+/paket-files/paket.restore.cached

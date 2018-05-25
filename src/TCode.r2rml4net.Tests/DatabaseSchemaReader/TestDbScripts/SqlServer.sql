@@ -1,24 +1,7 @@
-﻿USE [master]
-GO
-IF EXISTS(SELECT * FROM sys.databases WHERE name='SchemaReaderTest')
-	ALTER DATABASE [SchemaReaderTest]
-	SET SINGLE_USER
-	WITH ROLLBACK IMMEDIATE
-GO
-IF EXISTS(SELECT * FROM sys.databases WHERE name='SchemaReaderTest')
-	DROP DATABASE [SchemaReaderTest]
-go
-/****** Object:  Database [SchemaReaderTest]    Script Date: 06/19/2012 15:33:27 ******/
-CREATE DATABASE [SchemaReaderTest]
-GO
-ALTER DATABASE [SchemaReaderTest] SET COMPATIBILITY_LEVEL = 100
-GO
-IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+﻿IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
 EXEC [SchemaReaderTest].[dbo].[sp_fulltext_database] @action = 'enable'
 end
-GO
-USE [SchemaReaderTest]
 GO
 /****** Object:  Table [dbo].[CandidateKey]    Script Date: 06/19/2012 15:33:28 ******/
 SET ANSI_NULLS ON

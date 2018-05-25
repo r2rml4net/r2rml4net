@@ -63,7 +63,7 @@ namespace TCode.r2rml4net.RDB.DatabaseSchemaReader
 
                 Type type = dataType.GetNetType();
 
-                if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte) }.Contains(type))
+                if (new[] { typeof(int), typeof(short), typeof(long), typeof(sbyte), typeof(byte) }.Contains(type))
                 {
                     return R2RMLType.Integer;
                 }

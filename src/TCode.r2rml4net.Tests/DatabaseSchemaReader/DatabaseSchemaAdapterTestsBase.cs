@@ -36,7 +36,7 @@
 // terms.
 #endregion
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 using TCode.r2rml4net.RDB;
 
@@ -44,20 +44,17 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
 {
     public abstract class DatabaseSchemaAdapterTestsBase
     {
-        protected DatabaseSchemaAdapter DatabaseSchema;
+        protected readonly DatabaseSchemaAdapter DatabaseSchema;
 
-        [TestFixtureSetUp]
-        public void Setup()
+        protected DatabaseSchemaAdapterTestsBase(SqlServerFixture fixture)
         {
-            DatabaseSchema = SetupAdapter();
+            DatabaseSchema = fixture.DatabaseSchema;
         }
 
-        protected abstract DatabaseSchemaAdapter SetupAdapter();
-
-        [Test]
+        [Fact]
         public void ContainsTablesCorrectly()
         {
-            Assert.AreEqual(10, DatabaseSchema.Tables.Count);
+            Assert.Equal(10, DatabaseSchema.Tables.Count);
             var tableNames = DatabaseSchema.Tables.Select(t => t.Name).ToArray();
             Assert.Contains("CandidateKey", tableNames);
             Assert.Contains("CandidateRef", tableNames);
@@ -69,58 +66,58 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
             Assert.Contains("ReferencesUnique", tableNames);
         }
 
-        [Test]
+        [Fact]
         public void ReadsForeignKeysCorrectly()
         {
             // HasPrimaryKey - ForeignKeyReference
             TableMetadata foreignKeyReferenceTable = DatabaseSchema.Tables.Single(t => t.Name == "ForeignKeyReference");
             TableMetadata hasPrimaryKey = DatabaseSchema.Tables["HasPrimaryKey"];
-            Assert.AreEqual(1, foreignKeyReferenceTable.ForeignKeys.Length);
-            Assert.AreEqual("ForeignKey", foreignKeyReferenceTable.ForeignKeys[0].ForeignKeyColumns[0]);
-            Assert.AreEqual("Id", foreignKeyReferenceTable.ForeignKeys[0].ReferencedColumns[0]);
-            Assert.AreEqual("ForeignKeyReference", foreignKeyReferenceTable.ForeignKeys[0].TableName);
-            Assert.AreSame(hasPrimaryKey, foreignKeyReferenceTable.ForeignKeys[0].ReferencedTable);
+            Assert.Single(foreignKeyReferenceTable.ForeignKeys);
+            Assert.Equal("ForeignKey", foreignKeyReferenceTable.ForeignKeys[0].ForeignKeyColumns[0]);
+            Assert.Equal("Id", foreignKeyReferenceTable.ForeignKeys[0].ReferencedColumns[0]);
+            Assert.Equal("ForeignKeyReference", foreignKeyReferenceTable.ForeignKeys[0].TableName);
+            Assert.Same(hasPrimaryKey, foreignKeyReferenceTable.ForeignKeys[0].ReferencedTable);
 
             // CandidateRef - CandidateKey
             TableMetadata candidateRefTable = DatabaseSchema.Tables.Single(t => t.Name == "CandidateRef");
             TableMetadata candidateKeyTable = DatabaseSchema.Tables["CandidateKey"];
-            Assert.AreEqual(1, candidateRefTable.ForeignKeys.Length);
-            Assert.AreEqual("RefCol1", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[0]);
-            Assert.AreEqual("RefCol2", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[1]);
-            Assert.AreEqual("KeyCol1", candidateRefTable.ForeignKeys[0].ReferencedColumns[0]);
-            Assert.AreEqual("KeyCol2", candidateRefTable.ForeignKeys[0].ReferencedColumns[1]);
-            Assert.AreEqual("CandidateRef", candidateRefTable.ForeignKeys[0].TableName);
-            Assert.AreSame(candidateKeyTable, candidateRefTable.ForeignKeys[0].ReferencedTable);
-            Assert.IsTrue(candidateKeyTable.UniqueKeys.ElementAt(0).IsReferenced);
+            Assert.Single(candidateRefTable.ForeignKeys);
+            Assert.Equal("RefCol1", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[0]);
+            Assert.Equal("RefCol2", candidateRefTable.ForeignKeys[0].ForeignKeyColumns[1]);
+            Assert.Equal("KeyCol1", candidateRefTable.ForeignKeys[0].ReferencedColumns[0]);
+            Assert.Equal("KeyCol2", candidateRefTable.ForeignKeys[0].ReferencedColumns[1]);
+            Assert.Equal("CandidateRef", candidateRefTable.ForeignKeys[0].TableName);
+            Assert.Same(candidateKeyTable, candidateRefTable.ForeignKeys[0].ReferencedTable);
+            Assert.True(candidateKeyTable.UniqueKeys.ElementAt(0).IsReferenced);
         }
 
-        [Test]
+        [Fact]
         public void ReadsPrimaryKeysCorrectly()
         {
-            Assert.IsEmpty(DatabaseSchema.Tables["CandidateKey"].PrimaryKey);
-            Assert.IsEmpty(DatabaseSchema.Tables["CandidateRef"].PrimaryKey);
-            Assert.IsEmpty(DatabaseSchema.Tables["ManyDataTypes"].PrimaryKey);
+            Assert.Empty(DatabaseSchema.Tables["CandidateKey"].PrimaryKey);
+            Assert.Empty(DatabaseSchema.Tables["CandidateRef"].PrimaryKey);
+            Assert.Empty(DatabaseSchema.Tables["ManyDataTypes"].PrimaryKey);
 
-            Assert.AreEqual(1, DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey.Length);
-            Assert.AreEqual("Id", DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey[0]);
-            Assert.AreEqual("ForeignKey", DatabaseSchema.Tables["ForeignKeyReference"].PrimaryKey[0]);
+            Assert.Single(DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey);
+            Assert.Equal("Id", DatabaseSchema.Tables["HasPrimaryKey"].PrimaryKey[0]);
+            Assert.Equal("ForeignKey", DatabaseSchema.Tables["ForeignKeyReference"].PrimaryKey[0]);
         }
 
-        [Test]
+        [Fact]
         public void ReadsUniqueKeysAndMarksReferenced()
         {
-            Assert.AreEqual(3, DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys.Count());
+            Assert.Equal(3, DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys.Count());
 
-            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+            Assert.NotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 1 &&
                                                         uq.Any(col => col.Name == "UQ3") &&
                                                         uq.IsReferenced));
-            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+            Assert.NotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 2 &&
                                                         uq.Any(col => col.Name == "UQ1_1") &&
                                                         uq.Any(col => col.Name == "UQ1_2") &&
                                                         uq.IsReferenced));
-            Assert.IsNotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
+            Assert.NotNull(DatabaseSchema.Tables["MultipleUniqueKeys"].UniqueKeys
                                  .SingleOrDefault(uq => uq.ColumnsCount == 3 &&
                                                         uq.Any(col => col.Name == "UQ2_1") &&
                                                         uq.Any(col => col.Name == "UQ2_2") &&
@@ -128,12 +125,12 @@ namespace TCode.r2rml4net.Tests.DatabaseSchemaReader
                                                         !uq.IsReferenced));
         }
 
-        [Test]
+        [Fact]
         public void SetsFlagIfCandidateReferenceTargetHasPrimaryKey()
         {
-            Assert.AreEqual(1, DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys.Length);
-            Assert.IsTrue(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].IsCandidateKeyReference);
-            Assert.IsTrue(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].ReferencedTableHasPrimaryKey);
+            Assert.Single(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys);
+            Assert.True(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].IsCandidateKeyReference);
+            Assert.True(DatabaseSchema.Tables["ReferencesUnique"].ForeignKeys[0].ReferencedTableHasPrimaryKey);
         }
     }
 }

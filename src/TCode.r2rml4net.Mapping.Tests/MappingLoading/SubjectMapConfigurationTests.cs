@@ -38,25 +38,23 @@
 using System;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using Resourcer;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
 
 namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
 {
-    [TestFixture]
     public class SubjectMapConfigurationTests
     {
-        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
 
-        [SetUp]
-        public void Setup()
+        public SubjectMapConfigurationTests()
         {
             _triplesMap = new Mock<ITriplesMapConfiguration>();
         }
 
-        [Test]
+        [Fact]
         public void CanInitizalieFromGraph()
         {
             // given
@@ -69,12 +67,12 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual("http://data.example.com/employee/{EMPNO}", subjectMap.Template);
-            Assert.AreEqual("http://www.example.com/triplesMap", ((IUriNode)subjectMap.ParentMapNode).Uri.AbsoluteUri);
-            Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
+            Assert.Equal("http://data.example.com/employee/{EMPNO}", subjectMap.Template);
+            Assert.Equal("http://www.example.com/triplesMap", ((IUriNode)subjectMap.ParentMapNode).Uri.AbsoluteUri);
+            Assert.Equal(graph.GetUriNode("ex:subject"), subjectMap.Node);
         }
 
-        [Test]
+        [Fact]
         public void CanInitializeWithGraphMaps()
         {
             // given
@@ -87,17 +85,17 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
-            Assert.AreEqual(2, subjectMap.GraphMaps.Count());
-            Assert.AreEqual("http://data.example.com/jobgraph/{JOB}", subjectMap.GraphMaps.ElementAt(0).Template);
-            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
+            Assert.Equal(graph.GetUriNode("ex:subject"), subjectMap.Node);
+            Assert.Equal(2, subjectMap.GraphMaps.Count());
+            Assert.Equal("http://data.example.com/jobgraph/{JOB}", subjectMap.GraphMaps.ElementAt(0).Template);
+            Assert.Equal(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
-        [Test]
+        [Fact]
         public void CanInitializeWithShortcutGraphMaps()
         {
             // given
@@ -110,17 +108,17 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.GetUriNode("ex:subject"), subjectMap.Node);
-            Assert.AreEqual(2, subjectMap.GraphMaps.Count());
-            Assert.AreEqual(new Uri("http://data.example.com/shortGraph/"), subjectMap.GraphMaps.ElementAt(0).URI);
-            Assert.AreEqual(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
+            Assert.Equal(graph.GetUriNode("ex:subject"), subjectMap.Node);
+            Assert.Equal(2, subjectMap.GraphMaps.Count());
+            Assert.Equal(new Uri("http://data.example.com/shortGraph/"), subjectMap.GraphMaps.ElementAt(0).URI);
+            Assert.Equal(new Uri("http://data.example.com/agraph/"), subjectMap.GraphMaps.ElementAt(1).URI);
             var blankNode1 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(0).Object;
-            Assert.AreEqual(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
+            Assert.Equal(blankNode1, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(0).Node);
             var blankNode2 = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:subject"), graph.CreateUriNode("rr:graphMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
+            Assert.Equal(blankNode2, subjectMap.GraphMaps.Cast<GraphMapConfiguration>().ElementAt(1).Node);
         }
 
-        [Test, Ignore("consider a way to allow directly passing a graph with shortcut node")]
+        [SkippableFact(Skip = "consider a way to allow directly passing a graph with shortcut node")]
         public void CanBeInitializedWithConstantValueUsingShortcut()
         {
             // given
@@ -133,9 +131,9 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             subjectMap.RecursiveInitializeSubMapsFromCurrentGraph();
 
             // then
-            Assert.AreEqual(graph.CreateUriNode("ex:Value").Uri, subjectMap.ConstantValue);
+            Assert.Equal(graph.CreateUriNode("ex:Value").Uri, subjectMap.ConstantValue);
             var blankNode = graph.GetTriplesWithSubjectPredicate(graph.GetUriNode("ex:TriplesMap"), graph.CreateUriNode("rr:subjectMap")).ElementAt(1).Object;
-            Assert.AreEqual(blankNode, subjectMap.Node);
+            Assert.Equal(blankNode, subjectMap.Node);
         }
     }
 }

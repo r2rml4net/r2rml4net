@@ -37,7 +37,7 @@
 #endregion
 using System;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
@@ -46,23 +46,22 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 {
     public class SubjectMapConfigurationTests
     {
-        private IGraph _graph;
+        private readonly IGraph _graph;
         private SubjectMapConfiguration _subjectMapConfiguration;
-        private IUriNode _triplesMapNode;
-        private Mock<ITriplesMapConfiguration> _triplesMap;
+        private readonly IUriNode _triplesMapNode;
+        private readonly Mock<ITriplesMapConfiguration> _triplesMap;
 
-        [SetUp]
-        public void Setup()
+        public SubjectMapConfigurationTests()
         {
             _graph = new FluentR2RML().R2RMLMappings;
             _triplesMapNode = _graph.CreateUriNode(new Uri("http://unittest.mappings.com/TriplesMap"));
-         
+
             _triplesMap = new Mock<ITriplesMapConfiguration>();
             _triplesMap.Setup(tm => tm.Node).Returns(_triplesMapNode);
             _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph);
         }
 
-        [Test]
+        [Fact]
         public void CanAddMultipleClassIrisToSubjectMap()
         {
             // given
@@ -74,48 +73,48 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.AddClass(class1).AddClass(class2).AddClass(class3);
 
             // then
-            Assert.AreEqual(3, _subjectMapConfiguration.Classes.Length);
+            Assert.Equal(3, _subjectMapConfiguration.Classes.Length);
             Assert.Contains(class1, _subjectMapConfiguration.Classes);
             Assert.Contains(class2, _subjectMapConfiguration.Classes);
             Assert.Contains(class3, _subjectMapConfiguration.Classes);
         }
 
-        [Test]
+        [Fact]
         public void CanSetTermMapsTermTypeToIRI()
         {
             // when
             _subjectMapConfiguration.TermType.IsIRI();
 
             // then
-            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.Equal(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrIRI);
         }
 
-        [Test]
+        [Fact]
         public void CanSetTermMapsTermTypeToBlankNode()
         {
             // when
             _subjectMapConfiguration.TermType.IsBlankNode();
 
             // then
-            Assert.AreEqual(UriConstants.RrBlankNode, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.Equal(UriConstants.RrBlankNode, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
             _subjectMapConfiguration.R2RMLMappings.VerifyHasTripleWithBlankSubject(UriConstants.RrTermTypeProperty, UriConstants.RrBlankNode);
         }
 
-        [Test, ExpectedException(typeof(InvalidMapException))]
+        [Fact]
         public void CannnotSetTermMapsTermTypeToLiteral()
         {
             // when
-            _subjectMapConfiguration.TermType.IsLiteral();
+            Assert.Throws<InvalidMapException>(() => _subjectMapConfiguration.TermType.IsLiteral());
         }
 
-        [Test]
+        [Fact]
         public void DefaultTermTypeIsIRI()
         {
-            Assert.AreEqual(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
+            Assert.Equal(UriConstants.RrIRI, _subjectMapConfiguration.TermTypeURI.AbsoluteUri);
         }
 
-        [Test]
+        [Fact]
         public void CannoSetTermTypeTwice()
         {
             // when
@@ -126,7 +125,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             Assert.Throws<InvalidMapException>(() => _subjectMapConfiguration.TermType.IsBlankNode());
         }
 
-        [Test]
+        [Fact]
         public void SubjectMapCanBeIRIConstantValued()
         {
             // given
@@ -136,20 +135,20 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             _subjectMapConfiguration.IsConstantValued(uri);
 
             // then
-            Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
+            Assert.True(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _subjectMapConfiguration.ParentMapNode,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrSubjectMapProperty)),
                     _subjectMapConfiguration.Node)));
-            Assert.IsTrue(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
+            Assert.True(_subjectMapConfiguration.R2RMLMappings.ContainsTriple(
                 new Triple(
                     _subjectMapConfiguration.Node,
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(new Uri(UriConstants.RrConstantProperty)),
                     _subjectMapConfiguration.R2RMLMappings.CreateUriNode(uri))));
-            Assert.AreEqual(uri, _subjectMapConfiguration.URI);
+            Assert.Equal(uri, _subjectMapConfiguration.URI);
         }
 
-        [Test]
+        [Fact]
         public void CanHaveClassesAndBeTemplateValued()
         {
             // given
@@ -161,16 +160,16 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
 
             // then
             Assert.Contains(class1, _subjectMapConfiguration.Classes);
-            Assert.AreEqual(template, _subjectMapConfiguration.Template);
+            Assert.Equal(template, _subjectMapConfiguration.Template);
         }
 
-        [Test]
+        [Fact]
         public void SubjectIsNullByDefault()
         {
-            Assert.IsNull(_subjectMapConfiguration.URI);
+            Assert.Null(_subjectMapConfiguration.URI);
         }
 
-        [Test]
+        [Fact]
         public void CanCreateMultipleGraphMap()
         {
             // when
@@ -178,21 +177,23 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             IGraphMap graphMap2 = _subjectMapConfiguration.CreateGraphMap();
 
             // then
-            Assert.AreNotSame(graphMap1, graphMap2);
-            Assert.IsInstanceOf<TermMapConfiguration>(graphMap1);
-            Assert.IsInstanceOf<TermMapConfiguration>(graphMap2);
+            Assert.NotSame(graphMap1, graphMap2);
+            Assert.True(graphMap1 is TermMapConfiguration);
+            Assert.True(graphMap2 is TermMapConfiguration);
         }
 
-        [Test]
+        [Fact]
         public void CreatesCorrectShortcutPropertyNode()
         {
-            Assert.AreEqual(new Uri("http://www.w3.org/ns/r2rml#subject"), _subjectMapConfiguration.CreateShortcutPropertyNode().Uri);
+            Assert.Equal(new Uri("http://www.w3.org/ns/r2rml#subject"), _subjectMapConfiguration.CreateShortcutPropertyNode().Uri);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void NodeCannotBeNull()
         {
-            _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, (INode) null);
+            Assert.Throws<ArgumentNullException>(() =>
+                _subjectMapConfiguration = new SubjectMapConfiguration(_triplesMap.Object, _graph, (INode)null)
+            );
         }
     }
 }
