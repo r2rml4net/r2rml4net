@@ -36,7 +36,6 @@
 // terms.
 #endregion
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using DatabaseSchemaReader;
 using DatabaseSchemaReader.DataSchema;
