@@ -37,9 +37,7 @@
 #endregion
 using System;
 using System.Diagnostics;
-#if THREAD_AFFINITY
 using System.Threading;
-#endif
 
 namespace TCode.r2rml4net
 {
@@ -67,9 +65,7 @@ namespace TCode.r2rml4net
             _instance = instance;
             _instance.Freeze();
 
-#if THREAD_AFFINITY
             Thread.BeginThreadAffinity();
-#endif
             _parent = Head;
             Head = this;
         }
@@ -90,9 +86,7 @@ namespace TCode.r2rml4net
 
                 Debug.Assert(this == Head, "Disposed out of order.");
                 Head = _parent;
-#if THREAD_AFFINITY
                 Thread.EndThreadAffinity();
-#endif
             }
         }
     }
