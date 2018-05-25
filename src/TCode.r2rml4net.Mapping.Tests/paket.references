@@ -8,3 +8,4 @@ xunit
 xunit.extensibility.execution
 xunit.runner.visualstudio
 moq
+dotnet-xunit
