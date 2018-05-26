@@ -27,7 +27,7 @@ As of version 0.5 the r2rml4net library:
 * Support for other database managements systems
 * Enhance the fluent API to support modifying mapping (current is append-only)
 
-[nuget-badge]: https://badge.fury.io/nu/nuget.svg
-[nuget-link]: https://badge.fury.io/nu/nuget
+[nuget-badge]: https://badge.fury.io/nu/r2rml4net.svg
+[nuget-link]: https://badge.fury.io/nu/r2rml4net
 [build-badge]: https://ci.appveyor.com/api/projects/status/8y8hj6jd6d0urw6p/branch/master?svg=true
 [build-link]: https://ci.appveyor.com/project/tpluscode/r2rml4net/branch/master
