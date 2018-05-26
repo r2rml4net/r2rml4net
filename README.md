@@ -1,4 +1,4 @@
-# r2rml4net [![Build status](https://ci.appveyor.com/api/projects/status/8y8hj6jd6d0urw6p/branch/master?svg=true)](https://ci.appveyor.com/project/tpluscode/r2rml4net/branch/master)
+# r2rml4net [![Build status][build-badge]][build-link] [![NuGet version][nuget-badge]][nuget-link]
 
 Welcome to r2rml4net, a project which brings [R2RML](http://www.w3.org/TR/r2rml/) to the .NET world.
 
@@ -26,3 +26,8 @@ As of version 0.5 the r2rml4net library:
 
 * Support for other database managements systems
 * Enhance the fluent API to support modifying mapping (current is append-only)
+
+[nuget-badge]: https://badge.fury.io/nu/nuget.svg
+[nuget-link]: https://badge.fury.io/nu/nuget
+[build-badge]: https://ci.appveyor.com/api/projects/status/8y8hj6jd6d0urw6p/branch/master?svg=true
+[build-link]: https://ci.appveyor.com/project/tpluscode/r2rml4net/branch/master
