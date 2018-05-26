@@ -12,7 +12,7 @@ Or clone this repository.
 
 ## Features
 
-As of version 0.3 the r2rml4net library:
+As of version 0.5 the r2rml4net library:
 
 * Is nearly fully compatible with the [R2RML specifications](http://www.w3.org/TR/r2rml/),
 * Can load existing R2RML mapping graphs from any RDF serialization,
@@ -20,6 +20,7 @@ As of version 0.3 the r2rml4net library:
 * Can generate R2RML graphs from relational databases (aka [Direct Mapping](http://www.w3.org/TR/rdb-direct-mapping/)),
 * Can convert data from relational databases to structured data,
 * Has been tested and supports Microsoft SQL Server.
+* Supports .NET Framework 4.5.2 nad .NET Standard 2.0
 
 ## Important stuff to be done
 
