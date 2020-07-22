@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -39,6 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
@@ -96,10 +97,10 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-add-triples</remarks>
         protected internal void AddTriplesToDataSet(
-            INode subject,
+            [AllowNull] INode subject,
             IEnumerable<IUriNode> predicates,
-            IEnumerable<INode> objects, 
-            IEnumerable<IUriNode> graphs, 
+            IEnumerable<INode> objects,
+            IEnumerable<IUriNode> graphs,
             IRdfHandler rdfHandler)
         {
             var objectsLocal = objects.ToList();
@@ -161,7 +162,7 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// <summary>
         /// Handle triple by inserting it to all <paramref name="graphs"/> using the <paramref name="rdfHandler"/>
         /// </summary>
-        protected void AddTriplesToDataSet(INode subject, IUriNode predicate, INode obj, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
+        protected void AddTriplesToDataSet([AllowNull] INode subject, [AllowNull] IUriNode predicate, [AllowNull] INode obj, IEnumerable<IUriNode> graphs, IRdfHandler rdfHandler)
         {
             IEnumerable<IUriNode> graphsLocal = graphs.ToList();
             if (!graphsLocal.Any())
@@ -182,7 +183,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             }
         }
 
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode obj, IRdfHandler rdfHandler)
+        private void AddTripleToDataSet([AllowNull] INode subject, [AllowNull] IUriNode predicate, [AllowNull] INode obj, IRdfHandler rdfHandler)
         {
             if (subject == null || predicate == null || obj == null)
             {
@@ -193,7 +194,7 @@ namespace TCode.r2rml4net.TriplesGeneration
             rdfHandler.HandleTriple(triple);
         }
 
-        private void AddTripleToDataSet(INode subject, IUriNode predicate, INode obj, IUriNode graph, IRdfHandler rdfHandler)
+        private void AddTripleToDataSet([AllowNull] INode subject, [AllowNull] IUriNode predicate, [AllowNull] INode obj, [AllowNull] IUriNode graph, IRdfHandler rdfHandler)
         {
             if (subject == null || predicate == null || obj == null || graph == null)
             {
