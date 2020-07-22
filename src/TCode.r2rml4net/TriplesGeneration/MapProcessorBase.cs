@@ -39,9 +39,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Anotar.NLog;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
@@ -57,7 +57,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         /// </summary>
         protected const string RrDefaultgraph = "http://www.w3.org/ns/r2rml#defaultGraph";
         private readonly IRDFTermGenerator _termGenerator;
-        private LogFacadeBase _log;
 
         /// <summary>
         /// Creates an instance
@@ -65,23 +64,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         protected MapProcessorBase(IRDFTermGenerator termGenerator)
         {
             _termGenerator = termGenerator;
-        }
-
-        /// <summary>
-        /// Gets or sets the generation log
-        /// </summary>
-        public LogFacadeBase Log
-        {
-            get
-            {
-                return _log;
-            }
-
-            set
-            {
-                _log = value;
-                TermGenerator.Log = value;
-            }
         }
 
         /// <summary>
@@ -132,7 +114,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
                 catch (Exception e)
                 {
-                    Log.LogQueryExecutionError(map, e.Message);
+                    LogTo.Error("Failed to execute query for map {0}: {1}", map.Node, e.Message);
                     throw new InvalidMapException("Error executing query:", map);
                 }
             }

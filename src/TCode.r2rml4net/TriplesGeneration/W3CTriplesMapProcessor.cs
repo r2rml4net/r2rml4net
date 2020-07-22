@@ -39,8 +39,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Anotar.NLog;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using VDS.RDF;
 
@@ -64,7 +64,6 @@ namespace TCode.r2rml4net.TriplesGeneration
         {
             PredicateObjectMapProcessor = predicateObjectMapProcessor;
             RefObjectMapProcessor = refObjectMapProcessor;
-            Log = NullLog.Instance;
         }
 
         public IPredicateObjectMapProcessor PredicateObjectMapProcessor { get; set; }
@@ -77,7 +76,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             if (triplesMap.SubjectMap == null)
             {
-                Log.LogMissingSubject(triplesMap);
+                LogTo.Error("Subject missing in triples map {0}", triplesMap.Node);
                 throw new InvalidMapException("Subject is missing", triplesMap);
             }
             else

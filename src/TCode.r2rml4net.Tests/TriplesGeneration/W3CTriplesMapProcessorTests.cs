@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -41,7 +41,6 @@ using System.Data;
 using Moq;
 using Xunit;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Log;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
@@ -54,7 +53,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         private readonly W3CTriplesMapProcessor _triplesMapProcessor;
         private readonly Mock<ITriplesMap> _triplesMap;
         private readonly Mock<IDbConnection> _connection;
-        private readonly Mock<LogFacadeBase> _log;
         private readonly Mock<IRDFTermGenerator> _termGenerator;
         private readonly Mock<IRdfHandler> _rdfHandler;
         private readonly Mock<IPredicateObjectMapProcessor> _predicateObjectMapProcessor;
@@ -62,7 +60,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
         public W3CTriplesMapProcessorTests()
         {
-            _log = new Mock<LogFacadeBase>();
             _triplesMap = new Mock<ITriplesMap>();
             _connection = new Mock<IDbConnection>();
             _termGenerator = new Mock<IRDFTermGenerator>();
@@ -71,7 +68,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _refObjectMapProcessor = new Mock<IRefObjectMapProcessor>();
             _triplesMapProcessor = new W3CTriplesMapProcessor(_termGenerator.Object)
                                        {
-                                           Log = _log.Object,
                                            PredicateObjectMapProcessor = _predicateObjectMapProcessor.Object,
                                            RefObjectMapProcessor = _refObjectMapProcessor.Object
                                        };
@@ -88,7 +84,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             // then
             _connection.Verify(conn => conn.CreateCommand(), Times.Never());
-            _log.Verify(log => log.LogMissingSubject(It.IsAny<ITriplesMap>()), Times.Once());
         }
 
         [Theory]
@@ -231,24 +226,8 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _connection.Setup(con => con.CreateCommand()).Returns(command.Object);
             _triplesMap.Setup(map => map.SubjectMap).Returns(new Mock<ISubjectMap>().Object);
 
-            // when
+            // then
             Assert.Throws<InvalidMapException>(() => _triplesMapProcessor.ProcessTriplesMap(_triplesMap.Object, _connection.Object, _rdfHandler.Object));
-
-            // then
-            _log.Verify(log => log.LogQueryExecutionError(_triplesMap.Object, "Error message"), Times.Once());
-        }
-
-        [Fact]
-        public void SettingLogShouldSetLogToRdfTermGenerator()
-        {
-            // given
-            Mock<LogFacadeBase> log = new Mock<LogFacadeBase>();
-
-            // when
-            _triplesMapProcessor.Log = log.Object;
-
-            // then
-            _termGenerator.VerifySet(g => g.Log = log.Object, Times.Once());
         }
     }
 }

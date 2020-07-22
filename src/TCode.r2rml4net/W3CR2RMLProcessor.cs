@@ -2,43 +2,43 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
 using System;
 using System.Data;
+using Anotar.NLog;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Log;
 using TCode.r2rml4net.RDF;
 using TCode.r2rml4net.TriplesGeneration;
 using VDS.RDF;
@@ -47,7 +47,7 @@ using VDS.RDF.Parsing.Handlers;
 namespace TCode.r2rml4net
 {
     /// <summary>
-    /// Base implementation of the triple generation algorithm suggested by R2RML specification. 
+    /// Base implementation of the triple generation algorithm suggested by R2RML specification.
     /// It should generate triples for all rows in all triples maps from the input R2RML mappings
     /// </summary>
     /// <remarks>See http://www.w3.org/TR/r2rml/#generated-rdf</remarks>
@@ -55,7 +55,6 @@ namespace TCode.r2rml4net
     {
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
-        private LogFacadeBase _log;
 
         /// <summary>
         /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
@@ -87,8 +86,6 @@ namespace TCode.r2rml4net
             _triplesMapProcessor = triplesMapProcessor;
             _connection = connection;
 
-            Log = NullLog.Instance;
-
             if (connection.State != ConnectionState.Open)
             {
                 connection.Open();
@@ -99,23 +96,6 @@ namespace TCode.r2rml4net
         /// Gets a value indicating whether generating triples had no errors
         /// </summary>
         public bool Success { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="LogFacadeBase"/>
-        /// </summary>
-        public LogFacadeBase Log
-        {
-            get
-            {
-                return _log;
-            }
-
-            set
-            {
-                _log = value;
-                _triplesMapProcessor.Log = _log;
-            }
-        }
 
         /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
@@ -135,7 +115,7 @@ namespace TCode.r2rml4net
                 }
                 catch (InvalidTermException e)
                 {
-                    Log.LogInvalidTermMap(e.TermMap, e.Message);
+                    LogTo.Error("Term map {0} was invalid: {1}", e.TermMap.Node, e.Message);
                     handlingOk = false;
                     if (!MappingOptions.Current.IgnoreDataErrors)
                     {
@@ -144,7 +124,7 @@ namespace TCode.r2rml4net
                 }
                 catch (InvalidMapException e)
                 {
-                    Log.LogInvaldTriplesMap(triplesMap, e.Message);
+                    LogTo.Error("Triples map {0} was invalid: {1}", triplesMap.Node, e.Message);
                     handlingOk = false;
                     if (!MappingOptions.Current.IgnoreMappingErrors)
                     {

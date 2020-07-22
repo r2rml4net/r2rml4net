@@ -3,4 +3,5 @@
   <Freezable />
   <NullGuard IncludeDebugAssert="false" />
   <Resourcer />
+  <Anotar.NLog />
 </Weavers>
