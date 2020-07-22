@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>0.5.0</Version>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <Authors>tpluscode</Authors>
+        <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+        <PackageIconUrl>https://github.com/cygri/rdf-logos/blob/master/png/r2rml-128.png?raw=true</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/r2rml4net/r2rml4net</PackageProjectUrl>
+        <PackageTags>rdf;r2rml;semantic web</PackageTags>
+        <Description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</Description>
+        <Copyright>2012-2020 Tomasz Pluskiewicz</Copyright>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.8.0" />
+      <PackageReference Include="dotNetRDF" Version="2.5.1" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TCode.r2rml4net\TCode.r2rml4net.csproj" />
+    </ItemGroup>
+
+</Project>

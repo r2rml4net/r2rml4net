@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>TCode.r2rml4net.Tests</RootNamespace>
     <AssemblyName>TCode.r2rml4net.Tests</AssemblyName>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
@@ -9,6 +9,19 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DatabaseSchemaReader" Version="2.7.3"/>
+    <PackageReference Include="moq" Version="4.14.5"/>
+    <PackageReference Include="dotNetRDF" Version="2.5.1"/>
+    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2"/>
+    <PackageReference Include="xunit" Version="2.4.1"/>
+    <PackageReference Include="Resourcer.Fody" Version="1.8.0"/>
+    <PackageReference Include="SqlLocalDb" Version="1.1.0"/>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1"/>
+    <PackageReference Include="Xunit.SkippableFact" Version="1.4.13"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DatabaseSchemaReader\TestDbScripts\SqlServer.sql" />
   </ItemGroup>
@@ -18,5 +31,4 @@
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
