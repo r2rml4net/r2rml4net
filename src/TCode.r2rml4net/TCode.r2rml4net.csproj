@@ -21,7 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DatabaseSchemaReader" Version="2.7.3" />
-    <PackageReference Include="dotNetRDF" Version="2.2" />
+    <PackageReference Include="dotNetRDF" Version="2.5.1" />
     <PackageReference Include="NLog" Version="4.7.2" />
     <PackageReference Include="Freezable.Fody" Version="1.9.3">
       <PrivateAssets>all</PrivateAssets>

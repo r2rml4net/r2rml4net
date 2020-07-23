@@ -274,7 +274,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             _termType.VerifyAll();
         }
 
-        [SkippableFact(Skip = "Don't remember")]
+        [Fact]
         public void InvalidUriValueThrowsException()
         {
             // given

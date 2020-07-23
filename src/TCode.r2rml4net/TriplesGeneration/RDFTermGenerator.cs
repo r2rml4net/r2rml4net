@@ -43,7 +43,6 @@ using System.Text.RegularExpressions;
 using Anotar.NLog;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
-using TCode.r2rml4net.Extensions;
 using TCode.r2rml4net.Mapping;
 using TCode.r2rml4net.RDB;
 using TCode.r2rml4net.RDF;
@@ -150,12 +149,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                         uri = ConstructAbsoluteUri(termMap, value);
                     }
 
-                    if (uri.IsAbsoluteUri)
-                    {
-                        uri.LeaveDotsAndSlashesEscaped();
-
-                        return NodeFactory.CreateUriNode(uri);
-                    }
+                    return NodeFactory.CreateUriNode(uri);
                 }
                 catch (UriFormatException ex)
                 {
