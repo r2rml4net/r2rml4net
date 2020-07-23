@@ -51,11 +51,6 @@ namespace TCode.r2rml4net.Mapping
         INode Node { get; }
 
         /// <summary>
-        /// Gets the base mapping URI. It will be used to resolve relative values when generating terms
-        /// </summary>
-        Uri BaseUri { get; }
-
-        /// <summary>
         /// Gets the parent <see cref="ITriplesMap"/> containing this map
         /// </summary>
         ITriplesMap TriplesMap { get; }

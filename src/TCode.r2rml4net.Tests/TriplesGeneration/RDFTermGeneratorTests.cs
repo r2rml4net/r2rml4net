@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
-            _termGenerator = new RDFTermGenerator()
+            _termGenerator = new RDFTermGenerator("http://example.com/base/")
                                  {
                                      SqlValuesMappingStrategy = _lexicalFormProvider.Object,
                                  };
@@ -249,7 +249,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Fact]
         public void RelativeUriValueCreatesUriNode()
         {
-            const string expected = "http://www.example.com/value";
+            const string expected = "http://example.com/base/value";
 
             // given
             _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
@@ -260,7 +260,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -287,7 +286,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://www.example.com/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -314,7 +312,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -340,7 +337,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -361,7 +357,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -683,7 +678,6 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
                                 .Verifiable();
             _termMap.Setup(map => map.IsTemplateValued).Returns(true).Verifiable();
             _termMap.Setup(map => map.Template).Returns(string.Format("{{{0}}}", ColumnName)).Verifiable();
-            _termMap.Setup(map => map.BaseUri).Returns(new Uri("http://example.com/base/")).Verifiable();
             _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
 
             // when
@@ -784,7 +778,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             using (new MappingScope(new MappingOptions().WithDuplicateRowsPreserved(true)))
             {
                 // given
-                _termGenerator = new RDFTermGenerator();
+                _termGenerator = new RDFTermGenerator("http://example.com/");
                 const string nodeId = "node id";
                 _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
@@ -803,7 +797,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
-            _termGenerator = new RDFTermGenerator();
+            _termGenerator = new RDFTermGenerator("http://example.com/");
 
             // when
             var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
@@ -822,7 +816,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
             _objectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
-            _termGenerator = new RDFTermGenerator();
+            _termGenerator = new RDFTermGenerator("http://example.com/");
 
             // when
             INode node2;

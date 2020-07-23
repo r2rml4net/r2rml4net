@@ -47,16 +47,16 @@ namespace TCode.r2rml4net.CLI
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<DirectMappingOptions, R2rmlOptions, GenerateDirectOptions>(args)
-                .WithParsed<DirectMappingOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunDirect())
-                .WithParsed<R2rmlOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunMapping(options.MappingPath))
+                .WithParsed<DirectMappingOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunDirect(options.BaseUri))
+                .WithParsed<R2rmlOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunMapping(options.MappingPath, options.BaseUri))
                 .WithParsed<GenerateDirectOptions>(options =>
                 {
-                    var rml = GenerateDirectMapping(options.ConnectionString);
+                    var rml = GenerateDirectMapping(options.ConnectionString, options.BaseUri);
                     new CompressingTurtleWriter().Save(rml.MappingsGraph, Console.Out);
                 });
         }
 
-        static DirectR2RMLMapping GenerateDirectMapping(string connectionString)
+        static DirectR2RMLMapping GenerateDirectMapping(string connectionString, string baseUri)
         {
             using (DbConnection connection = new SqlConnection(connectionString))
             {
@@ -64,13 +64,13 @@ namespace TCode.r2rml4net.CLI
                     new DatabaseReader(connection),
                     new MSSQLServerColumTypeMapper());
 
-                return new DirectR2RMLMapping(dbSchema);
+                return new DirectR2RMLMapping(dbSchema, new Uri(baseUri));
             }
         }
 
-        private void RunDirect()
+        private void RunDirect(string baseUri)
         {
-            var rml = GenerateDirectMapping(this._connectionString);
+            var rml = GenerateDirectMapping(this._connectionString, baseUri);
 
             using (DbConnection connection = new SqlConnection(this._connectionString))
             {
@@ -80,11 +80,11 @@ namespace TCode.r2rml4net.CLI
             }
         }
 
-        private void RunMapping(string mappingPath)
+        private void RunMapping(string mappingPath, string baseUri)
         {
             using (IDbConnection connection = new SqlConnection(this._connectionString))
             {
-                var processor = new W3CR2RMLProcessor(connection);
+                var processor = new W3CR2RMLProcessor(connection, baseUri);
                 if ((File.GetAttributes(mappingPath) & FileAttributes.Directory) != 0)
                 {
                     foreach (var path in Directory.GetFiles(mappingPath))
@@ -122,11 +122,8 @@ namespace TCode.r2rml4net.CLI
         }
 
         [Verb("rml")]
-        class R2rmlOptions
+        class R2rmlOptions : BaseOptions
         {
-            [Option('c', "connection-string", Required = true)]
-            public string ConnectionString { get; set; }
-
             [Option('o', "output")]
             public string Output { get; set; }
 
@@ -138,23 +135,27 @@ namespace TCode.r2rml4net.CLI
         }
 
         [Verb("generate-direct")]
-        class GenerateDirectOptions
+        class GenerateDirectOptions : BaseOptions
         {
-            [Option('c', "connection-string", Required = true)]
-            public string ConnectionString { get; set; }
         }
 
         [Verb("direct")]
-        class DirectMappingOptions
+        class DirectMappingOptions : BaseOptions
         {
-            [Option('c', "connection-string", Required = true)]
-            public string ConnectionString { get; set; }
-
             [Option('o', "output")]
             public string Output { get; set; }
 
             [Option('v')]
             public bool Verbose { get; set; }
+        }
+
+        abstract class BaseOptions
+        {
+            [Option('c', "connection-string", Required = true)]
+            public string ConnectionString { get; set; }
+
+            [Option('b', "base-uri", Default = "http://r2rml.net/base/")]
+            public string BaseUri { get; set; }
         }
     }
 }

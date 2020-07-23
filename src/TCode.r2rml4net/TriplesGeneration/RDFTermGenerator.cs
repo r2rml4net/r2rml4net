@@ -41,7 +41,6 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Anotar.NLog;
-using NLog.Fluent;
 using NullGuard;
 using TCode.r2rml4net.Exceptions;
 using TCode.r2rml4net.Extensions;
@@ -62,6 +61,12 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
+        private readonly string _baseUri;
+
+        public RDFTermGenerator(string baseUri)
+        {
+            _baseUri = baseUri;
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="ISQLValuesMappingStrategy"/>
@@ -285,7 +290,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
             }
 
-            return new Uri(termMap.BaseUri + relativePart);
+            return new Uri(this._baseUri + relativePart);
         }
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)

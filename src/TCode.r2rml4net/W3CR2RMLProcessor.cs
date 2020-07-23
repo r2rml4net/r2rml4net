@@ -62,8 +62,9 @@ namespace TCode.r2rml4net
         /// and uses default RDF term generation and map processing algorithms
         /// </summary>
         /// <param name="connection">connection to datasource</param>
-        public W3CR2RMLProcessor(IDbConnection connection)
-            : this(connection, new RDFTermGenerator())
+        /// <param name="baseUri">base URI to use for relative templates</param>
+        public W3CR2RMLProcessor(IDbConnection connection, string baseUri = "http://r2rml.net/base/")
+            : this(connection, new RDFTermGenerator(baseUri))
         {
         }
 
