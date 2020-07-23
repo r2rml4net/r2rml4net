@@ -1,11 +1,15 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Anotar.NLog;
 using CommandLine;
+using DatabaseSchemaReader;
 using NLog;
 using TCode.r2rml4net.Mapping.Fluent;
+using TCode.r2rml4net.RDB.DatabaseSchemaReader;
 using VDS.RDF;
 using VDS.RDF.Writing;
 
@@ -15,11 +19,11 @@ namespace TCode.r2rml4net.CLI
 {
     class Program
     {
-        private readonly Options _options;
+        private readonly DirectMappingOptions _options;
         private readonly ITripleStore _output;
         private readonly IStoreWriter _writer;
 
-        private Program(Options options)
+        private Program(DirectMappingOptions options)
         {
             _options = options;
             _output = new TripleStore();
@@ -39,25 +43,55 @@ namespace TCode.r2rml4net.CLI
 
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(options => new Program(options).Run());
+            Parser.Default.ParseArguments<DirectMappingOptions, R2rmlOptions, GenerateDirectOptions>(args)
+                .WithParsed<DirectMappingOptions>(options => new Program(options).RunDirect())
+                .WithParsed<R2rmlOptions>(options => new Program(options).RunMapping(options.MappingPath))
+                .WithParsed<GenerateDirectOptions>(options =>
+                {
+                    var rml = GenerateDirectMapping(options.ConnectionString);
+                    new CompressingTurtleWriter().Save(rml.MappingsGraph, Console.Out);
+                });
         }
 
-        private void Run()
+        static DirectR2RMLMapping GenerateDirectMapping(string connectionString)
+        {
+            using (DbConnection connection = new SqlConnection(connectionString))
+            {
+                var dbSchema = new DatabaseSchemaAdapter(
+                    new DatabaseReader(connection),
+                    new MSSQLServerColumTypeMapper());
+
+                return new DirectR2RMLMapping(dbSchema);
+            }
+        }
+
+        private void RunDirect()
+        {
+            var rml = GenerateDirectMapping(this._options.ConnectionString);
+
+            using (DbConnection connection = new SqlConnection(this._options.ConnectionString))
+            {
+                var processor = new W3CR2RMLProcessor(connection);
+
+                this.Run(processor, rml);
+            }
+        }
+
+        private void RunMapping(string mappingPath)
         {
             using (IDbConnection connection = new SqlConnection(this._options.ConnectionString))
             {
                 var processor = new W3CR2RMLProcessor(connection);
-                if ((File.GetAttributes(this._options.MappingPath) & FileAttributes.Directory) != 0)
+                if ((File.GetAttributes(mappingPath) & FileAttributes.Directory) != 0)
                 {
-                    foreach (var path in Directory.GetFiles(this._options.MappingPath))
+                    foreach (var path in Directory.GetFiles(mappingPath))
                     {
                         this.RunMapping(processor, path);
                     }
                 }
                 else
                 {
-                    this.RunMapping(processor, this._options.MappingPath);
+                    this.RunMapping(processor, mappingPath);
                 }
             }
 
@@ -70,18 +104,35 @@ namespace TCode.r2rml4net.CLI
             LogTo.Info($"Processing {path}");
             var rml = R2RMLLoader.LoadFile(path);
 
+          this.Run(processor, rml);
+        }
+
+        private void Run(IR2RMLProcessor processor, IR2RML rml)
+        {
             LogTo.Info("Found {0} triples maps", rml.TriplesMaps.Count());
             processor.GenerateTriples(rml, this._output);
             LogTo.Info("Generated {0} quads in {1} graphs", processor.TriplesGenerated, processor.GraphsGenerated);
         }
 
-        class Options
+        [Verb("rml")]
+        class R2rmlOptions : DirectMappingOptions
+        {
+            [Option('m', "mapping", Required = true)]
+            public string MappingPath { get; set; }
+        }
+
+        [Verb("generate-direct")]
+        class GenerateDirectOptions
         {
             [Option('c', "connection-string", Required = true)]
             public string ConnectionString { get; set; }
+        }
 
-            [Option('m', "mapping", Required = true)]
-            public string MappingPath { get; set; }
+        [Verb("direct")]
+        class DirectMappingOptions
+        {
+            [Option('c', "connection-string", Required = true)]
+            public string ConnectionString { get; set; }
 
             [Option('o', "output")]
             public string Output { get; set; }

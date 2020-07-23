@@ -98,6 +98,8 @@ namespace TCode.r2rml4net
             }
         }
 
+        public IGraph MappingsGraph => this.GraphReadOnly;
+
         /// <inheritdoc />
         public ISqlQueryBuilder SqlQueryBuilder
         {
