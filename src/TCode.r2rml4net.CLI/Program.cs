@@ -19,13 +19,16 @@ namespace TCode.r2rml4net.CLI
 {
     class Program
     {
-        private readonly DirectMappingOptions _options;
         private readonly ITripleStore _output;
         private readonly IStoreWriter _writer;
+        private readonly string _connectionString;
+        private readonly string _outputPath;
 
-        private Program(DirectMappingOptions options)
+        private Program(string connectionString, string outputPath, bool verbose)
         {
-            _options = options;
+            _connectionString = connectionString;
+            _outputPath = outputPath;
+
             _output = new TripleStore();
             _writer = new NQuadsWriter();
 
@@ -35,7 +38,7 @@ namespace TCode.r2rml4net.CLI
                 Layout = "${level} ${message}"
             };
 
-            var minLevel = options.Verbose ? LogLevel.Debug : LogLevel.Info;
+            var minLevel = verbose ? LogLevel.Debug : LogLevel.Info;
             config.AddRule(minLevel, LogLevel.Fatal, logconsole);
 
             LogManager.Configuration = config;
@@ -44,8 +47,8 @@ namespace TCode.r2rml4net.CLI
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<DirectMappingOptions, R2rmlOptions, GenerateDirectOptions>(args)
-                .WithParsed<DirectMappingOptions>(options => new Program(options).RunDirect())
-                .WithParsed<R2rmlOptions>(options => new Program(options).RunMapping(options.MappingPath))
+                .WithParsed<DirectMappingOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunDirect())
+                .WithParsed<R2rmlOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunMapping(options.MappingPath))
                 .WithParsed<GenerateDirectOptions>(options =>
                 {
                     var rml = GenerateDirectMapping(options.ConnectionString);
@@ -67,9 +70,9 @@ namespace TCode.r2rml4net.CLI
 
         private void RunDirect()
         {
-            var rml = GenerateDirectMapping(this._options.ConnectionString);
+            var rml = GenerateDirectMapping(this._connectionString);
 
-            using (DbConnection connection = new SqlConnection(this._options.ConnectionString))
+            using (DbConnection connection = new SqlConnection(this._connectionString))
             {
                 var processor = new W3CR2RMLProcessor(connection);
 
@@ -79,7 +82,7 @@ namespace TCode.r2rml4net.CLI
 
         private void RunMapping(string mappingPath)
         {
-            using (IDbConnection connection = new SqlConnection(this._options.ConnectionString))
+            using (IDbConnection connection = new SqlConnection(this._connectionString))
             {
                 var processor = new W3CR2RMLProcessor(connection);
                 if ((File.GetAttributes(mappingPath) & FileAttributes.Directory) != 0)
@@ -95,8 +98,12 @@ namespace TCode.r2rml4net.CLI
                 }
             }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(this._options.Output));
-            this._writer.Save(this._output, this._options.Output);
+            var dirPath = Path.GetDirectoryName(this._outputPath);
+            if (string.IsNullOrWhiteSpace(dirPath) == false)
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            this._writer.Save(this._output, this._outputPath);
         }
 
         private void RunMapping(IR2RMLProcessor processor, string path)
@@ -115,8 +122,17 @@ namespace TCode.r2rml4net.CLI
         }
 
         [Verb("rml")]
-        class R2rmlOptions : DirectMappingOptions
+        class R2rmlOptions
         {
+            [Option('c', "connection-string", Required = true)]
+            public string ConnectionString { get; set; }
+
+            [Option('o', "output")]
+            public string Output { get; set; }
+
+            [Option('v')]
+            public bool Verbose { get; set; }
+
             [Option('m', "mapping", Required = true)]
             public string MappingPath { get; set; }
         }
