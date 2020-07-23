@@ -2,7 +2,8 @@ before_build:
   - ps: gitversion /l console /output buildserver /updateassemblyinfo
 
 build_script:
-  - ps: dotnet pack -c Release TCode.r2rml4net.sln
+  - ps: dotnet pack -c Release src/TCode.r2rml4net -o ./nugets
+  - ps: dotnet pack -c Release src/TCode.r2rml4net.CLI -o ./nugets
 
 test_script:
   - dotnet test TCode.r2rml4net.sln
