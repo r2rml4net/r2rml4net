@@ -11,6 +11,9 @@
         <PackageTags>rdf;r2rml;semantic web</PackageTags>
         <Description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</Description>
         <Copyright>2012-2020 Tomasz Pluskiewicz</Copyright>
+        <PackageId>r2rml4net-cli</PackageId>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>r2rml4net</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>

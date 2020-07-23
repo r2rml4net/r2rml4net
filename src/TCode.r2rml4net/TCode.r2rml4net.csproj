@@ -11,6 +11,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <Authors>tpluscode</Authors>
+    <PackageId>r2rml4net</PackageId>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <PackageIconUrl>https://github.com/cygri/rdf-logos/blob/master/png/r2rml-128.png?raw=true</PackageIconUrl>
     <PackageProjectUrl>https://github.com/r2rml4net/r2rml4net</PackageProjectUrl>
