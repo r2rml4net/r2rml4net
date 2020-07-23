@@ -55,6 +55,7 @@ namespace TCode.r2rml4net
     {
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
+        private readonly StoreCountHandler _counter = new StoreCountHandler();
 
         /// <summary>
         /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
@@ -97,6 +98,10 @@ namespace TCode.r2rml4net
         /// </summary>
         public bool Success { get; private set; }
 
+        public int TriplesGenerated => this._counter.TripleCount;
+
+        public int GraphsGenerated => this._counter.GraphCount;
+
         /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
         /// </summary>
@@ -104,14 +109,20 @@ namespace TCode.r2rml4net
         {
             bool handlingOk = true;
             IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler);
+            IRdfHandler combinedHandler = new MultiHandler(new []
+            {
+                this._counter,
+                blankNodeReplaceHandler
+            });
 
-            blankNodeReplaceHandler.StartRdf();
+            combinedHandler.StartRdf();
 
             foreach (var triplesMap in mappings.TriplesMaps)
             {
                 try
                 {
-                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, blankNodeReplaceHandler);
+                    LogTo.Info("Processing triples map {0}", triplesMap.Node);
+                    _triplesMapProcessor.ProcessTriplesMap(triplesMap, _connection, combinedHandler);
                 }
                 catch (InvalidTermException e)
                 {
@@ -133,7 +144,7 @@ namespace TCode.r2rml4net
                 }
             }
 
-            blankNodeReplaceHandler.EndRdf(handlingOk);
+            combinedHandler.EndRdf(handlingOk);
             Success = handlingOk;
         }
 

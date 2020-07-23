@@ -82,11 +82,14 @@ namespace TCode.r2rml4net.TriplesGeneration
             else
             {
                 IDataReader logicalTable;
+
                 if (!FetchLogicalRows(connection, triplesMap, out logicalTable))
                 {
+                    LogTo.Info("No rows returned by effective query");
                     return;
                 }
 
+                var rowsProcessed = 0;
                 using (logicalTable)
                 {
                     AssertNoDuplicateColumnNames(logicalTable);
@@ -94,6 +97,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     IEnumerable<Uri> classes = triplesMap.SubjectMap.Classes;
                     while (logicalTable.Read())
                     {
+                        rowsProcessed++;
                         var subject = TermGenerator.GenerateTerm<INode>(triplesMap.SubjectMap, logicalTable);
                         var graphs = (from graph in triplesMap.SubjectMap.GraphMaps
                                       select TermGenerator.GenerateTerm<IUriNode>(graph, logicalTable)).ToArray();
@@ -122,6 +126,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                     }
                 }
 
+                LogTo.Info("Processed {0} rows", rowsProcessed);
                 foreach (var refObjectMapProcess in refObjectMapProcesses)
                 {
                     refObjectMapProcess.Invoke();

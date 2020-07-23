@@ -115,7 +115,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 catch (Exception e)
                 {
                     LogTo.Error("Failed to execute query for map {0}: {1}", map.Node, e.Message);
-                    throw new InvalidMapException("Error executing query:", map);
+                    throw new InvalidMapException("Error executing query", map);
                 }
             }
 

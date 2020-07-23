@@ -50,6 +50,16 @@ namespace TCode.r2rml4net
         bool Success { get; }
 
         /// <summary>
+        /// Gets the number of generated triples
+        /// </summary>
+        int TriplesGenerated { get; }
+
+        /// <summary>
+        /// Gets the number of generated graphs
+        /// </summary>
+        int GraphsGenerated { get; }
+
+        /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
         /// </summary>
         void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler);
