@@ -35,59 +35,17 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System;
-using System.Diagnostics;
-using System.Threading;
-
 namespace TCode.r2rml4net
 {
     /// <summary>
-    /// A thread-static scope, which allow changing mapping options for a given time
+    /// Interface for the freezeable pattern
     /// </summary>
-    /// <remarks>
-    /// See http://msdn.microsoft.com/en-us/magazine/cc300805.aspx
-    /// </remarks>
-    public sealed class MappingScope : IDisposable
+    /// <remarks>See http://blogs.msdn.com/b/ericlippert/archive/2007/11/13/immutability-in-c-part-one-kinds-of-immutability.aspx</remarks>
+    public interface IFreezable
     {
-        [ThreadStatic]
-        // ReSharper disable InconsistentNaming
-        private static MappingScope Head;
-        // ReSharper restore InconsistentNaming
-        private readonly MappingOptions _instance;
-        private readonly MappingScope _parent;
-        private bool _disposed;
-
         /// <summary>
-        /// Creates a new instance of <see cref="MappingScope"/> with a given set of options
+        /// Makes a freezable object immutable
         /// </summary>
-        public MappingScope(MappingOptions instance)
-        {
-            _instance = instance;
-            _instance.Freeze();
-
-            Thread.BeginThreadAffinity();
-            _parent = Head;
-            Head = this;
-        }
-
-        internal static MappingOptions Current
-        {
-            get { return Head != null ? Head._instance : null; }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _disposed = true;
-
-                Debug.Assert(this == Head, "Disposed out of order.");
-                Head = _parent;
-                Thread.EndThreadAffinity();
-            }
-        }
+        MappingOptions Freeze();
     }
 }
