@@ -56,15 +56,15 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         public R2RMLMappingGeneratorTests()
         {
+            _sqlBuilder = new Mock<ISqlQueryBuilder>();
             _configuration = new Mock<IR2RMLConfiguration>();
             _configuration.SetupGet(conf => conf.Options).Returns(new MappingOptions());
+            _configuration.SetupGet(conf => conf.SqlQueryBuilder).Returns(_sqlBuilder.Object);
             _databaseMetedata = new Mock<IDatabaseMetadata>();
-            _sqlBuilder = new Mock<ISqlQueryBuilder>();
             _mappingStrategy = new Mock<IDirectMappingStrategy>();
             _generator = new R2RMLMappingGenerator(_databaseMetedata.Object, _configuration.Object)
             {
                 MappingBaseUri = _mappingBaseUri,
-                SqlBuilder = _sqlBuilder.Object,
                 MappingStrategy = _mappingStrategy.Object
             };
             _configuration.Setup(c => c.CreateTriplesMapFromTable(It.IsAny<string>()))

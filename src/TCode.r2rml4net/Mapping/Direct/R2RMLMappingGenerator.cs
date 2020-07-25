@@ -64,7 +64,6 @@ namespace TCode.r2rml4net.Mapping.Direct
             _r2RMLConfiguration = r2RMLConfiguration;
 
             MappingBaseUri = r2RMLConfiguration.MappingsGraph?.BaseUri;
-            SqlBuilder = new W3CSqlQueryBuilder(_r2RMLConfiguration.Options);
         }
 
         /// <summary>
@@ -138,12 +137,6 @@ namespace TCode.r2rml4net.Mapping.Direct
             }
         }
 
-        /// <summary>
-        /// Gets or sets the implementation of <see cref="ISqlQueryBuilder"/>,
-        /// which builds queries used to retrieve data from relationalt database for genertaing triples
-        /// </summary>
-        public ISqlQueryBuilder SqlBuilder { get; set; }
-
         internal ITriplesMapConfiguration CurrentTriplesMapConfiguration
         {
             get { return _currentTriplesMapConfiguration; }
@@ -179,7 +172,7 @@ namespace TCode.r2rml4net.Mapping.Direct
         {
             if (table.ForeignKeys.Any(fk => fk.IsCandidateKeyReference && fk.ReferencedTableHasPrimaryKey))
             {
-                var rmlView = SqlBuilder.GetR2RMLViewForJoinedTables(table);
+                var rmlView = _r2RMLConfiguration.SqlQueryBuilder.GetR2RMLViewForJoinedTables(table);
                 _currentTriplesMapConfiguration = _r2RMLConfiguration.CreateTriplesMapFromR2RMLView(rmlView);
             }
             else

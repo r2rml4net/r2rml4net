@@ -54,14 +54,6 @@ namespace TCode.r2rml4net
         private IR2RML _generatedMappings;
 
         /// <summary>
-        /// Creates a default mapping with no base URI
-        /// </summary>
-        public DirectR2RMLMapping(IDatabaseMetadata provider)
-        {
-            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(new MappingOptions()));
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DirectR2RMLMapping"/> class.
         /// </summary>
         /// <param name="provider">The provider.</param>

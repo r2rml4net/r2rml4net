@@ -63,6 +63,7 @@ namespace TCode.r2rml4net
             : base(options.BaseUri)
         {
             Options = options;
+            this._sqlQueryBuilder = new W3CSqlQueryBuilder(options);
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
 
@@ -70,6 +71,7 @@ namespace TCode.r2rml4net
             : base(mappingsGraph)
         {
             this.Options = options;
+            this._sqlQueryBuilder = new W3CSqlQueryBuilder(options);
         }
 
         public MappingOptions Options { get; }
