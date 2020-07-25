@@ -47,8 +47,18 @@ namespace TCode.r2rml4net.CLI
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<DirectMappingOptions, R2rmlOptions, GenerateDirectOptions>(args)
-                .WithParsed<DirectMappingOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunDirect(options.BaseUri))
-                .WithParsed<R2rmlOptions>(options => new Program(options.ConnectionString, options.Output, options.Verbose).RunMapping(options.MappingPath, options.BaseUri))
+                .WithParsed<DirectMappingOptions>(options =>
+                {
+                    var program = new Program(options.ConnectionString, options.Output, options.Verbose);
+                    program.RunDirect(options.BaseUri);
+                    program.SaveOutput();
+                })
+                .WithParsed<R2rmlOptions>(options =>
+                {
+                    var program = new Program(options.ConnectionString, options.Output, options.Verbose);
+                    program.RunMapping(options.MappingPath, options.BaseUri);
+                    program.SaveOutput();
+                })
                 .WithParsed<GenerateDirectOptions>(options =>
                 {
                     var rml = GenerateDirectMapping(options.ConnectionString, options.BaseUri);
@@ -66,6 +76,17 @@ namespace TCode.r2rml4net.CLI
 
                 return new DirectR2RMLMapping(dbSchema, new Uri(baseUri));
             }
+        }
+
+        private void SaveOutput()
+        {
+            LogTo.Info("Saving {0}", this._outputPath);
+            var dirPath = Path.GetDirectoryName(this._outputPath);
+            if (string.IsNullOrWhiteSpace(dirPath) == false)
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            this._writer.Save(this._output, this._outputPath);
         }
 
         private void RunDirect(string baseUri)
@@ -97,13 +118,6 @@ namespace TCode.r2rml4net.CLI
                     this.RunMapping(processor, mappingPath);
                 }
             }
-
-            var dirPath = Path.GetDirectoryName(this._outputPath);
-            if (string.IsNullOrWhiteSpace(dirPath) == false)
-            {
-                Directory.CreateDirectory(dirPath);
-            }
-            this._writer.Save(this._output, this._outputPath);
         }
 
         private void RunMapping(IR2RMLProcessor processor, string path)
