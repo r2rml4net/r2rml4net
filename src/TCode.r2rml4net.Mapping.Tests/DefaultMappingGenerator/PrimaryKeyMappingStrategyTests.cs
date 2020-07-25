@@ -50,7 +50,7 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
 
         public PrimaryKeyMappingStrategyTests()
         {
-            _strategy = new PrimaryKeyMappingStrategy();
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions());
         }
 
         [Theory]
@@ -66,14 +66,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = "Column" + i });
             }
-            _strategy = new PrimaryKeyMappingStrategy();
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator));
 
             // when
-            string template;
-            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator)))
-            {
-                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
-            }
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
             Assert.Equal(expectedTemplate, template);
@@ -89,16 +85,14 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = "Column" + i });
             }
-            _strategy = new PrimaryKeyMappingStrategy();
 
             // when
-            using (new MappingScope(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator)))
-            {
-                // then
-                Assert.Throws<InvalidMapException>(() =>
-                    _strategy.CreateSubjectTemplateForNoPrimaryKey(table)
-                );
-            }
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions().WithBlankNodeTemplateSeparator(columnSeparator));
+
+            // then
+            Assert.Throws<InvalidMapException>(() =>
+                _strategy.CreateSubjectTemplateForNoPrimaryKey(table)
+            );
         }
 
         [Fact]
@@ -110,14 +104,10 @@ namespace TCode.r2rml4net.Mapping.Tests.DefaultMappingGenerator
             {
                 table.Add(new ColumnMetadata { Name = column });
             }
-            _strategy = new PrimaryKeyMappingStrategy();
+            _strategy = new PrimaryKeyMappingStrategy(new MappingOptions().UsingDelimitedIdentifiers(false));
 
             // when
-            string template;
-            using (new MappingScope(new MappingOptions().UsingDelimitedIdentifiers(false)))
-            {
-                template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
-            }
+            var template = _strategy.CreateSubjectTemplateForNoPrimaryKey(table);
 
             // then
             Assert.Equal("Table_{ColumnA}_{Column B}_{Yet another column}", template);

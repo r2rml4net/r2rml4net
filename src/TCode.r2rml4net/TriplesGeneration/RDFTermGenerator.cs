@@ -60,11 +60,10 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
         private INodeFactory _nodeFactory = new NodeFactory();
         private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
-        private readonly string _baseUri;
 
-        public RDFTermGenerator(string baseUri)
+        public RDFTermGenerator(MappingOptions options)
         {
-            _baseUri = baseUri;
+            Options = options;
         }
 
         /// <summary>
@@ -85,6 +84,8 @@ namespace TCode.r2rml4net.TriplesGeneration
             set { _nodeFactory = value; }
         }
 
+        private MappingOptions Options { get; }
+
         /// <inheritdoc />
         [return: AllowNull]
         public TNodeType GenerateTerm<TNodeType>(ITermMap termMap, IDataRecord logicalRow)
@@ -96,7 +97,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
             if (!(termMap.IsColumnValued || termMap.IsConstantValued || termMap.IsTemplateValued))
             {
-                if (termMap is ISubjectMap && MappingOptions.Current.AllowAutomaticBlankNodeSubjects)
+                if (termMap is ISubjectMap && this.Options.AllowAutomaticBlankNodeSubjects)
                 {
                     node = NodeFactory.CreateBlankNode();
                 }
@@ -284,7 +285,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 throw new InvalidTermException(termMap, "The relative IRI cannot contain any . or .. parts");
             }
 
-            return new Uri(this._baseUri + relativePart);
+            return new Uri(this.Options.BaseUri + relativePart);
         }
 
         private INode GenerateBlankNodeForValue(ITermMap termMap, string value)
@@ -306,7 +307,7 @@ namespace TCode.r2rml4net.TriplesGeneration
 
                     _blankNodeSubjects.Add(value, blankNode);
                 }
-                else if (MappingOptions.Current.PreserveDuplicateRows)
+                else if (this.Options.PreserveDuplicateRows)
                 {
                     blankNode = _nodeFactory.CreateBlankNode();
                 }

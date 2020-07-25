@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -55,20 +55,23 @@ namespace TCode.r2rml4net.Mapping.Fluent
     [NullGuard(ValidationFlags.All)]
     internal class TriplesMapConfiguration : BaseConfiguration, ITriplesMapFromR2RMLViewConfiguration
     {
+        private readonly MappingOptions _options;
         private static readonly Regex TableNameRegex = new Regex(@"([\p{L}0-9 _]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private readonly IR2RMLConfiguration _r2RMLConfiguration;
         private readonly IList<PredicateObjectMapConfiguration> _predicateObjectMaps = new List<PredicateObjectMapConfiguration>();
         private SubjectMapConfiguration _subjectMapConfiguration;
 
-        internal TriplesMapConfiguration(TriplesMapConfigurationStub triplesMapConfigurationStub, INode node)
+        internal TriplesMapConfiguration(TriplesMapConfigurationStub triplesMapConfigurationStub, INode node,
+            MappingOptions options)
             : base(triplesMapConfigurationStub.R2RMLMappings, node)
         {
+            _options = options;
             _r2RMLConfiguration = triplesMapConfigurationStub.R2RMLConfiguration;
         }
 
         /// <inheritdoc/>
         public string TableName
-        {   
+        {
             [return: AllowNull]
             get
             {
@@ -248,7 +251,7 @@ WHERE
                 throw new InvalidMapException("Cannot set SQL version to a table-based logical table", this);
             }
 
-            if (MappingOptions.Current.ValidateSqlVersion && R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri) == false)
+            if (this._options.ValidateSqlVersion && R2RMLConfiguration.SqlVersionValidator.SqlVersionIsValid(uri) == false)
             {
                 throw new InvalidSqlVersionException(uri);
             }
@@ -266,7 +269,7 @@ WHERE
             return this.SetSqlVersion(new Uri(uri));
         }
 
-        internal static TriplesMapConfiguration FromSqlQuery(TriplesMapConfigurationStub triplesMapConfigurationStub, string sqlQuery)
+        internal static TriplesMapConfiguration FromSqlQuery(TriplesMapConfigurationStub triplesMapConfigurationStub, string sqlQuery, MappingOptions options)
         {
             if (string.IsNullOrWhiteSpace(sqlQuery))
             {
@@ -275,10 +278,13 @@ WHERE
 
             INode node = AssertSqlQueryTriples(triplesMapConfigurationStub.R2RMLMappings, sqlQuery);
 
-            return new TriplesMapConfiguration(triplesMapConfigurationStub, node);
+            return new TriplesMapConfiguration(triplesMapConfigurationStub, node, options);
         }
 
-        internal static TriplesMapConfiguration FromTable(TriplesMapConfigurationStub triplesMapConfigurationStub, string tableName)
+        internal static TriplesMapConfiguration FromTable(
+            TriplesMapConfigurationStub triplesMapConfigurationStub,
+            string tableName,
+            MappingOptions options)
         {
             if (string.IsNullOrWhiteSpace(tableName))
             {
@@ -293,7 +299,7 @@ WHERE
 
             INode node = AssertTableNameTriples(triplesMapConfigurationStub.R2RMLMappings, tablename);
 
-            return new TriplesMapConfiguration(triplesMapConfigurationStub, node);
+            return new TriplesMapConfiguration(triplesMapConfigurationStub, node, options);
         }
 
         protected override void InitializeSubMapsFromCurrentGraph()

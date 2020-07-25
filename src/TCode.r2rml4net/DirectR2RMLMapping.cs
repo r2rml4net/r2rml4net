@@ -58,17 +58,16 @@ namespace TCode.r2rml4net
         /// </summary>
         public DirectR2RMLMapping(IDatabaseMetadata provider)
         {
-            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML());
+            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(new MappingOptions()));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectR2RMLMapping"/> class.
         /// </summary>
         /// <param name="provider">The provider.</param>
-        /// <param name="baseMappingUri">The base mapping URI.</param>
-        public DirectR2RMLMapping(IDatabaseMetadata provider, Uri baseMappingUri)
+        public DirectR2RMLMapping(IDatabaseMetadata provider, MappingOptions options)
         {
-            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(baseMappingUri));
+            _generator = new R2RMLMappingGenerator(provider, new FluentR2RML(options));
         }
 
         /// <inheritdoc/>

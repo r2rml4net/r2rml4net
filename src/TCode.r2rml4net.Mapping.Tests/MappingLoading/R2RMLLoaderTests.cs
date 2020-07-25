@@ -51,7 +51,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
         public void CanLoadR2RMLFromString()
         {
             // when
-            IR2RML mappings = R2RMLLoader.Load(Resource.AsString("Graphs.SimpleMapping.ttl"));
+            IR2RML mappings = R2RMLLoader.Load(Resource.AsString("Graphs.SimpleMapping.ttl"), new MappingOptions());
 
             // then
             Assert.NotNull(mappings);
@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Mapping.Tests.MappingLoading
             // when
             using (Stream turtle = Resource.AsStream("Graphs.ComplexMapping.ttl"))
             {
-                mappings = R2RMLLoader.Load(turtle);
+                mappings = R2RMLLoader.Load(turtle, new MappingOptions());
             }
 
             // then

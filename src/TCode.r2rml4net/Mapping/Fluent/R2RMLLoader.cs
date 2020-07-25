@@ -48,39 +48,39 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <summary>
         /// Loads R2RML mappings from a string
         /// </summary>
-        public static IR2RML Load(string r2RMLGraph)
+        public static IR2RML Load(string r2RMLGraph, MappingOptions options)
         {
             IGraph graph = new Graph();
             graph.LoadFromString(r2RMLGraph);
 
-            return InitializeMappings(graph);
+            return InitializeMappings(graph, options);
         }
 
         /// <summary>
         /// Loads R2RML mappings from a stream
         /// </summary>
-        public static IR2RML Load(Stream r2RMLGraph)
+        public static IR2RML Load(Stream r2RMLGraph, MappingOptions options)
         {
             using (var reader = new StreamReader(r2RMLGraph))
             {
-                return Load(reader.ReadToEnd());
+                return Load(reader.ReadToEnd(), options);
             }
         }
 
         /// <summary>
         /// Loads R2RML mappings from a stream
         /// </summary>
-        public static IR2RML LoadFile(string file)
+        public static IR2RML LoadFile(string file, MappingOptions options)
         {
             IGraph graph = new Graph();
             graph.LoadFromFile(file);
 
-            return InitializeMappings(graph);
+            return InitializeMappings(graph, options);
         }
 
-        private static IR2RML InitializeMappings(IGraph graph)
+        private static IR2RML InitializeMappings(IGraph graph, MappingOptions options)
         {
-            var mappings = new FluentR2RML(graph);
+            var mappings = new FluentR2RML(graph, options);
             mappings.RecursiveInitializeSubMapsFromCurrentGraph();
             return mappings;
         }

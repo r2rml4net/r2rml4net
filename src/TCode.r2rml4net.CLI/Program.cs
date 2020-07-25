@@ -19,6 +19,7 @@ namespace TCode.r2rml4net.CLI
 {
     class Program
     {
+        private readonly MappingOptions _mappingOptions;
         private readonly ITripleStore _output;
         private readonly IStoreWriter _writer;
         private readonly string _connectionString;
@@ -74,7 +75,7 @@ namespace TCode.r2rml4net.CLI
                     new DatabaseReader(connection),
                     new MSSQLServerColumTypeMapper());
 
-                return new DirectR2RMLMapping(dbSchema, new Uri(baseUri));
+                return new DirectR2RMLMapping(dbSchema, new MappingOptions().WithBaseUri(baseUri));
             }
         }
 
@@ -95,7 +96,7 @@ namespace TCode.r2rml4net.CLI
 
             using (DbConnection connection = new SqlConnection(this._connectionString))
             {
-                var processor = new W3CR2RMLProcessor(connection);
+                var processor = new W3CR2RMLProcessor(connection, new MappingOptions().WithBaseUri(baseUri));
 
                 this.Run(processor, rml);
             }
@@ -105,7 +106,7 @@ namespace TCode.r2rml4net.CLI
         {
             using (IDbConnection connection = new SqlConnection(this._connectionString))
             {
-                var processor = new W3CR2RMLProcessor(connection, baseUri);
+                var processor = new W3CR2RMLProcessor(connection, new MappingOptions().WithBaseUri(baseUri));
                 if ((File.GetAttributes(mappingPath) & FileAttributes.Directory) != 0)
                 {
                     foreach (var path in Directory.GetFiles(mappingPath))
@@ -123,9 +124,9 @@ namespace TCode.r2rml4net.CLI
         private void RunMapping(IR2RMLProcessor processor, string path)
         {
             LogTo.Info($"Processing {path}");
-            var rml = R2RMLLoader.LoadFile(path);
+            var rml = R2RMLLoader.LoadFile(path, this._mappingOptions);
 
-          this.Run(processor, rml);
+            this.Run(processor, rml);
         }
 
         private void Run(IR2RMLProcessor processor, IR2RML rml)

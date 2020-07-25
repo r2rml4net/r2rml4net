@@ -69,7 +69,7 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
 
             _termMap.Setup(map => map.TermType).Returns(_termType.Object);
 
-            _termGenerator = new RDFTermGenerator("http://example.com/base/")
+            _termGenerator = new RDFTermGenerator(new MappingOptions().WithBaseUri("http://example.com/base/"))
                                  {
                                      SqlValuesMappingStrategy = _lexicalFormProvider.Object,
                                  };
@@ -731,17 +731,18 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Fact]
         public void WhenOverridenInOptionsShouldAllowBlankSubjectNodesWithoutTemplateOrConstantOrColumn()
         {
-            using (new MappingScope(new MappingOptions().WithAutomaticBlankNodeSubjects(true)))
+            // given
+            _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+            var termGenerator = new RDFTermGenerator(new MappingOptions().WithBaseUri("http://example.com/base/").WithAutomaticBlankNodeSubjects())
             {
-                // given
-                _subjectMap.Setup(map => map.TermType.IsBlankNode).Returns(true);
+                SqlValuesMappingStrategy = _lexicalFormProvider.Object,
+            };
 
-                // when
-                var node = _termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
+            // when
+            var node = termGenerator.GenerateTerm<IBlankNode>(_subjectMap.Object, _logicalRow.Object);
 
-                // then
-                Assert.NotNull(node);
-            }
+            // then
+            Assert.NotNull(node);
         }
 
         [Fact]
@@ -775,20 +776,17 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Fact]
         public void RetrunsDifferentSubjectBlankNodesForSameValuesWhenPreservingDuplicateRows()
         {
-            using (new MappingScope(new MappingOptions().WithDuplicateRowsPreserved(true)))
-            {
-                // given
-                _termGenerator = new RDFTermGenerator("http://example.com/");
-                const string nodeId = "node id";
-                _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
+            // given
+            var termGenerator = new RDFTermGenerator(new MappingOptions().WithBaseUri("http://example.com/").WithDuplicateRowsPreserved());
+            const string nodeId = "node id";
+            _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
 
-                // when
-                var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-                var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            // when
+            var node = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
-                // then
-                Assert.NotSame(node, node2);
-            }
+            // then
+            Assert.NotSame(node, node2);
         }
 
         [Fact]
@@ -797,11 +795,11 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             // given
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
-            _termGenerator = new RDFTermGenerator("http://example.com/");
+            var termGenerator = new RDFTermGenerator(new MappingOptions().WithBaseUri("http://example.com/"));
 
             // when
-            var node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-            var node2 = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+            var node2 = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
 
             // then
             Assert.Same(node, node2);
@@ -816,20 +814,20 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             const string nodeId = "node id";
             _subjectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
             _objectMap.Setup(sm => sm.TermType.IsBlankNode).Returns(true);
-            _termGenerator = new RDFTermGenerator("http://example.com/");
+            var termGenerator = new RDFTermGenerator(new MappingOptions().WithBaseUri("http://example.com/"));
 
             // when
             INode node2;
             INode node;
             if (subjectFirst)
             {
-                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
-                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+                node = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                node2 = termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
             }
             else
             {
-                node2 = _termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
-                node = _termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
+                node2 = termGenerator.GenerateTermForValue(_objectMap.Object, nodeId);
+                node = termGenerator.GenerateTermForValue(_subjectMap.Object, nodeId);
             }
 
             // then

@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -53,8 +53,9 @@ namespace TCode.r2rml4net.RDB
         /// <summary>
         /// Initializes a new instance of <see cref="W3CSqlQueryBuilder"/>
         /// </summary>
-        public W3CSqlQueryBuilder()
+        public W3CSqlQueryBuilder(MappingOptions options)
         {
+            Options = options;
             SqlVersionValidator = new Wc3SqlVersionValidator();
         }
 
@@ -63,17 +64,19 @@ namespace TCode.r2rml4net.RDB
         /// </summary>
         public ISqlVersionValidator SqlVersionValidator { get; set; }
 
+        public MappingOptions Options { get; }
+
         #region Implementation of ISqlQueryBuilder
 
         /// <summary>
         /// Gets effective sql query based on table name or sql view
         /// </summary>
         /// <returns>SQL query string</returns>
-        /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query, 
+        /// <remarks>See http://www.w3.org/TR/r2rml/#dfn-effective-sql-query,
         /// http://www.w3.org/TR/r2rml/#physical-tables and http://www.w3.org/TR/r2rml/#r2rml-views</remarks>
         public string GetEffectiveQueryForTriplesMap(ITriplesMap triplesMap)
         {
-            if (MappingOptions.Current.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
+            if (this.Options.ValidateSqlVersion && !triplesMap.SqlVersions.All(SqlVersionValidator.SqlVersionIsValid))
             {
                 throw new InvalidSqlVersionException(triplesMap.SqlVersions.First(version => !SqlVersionValidator.SqlVersionIsValid(version)));
             }
@@ -85,7 +88,7 @@ namespace TCode.r2rml4net.RDB
 
             if (triplesMap.TableName != null)
             {
-                return string.Format("SELECT * FROM {0}", triplesMap.TableName.DelimitIdentifier());
+                return string.Format("SELECT * FROM {0}", triplesMap.TableName.DelimitIdentifier(this.Options));
             }
 
             return triplesMap.SqlQuery;
@@ -104,8 +107,8 @@ namespace TCode.r2rml4net.RDB
                     refObjectMap.JoinConditions.Select(
                         delegate(JoinCondition joinCondition)
                         {
-                            var childColumn = joinCondition.ChildColumn.DelimitIdentifier();
-                            var parentColumn = joinCondition.ParentColumn.DelimitIdentifier();
+                            var childColumn = joinCondition.ChildColumn.DelimitIdentifier(this.Options);
+                            var parentColumn = joinCondition.ParentColumn.DelimitIdentifier(this.Options);
                             return string.Format("child.{0}=parent.{1}", childColumn, parentColumn);
                         });
 
@@ -138,13 +141,13 @@ WHERE {2}",
 
             sqlBuilder.AppendFormat("SELECT child.*, {0}", string.Join(", ", GetJoinedPrimaryKeyColumnList(fkTargetHasPrimaryKey)));
             sqlBuilder.AppendLine();
-            sqlBuilder.AppendFormat("FROM {0} as child", table.Name.DelimitIdentifier());
+            sqlBuilder.AppendFormat("FROM {0} as child", table.Name.DelimitIdentifier(this.Options));
             sqlBuilder.AppendLine();
 
             int i = 1;
             foreach (var foreignKey in fkTargetHasPrimaryKey)
             {
-                sqlBuilder.AppendFormat("LEFT JOIN {0} as p{1} ON", foreignKey.ReferencedTable.Name.DelimitIdentifier(), i);
+                sqlBuilder.AppendFormat("LEFT JOIN {0} as p{1} ON", foreignKey.ReferencedTable.Name.DelimitIdentifier(this.Options), i);
                 sqlBuilder.AppendLine();
                 sqlBuilder.Append(string.Join(" AND ", GetJoinConditions(foreignKey, "p" + i++)));
                 sqlBuilder.AppendLine();
@@ -164,8 +167,8 @@ WHERE {2}",
                    select string.Format(
                        "{0}.{1} as {2}",
                        tableAlias,
-                       pkColumn.DelimitIdentifier(),
-                       (foreignKey.ReferencedTable.Name + pkColumn).DelimitIdentifier());
+                       pkColumn.DelimitIdentifier(this.Options),
+                       (foreignKey.ReferencedTable.Name + pkColumn).DelimitIdentifier(this.Options));
         }
 
         private IEnumerable<string> GetJoinConditions(ForeignKeyMetadata foreignKey, string parent)
@@ -174,8 +177,8 @@ WHERE {2}",
                              .Select((t, colIdx) => string.Format(
                                  "{0}.{1} = child.{2}",
                                  parent,
-                                 t.DelimitIdentifier(),
-                                 foreignKey.ForeignKeyColumns[colIdx].DelimitIdentifier()));
+                                 t.DelimitIdentifier(this.Options),
+                                 foreignKey.ForeignKeyColumns[colIdx].DelimitIdentifier(this.Options)));
         }
     }
 }

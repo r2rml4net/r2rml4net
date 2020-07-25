@@ -64,7 +64,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             _r2RMLConfiguration = r2RMLConfiguration;
 
             MappingBaseUri = r2RMLConfiguration.MappingsGraph?.BaseUri;
-            SqlBuilder = new W3CSqlQueryBuilder();
+            SqlBuilder = new W3CSqlQueryBuilder(_r2RMLConfiguration.Options);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             {
                 if (_mappingStrategy == null)
                 {
-                    _mappingStrategy = new DirectMappingStrategy();
+                    _mappingStrategy = new DirectMappingStrategy(this._r2RMLConfiguration.Options);
                 }
 
                 return _mappingStrategy;
@@ -126,7 +126,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             {
                 if (_primaryKeyMappingStrategy == null)
                 {
-                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy();
+                    _primaryKeyMappingStrategy = new PrimaryKeyMappingStrategy(this._r2RMLConfiguration.Options);
                 }
 
                 return _primaryKeyMappingStrategy;

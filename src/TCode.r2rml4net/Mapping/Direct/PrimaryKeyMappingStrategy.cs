@@ -49,6 +49,10 @@ namespace TCode.r2rml4net.Mapping.Direct
     /// </summary>
     public class PrimaryKeyMappingStrategy : MappingStrategyBase, IPrimaryKeyMappingStrategy
     {
+        public PrimaryKeyMappingStrategy(MappingOptions options) : base(options)
+        {
+        }
+
         /// <summary>
         /// Creates a URI for subject class by joining <paramref name="baseUri"/> and <paramref name="tableName"/>
         /// </summary>
@@ -116,7 +120,7 @@ namespace TCode.r2rml4net.Mapping.Direct
             }
 
             string template = CreateSubjectClassUri(baseUri, table.Name).OriginalString;
-            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk))));
+            template += "/" + string.Join(";", table.PrimaryKey.Select(pk => string.Format("{0}={1}", MappingHelper.UrlEncode(pk), MappingHelper.EncloseColumnName(pk, this.Options))));
             return template;
         }
     }

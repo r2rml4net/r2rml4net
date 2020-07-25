@@ -56,5 +56,7 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// </summary>
         /// <param name="sqlQuery">a valid SQL query</param>
         ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery);
+
+        MappingOptions Options { get; }
     }
 }

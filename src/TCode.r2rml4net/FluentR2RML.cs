@@ -35,7 +35,6 @@
 // us at the above stated email address to discuss alternative
 // terms.
 #endregion
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TCode.r2rml4net.Mapping;
@@ -55,30 +54,25 @@ namespace TCode.r2rml4net
         private readonly IList<ITriplesMapConfiguration> _triplesMaps = new List<ITriplesMapConfiguration>();
         private IGraph _graphCopy;
         private ISqlVersionValidator _sqlVersionValidator = new Wc3SqlVersionValidator();
-        private ISqlQueryBuilder _sqlQueryBuilder = new W3CSqlQueryBuilder();
+        private ISqlQueryBuilder _sqlQueryBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FluentR2RML"/> class.
         /// </summary>
-        /// <param name="baseUri">base URI for mapping nodes</param>
-        public FluentR2RML(Uri baseUri)
-            : base(baseUri)
+        public FluentR2RML(MappingOptions options)
+            : base(options.BaseUri)
         {
+            Options = options;
             R2RMLMappings.Changed += R2RMLMappingsChanged;
         }
 
-        /// <summary>
-        /// Creates a new instance of R2RMLConfiguration with empty R2RML mappings
-        /// </summary>
-        public FluentR2RML()
-            : base(DefaultBaseUri)
-        {
-        }
-
-        internal FluentR2RML(IGraph mappingsGraph)
+        internal FluentR2RML(IGraph mappingsGraph, MappingOptions options)
             : base(mappingsGraph)
         {
+            this.Options = options;
         }
+
+        public MappingOptions Options { get; }
 
         /// <summary>
         /// Gets a copy of the mapping graph
@@ -120,14 +114,6 @@ namespace TCode.r2rml4net
             get { return _triplesMaps; }
         }
 
-        internal static Uri DefaultBaseUri
-        {
-            get
-            {
-                return new Uri("http://r2rml.net/mappings/");
-            }
-        }
-
         /// <summary>
         /// Always returns false
         /// </summary>
@@ -144,7 +130,7 @@ namespace TCode.r2rml4net
         /// </summary>
         public ITriplesMapConfiguration CreateTriplesMapFromTable(string tablename)
         {
-            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), tablename));
+            return SetupTriplesMap(TriplesMapConfiguration.FromTable(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), tablename, this.Options));
         }
 
         /// <summary>
@@ -152,7 +138,7 @@ namespace TCode.r2rml4net
         /// </summary>
         public ITriplesMapFromR2RMLViewConfiguration CreateTriplesMapFromR2RMLView(string sqlQuery)
         {
-            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), sqlQuery));
+            return SetupTriplesMap(TriplesMapConfiguration.FromSqlQuery(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), sqlQuery, this.Options));
         }
 
         /// <summary>
@@ -172,7 +158,7 @@ namespace TCode.r2rml4net
 
             foreach (var triplesMapNode in triplesMapsTriples.Select(triple => triple.Subject))
             {
-                var triplesMapConfiguration = new TriplesMapConfiguration(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), triplesMapNode);
+                var triplesMapConfiguration = new TriplesMapConfiguration(new TriplesMapConfigurationStub(this, R2RMLMappings, SqlVersionValidator), triplesMapNode, this.Options);
                 triplesMaps.Add(triplesMapNode, triplesMapConfiguration);
                 _triplesMaps.Add(triplesMapConfiguration);
             }

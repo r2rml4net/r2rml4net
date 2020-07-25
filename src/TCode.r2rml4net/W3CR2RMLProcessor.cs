@@ -56,15 +56,16 @@ namespace TCode.r2rml4net
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
         private readonly StoreCountHandler _counter = new StoreCountHandler();
+        private readonly MappingOptions _options;
 
         /// <summary>
         /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>
         /// and uses default RDF term generation and map processing algorithms
         /// </summary>
         /// <param name="connection">connection to datasource</param>
-        /// <param name="baseUri">base URI to use for relative templates</param>
-        public W3CR2RMLProcessor(IDbConnection connection, string baseUri = "http://r2rml.net/base/")
-            : this(connection, new RDFTermGenerator(baseUri))
+        /// <param name="options">options to influence mapping process</param>
+        public W3CR2RMLProcessor(IDbConnection connection, MappingOptions options)
+            : this(connection, new RDFTermGenerator(options))
         {
         }
 
@@ -99,6 +100,18 @@ namespace TCode.r2rml4net
         /// </summary>
         public bool Success { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether data errors should be ignored.
+        /// Default value is true
+        /// </summary>
+        public bool IgnoreDataErrors { get; set; } = true;
+
+        /// <summary>
+        /// Gets a value indicating whether mapping errors should be ignored.
+        /// Default value is true
+        /// </summary>
+        public bool IgnoreMappingErrors { get; set; } = true;
+
         public int TriplesGenerated => this._counter.TripleCount;
 
         public int GraphsGenerated => this._counter.GraphCount;
@@ -129,7 +142,7 @@ namespace TCode.r2rml4net
                 {
                     LogTo.Error("Term map {0} was invalid: {1}", e.TermMap.Node, e.Message);
                     handlingOk = false;
-                    if (!MappingOptions.Current.IgnoreDataErrors)
+                    if (!this.IgnoreDataErrors)
                     {
                         break;
                     }
@@ -138,7 +151,7 @@ namespace TCode.r2rml4net
                 {
                     LogTo.Error("Triples map {0} was invalid: {1}", triplesMap.Node, e.Message);
                     handlingOk = false;
-                    if (!MappingOptions.Current.IgnoreMappingErrors)
+                    if (!this.IgnoreMappingErrors)
                     {
                         break;
                     }

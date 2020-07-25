@@ -105,57 +105,57 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
         [Fact]
         public void CanStopProcessingIfDataErrorOccurs()
         {
-            using (new MappingScope(new MappingOptions().IgnoringDataErrors(false)))
+            // given
+            var triplesMaps = GenerateTriplesMaps(3).ToList();
+            _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
+            _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object)
             {
-                // given
-                var triplesMaps = GenerateTriplesMaps(3).ToList();
-                _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-                _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object);
-                _triplesMapProcessor.Setup(
-                    rml =>
-                    rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
-                                          It.IsAny<IRdfHandler>()))
-                                    .Throws(new InvalidTermException(new Mock<ITermMap>().Object, "error"));
+                IgnoreDataErrors = false
+            };
+            _triplesMapProcessor.Setup(
+                rml =>
+                rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
+                                      It.IsAny<IRdfHandler>()))
+                                .Throws(new InvalidTermException(new Mock<ITermMap>().Object, "error"));
 
-                // when
-                _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
+            // when
+            _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
 
-                // then
-                _triplesMapProcessor.Verify(
-                    rml =>
-                    rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
-                                          It.IsAny<IRdfHandler>()), Times.Once());
-                Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
-                Assert.False(_triplesGenerator.Success);
-            }
+            // then
+            _triplesMapProcessor.Verify(
+                rml =>
+                rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
+                                      It.IsAny<IRdfHandler>()), Times.Once());
+            Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
+            Assert.False(_triplesGenerator.Success);
         }
 
         [Fact]
         public void CanStopProcessingIfMappingErrorOccurs()
         {
-            using (new MappingScope(new MappingOptions().IgnoringMappingErrors(false)))
+            // given
+            var triplesMaps = GenerateTriplesMaps(3).ToList();
+            _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
+            _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object)
             {
-                // given
-                var triplesMaps = GenerateTriplesMaps(3).ToList();
-                _r2RML.Setup(rml => rml.TriplesMaps).Returns(triplesMaps);
-                _triplesGenerator = new W3CR2RMLProcessor(_connection.Object, _triplesMapProcessor.Object);
-                _triplesMapProcessor.Setup(
-                    rml =>
-                    rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
-                                          It.IsAny<IRdfHandler>()))
-                                    .Throws(new InvalidMapException("error"));
+                IgnoreMappingErrors = false
+            };
+            _triplesMapProcessor.Setup(
+                rml =>
+                rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
+                                      It.IsAny<IRdfHandler>()))
+                                .Throws(new InvalidMapException("error"));
 
-                // when
-                _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
+            // when
+            _triplesGenerator.GenerateTriples(_r2RML.Object, _rdfHandler.Object);
 
-                // then
-                _triplesMapProcessor.Verify(
-                    rml =>
-                    rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
-                                          It.IsAny<IRdfHandler>()), Times.Once());
-                Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
-                Assert.False(_triplesGenerator.Success);
-            }
+            // then
+            _triplesMapProcessor.Verify(
+                rml =>
+                rml.ProcessTriplesMap(It.IsAny<ITriplesMap>(), It.IsAny<DbConnection>(),
+                                      It.IsAny<IRdfHandler>()), Times.Once());
+            Assert.True(_handlingResult.HasValue && !_handlingResult.Value);
+            Assert.False(_triplesGenerator.Success);
         }
     }
 }

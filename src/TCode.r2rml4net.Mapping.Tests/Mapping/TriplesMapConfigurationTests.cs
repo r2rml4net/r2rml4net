@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -65,11 +65,11 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public TriplesMapConfigurationTests()
         {
             // Initialize TriplesMapConfiguration with a default graph
-            var r2RMLConfiguration = new FluentR2RML();
+            var r2RMLConfiguration = new FluentR2RML(new MappingOptions());
             _r2RMLConfiguration = new Mock<IR2RMLConfiguration>();
             _r2RMLMappings = r2RMLConfiguration.R2RMLMappings;
             _sqlVersionValidator = new Mock<ISqlVersionValidator>(MockBehavior.Strict);
-            _triplesMapConfiguration = new TriplesMapConfiguration(CreatStub(), _r2RMLMappings.CreateBlankNode());
+            _triplesMapConfiguration = new TriplesMapConfiguration(CreatStub(), _r2RMLMappings.CreateBlankNode(), new MappingOptions());
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             const string query = "SELECT * from Table";
 
             // when
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), query);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), query, new MappingOptions());
 
             // then
             Assert.Equal(query, _triplesMapConfiguration.SqlQuery);
@@ -97,7 +97,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void TriplesMapTableNameShouldBeTrimmed(string tableName, string expected)
         {
             // when
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName, new MappingOptions());
 
             // then
             Assert.Equal(expected, _triplesMapConfiguration.TableName);
@@ -112,7 +112,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void TriplesMapTableNameCanContainSchema(string tableName)
         {
             // when
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName, new MappingOptions());
 
             // then
             Assert.Equal("Schema.TableName", _triplesMapConfiguration.TableName);
@@ -127,7 +127,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void TriplesMapTableNameCanContainSchemaAndDatabaseName(string tableName)
         {
             // when
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName, new MappingOptions());
 
             // then
             Assert.Equal("Database.Schema.TableName", _triplesMapConfiguration.TableName);
@@ -140,7 +140,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CannotCreateTriplesMapFromEmptyOrNullTableName(string tableName, Type exceptionType)
         {
             Assert.Throws(exceptionType, () =>
-                _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName)
+                _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), tableName, new MappingOptions())
             );
         }
 
@@ -150,7 +150,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CannotCreateTriplesMapFromEmptyOrNullSqlQuery(string sqlQuery, Type exceptionType)
         {
             Assert.Throws(exceptionType, () =>
-                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery)
+                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), sqlQuery, new MappingOptions())
             );
         }
 
@@ -162,7 +162,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             var coreSql2008 = new Uri("http://www.w3.org/ns/r2rml#SQL2008");
             _sqlVersionValidator.Setup(val => val.SqlVersionIsValid(coreSql2008)).Returns(true);
             _sqlVersionValidator.Setup(val => val.SqlVersionIsValid(mssql)).Returns(true);
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X", new MappingOptions());
 
             // when
             _triplesMapConfiguration.SetSqlVersion(coreSql2008)
@@ -179,7 +179,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             // given
             var sqlVersion = new Uri("http://www.w3.org/ns/r2rml#SQL2008");
             _sqlVersionValidator.Setup(val => val.SqlVersionIsValid(sqlVersion)).Returns(true);
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X", new MappingOptions());
 
             // when
             _triplesMapConfiguration.SetSqlVersion(sqlVersion)
@@ -198,7 +198,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
             const string sqlVersionString = "http://www.w3.org/ns/r2rml#SQL2008";
             Uri sqlVersion = new Uri(sqlVersionString);
             _sqlVersionValidator.Setup(val => val.SqlVersionIsValid(sqlVersion)).Returns(true);
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SELECT * from X", new MappingOptions());
 
             // when
             if (fromUriString)
@@ -219,7 +219,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CannotSetSqlVersionWhenTableNameHasAlreadyBeenSet()
         {
             // given
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table", new MappingOptions());
 
             // then
             Assert.Throws<InvalidMapException>(
@@ -237,7 +237,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
                                                                                _r2RMLMappings,
                                                                                _sqlVersionValidator.Object);
             _r2RMLConfiguration.Setup(config => config.SqlVersionValidator).Returns(_sqlVersionValidator.Object);
-            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table", new MappingOptions());
 
             // when
             Assert.Throws<InvalidSqlVersionException>(() => _triplesMapConfiguration.SetSqlVersion(sqlVersion));
@@ -251,15 +251,12 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         {
             // given
             var sqlVersion = new Uri("http://no-such-identifier.com");
-            using (new MappingScope(new MappingOptions().WithSqlVersionValidation(false)))
-            {
+            var options = new MappingOptions().WithSqlVersionValidation(false);
+            var stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
+                                                                               _r2RMLMappings,
+                                                                               _sqlVersionValidator.Object);
+            _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table", options);
 
-                var stub = new TriplesMapConfigurationStub(_r2RMLConfiguration.Object,
-                                                                                   _r2RMLMappings,
-                                                                                   _sqlVersionValidator.Object);
-                _triplesMapConfiguration = TriplesMapConfiguration.FromSqlQuery(stub, "SELECT * FROM Table");
-
-            }
             // when
             _triplesMapConfiguration.SetSqlVersion(sqlVersion);
 
@@ -271,7 +268,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CanCreateSubjectMaps()
         {
             // given
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table", new MappingOptions());
 
             // when
             var subjectMapConfiguration = (ISubjectMapConfiguration)_triplesMapConfiguration.SubjectMap;
@@ -285,8 +282,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         [Fact]
         public void SubjectMapAlwaysReturnsSameInstance()
         {
-            // given 
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
+            // given
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table", new MappingOptions());
             var subjectMapConfiguration = (ISubjectMapConfiguration)_triplesMapConfiguration.SubjectMap;
 
             // when
@@ -300,7 +297,7 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void CanCreatePropertyObjectMap()
         {
             // given
-            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
+            _triplesMapConfiguration = TriplesMapConfiguration.FromTable(CreatStub(), "Table", new MappingOptions());
 
             // when
             IPredicateObjectMapConfiguration predicateObjectMap = _triplesMapConfiguration.CreatePropertyObjectMap();
@@ -331,8 +328,8 @@ namespace TCode.r2rml4net.Mapping.Tests.Mapping
         public void BlankNodeTriplesMapsDontInterfereWithEachOther()
         {
             // given
-            var fromTable = TriplesMapConfiguration.FromTable(CreatStub(), "Table");
-            var fromSqlQuery = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SElECT * FROM y");
+            var fromTable = TriplesMapConfiguration.FromTable(CreatStub(), "Table", new MappingOptions());
+            var fromSqlQuery = TriplesMapConfiguration.FromSqlQuery(CreatStub(), "SElECT * FROM y", new MappingOptions());
 
             // then
             Assert.Null(fromTable.SqlQuery);

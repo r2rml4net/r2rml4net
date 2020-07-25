@@ -69,10 +69,9 @@ namespace TCode.r2rml4net.Mapping.Fluent
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseConfiguration"/> class.
         /// </summary>
-        /// <param name="baseUri">R2RML graph's base URI</param>
         /// <remarks>Used by <see cref="FluentR2RML"/></remarks>
-        protected BaseConfiguration(Uri baseUri)
-            : this(new Graph { BaseUri = baseUri })
+        protected BaseConfiguration(string baseUri)
+            : this(new Graph { BaseUri = new Uri(baseUri) })
         {
         }
 
