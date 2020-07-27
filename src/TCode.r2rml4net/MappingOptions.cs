@@ -62,6 +62,7 @@ namespace TCode.r2rml4net
             PreserveDuplicateRows = false;
             AllowAutomaticBlankNodeSubjects = false;
             BaseUri = "http://r2rml.net/base/";
+            TimeZoneName = "UTC";
         }
 
         public string BaseUri { get; private set; }
@@ -98,6 +99,12 @@ namespace TCode.r2rml4net
         /// Default value is false
         /// </summary>
         public bool PreserveDuplicateRows { get; internal set; }
+
+        /// <summary>
+        /// Gets the TimeZoneInfo name of time zone to use when parsing date and date/time values
+        /// Default is UTC
+        /// </summary>
+        public string TimeZoneName { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether <a href="http://www.w3.org/TR/r2rml/#dfn-subject-map">subject maps</a> can be neither

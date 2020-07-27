@@ -59,11 +59,12 @@ namespace TCode.r2rml4net.TriplesGeneration
         private readonly IDictionary<string, IBlankNode> _blankNodeSubjects = new Dictionary<string, IBlankNode>(256);
         private readonly IDictionary<string, IBlankNode> _blankNodeObjects = new Dictionary<string, IBlankNode>(256);
         private INodeFactory _nodeFactory = new NodeFactory();
-        private ISQLValuesMappingStrategy _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy();
+        private ISQLValuesMappingStrategy _sqlValuesMappingStrategy;
 
         public RDFTermGenerator(MappingOptions options)
         {
             Options = options;
+            _sqlValuesMappingStrategy = new DefaultSQLValuesMappingStrategy(options);
         }
 
         /// <summary>

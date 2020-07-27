@@ -2,35 +2,35 @@
 // Copyright (C) 2012-2018 Tomasz Pluskiewicz
 // http://r2rml.net/
 // r2rml@t-code.pl
-// 	
+//
 // ------------------------------------------------------------------------
-// 	
+//
 // This file is part of r2rml4net.
-// 	
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal 
-// in the Software without restriction, including without limitation the rights 
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-// copies of the Software, and to permit persons to whom the Software is 
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all 
+//
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-// 	
+//
 // ------------------------------------------------------------------------
-// 
+//
 // r2rml4net may alternatively be used under the LGPL licence
-// 
+//
 // http://www.gnu.org/licenses/lgpl.html
-// 
+//
 // If these licenses are not suitable for your intended use please contact
 // us at the above stated email address to discuss alternative
 // terms.
@@ -41,6 +41,7 @@ using System.Data;
 using System.Globalization;
 using NullGuard;
 using TCode.r2rml4net.TriplesGeneration;
+using VDS.Common.References;
 
 namespace TCode.r2rml4net.RDF
 {
@@ -51,13 +52,15 @@ namespace TCode.r2rml4net.RDF
     [NullGuard(ValidationFlags.OutValues)]
     public class DefaultSQLValuesMappingStrategy : ISQLValuesMappingStrategy
     {
+        private readonly string _timeZoneId;
         private readonly IDictionary<Type, string> _datatypeMappings = new Dictionary<Type, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultSQLValuesMappingStrategy"/> class.
         /// </summary>
-        public DefaultSQLValuesMappingStrategy()
+        public DefaultSQLValuesMappingStrategy(MappingOptions options)
         {
+            this._timeZoneId = options.TimeZoneName;
             FillDefaultDatatypeMappings();
         }
 
@@ -96,8 +99,8 @@ namespace TCode.r2rml4net.RDF
                     case XsdDatatypes.Double:
                         var format = "0.0" + new string('#', 29) + "E-0";
 
-                        return logicalRow.GetFieldType(columnIndex) == typeof(float) 
-                            ? logicalRow.GetFloat(columnIndex).ToString(format, CultureInfo.InvariantCulture) 
+                        return logicalRow.GetFieldType(columnIndex) == typeof(float)
+                            ? logicalRow.GetFloat(columnIndex).ToString(format, CultureInfo.InvariantCulture)
                             : logicalRow.GetDouble(columnIndex).ToString(format, CultureInfo.InvariantCulture);
 
                     case XsdDatatypes.DateTime:
@@ -141,9 +144,12 @@ namespace TCode.r2rml4net.RDF
             return null;
         }
 
-        private static DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
+        private DateTime GetUtcTime(int columnIndex, IDataRecord logicalRow)
         {
-            return TimeZoneInfo.ConvertTime(logicalRow.GetDateTime(columnIndex), TimeZoneInfo.Local, TimeZoneInfo.Utc);
+            return TimeZoneInfo.ConvertTime(
+                logicalRow.GetDateTime(columnIndex),
+                TimeZoneInfo.FindSystemTimeZoneById(this._timeZoneId),
+                TimeZoneInfo.Utc);
         }
 
         private static string ByteArrayToString(byte[] bytes)
