@@ -18,7 +18,14 @@ namespace TCode.r2rml4net.CLI
         private static void Run(BaseCommand command)
         {
             command.Prepare();
-            command.Run();
+            if (command.Run())
+            {
+                command.SaveOutput();
+            }
+            else
+            {
+                LogTo.Info("Errors occurred running command. Skipping output");
+            }
         }
     }
 }

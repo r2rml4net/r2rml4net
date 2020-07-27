@@ -55,12 +55,15 @@ namespace TCode.r2rml4net.CLI
 
         public override void Prepare()
         {
-            base.Prepare();
+            if (this.OutFile != null)
+            {
+                base.Prepare();
+            }
 
             this._output = new TripleStore();
         }
 
-        public override void Run()
+        public override bool Run()
         {
             var rml = ProcessorExtensions.GenerateDirectMapping(this.ConnectionString, this.BaseUri);
 
@@ -69,9 +72,14 @@ namespace TCode.r2rml4net.CLI
                 var processor = new W3CR2RMLProcessor(connection, this.MappingOptions);
 
                 processor.Run(rml, this._output);
-            }
 
-            var defaultGraph = this._output[null];
+                return processor.Success;
+            }
+        }
+
+        public override void SaveOutput()
+        {
+            var defaultGraph = this._output.HasGraph(null) ? this._output[null] : new Graph();
             if (this.OutFile != null)
             {
                 defaultGraph.SaveToFile(this.OutFile);

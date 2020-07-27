@@ -61,12 +61,15 @@ namespace TCode.r2rml4net.CLI
 
         public override void Prepare()
         {
-            base.Prepare();
+            if (this.OutFile != null)
+            {
+                base.Prepare();
+            }
 
             this._output = new TripleStore();
         }
 
-        public override void Run()
+        public override bool Run()
         {
             using (IDbConnection connection = new SqlConnection(this.ConnectionString))
             {
@@ -82,8 +85,13 @@ namespace TCode.r2rml4net.CLI
                 {
                     this.RunMapping(processor, this.MappingPath);
                 }
-            }
 
+                return processor.Success;
+            }
+        }
+
+        public override void SaveOutput()
+        {
             if (this.OutFile != null)
             {
                 this._output.SaveToFile(this.OutFile);

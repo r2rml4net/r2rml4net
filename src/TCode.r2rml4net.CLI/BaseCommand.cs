@@ -77,6 +77,8 @@ namespace TCode.r2rml4net.CLI
             LogManager.Configuration = config;
         }
 
-        public abstract void Run();
+        public virtual void SaveOutput() {}
+
+        public abstract bool Run();
     }
 }

@@ -45,10 +45,18 @@ namespace TCode.r2rml4net.CLI
     [Verb("generate-direct")]
     public class GenerateDirectMappingCommand : BaseCommand
     {
-        public override void Run()
+        private DirectR2RMLMapping _rml;
+
+        public override bool Run()
         {
-            var rml = ProcessorExtensions.GenerateDirectMapping(this.ConnectionString, this.BaseUri);
-            new CompressingTurtleWriter().Save(rml.MappingsGraph, Console.Out);
+            this._rml = ProcessorExtensions.GenerateDirectMapping(this.ConnectionString, this.BaseUri);
+
+            return true;
+        }
+
+        public override void SaveOutput()
+        {
+            new CompressingTurtleWriter().Save(this._rml.MappingsGraph, Console.Out);
         }
     }
 }
