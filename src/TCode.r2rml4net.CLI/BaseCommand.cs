@@ -56,7 +56,12 @@ namespace TCode.r2rml4net.CLI
         [Option('v')]
         public bool Verbose { get; set; }
 
-        public MappingOptions MappingOptions => new MappingOptions().WithBaseUri(this.BaseUri);
+        [Option("preserve-duplicate-rows", Default = false)]
+        public bool PreserveDuplicateRows { get; set; }
+
+        public MappingOptions MappingOptions => new MappingOptions()
+            .WithBaseUri(this.BaseUri)
+            .WithDuplicateRowsPreserved(this.PreserveDuplicateRows);
 
         public virtual void Prepare()
         {
