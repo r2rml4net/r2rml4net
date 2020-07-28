@@ -62,7 +62,7 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
         /// </summary>
-        void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler);
+        void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler, bool keepOpen = false);
 
         /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and returns the generated dataset

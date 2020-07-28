@@ -119,10 +119,10 @@ namespace TCode.r2rml4net
         /// <summary>
         /// Generates triples from <paramref name="mappings"/> mappings and processes them with the given <see cref="IRdfHandler"/>
         /// </summary>
-        public void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler)
+        public void GenerateTriples(IR2RML mappings, IRdfHandler rdfHandler, bool keepOpen = false)
         {
             bool handlingOk = true;
-            IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler);
+            IRdfHandler blankNodeReplaceHandler = new BlankNodeSubjectReplaceHandler(rdfHandler, keepOpen);
             IRdfHandler combinedHandler = new MultiHandler(new []
             {
                 this._counter,

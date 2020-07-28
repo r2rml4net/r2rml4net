@@ -48,10 +48,10 @@ namespace TCode.r2rml4net.CLI
 {
     public static class ProcessorExtensions
     {
-        public static void Run(this IR2RMLProcessor processor, IR2RML rml, ITripleStore output)
+        public static void Run(this IR2RMLProcessor processor, IR2RML rml, IRdfHandler output)
         {
             LogTo.Info("Found {0} triples maps", rml.TriplesMaps.Count());
-            processor.GenerateTriples(rml, output);
+            processor.GenerateTriples(rml, output, true);
             LogTo.Info("Generated {0} quads in {1} graphs", processor.TriplesGenerated, processor.GraphsGenerated);
         }
 

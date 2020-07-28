@@ -49,25 +49,10 @@ using VDS.RDF.Writing;
 namespace TCode.r2rml4net.CLI
 {
     [Verb("rml")]
-    public class R2RMLCommand : BaseCommand
+    public class R2RMLCommand : MappingCommand
     {
-        private TripleStore _output;
-
-        [Option('o', "output")]
-        public string OutFile { get; set; }
-
         [Option('m', "mapping", Required = true)]
         public string MappingPath { get; set; }
-
-        public override void Prepare()
-        {
-            if (this.OutFile != null)
-            {
-                base.Prepare();
-            }
-
-            this._output = new TripleStore();
-        }
 
         public override bool Run()
         {
@@ -92,13 +77,15 @@ namespace TCode.r2rml4net.CLI
 
         public override void SaveOutput()
         {
+            base.SaveOutput();
+
             if (this.OutFile != null)
             {
-                this._output.SaveToFile(this.OutFile);
+                this.Store.SaveToFile(this.OutFile);
             }
             else
             {
-                new NQuadsWriter().Save(this._output, Console.Out);
+                new NQuadsWriter().Save(this.Store, Console.Out);
             }
         }
 
@@ -107,7 +94,7 @@ namespace TCode.r2rml4net.CLI
             LogTo.Info($"Processing {path}");
             var rml = R2RMLLoader.LoadFile(path, this.MappingOptions);
 
-            processor.Run(rml, this._output);
+            processor.Run(rml, this.Output);
         }
     }
 }

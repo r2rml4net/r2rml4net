@@ -38,10 +38,9 @@
 
 #endregion
 
+using System;
 using CommandLine;
 using NLog;
-using VDS.RDF;
-using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {

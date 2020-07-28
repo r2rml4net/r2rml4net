@@ -46,23 +46,8 @@ using VDS.RDF.Writing;
 namespace TCode.r2rml4net.CLI
 {
     [Verb("direct")]
-    public class DirectMappingCommand : BaseCommand
+    public class DirectMappingCommand : MappingCommand
     {
-        private TripleStore _output;
-
-        [Option('o', "output")]
-        public string OutFile { get; set; }
-
-        public override void Prepare()
-        {
-            if (this.OutFile != null)
-            {
-                base.Prepare();
-            }
-
-            this._output = new TripleStore();
-        }
-
         public override bool Run()
         {
             var rml = ProcessorExtensions.GenerateDirectMapping(this.ConnectionString, this.BaseUri);
@@ -71,7 +56,7 @@ namespace TCode.r2rml4net.CLI
             {
                 var processor = new W3CR2RMLProcessor(connection, this.MappingOptions);
 
-                processor.Run(rml, this._output);
+                processor.Run(rml, this.Output);
 
                 return processor.Success;
             }
@@ -79,7 +64,9 @@ namespace TCode.r2rml4net.CLI
 
         public override void SaveOutput()
         {
-            var defaultGraph = this._output.HasGraph(null) ? this._output[null] : new Graph();
+            base.SaveOutput();
+
+            var defaultGraph = this.Store.HasGraph(null) ? this.Store[null] : new Graph();
             if (this.OutFile != null)
             {
                 defaultGraph.SaveToFile(this.OutFile);
