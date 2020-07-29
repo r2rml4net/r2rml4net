@@ -2,7 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
-<a name="0.6.3"></a>
+<a name="0.7.0"></a>
+## 0.7.0 (2020-7-29)
+
+### Bug Fixes
+
+* writing to console as n-quad stream
+* assume UTC date/times by default
+
+### Features
+
+* add option to write directly to triple store over sparql
+* write output only mapping succeeds
+* add flag to preserve duplicate rows
+* write to standard output when no out file is specified
+
 ## 0.6.3 (2020-7-25)
 
 ### Bug Fixes
