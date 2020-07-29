@@ -1,4 +1,5 @@
-﻿using Anotar.NLog;
+﻿using System;
+using Anotar.NLog;
 using CommandLine;
 
 [assembly: LogMinimalMessage]
@@ -12,7 +13,8 @@ namespace TCode.r2rml4net.CLI
             Parser.Default.ParseArguments<DirectMappingCommand, R2RMLCommand, GenerateDirectMappingCommand>(args)
                 .WithParsed<DirectMappingCommand>(Run)
                 .WithParsed<R2RMLCommand>(Run)
-                .WithParsed<GenerateDirectMappingCommand>(Run);
+                .WithParsed<GenerateDirectMappingCommand>(Run)
+                .WithNotParsed(_ => Environment.Exit(1));
         }
 
         private static void Run(BaseCommand command)
@@ -21,10 +23,12 @@ namespace TCode.r2rml4net.CLI
             if (command.Run())
             {
                 command.SaveOutput();
+                Environment.Exit(0);
             }
             else
             {
                 LogTo.Info("Errors occurred running command. Skipping output");
+                Environment.Exit(1);
             }
         }
     }

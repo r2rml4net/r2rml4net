@@ -48,10 +48,10 @@ using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {
-    [Verb("rml")]
+    [Verb("rml", true, HelpText = "Generate triples from R2RML mappings")]
     public class R2RMLCommand : MappingCommand
     {
-        [Option('m', "mapping", Required = true)]
+        [Option('m', "mapping", Required = true, HelpText = "Path to the R2RML mapping documents. Can be a file or direcotry")]
         public string MappingPath { get; set; }
 
         public override bool Run()

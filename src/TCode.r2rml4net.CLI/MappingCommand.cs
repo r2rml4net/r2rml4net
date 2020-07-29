@@ -56,22 +56,19 @@ namespace TCode.r2rml4net.CLI
 
         protected ITripleStore Store { get; } = new TripleStore();
 
-        [Option('o', "output")]
+        [Option('o', "output", HelpText = "Output file path. Overwrites existing file. Creates directories if necessary.", SetName = "file")]
         public string OutFile { get; set; }
 
-        [Option('e', "endpoint")]
+        [Option('e', "endpoint", HelpText = "SPARQL Update Endpoint to write generated quads", SetName = "endpoint")]
         public string SparqlEndpoint { get; set; }
 
-        [Option('u', "update-endpoint")]
-        public string SparqlUpdateEndpoint { get; set; }
-
-        [Option( "user")]
+        [Option( "user", HelpText = "Endpoint user name", SetName = "endpoint")]
         public string SparqlEndpointUser { get; set; }
 
-        [Option( "pass")]
+        [Option( "pass", HelpText = "Endpoint password", SetName = "endpoint")]
         public string SparqlEndpointPassword { get; set; }
 
-        [Option("batch-size", Default = 1000)]
+        [Option("batch-size", Default = 1000, SetName = "endpoint")]
         public int BatchSize { get; set; }
 
         public override void Prepare()
@@ -86,12 +83,11 @@ namespace TCode.r2rml4net.CLI
             {
                 base.Prepare();
 
-                var endpoint = CreateEndpoint(uri => new SparqlRemoteEndpoint(uri));
-                var upEndpoint = CreateEndpoint(uri => new SparqlRemoteUpdateEndpoint(uri), true);
+                var upEndpoint = CreateEndpoint();
 
                 LogTo.Info("Saving to SPARQL Endpoint with batch size {0}", this.BatchSize);
 
-                this.Output = new EfficientBatchSparqlInsertHandler(new ReadWriteSparqlConnector(endpoint, upEndpoint), this.BatchSize);
+                this.Output = new EfficientBatchSparqlInsertHandler(new ReadWriteSparqlConnector(null, upEndpoint), this.BatchSize);
                 this.Output.StartRdf();
             }
         }
@@ -101,11 +97,9 @@ namespace TCode.r2rml4net.CLI
             this.Output.EndRdf(true);
         }
 
-        private TEndpoint CreateEndpoint<TEndpoint>(Func<Uri, TEndpoint> create, bool update = false) where TEndpoint : BaseEndpoint
+        private SparqlRemoteUpdateEndpoint CreateEndpoint()
         {
-            var endpointUri = update ? this.SparqlUpdateEndpoint ?? this.SparqlEndpoint : this.SparqlEndpoint;
-
-            var endpoint = create(new Uri(endpointUri));
+            var endpoint = new SparqlRemoteUpdateEndpoint(new Uri(this.SparqlEndpoint));
             if (this.SparqlEndpointUser != null)
             {
                 if (this.SparqlEndpointPassword == null)

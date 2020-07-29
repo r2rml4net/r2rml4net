@@ -45,7 +45,7 @@ using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {
-    [Verb("direct")]
+    [Verb("direct", HelpText = "Transform entire database using Direct Mapping")]
     public class DirectMappingCommand : MappingCommand
     {
         public override bool Run()

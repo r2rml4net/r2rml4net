@@ -38,7 +38,6 @@
 
 #endregion
 
-using System;
 using CommandLine;
 using NLog;
 
@@ -46,16 +45,16 @@ namespace TCode.r2rml4net.CLI
 {
     public abstract class BaseCommand
     {
-        [Option('c', "connection-string", Required = true)]
+        [Option('c', "connection-string", Required = true, HelpText = "Database connection string")]
         public string ConnectionString { get; set; }
 
-        [Option('b', "base-uri", Default = "http://r2rml.net/base/")]
+        [Option('b', "base-uri", Default = "http://r2rml.net/base/", HelpText = "Base URI used for when generating triples as well as parsing the mapping graphs")]
         public string BaseUri { get; set; }
 
-        [Option('v')]
+        [Option('v', "verbose", HelpText = "Enables verbose console output")]
         public bool Verbose { get; set; }
 
-        [Option("preserve-duplicate-rows", Default = false)]
+        [Option("preserve-duplicate-rows", Default = false, HelpText = "Enable to generate duplicate blank node subjects rows in direct mapping")]
         public bool PreserveDuplicateRows { get; set; }
 
         public MappingOptions MappingOptions => new MappingOptions()
