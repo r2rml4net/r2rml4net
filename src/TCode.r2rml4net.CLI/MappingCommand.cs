@@ -44,9 +44,9 @@ using Anotar.NLog;
 using CommandLine;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
-using VDS.RDF.Query;
 using VDS.RDF.Storage;
 using VDS.RDF.Update;
+using VDS.RDF.Writing.Formatting;
 
 namespace TCode.r2rml4net.CLI
 {
@@ -88,8 +88,13 @@ namespace TCode.r2rml4net.CLI
                 LogTo.Info("Saving to SPARQL Endpoint with batch size {0}", this.BatchSize);
 
                 this.Output = new EfficientBatchSparqlInsertHandler(new ReadWriteSparqlConnector(null, upEndpoint), this.BatchSize);
-                this.Output.StartRdf();
             }
+            else
+            {
+                this.Output = new WriteThroughHandler(new NQuadsFormatter(), Console.Out);
+            }
+
+            this.Output.StartRdf();
         }
 
         public override void SaveOutput()

@@ -36,7 +36,6 @@
 // terms.
 #endregion
 
-using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -44,7 +43,6 @@ using Anotar.NLog;
 using CommandLine;
 using TCode.r2rml4net.Mapping.Fluent;
 using VDS.RDF;
-using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {
@@ -82,10 +80,6 @@ namespace TCode.r2rml4net.CLI
             if (this.OutFile != null)
             {
                 this.Store.SaveToFile(this.OutFile);
-            }
-            else
-            {
-                new NQuadsWriter().Save(this.Store, Console.Out);
             }
         }
 

@@ -36,12 +36,10 @@
 // terms.
 #endregion
 
-using System;
 using System.Data.Common;
 using System.Data.SqlClient;
 using CommandLine;
 using VDS.RDF;
-using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {
@@ -77,10 +75,6 @@ namespace TCode.r2rml4net.CLI
             if (this.OutFile != null)
             {
                 defaultGraph.SaveToFile(this.OutFile);
-            }
-            else
-            {
-                defaultGraph.SaveToStream(Console.Out, new CompressingTurtleWriter());
             }
         }
     }
