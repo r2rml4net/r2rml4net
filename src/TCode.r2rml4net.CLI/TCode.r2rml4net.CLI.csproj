@@ -5,8 +5,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <Authors>tpluscode</Authors>
-        <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-        <PackageIconUrl>https://github.com/cygri/rdf-logos/blob/master/png/r2rml-128.png?raw=true</PackageIconUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIconUrl>../../r2rml-128.png?raw=true</PackageIconUrl>
         <PackageProjectUrl>https://github.com/r2rml4net/r2rml4net</PackageProjectUrl>
         <PackageTags>rdf;r2rml;semantic web</PackageTags>
         <Description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</Description>

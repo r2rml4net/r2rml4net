@@ -56,7 +56,6 @@ namespace TCode.r2rml4net
         private readonly IDbConnection _connection;
         private readonly ITriplesMapProcessor _triplesMapProcessor;
         private readonly StoreCountHandler _counter = new StoreCountHandler();
-        private readonly MappingOptions _options;
 
         /// <summary>
         /// Initializes an instance of <see cref="W3CR2RMLProcessor"/> which generates triples using the default <see cref="RDFTermGenerator"/>

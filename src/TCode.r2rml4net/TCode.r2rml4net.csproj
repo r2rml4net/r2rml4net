@@ -12,8 +12,8 @@
     <DebugSymbols>true</DebugSymbols>
     <Authors>tpluscode</Authors>
     <PackageId>r2rml4net</PackageId>
-    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-    <PackageIconUrl>https://github.com/cygri/rdf-logos/blob/master/png/r2rml-128.png?raw=true</PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIconUrl>../../r2rml-128.png?raw=true</PackageIconUrl>
     <PackageProjectUrl>https://github.com/r2rml4net/r2rml4net</PackageProjectUrl>
     <PackageTags>rdf;r2rml;semantic web</PackageTags>
     <Description>A C# implementation of R2RML, which allows creating R2RML and converting relational data to RDF using the .NET Framework</Description>
@@ -23,9 +23,6 @@
     <PackageReference Include="DatabaseSchemaReader" Version="2.7.3" />
     <PackageReference Include="dotNetRDF" Version="2.6.0" />
     <PackageReference Include="NLog" Version="4.7.2" />
-    <PackageReference Include="Freezable.Fody" Version="1.9.3">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Resourcer.Fody" Version="1.8.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
