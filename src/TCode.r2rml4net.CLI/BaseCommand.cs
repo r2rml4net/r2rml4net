@@ -54,12 +54,7 @@ namespace TCode.r2rml4net.CLI
         [Option('v', "verbose", HelpText = "Enables verbose console output")]
         public bool Verbose { get; set; }
 
-        [Option("preserve-duplicate-rows", Default = false, HelpText = "Enable to generate duplicate blank node subjects rows in direct mapping")]
-        public bool PreserveDuplicateRows { get; set; }
-
-        public MappingOptions MappingOptions => new MappingOptions()
-            .WithBaseUri(this.BaseUri)
-            .WithDuplicateRowsPreserved(this.PreserveDuplicateRows);
+        public virtual MappingOptions MappingOptions => new MappingOptions().WithBaseUri(this.BaseUri);
 
         public virtual void Prepare()
         {

@@ -48,6 +48,13 @@ namespace TCode.r2rml4net.CLI
     [Verb("direct", HelpText = "Transform entire database using Direct Mapping")]
     public class DirectMappingCommand : MappingCommand
     {
+        [Option("preserve-duplicate-rows", Default = false, HelpText = "Enable to generate duplicate blank node subjects rows in direct mapping")]
+        public bool PreserveDuplicateRows { get; set; }
+
+        public override MappingOptions MappingOptions =>
+            base.MappingOptions
+                .WithDuplicateRowsPreserved(this.PreserveDuplicateRows);
+
         public override bool Run()
         {
             var rml = ProcessorExtensions.GenerateDirectMapping(this.ConnectionString, this.BaseUri);
