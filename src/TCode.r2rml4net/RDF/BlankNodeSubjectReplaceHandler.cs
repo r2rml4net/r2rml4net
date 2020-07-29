@@ -44,14 +44,13 @@ namespace TCode.r2rml4net.RDF
     internal class BlankNodeSubjectReplaceHandler : BaseRdfHandler
     {
         private readonly IRdfHandler _wrapped;
-        private readonly bool _keepOpen;
-        private bool _open;
+        private readonly bool _controlledExternally;
         private readonly IDictionary<string, IBlankNode> _replacedNodes = new Dictionary<string, IBlankNode>();
 
-        public BlankNodeSubjectReplaceHandler(IRdfHandler wrapped, bool keepOpen)
+        public BlankNodeSubjectReplaceHandler(IRdfHandler wrapped, bool controlledExternally)
         {
             _wrapped = wrapped;
-            _keepOpen = keepOpen;
+            _controlledExternally = controlledExternally;
         }
 
         /// <summary>
@@ -100,18 +99,16 @@ namespace TCode.r2rml4net.RDF
 
         protected override void StartRdfInternal()
         {
-            if (_open) return;
+            if (_controlledExternally) return;
 
-            _open = true;
             _wrapped.StartRdf();
             base.StartRdfInternal();
         }
 
         protected override void EndRdfInternal(bool ok)
         {
-            if (!_open || _keepOpen) return;
+            if (_controlledExternally) return;
 
-            _open = false;
             _wrapped.EndRdf(ok);
             base.EndRdfInternal(ok);
         }
