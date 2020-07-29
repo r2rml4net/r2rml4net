@@ -10,10 +10,10 @@ namespace TCode.r2rml4net.CLI
     {
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<DirectMappingCommand, R2RMLCommand, GenerateDirectMappingCommand>(args)
+            Parser.Default.ParseArguments<DirectMappingCommand, R2RMLCommand, GenerateDefaultMappingCommand>(args)
                 .WithParsed<DirectMappingCommand>(Run)
                 .WithParsed<R2RMLCommand>(Run)
-                .WithParsed<GenerateDirectMappingCommand>(Run)
+                .WithParsed<GenerateDefaultMappingCommand>(Run)
                 .WithNotParsed(_ => Environment.Exit(1));
         }
 

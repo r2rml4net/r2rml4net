@@ -42,8 +42,8 @@ using VDS.RDF.Writing;
 
 namespace TCode.r2rml4net.CLI
 {
-    [Verb("generate-direct", HelpText = "Generate a default mapping graph")]
-    public class GenerateDirectMappingCommand : BaseCommand
+    [Verb("default-mapping", HelpText = "Generate a default mapping graph")]
+    public class GenerateDefaultMappingCommand : BaseCommand
     {
         private DirectR2RMLMapping _rml;
 
