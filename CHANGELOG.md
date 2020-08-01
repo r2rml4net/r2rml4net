@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
-<a name="0.7.0"></a>
+<a name="0.7.1"></a>
+## 0.7.1 (2020-8-1)
+
+### Bug Fixes
+
+* query endpoint cannot be null
+
 ## 0.7.0 (2020-7-29)
 
 ### Bug Fixes
