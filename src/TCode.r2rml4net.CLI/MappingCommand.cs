@@ -44,6 +44,7 @@ using Anotar.NLog;
 using CommandLine;
 using VDS.RDF;
 using VDS.RDF.Parsing.Handlers;
+using VDS.RDF.Query;
 using VDS.RDF.Storage;
 using VDS.RDF.Update;
 using VDS.RDF.Writing.Formatting;
@@ -83,11 +84,12 @@ namespace TCode.r2rml4net.CLI
             {
                 base.Prepare();
 
-                var upEndpoint = CreateEndpoint();
+                var qEndpoint = SetupEndpoint(new SparqlRemoteEndpoint(new Uri(this.SparqlEndpoint)));
+                var upEndpoint = SetupEndpoint(new SparqlRemoteUpdateEndpoint(new Uri(this.SparqlEndpoint)));
 
                 LogTo.Info("Saving to SPARQL Endpoint with batch size {0}", this.BatchSize);
 
-                this.Output = new EfficientBatchSparqlInsertHandler(new ReadWriteSparqlConnector(null, upEndpoint), this.BatchSize);
+                this.Output = new EfficientBatchSparqlInsertHandler(new ReadWriteSparqlConnector(qEndpoint, upEndpoint), this.BatchSize);
             }
             else
             {
@@ -102,9 +104,8 @@ namespace TCode.r2rml4net.CLI
             this.Output.EndRdf(true);
         }
 
-        private SparqlRemoteUpdateEndpoint CreateEndpoint()
+        private T SetupEndpoint<T>(T endpoint) where T : BaseEndpoint
         {
-            var endpoint = new SparqlRemoteUpdateEndpoint(new Uri(this.SparqlEndpoint));
             if (this.SparqlEndpointUser != null)
             {
                 if (this.SparqlEndpointPassword == null)
