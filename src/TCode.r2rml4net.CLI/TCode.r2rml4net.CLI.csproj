@@ -3,7 +3,6 @@
     <PropertyGroup>
         <Version>0.7.1</Version>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
         <Authors>tpluscode</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIconUrl>../../r2rml-128.png?raw=true</PackageIconUrl>
@@ -14,6 +13,7 @@
         <PackageId>r2rml4net-cli</PackageId>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>r2rml4net</ToolCommandName>
+        <TargetFrameworks>net6.0;netcoreapp2.2</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
