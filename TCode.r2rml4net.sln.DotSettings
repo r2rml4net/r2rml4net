@@ -40,6 +40,7 @@ http://www.gnu.org/licenses/lgpl.html&#xD;
 If these licenses are not suitable for your intended use please contact&#xD;
 us at the above stated email address to discuss alternative&#xD;
 terms.</s:String>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=_002A_002ETests_003B_002A_003B_002A_003B_002A/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/AbsolutePath/@EntryValue">e:\Piskorz\Projekty\Semantic web\r2rml4net\src\TCode.r2rml4net.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/RelativePath/@EntryValue">..\TCode.r2rml4net.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED9D62A6124B864BBA0D016F3B4B0BF8/@KeyIndexDefined">True</s:Boolean>
@@ -49,6 +50,7 @@ terms.</s:String>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_002Dtest_002Drunner_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/RelativePriority/@EntryValue">2</s:Double>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003Ae_003A_005CPiskorz_005CProjekty_005CSemantic_0020web_005Cr2rml4net_005Csrc_005CTCode_002Er2rml4net_002EDotSettings/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EdotCover_002EIde_002ECore_002EFilterManagement_002EModel_002ESolutionFilterSettingsManagerMigrateSettings/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpAttributeForSingleLineMethodUpgrade/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpKeepExistingMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
