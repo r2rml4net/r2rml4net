@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.8.0"></a>
+## [0.8.0](https://www.github.com/r2rml4net/r2rml4net/releases/tag/v0.8.0) (2022-10-25)
+
+### Features
+
+* BREAKING CHANGE: support only net6 ([ec42cc6](https://www.github.com/r2rml4net/r2rml4net/commit/ec42cc6f8f548b4556410d90a7939cbe5e23f3a3))
+
+### Bug Fixes
+
+* do not throw when value is absolute IRI (11.2 in spec) ([d973d54](https://www.github.com/r2rml4net/r2rml4net/commit/d973d54e451681775183313e6fec3e090dd13f79))
+
 <a name="0.7.1"></a>
 ## 0.7.1 (2020-8-1)
 
