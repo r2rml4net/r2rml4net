@@ -323,6 +323,29 @@ namespace TCode.r2rml4net.Tests.TriplesGeneration
             Assert.Equal(expected, (node as IUriNode).Uri.AbsoluteUri);
         }
 
+        [Fact]
+        public void KeepsIriIntactWhenItIsAlreadyFullEncoded()
+        {
+            // given
+            _logicalRow.Setup(rec => rec.GetOrdinal(ColumnName)).Returns(ColumnIndex).Verifiable();
+            _logicalRow.Setup(rec => rec.IsDBNull(ColumnIndex)).Returns(false).Verifiable();
+            Uri datatype;
+            _lexicalFormProvider.Setup(lex => lex.GetLexicalForm(ColumnIndex, It.IsAny<IDataRecord>(), out datatype))
+                .Returns("http://example.com/foo%20bar%20baz")
+                .Verifiable();
+            _termMap.Setup(map => map.IsColumnValued).Returns(true).Verifiable();
+            _termMap.Setup(map => map.ColumnName).Returns(ColumnName).Verifiable();
+            _termType.Setup(type => type.IsURI).Returns(true).Verifiable();
+
+            // when
+            var node = _termGenerator.GenerateTerm<INode>(_termMap.Object, _logicalRow.Object);
+
+            // then
+            Assert.NotNull(node);
+            Assert.True(node is IUriNode);
+            Assert.Equal("http://example.com/foo%20bar%20baz", (node as IUriNode).Uri.AbsoluteUri);
+        }
+
         [Theory]
         [InlineData("path/../Danny")]
         [InlineData("Bob Charles")]

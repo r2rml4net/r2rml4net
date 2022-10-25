@@ -155,7 +155,7 @@ namespace TCode.r2rml4net.TriplesGeneration
                 }
                 catch (UriFormatException ex)
                 {
-                    throw new InvalidTermException(termMap, string.Format("Value {0} is invalid. {1}", value, ex.Message));
+                    throw new InvalidTermException(termMap, $"Value {value} is invalid. {ex.Message}");
                 }
             }
 
@@ -269,6 +269,11 @@ namespace TCode.r2rml4net.TriplesGeneration
             if (termMap.TermType.IsLiteral)
             {
                 return GenerateTermForLiteral(termMap, value, implicitDatatype);
+            }
+            
+            if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
+            {
+                return NodeFactory.CreateUriNode(new Uri(value)); 
             }
 
             AssertNoIllegalCharacters(termMap, new Uri(value, UriKind.RelativeOrAbsolute));
