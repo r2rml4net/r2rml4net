@@ -1,3 +1,5 @@
+image: Visual Studio 2022
+
 before_build:
   - ps: gitversion /l console /output buildserver /updateassemblyinfo
 
